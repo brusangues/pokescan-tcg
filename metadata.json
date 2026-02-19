@@ -1,0 +1,7 @@
+{
+  "name": "PokéScan TCG",
+  "description": "Identify Pokémon cards using AI vision and build your collection.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
