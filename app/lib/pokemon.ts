@@ -89,9 +89,22 @@ export async function fetchCards(query: string = 'page=1&pageSize=5', retries = 
         console.warn(`Attempt ${i + 1} received non-JSON response (likely server starting): ${text.substring(0, 50)}...`);
         if (i === retries - 1) throw new Error(`Expected JSON but got ${contentType}`);
       }
-    } catch (error) {fetchCards
+    } catch (error) {
       console.error(`Attempt ${i + 1} /api/cards?${query} error:`, error);
-      if (i === retries - 1) return [];
+      if (i === retries - 1) {
+        // Use fallback data from fetch_result.json
+        try {
+          console.log('API fetch failed. Using fallback data from fetch_result.json');
+          const fallbackResponse = await fetch('/fetch_result.json');
+          if (fallbackResponse.ok) {
+            const fallbackData = await fallbackResponse.json();
+            return fallbackData.data || [];
+          }
+        } catch (fallbackError) {
+          console.error('Fallback fetch also failed:', fallbackError);
+        }
+        return [];
+      }
     }
     
     // Wait before retrying

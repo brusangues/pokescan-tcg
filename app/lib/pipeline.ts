@@ -1,8 +1,8 @@
 
 // Singleton pattern for the pipeline
 class PipelineSingleton {
-  static task = 'feature-extraction';
-  static model = 'Xenova/clip-vit-base-patch32';
+  static task = 'image-feature-extraction';
+  static model = 'Xenova/vit-base-patch16-224';
   static instance: any = null;
 
   static async getInstance(progressCallback: (data: any) => void = () => {}) {
@@ -17,7 +17,7 @@ class PipelineSingleton {
       env.allowLocalModels = false;
       env.useBrowserCache = true;
 
-      this.instance = pipeline(this.task as any, this.model, { progress_callback: progressCallback });
+      this.instance = await pipeline(this.task as any, this.model, { progress_callback: progressCallback });
     }
     return this.instance;
   }

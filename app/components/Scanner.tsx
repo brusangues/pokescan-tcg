@@ -2,16 +2,6 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-// Helper to load image from URL and return HTMLImageElement
-function loadImage(url: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const img = new window.Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = url;
-  });
-}
 import { Upload, Camera, Loader2, Search, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDropzone } from 'react-dropzone';
@@ -76,26 +66,20 @@ export default function Scanner() {
           const card = fetchedCards[i];
           setProgress(Math.round(((i + 1) / total) * 100));
           
-          let objectUrl = null;
           try {
-            // Pre-fetch image to ensure it's accessible and avoid "Missing pixel_values"
-            // caused by internal fetch failures in transformers.js
-            const response = await fetch(card.images.small);
-            if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
-            const blob = await response.blob();
-            objectUrl = URL.createObjectURL(blob);
-
-            const output = await pipeline(objectUrl);
+            // Pass image URL directly to the pipeline
+            const output = await pipeline(card.images.small);
+            // Extract embedding from output
             if (output && output.data) {
                newEmbeddings.push(Array.from(output.data));
+            } else if (output && Array.isArray(output)) {
+               newEmbeddings.push(Array.from(output));
             } else {
-               newEmbeddings.push(new Array(512).fill(0));
+               newEmbeddings.push(new Array(768).fill(0));
             }
           } catch (e) {
             console.warn(`Failed to embed card ${card.name}:`, e);
-            newEmbeddings.push(new Array(512).fill(0));
-          } finally {
-            if (objectUrl) URL.revokeObjectURL(objectUrl);
+            newEmbeddings.push(new Array(768).fill(0));
           }
           
           // Small delay to allow UI updates
@@ -125,52 +109,68 @@ export default function Scanner() {
     const file = acceptedFiles[0];
     if (!file) return;
 
-    const objectUrl = URL.createObjectURL(file);
-    setPreview(objectUrl);
-    setMatchedCard(null);
-    setStatus('scanning');
-
-    try {
-      const pipeline = await PipelineSingleton.getInstance();
-      const imgElement = await loadImage(objectUrl);
-      const output = await pipeline(imgElement);
+    // Convert file to data URL for pipeline processing
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const dataUrl = e.target?.result as string;
       
-      if (!output || !output.data) {
-        throw new Error("Model failed to produce output");
-      }
+      setPreview(dataUrl);
+      setMatchedCard(null);
+      setStatus('scanning');
 
-      const queryEmbedding = Array.from(output.data) as number[];
-
-      // Find best match
-      let bestScore = -1;
-      let bestIndex = -1;
-
-      embeddings.forEach((emb, idx) => {
-        // Skip placeholder embeddings
-        if (emb.every(v => v === 0)) return;
-
-        const score = cosineSimilarity(queryEmbedding, emb);
-        if (score > bestScore) {
-          bestScore = score;
-          bestIndex = idx;
+      try {
+        const pipeline = await PipelineSingleton.getInstance();
+        
+        // Pass image URL/data URL directly to the pipeline
+        const output = await pipeline(dataUrl);
+        
+        let queryEmbedding: number[] = [];
+        if (output && output.data) {
+          queryEmbedding = Array.from(output.data);
+        } else if (output && Array.isArray(output)) {
+          queryEmbedding = Array.from(output);
+        } else {
+          throw new Error("Model failed to produce output");
         }
-      });
 
-      if (bestIndex !== -1 && bestScore > 0.15) {
-        setMatchedCard({
-          card: cards[bestIndex],
-          score: bestScore
+        // Find best match
+        let bestScore = -1;
+        let bestIndex = -1;
+
+        embeddings.forEach((emb, idx) => {
+          // Skip placeholder embeddings
+          if (emb.every(v => v === 0)) return;
+
+          const score = cosineSimilarity(queryEmbedding, emb);
+          if (score > bestScore) {
+            bestScore = score;
+            bestIndex = idx;
+          }
         });
-      } else {
-        setMatchedCard(null);
-        setErrorMsg("No matching card found.");
+
+        if (bestIndex !== -1 && bestScore > 0.15) {
+          setMatchedCard({
+            card: cards[bestIndex],
+            score: bestScore
+          });
+        } else {
+          setMatchedCard(null);
+          setErrorMsg("No matching card found.");
+        }
+      } catch (err) {
+        console.error(err);
+        setErrorMsg('Failed to scan image.');
+      } finally {
+        setStatus('ready');
       }
-    } catch (err) {
-      console.error(err);
-      setErrorMsg('Failed to scan image.');
-    } finally {
+    };
+    
+    reader.onerror = () => {
+      setErrorMsg('Failed to read image file.');
       setStatus('ready');
-    }
+    };
+    
+    reader.readAsDataURL(file);
   }, [cards, embeddings]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
