@@ -67,16 +67,35 @@ export interface PokemonCard {
   };
 }
 
-export async function fetchCards(query: string = 'page=1&pageSize=20'): Promise<PokemonCard[]> {
-  try {
-    const response = await fetch(`/api/cards?${query}`);
-    if (!response.ok) {
-      throw new Error('Failed to fetch cards');
+export async function fetchCards(query: string = 'page=1&pageSize=5', retries = 2, delay = 10): Promise<PokemonCard[]> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      // Use local API route to avoid CORS/Network issues
+      const response = await fetch(`/api/cards?${query}`);
+      
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        if (!response.ok) {
+           const errorData = await response.json().catch(() => ({}));
+           console.warn(`Attempt ${i + 1} /api/cards?${query} failed: ${response.status} ${JSON.stringify(errorData)}`);
+           if (i === retries - 1) throw new Error(`Failed to fetch cards: ${response.status}`);
+        } else {
+           const data = await response.json();
+           return data.data || [];
+        }
+      } else {
+        // Received HTML or non-JSON (likely "Starting Server..." page)
+        const text = await response.text();
+        console.warn(`Attempt ${i + 1} received non-JSON response (likely server starting): ${text.substring(0, 50)}...`);
+        if (i === retries - 1) throw new Error(`Expected JSON but got ${contentType}`);
+      }
+    } catch (error) {fetchCards
+      console.error(`Attempt ${i + 1} /api/cards?${query} error:`, error);
+      if (i === retries - 1) return [];
     }
-    const data = await response.json();
-    return data.data;
-  } catch (error) {
-    console.error('Error fetching cards:', error);
-    return [];
+    
+    // Wait before retrying
+    await new Promise(resolve => setTimeout(resolve, delay * (i + 1)));
   }
+  throw new Error('Failed to fetch cards after multiple attempts');
 }

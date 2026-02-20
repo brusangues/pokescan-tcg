@@ -2,6 +2,16 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+// Helper to load image from URL and return HTMLImageElement
+function loadImage(url: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+}
 import { Upload, Camera, Loader2, Search, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDropzone } from 'react-dropzone';
@@ -50,7 +60,12 @@ export default function Scanner() {
         setStatus('indexing');
         // 2. Fetch Cards (Base Set 151 for demo)
         // Fetching a small subset to keep it fast in browser
-        const fetchedCards = await fetchCards('q=set.id:base1&pageSize=15'); 
+        const fetchedCards = await fetchCards('q=set.id:base1&pageSize=5'); 
+        
+        if (!fetchedCards || fetchedCards.length === 0) {
+          throw new Error('No cards returned from API. Please check your network connection.');
+        }
+
         setCards(fetchedCards);
 
         // 3. Generate Embeddings for the "Index"
@@ -61,10 +76,27 @@ export default function Scanner() {
           const card = fetchedCards[i];
           setProgress(Math.round(((i + 1) / total) * 100));
           
-          // Embed the card image
-          // We use the small image for speed
-          const output = await pipeline(card.images.small);
-          newEmbeddings.push(Array.from(output.data));
+          let objectUrl = null;
+          try {
+            // Pre-fetch image to ensure it's accessible and avoid "Missing pixel_values"
+            // caused by internal fetch failures in transformers.js
+            const response = await fetch(card.images.small);
+            if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+            const blob = await response.blob();
+            objectUrl = URL.createObjectURL(blob);
+
+            const output = await pipeline(objectUrl);
+            if (output && output.data) {
+               newEmbeddings.push(Array.from(output.data));
+            } else {
+               newEmbeddings.push(new Array(512).fill(0));
+            }
+          } catch (e) {
+            console.warn(`Failed to embed card ${card.name}:`, e);
+            newEmbeddings.push(new Array(512).fill(0));
+          } finally {
+            if (objectUrl) URL.revokeObjectURL(objectUrl);
+          }
           
           // Small delay to allow UI updates
           await new Promise(r => setTimeout(r, 10));
@@ -100,7 +132,13 @@ export default function Scanner() {
 
     try {
       const pipeline = await PipelineSingleton.getInstance();
-      const output = await pipeline(objectUrl);
+      const imgElement = await loadImage(objectUrl);
+      const output = await pipeline(imgElement);
+      
+      if (!output || !output.data) {
+        throw new Error("Model failed to produce output");
+      }
+
       const queryEmbedding = Array.from(output.data) as number[];
 
       // Find best match
@@ -108,6 +146,9 @@ export default function Scanner() {
       let bestIndex = -1;
 
       embeddings.forEach((emb, idx) => {
+        // Skip placeholder embeddings
+        if (emb.every(v => v === 0)) return;
+
         const score = cosineSimilarity(queryEmbedding, emb);
         if (score > bestScore) {
           bestScore = score;
@@ -115,11 +156,14 @@ export default function Scanner() {
         }
       });
 
-      if (bestIndex !== -1) {
+      if (bestIndex !== -1 && bestScore > 0.15) {
         setMatchedCard({
           card: cards[bestIndex],
           score: bestScore
         });
+      } else {
+        setMatchedCard(null);
+        setErrorMsg("No matching card found.");
       }
     } catch (err) {
       console.error(err);
