@@ -2,6 +2,7 @@ import cloudscraper
 from bs4 import BeautifulSoup
 import csv
 import pandas as pd
+import os
 
 PERIODOS = {
     "dia": 1,
@@ -71,6 +72,34 @@ def crawl_pokemon_variations(variacao="alta", periodo="semana"):
             
     print(f"Success! {len(cards_data)} cards saved to {csv_filename}.")
     return cards_data
+
+def get_cards(num_cards=5):
+    url = f"https://api.pokemontcg.io/v2/cards?q=set.id:base1&pageSize={num_cards}"
+    headers = {
+        "X-Api-Key": os.getenv("POKEMON_TCG_API_KEY")
+    }
+
+    print("Bypassing Cloudflare and fetching data...")
+    # Create a scraper instance that mimics a real browser
+    scraper = cloudscraper.create_scraper(
+        browser={
+            'browser': 'chrome',
+            'platform': 'windows',
+            'desktop': True
+        }
+    )
+    
+    # Use the scraper just like you would use 'requests'
+    response = scraper.get(url, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Failed! Cloudflare might still be blocking it. Status: {response.status_code}")
+        return
+
+    with open('cards.json', 'w', encoding='utf-8') as f:
+        f.write(response.json())
+
+    return response
 
 if __name__ == "__main__":
     crawl_pokemon_variations()
