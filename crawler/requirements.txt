@@ -2,3 +2,10 @@ bs4
 cloudscraper
 pandas
 jupyter
+pokemontcgsdk
+tcgdex-sdk
+tqdm
+undetected-chromedriver
+selenium
+pyarrow
+matplotlib

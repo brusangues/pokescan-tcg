@@ -2,7 +2,7 @@
 
 Windows conda
 
-conda --name node
+conda create --name node python=3.12
 conda activate node
 conda install -c conda-forge nodejs=24
 npm install
