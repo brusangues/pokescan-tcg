@@ -163,7 +163,60 @@ def parse_card(c):
     }
 
 
-# ── 3. Pricing (busca individual complementar) ─────────────────────
+# ── 3a. Merge BRL (Liga Pokémon) ────────────────────────────────────
+
+LIGA_PATH = DATA_DIR / 'liga' / 'liga_all_cards.csv'
+
+def load_liga_brl():
+    """Carrega preços BRL consolidados."""
+    if not LIGA_PATH.exists():
+        return None
+    df = pd.read_csv(LIGA_PATH)
+    df = df[df['preco_medio_brl'] > 0].copy()
+    
+    # Limpa nome: "abomasnow (#008/184)" → "abomasnow"
+    import re
+    df['nome_en_clean'] = df['nome_en'].str.replace(r'\s*\(#[^)]*\)', '', regex=True).str.strip().str.lower()
+    # Remove espaços extras e uniformiza
+    df['nome_en_clean'] = df['nome_en_clean'].str.replace(r'\s+', ' ', regex=True)
+    
+    # Pega o menor preço médio se houver duplicatas (mesmo nome em sets diferentes)
+    df = df.groupby('nome_en_clean', as_index=False).agg({
+        'preco_min_brl': 'min',
+        'preco_medio_brl': 'min',
+        'preco_max_brl': 'max',
+        'sigla_set': lambda x: ', '.join(sorted(set(str(v) for v in x if pd.notna(v)))),
+    })
+    
+    print(f'📦 Liga BRL: {len(df)} cartas únicas carregadas')
+    return df
+
+
+def enrich_brl(df_tcgdex, df_liga):
+    """Faz merge dos preços BRL nas cartas TCGdex."""
+    if df_liga is None or df_liga.empty:
+        df_tcgdex['target_price_brl'] = None
+        df_tcgdex['preco_min_brl'] = None
+        df_tcgdex['preco_max_brl'] = None
+        return df_tcgdex
+    
+    df = df_tcgdex.copy()
+    df['name_en_clean'] = df['name_en'].str.strip().str.lower()
+    df['name_en_clean'] = df['name_en_clean'].str.replace(r'\s+', ' ', regex=True)
+    
+    merged = df.merge(
+        df_liga[['nome_en_clean', 'preco_medio_brl', 'preco_min_brl', 'preco_max_brl']],
+        left_on='name_en_clean', right_on='nome_en_clean', how='left'
+    )
+    merged.rename(columns={'preco_medio_brl': 'target_price_brl'}, inplace=True)
+    merged.drop(columns=['name_en_clean'], inplace=True)
+    
+    has_brl = merged['target_price_brl'].notna().sum()
+    print(f'💰 BRL: {has_brl}/{len(merged)} cartas com preço em R$')
+    return merged
+
+
+# ── 3b. Pricing (busca individual TCGPlayer) ───────────────────────────
 
 def enrich_pricing(df):
     """Busca pricing TCGPlayer USD via requisições paralelas."""
@@ -278,7 +331,11 @@ def run_snapshot(model=None):
 
     df = enrich_pricing(df)
     df_valid = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
-    print(f'💰 Com preço: {len(df_valid)}')
+    print(f'💰 USD: {len(df_valid)} cartas com preço')
+
+    # BRL
+    df_liga = load_liga_brl()
+    df_valid = enrich_brl(df_valid, df_liga)
 
     if model is None:
         model = load_model()
@@ -286,12 +343,12 @@ def run_snapshot(model=None):
     X = prepare_features(df_valid)
     log_pred = model.predict(X)
     df_valid['predicted_price'] = np.expm1(log_pred)
-    df_valid['residual'] = df_valid['target_price'] - df_valid['predicted_price']
-    df_valid['residual_pct'] = (df_valid['residual'] / df_valid['target_price'] * 100).clip(-500, 500)
+    df_valid['residual_usd'] = df_valid['target_price'] - df_valid['predicted_price']
+    df_valid['residual_pct'] = (df_valid['residual_usd'] / df_valid['target_price'] * 100).clip(-500, 500)
     df_valid['snapshot_date'] = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-    resid_std = df_valid['residual'].std()
-    df_valid['is_outlier'] = df_valid['residual'].abs() > 2 * resid_std
+    resid_std = df_valid['residual_usd'].std()
+    df_valid['is_outlier'] = df_valid['residual_usd'].abs() > 2 * resid_std
 
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
     path = MONITOR_DIR / f'snapshot_{ts}.csv'
@@ -299,10 +356,13 @@ def run_snapshot(model=None):
     print(f'💾 Salvo: {path} ({len(df_valid)} cartas)')
 
     print(f'\n📈 RESUMO')
-    print(f'  Preço real médio:    ${df_valid["target_price"].mean():.2f}')
+    print(f'  Preço USD médio:     ${df_valid["target_price"].mean():.2f}')
     print(f'  Preço predito médio: ${df_valid["predicted_price"].mean():.2f}')
-    print(f'  MAE:                 ${df_valid["residual"].abs().mean():.2f}')
+    print(f'  MAE (USD):           ${df_valid["residual_usd"].abs().mean():.2f}')
     print(f'  Outliers detectados: {df_valid["is_outlier"].sum()}')
+    if df_valid['target_price_brl'].notna().sum() > 0:
+        b = df_valid['target_price_brl'].dropna()
+        print(f'  Preço BRL médio:      R${b.mean():.2f} ({len(b)} cartas)')
 
     last_path = get_last_snapshot()
     if last_path:

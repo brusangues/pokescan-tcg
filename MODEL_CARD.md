@@ -117,11 +117,12 @@ normalizado para 0-100
 
 ## Histórico de Métricas
 
-| Data | Versão | MAE | R² | Fonte | Mudança |
-|---|---|---|---|---|---|
-| 2026-07-29 | v1 | $21.46 | - | pokemontcg.io | Pipeline inicial (2500 cartas) |
-| 2026-07-29 | v2 | $13.04 | - | TCGdex | Migração p/ TCGdex (5176 cartas, -39%) |
-| 2026-07-29 | v3 | **$11.20** | - | TCGdex + Popularidade | Feature pokemon_popularity adicionada (-14%) |
+| Data | Versão | MAE (USD) | Fonte | Mudança |
+|---|---|---|---|---|
+| 2026-07-29 | v1 | $21.46 | pokemontcg.io | Pipeline inicial (2500 cartas) |
+| 2026-07-29 | v2 | $13.04 | TCGdex | Migração p/ TCGdex (5176 cartas, -39%) |
+| 2026-07-29 | v3 | **$11.20** | TCGdex | Feature pokemon_popularity adicionada (-14%) |
+| 2026-07-29 | v4 | $11.20 | TCGdex + Liga Pokémon | Integração de preços BRL (2236 cartas mergeadas) |
 
 > Nota: R² não está sendo calculado na pipeline atual (apenas no notebook de modelagem). Pendente adicionar ao monitor.
 
@@ -143,7 +144,8 @@ normalizado para 0-100
 ---
 
 ## Próximas Melhorias Potenciais
-- [ ] Preços brasileiros (BRL) via crawler Liga Pokémon
+- [x] Preços brasileiros (BRL) via crawler Liga Pokémon — integrado no snapshot
+- [ ] Modelo de previsão em BRL (target separado)
 - [ ] R² na pipeline de monitoramento
 - [ ] Features de texto (nome do artista, flavor text via embeddings)
 - [ ] Data augmentation (preços históricos)
