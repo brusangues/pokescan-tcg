@@ -117,15 +117,16 @@ normalizado para 0-100
 
 ## Histórico de Métricas
 
-| Data | Versão | MAE (USD) | Fonte | Mudança |
-|---|---|---|---|---|
-| 2026-07-29 | v1 | $21.46 | pokemontcg.io | Pipeline inicial (2500 cartas) |
-| 2026-07-29 | v2 | $13.04 | TCGdex | Migração p/ TCGdex (5176 cartas, -39%) |
-| 2026-07-29 | v3 | **$11.20** | — | TCGdex | Feature pokemon_popularity adicionada (-14%) |
-| 2026-07-29 | v4 | $11.20 | R$27.30 | TCGdex + Liga Pokémon | Integração preços BRL + modelo BRL (2236 cartas) |
-| 2026-07-29 | **v5** | $11.20 | **R$16.40** | TCGdex + Liga (bulk) | Crawler massa (194 sets, 4263 cartas BRL, -40% MAE BRL) |
+> A partir de v5, o MAE reportado é no **conjunto de teste** (20% mais recentes, split temporal).
+> Antes disso, o MAE era calculado sobre o dataset inteiro (otimista).
 
-> Nota: R² não está sendo calculado na pipeline atual (apenas no notebook de modelagem). Pendente adicionar ao monitor.
+| Data | Versão | MAE USD (teste) | MAE BRL (teste) | R² USD | R² BRL | Fonte | Mudança |
+|---|---|---|---|---|---|---|---|
+| 2026-07-29 | v1 | — | — | — | — | pokemontcg.io | Pipeline inicial (2500 cartas) |
+| 2026-07-29 | v2 | — | — | — | — | TCGdex | Migração p/ TCGdex (5176 cartas) |
+| 2026-07-29 | v3 | — | — | — | — | TCGdex | Feature pokemon_popularity |
+| 2026-07-29 | v4 | — | — | — | — | TCGdex + Liga | Integração preços BRL |
+| 2026-07-29 | **v5** | $6.90 | R$14.11 | 0.077 | 0.006 | TCGdex + Liga (bulk) | Split temporal corrigido + eval_set pra early stopping |
 
 ---
 

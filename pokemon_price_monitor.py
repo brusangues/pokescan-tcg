@@ -17,6 +17,7 @@ from pathlib import Path
 from datetime import datetime
 from catboost import CatBoostRegressor
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from sklearn.metrics import mean_absolute_error, r2_score
 sys.path.insert(0, str(Path(__file__).parent))
 import pokemon_popularity as pop
 
@@ -284,24 +285,40 @@ def train_model(max_sets=20):
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     df['log_target'] = np.log1p(df['target_price'])
 
-    X = prepare_features(df)
-    y = df['log_target']
     cat_idx = [i for i, c in enumerate(FEATURE_COLS) if c in CAT_FEATURES]
 
+    # Split temporal: 80% antigas treino, 20% recentes teste
     df_sorted = df.sort_values('release_year', na_position='first')
     split = int(len(df_sorted) * 0.8)
-    X_train = prepare_features(df_sorted.iloc[:split])
-    y_train = df_sorted['log_target'].iloc[:split]
+    train_df = df_sorted.iloc[:split]
+    test_df = df_sorted.iloc[split:]
+
+    X_train = prepare_features(train_df)
+    y_train = train_df['log_target']
+    X_test = prepare_features(test_df)
+    y_test = test_df['log_target']
+
+    print(f'  Treino: {len(train_df)} | Teste: {len(test_df)} (split temporal)')
 
     model = CatBoostRegressor(
         iterations=500, learning_rate=0.05, depth=6,
         l2_leaf_reg=3, loss_function='MAE', eval_metric='MAE',
-        cat_features=cat_idx, verbose=0, random_seed=42,
+        cat_features=cat_idx, verbose=50, random_seed=42,
         early_stopping_rounds=30,
     )
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_train, eval_set=(X_test, y_test), verbose=50)
+
+    # Métricas separadas
+    for nome, X_eval, y_eval in [('Treino', X_train, y_train), ('Teste', X_test, y_test)]:
+        pred_log = model.predict(X_eval)
+        pred = np.expm1(pred_log)
+        real = np.expm1(y_eval.values)
+        mae = mean_absolute_error(real, pred)
+        r2 = r2_score(real, pred)
+        print(f'  MAE {nome}: ${mae:.2f}  |  R² {nome}: {r2:.4f}')
+
     model.save_model(str(MODEL_PATH))
-    print(f'✅ Modelo salvo em {MODEL_PATH}')
+    print(f'✅ Modelo salvo em {MODEL_PATH} (melhor iteração: {model.get_best_iteration()})')
     return model
 
 
@@ -335,24 +352,40 @@ def train_model_brl(max_sets=50):
     
     df['log_target_brl'] = np.log1p(df['target_price_brl'])
     
-    X = prepare_features(df)
-    y = df['log_target_brl']
     cat_idx = [i for i, c in enumerate(FEATURE_COLS) if c in CAT_FEATURES]
     
-    split = int(len(df) * 0.8)
+    # Split temporal: 80% antigas treino, 20% recentes teste
     df_sorted = df.sort_values('release_year', na_position='first')
-    X_train = prepare_features(df_sorted.iloc[:split])
-    y_train = df_sorted['log_target_brl'].iloc[:split]
+    split = int(len(df_sorted) * 0.8)
+    train_df = df_sorted.iloc[:split]
+    test_df = df_sorted.iloc[split:]
+    
+    X_train = prepare_features(train_df)
+    y_train = train_df['log_target_brl']
+    X_test = prepare_features(test_df)
+    y_test = test_df['log_target_brl']
+    
+    print(f'  Treino: {len(train_df)} | Teste: {len(test_df)} (split temporal BRL)')
     
     model = CatBoostRegressor(
         iterations=500, learning_rate=0.05, depth=6,
         l2_leaf_reg=3, loss_function='MAE', eval_metric='MAE',
-        cat_features=cat_idx, verbose=0, random_seed=42,
+        cat_features=cat_idx, verbose=50, random_seed=42,
         early_stopping_rounds=30,
     )
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_train, eval_set=(X_test, y_test), verbose=50)
+    
+    # Métricas separadas
+    for nome, X_eval, y_eval in [('Treino', X_train, y_train), ('Teste', X_test, y_test)]:
+        pred_log = model.predict(X_eval)
+        pred = np.expm1(pred_log)
+        real = np.expm1(y_eval.values)
+        mae = mean_absolute_error(real, pred)
+        r2 = r2_score(real, pred)
+        print(f'  MAE {nome}: R${mae:.2f}  |  R² {nome}: {r2:.4f}')
+    
     model.save_model(str(BRL_MODEL_PATH))
-    print(f'✅ Modelo BRL salvo em {BRL_MODEL_PATH} ({len(df)} cartas)')
+    print(f'✅ Modelo BRL salvo em {BRL_MODEL_PATH} ({len(df)} cartas, melhor iteração: {model.get_best_iteration()})')
     return model
 
 
