@@ -17,6 +17,8 @@ from pathlib import Path
 from datetime import datetime
 from catboost import CatBoostRegressor
 from concurrent.futures import ThreadPoolExecutor, as_completed
+sys.path.insert(0, str(Path(__file__).parent))
+import pokemon_popularity as pop
 
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / 'data'
@@ -192,12 +194,23 @@ def enrich_pricing(df):
 # ── 4. Features ─────────────────────────────────────────────────────
 
 CAT_FEATURES = ['rarity', 'primary_type', 'set_series', 'price_type', 'supertype']
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number']
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity']
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
 
 def prepare_features(df):
-    X = df[FEATURE_COLS].copy()
+    # Adiciona popularidade se tiver nome
+    X = df.copy()
+    if 'name_en' in X.columns:
+        X['pokemon_popularity'] = X['name_en'].apply(
+            lambda n: pop.get_popularity(n) if pd.notna(n) else 10.0
+        )
+    elif 'pokemon_popularity' not in X.columns:
+        X['pokemon_popularity'] = 10.0
+    
+    # Seleciona apenas as features
+    avail = [c for c in FEATURE_COLS if c in X.columns]
+    X = X[avail].copy()
     X['hp'] = X['hp'].fillna(X['hp'].median())
     X['set_printed_total'] = X['set_printed_total'].fillna(X['set_printed_total'].median())
     X['release_year'] = X['release_year'].fillna(2016)
