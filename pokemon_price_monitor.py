@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / 'data'
 MONITOR_DIR = DATA_DIR / 'monitoring'
 MODEL_PATH = DATA_DIR / 'catboost_model.cbm'
+BRL_MODEL_PATH = DATA_DIR / 'catboost_model_brl.cbm'
 SNAPSHOT_LOG = MONITOR_DIR / '_snapshots.json'
 TIMEOUT = 30
 os.makedirs(MONITOR_DIR, exist_ok=True)
@@ -313,6 +314,57 @@ def load_model():
     return train_model()
 
 
+# ── 5b. Modelo BRL ────────────────────────────────────────────────
+
+def train_model_brl():
+    """Treina modelo com target BRL (preços brasileiros)."""
+    print('\n📦 Treinando modelo BRL...')
+    cards = fetch_all_cards(max_sets=50)
+    df = pd.DataFrame([parse_card(c) for c in cards])
+    df = enrich_pricing(df)
+    df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
+    
+    # Merge BRL
+    df_liga = load_liga_brl()
+    df = enrich_brl(df, df_liga)
+    df = df[df['target_price_brl'].notna() & (df['target_price_brl'] > 0)].copy()
+    
+    if len(df) < 100:
+        print(f'⚠️  Poucas cartas BRL ({len(df)}). Pulando treino.')
+        return None
+    
+    df['log_target_brl'] = np.log1p(df['target_price_brl'])
+    
+    X = prepare_features(df)
+    y = df['log_target_brl']
+    cat_idx = [i for i, c in enumerate(FEATURE_COLS) if c in CAT_FEATURES]
+    
+    split = int(len(df) * 0.8)
+    df_sorted = df.sort_values('release_year', na_position='first')
+    X_train = prepare_features(df_sorted.iloc[:split])
+    y_train = df_sorted['log_target_brl'].iloc[:split]
+    
+    model = CatBoostRegressor(
+        iterations=500, learning_rate=0.05, depth=6,
+        l2_leaf_reg=3, loss_function='MAE', eval_metric='MAE',
+        cat_features=cat_idx, verbose=0, random_seed=42,
+        early_stopping_rounds=30,
+    )
+    model.fit(X_train, y_train)
+    model.save_model(str(BRL_MODEL_PATH))
+    print(f'✅ Modelo BRL salvo em {BRL_MODEL_PATH} ({len(df)} cartas)')
+    return model
+
+
+def load_model_brl():
+    if BRL_MODEL_PATH.exists():
+        model = CatBoostRegressor()
+        model.load_model(str(BRL_MODEL_PATH))
+        print(f'📦 Modelo BRL carregado de {BRL_MODEL_PATH}')
+        return model
+    return train_model_brl()
+
+
 # ── 6. Snapshot ─────────────────────────────────────────────────────
 
 def run_snapshot(model=None):
@@ -347,6 +399,18 @@ def run_snapshot(model=None):
     df_valid['residual_pct'] = (df_valid['residual_usd'] / df_valid['target_price'] * 100).clip(-500, 500)
     df_valid['snapshot_date'] = datetime.now().strftime('%Y-%m-%d %H:%M')
 
+    # Predição BRL
+    tem_brl = df_valid['target_price_brl'].notna().sum()
+    if tem_brl > 50:
+        model_brl = load_model_brl()
+        if model_brl:
+            brl_idx = df_valid['target_price_brl'].notna()
+            X_brl = prepare_features(df_valid[brl_idx])
+            log_pred_brl = model_brl.predict(X_brl)
+            df_valid.loc[brl_idx, 'predicted_price_brl'] = np.expm1(log_pred_brl)
+            df_valid.loc[brl_idx, 'residual_brl'] = df_valid.loc[brl_idx, 'target_price_brl'] - df_valid.loc[brl_idx, 'predicted_price_brl']
+            print(f'  BRL: {tem_brl} cartas, MAE R${df_valid.loc[brl_idx, "residual_brl"].abs().mean():.2f}')
+
     resid_std = df_valid['residual_usd'].std()
     df_valid['is_outlier'] = df_valid['residual_usd'].abs() > 2 * resid_std
 
@@ -363,6 +427,9 @@ def run_snapshot(model=None):
     if df_valid['target_price_brl'].notna().sum() > 0:
         b = df_valid['target_price_brl'].dropna()
         print(f'  Preço BRL médio:      R${b.mean():.2f} ({len(b)} cartas)')
+    if 'predicted_price_brl' in df_valid.columns and df_valid['predicted_price_brl'].notna().sum() > 0:
+        print(f'  MAE (BRL):            R${df_valid["residual_brl"].abs().mean():.2f}')
+        print(f'  Predito BRL médio:    R${df_valid["predicted_price_brl"].mean():.2f}')
 
     last_path = get_last_snapshot()
     if last_path:
