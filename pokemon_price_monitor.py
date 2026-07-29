@@ -174,7 +174,7 @@ def build_liga_lookup():
     import re
     
     # Carrega mapping TCGdex set_id → Liga sigla
-    mapping_path = DATA_DIR / 'liga' / 'set_mapping.json'
+    mapping_path = BASE_DIR / 'set_mapping.json'
     if mapping_path.exists():
         set_mapping = json.loads(mapping_path.read_text())
     else:
