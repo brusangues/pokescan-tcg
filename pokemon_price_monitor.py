@@ -169,53 +169,85 @@ def parse_card(c):
 
 LIGA_PATH = DATA_DIR / 'liga' / 'liga_all_cards.csv'
 
-def load_liga_brl():
-    """Carrega preços BRL consolidados."""
-    if not LIGA_PATH.exists():
-        return None
-    df = pd.read_csv(LIGA_PATH)
-    df = df[df['preco_medio_brl'] > 0].copy()
-    
-    # Limpa nome: "abomasnow (#008/184)" → "abomasnow"
+def build_liga_lookup():
+    """Constrói lookups de BRL + iCO."""
     import re
-    df['nome_en_clean'] = df['nome_en'].str.replace(r'\s*\(#[^)]*\)', '', regex=True).str.strip().str.lower()
-    # Remove espaços extras e uniformiza
-    df['nome_en_clean'] = df['nome_en_clean'].str.replace(r'\s+', ' ', regex=True)
     
-    # Pega o menor preço médio se houver duplicatas (mesmo nome em sets diferentes)
-    df = df.groupby('nome_en_clean', as_index=False).agg({
-        'preco_min_brl': 'min',
-        'preco_medio_brl': 'min',
-        'preco_max_brl': 'max',
-        'sigla_set': lambda x: ', '.join(sorted(set(str(v) for v in x if pd.notna(v)))),
-    })
+    # Carrega mapping TCGdex set_id → Liga sigla
+    mapping_path = DATA_DIR / 'liga' / 'set_mapping.json'
+    if mapping_path.exists():
+        set_mapping = json.loads(mapping_path.read_text())
+    else:
+        set_mapping = {}
     
-    print(f'📦 Liga BRL: {len(df)} cartas únicas carregadas')
-    return df
+    # Lookup Liga: (sigla, num) → preços
+    liga_dir = DATA_DIR / 'liga'
+    lookup_brl = {}
+    lookup_ico = {}
+    
+    for f in sorted(liga_dir.glob('set_[0-9]*.json')):
+        with open(f) as fh:
+            for c in json.load(fh):
+                sigla = str(c.get('sSigla', '')).strip()
+                num_m = re.search(r'\(?#?(\d+)', str(c.get('nEN', '')))
+                if not num_m: continue
+                num = int(num_m.group(1))
+                p_med = float(c.get('p1b', 0) or 0)
+                ico = c.get('iCO', 0) or 0
+                
+                if p_med > 0:
+                    key = (sigla, num)
+                    if key not in lookup_brl or p_med < lookup_brl[key].get('preco_medio_brl', float('inf')):
+                        lookup_brl[key] = {
+                            'preco_min_brl': float(c.get('p1a', 0) or 0),
+                            'preco_medio_brl': p_med,
+                            'preco_max_brl': float(c.get('p1c', 0) or 0),
+                        }
+                    if key not in lookup_ico or ico > lookup_ico[key][0]:
+                        lookup_ico[key] = (ico, p_med)
+    
+    print(f'📦 Liga BRL: {len(lookup_brl)} cartas | iCO: {len(lookup_ico)} | sets mapeados: {len(set_mapping)}')
+    return lookup_brl, lookup_ico, set_mapping
 
 
-def enrich_brl(df_tcgdex, df_liga):
-    """Faz merge dos preços BRL nas cartas TCGdex."""
-    if df_liga is None or df_liga.empty:
-        df_tcgdex['target_price_brl'] = None
-        df_tcgdex['preco_min_brl'] = None
-        df_tcgdex['preco_max_brl'] = None
-        return df_tcgdex
+def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
+    """Faz merge dos preços BRL usando (set_mapping[set_id], card_number)."""
+    import re
     
-    df = df_tcgdex.copy()
-    df['name_en_clean'] = df['name_en'].str.strip().str.lower()
-    df['name_en_clean'] = df['name_en_clean'].str.replace(r'\s+', ' ', regex=True)
+    results = {'target_price_brl': [], 'preco_min_brl': [], 'preco_max_brl': [], 'iCO': []}
+    matched = 0
     
-    merged = df.merge(
-        df_liga[['nome_en_clean', 'preco_medio_brl', 'preco_min_brl', 'preco_max_brl']],
-        left_on='name_en_clean', right_on='nome_en_clean', how='left'
-    )
-    merged.rename(columns={'preco_medio_brl': 'target_price_brl'}, inplace=True)
-    merged.drop(columns=['name_en_clean'], inplace=True)
+    for _, row in df_tcgdex.iterrows():
+        parts = str(row.get('id', '')).split('-')
+        if len(parts) == 2:
+            tcg_set = parts[0]
+            try: local_id = int(parts[1])
+            except: local_id = None
+            
+            liga_sigla = set_mapping.get(tcg_set)
+            if liga_sigla and local_id is not None:
+                key = (liga_sigla, local_id)
+                if key in lookup_brl:
+                    brl = lookup_brl[key]
+                    ico_data = lookup_ico.get(key, (0, 0))
+                    matched += 1
+                    results['target_price_brl'].append(brl.get('preco_medio_brl'))
+                    results['preco_min_brl'].append(brl.get('preco_min_brl'))
+                    results['preco_max_brl'].append(brl.get('preco_max_brl'))
+                    results['iCO'].append(ico_data[0])
+                    continue
+        
+        results['target_price_brl'].append(None)
+        results['preco_min_brl'].append(None)
+        results['preco_max_brl'].append(None)
+        results['iCO'].append(0)
     
-    has_brl = merged['target_price_brl'].notna().sum()
-    print(f'💰 BRL: {has_brl}/{len(merged)} cartas com preço em R$')
-    return merged
+    df_out = df_tcgdex.copy()
+    for col, vals in results.items():
+        df_out[col] = vals
+    
+    print(f'💰 BRL (merge por set+número): {matched}/{len(df_out)} cartas')
+    return df_out
 
 
 # ── 3b. Pricing (busca individual TCGPlayer) ───────────────────────────
@@ -249,7 +281,7 @@ def enrich_pricing(df):
 # ── 4. Features ─────────────────────────────────────────────────────
 
 CAT_FEATURES = ['rarity', 'primary_type', 'set_series', 'price_type', 'supertype']
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity']
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO']
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
 
@@ -342,8 +374,8 @@ def train_model_brl(max_sets=50):
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     
     # Merge BRL
-    df_liga = load_liga_brl()
-    df = enrich_brl(df, df_liga)
+    _lookup_brl, _lookup_ico, _set_map = build_liga_lookup()
+    df = enrich_brl(df, _lookup_brl, _lookup_ico, _set_map)
     df = df[df['target_price_brl'].notna() & (df['target_price_brl'] > 0)].copy()
     
     if len(df) < 100:
@@ -419,8 +451,8 @@ def run_snapshot(model=None, max_sets=50):
     print(f'💰 USD: {len(df_valid)} cartas com preço')
 
     # BRL
-    df_liga = load_liga_brl()
-    df_valid = enrich_brl(df_valid, df_liga)
+    _lookup_brl, _lookup_ico, _set_map = build_liga_lookup()
+    df_valid = enrich_brl(df_valid, _lookup_brl, _lookup_ico, _set_map)
 
     if model is None:
         model = load_model()
