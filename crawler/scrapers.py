@@ -33,14 +33,10 @@ DRIVER = None
 
 
 def get_driver():
-    """Initialize undetected chromedriver"""
+    """Initialize undetected chromedriver with auto-version detection"""
     global DRIVER
     if DRIVER is None:
-        try:
-            DRIVER = uc.Chrome(version_main=145)
-        except:
-            # Fallback if version detection fails
-            DRIVER = uc.Chrome()
+        DRIVER = uc.Chrome(headless=True, use_subprocess=True)
     return DRIVER
 
 
