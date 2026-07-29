@@ -276,9 +276,9 @@ def prepare_features(df):
 
 # ── 5. Modelo ───────────────────────────────────────────────────────
 
-def train_model():
+def train_model(max_sets=20):
     print('\n📦 Treinando modelo...')
-    cards = fetch_all_cards(max_sets=20)        # ~5000 cartas p/ treino
+    cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
     df = enrich_pricing(df)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
@@ -316,10 +316,10 @@ def load_model():
 
 # ── 5b. Modelo BRL ────────────────────────────────────────────────
 
-def train_model_brl():
+def train_model_brl(max_sets=50):
     """Treina modelo com target BRL (preços brasileiros)."""
     print('\n📦 Treinando modelo BRL...')
-    cards = fetch_all_cards(max_sets=50)
+    cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
     df = enrich_pricing(df)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
@@ -367,7 +367,7 @@ def load_model_brl():
 
 # ── 6. Snapshot ─────────────────────────────────────────────────────
 
-def run_snapshot(model=None):
+def run_snapshot(model=None, max_sets=50):
     print(f'\n{"="*50}')
     print(f'📸 Snapshot: {datetime.now().strftime("%Y-%m-%d %H:%M")}')
     print(f'{"="*50}')
@@ -487,7 +487,13 @@ if __name__ == '__main__':
     if '--status' in sys.argv:
         show_status()
     else:
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--max-sets', type=int, default=50, help='Limite de sets (mais recentes)')
+        parser.add_argument('--train-brl', action='store_true', help='Só treina modelo BRL')
+        args, _ = parser.parse_known_args()
+        
         import requests
         import time
         model = load_model()
-        run_snapshot(model)
+        run_snapshot(model, max_sets=args.max_sets)

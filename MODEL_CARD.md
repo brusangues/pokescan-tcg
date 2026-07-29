@@ -123,6 +123,7 @@ normalizado para 0-100
 | 2026-07-29 | v2 | $13.04 | TCGdex | Migração p/ TCGdex (5176 cartas, -39%) |
 | 2026-07-29 | v3 | **$11.20** | — | TCGdex | Feature pokemon_popularity adicionada (-14%) |
 | 2026-07-29 | v4 | $11.20 | R$27.30 | TCGdex + Liga Pokémon | Integração preços BRL + modelo BRL (2236 cartas) |
+| 2026-07-29 | **v5** | $11.20 | **R$16.40** | TCGdex + Liga (bulk) | Crawler massa (194 sets, 4263 cartas BRL, -40% MAE BRL) |
 
 > Nota: R² não está sendo calculado na pipeline atual (apenas no notebook de modelagem). Pendente adicionar ao monitor.
 
