@@ -91,7 +91,7 @@ def fetch_set_cards(set_id):
 
 
 def fetch_card_pricing(card_id):
-    """Busca pricing individual de uma carta (EN — tem TCGPlayer)."""
+    """Busca pricing individual + raridade + variantes de uma carta."""
     clean_id = card_id.replace('pt/', '')
     data = fetch_json(f'{TCGDEX}/en/cards/{clean_id}')
     if not data:
@@ -100,9 +100,28 @@ def fetch_card_pricing(card_id):
     tcg = pricing.get('tcgplayer', {}) if pricing else {}
     holofoil = tcg.get('holofoil', {}) if tcg else {}
     normal = tcg.get('normal', {}) if tcg else {}
+    
+    # Extrai info de arte/raridade
+    rarity_tcg = data.get('rarity', 'Unknown')
+    variants = data.get('variants', {}) or {}
+    variants_detailed = data.get('variants_detailed', [])
+    
+    # Flags de arte
+    is_holo = variants.get('holo', False) or any(v.get('type') == 'holo' for v in variants_detailed)
+    is_reverse = variants.get('reverse', False)
+    is_normal = variants.get('normal', False)
+    
+    # Nome em inglês (da EN endpoint)
+    name_en = data.get('name', '')
+    
     return {
         'target_price_usd': holofoil.get('marketPrice') or normal.get('marketPrice'),
         'price_type': 'holofoil' if holofoil.get('marketPrice') else ('normal' if normal.get('marketPrice') else None),
+        'rarity_tcg': rarity_tcg,
+        'is_holo': is_holo,
+        'is_reverse': is_reverse,
+        'is_normal': is_normal,
+        'name_en': name_en,
     }
 
 
@@ -273,6 +292,15 @@ def enrich_pricing(df):
     df_prices = pd.DataFrame(results)
     df['target_price'] = df_prices['target_price_usd']
     df['price_type'] = df_prices['price_type']
+    df['rarity_tcg'] = df_prices['rarity_tcg'].fillna('Unknown')
+    df['is_holo'] = df_prices['is_holo'].fillna(False).astype(int)
+    df['is_reverse'] = df_prices['is_reverse'].fillna(False).astype(int)
+    df['is_normal'] = df_prices['is_normal'].fillna(False).astype(int)
+    # Nome EN vindo do endpoint individual (mais confiável)
+    en_names = df_prices['name_en'].fillna('')
+    df['name_en'] = df['name_en'].combine_first(en_names)
+    # TCGdex rarity pura (sem mapping)
+    df['rarity'] = df['rarity_tcg']
     has_price = df['target_price'].notna().sum()
     print(f'  Cartas com preço: {has_price}/{total}')
     return df
@@ -280,10 +308,13 @@ def enrich_pricing(df):
 
 # ── 4. Features ─────────────────────────────────────────────────────
 
-CAT_FEATURES = ['rarity', 'primary_type', 'set_series', 'price_type', 'supertype']
+CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype']
 EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
 
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO'] + [f'emb_{i}' for i in range(16)]
+# Flags binárias de arte
+ART_FEATURES = ['is_holo', 'is_reverse', 'is_normal']
+# Raridade TCGdex numérica ordinal
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO'] + ART_FEATURES + [f'emb_{i}' for i in range(16)]
 NUM_FEATURES_BRL = NUM_FEATURES + ['target_price_usd']  # USD price como feature para modelo BRL
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
@@ -354,8 +385,15 @@ def prepare_features(df, extra_features=None):
     X['release_year'] = X['release_year'].fillna(2016)
     X['card_age_years'] = X['card_age_years'].fillna(10)
     X['pokedex_number'] = X['pokedex_number'].fillna(0)
-    X['iCO'] = X.get('iCO', 0).fillna(0)
-    X['target_price_usd'] = X.get('target_price_usd', 0).fillna(0)
+    X['iCO'] = X.get('iCO', 0).fillna(0) if isinstance(X.get('iCO', 0), pd.Series) else 0
+    if 'target_price_usd' in X.columns:
+        X['target_price_usd'] = X['target_price_usd'].fillna(0)
+    # Flags de arte default
+    for col in ['is_holo', 'is_reverse', 'is_normal']:
+        if col not in X.columns:
+            X[col] = 0
+        else:
+            X[col] = X[col].fillna(0).astype(int)
     X = X.infer_objects(copy=False)
     return X
 
