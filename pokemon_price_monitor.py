@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from datetime import datetime
-from catboost import CatBoostRegressor
+from catboost import CatBoostRegressor, CatBoostClassifier
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from sklearn.metrics import mean_absolute_error, r2_score
 sys.path.insert(0, str(Path(__file__).parent))
@@ -536,7 +536,61 @@ def train_model(max_sets=20):
 
     model.save_model(str(MODEL_PATH))
     print(f'✅ Modelo salvo em {MODEL_PATH} (melhor iteração: {model.get_best_iteration()})')
+    
+    # Classificador de faixa de preço
+    print()
+    train_price_classifier(X_train, train_df['log_target'], X_test, test_df['log_target'], cat_idx, prefix='USD ')
     return model
+
+
+# ── 5c. Classificador de faixa de preço ─────────────────────────────
+
+PRICE_BINS = ['Muito barato', 'Barato', 'Médio', 'Caro', 'Muito caro']
+
+def train_price_classifier(X_train, y_train_price, X_test, y_test_price, cat_idx, prefix=''):
+    """Treina classificador de faixa de preço (5 bins por percentil)."""
+    from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
+    
+    # Bins por percentil (20% cada) em log-scale
+    bins = y_train_price.quantile([0, 0.2, 0.4, 0.6, 0.8, 1.0]).values
+    bins = np.array(bins, dtype=float)
+    bins[0] = -np.inf
+    bins[-1] = np.inf
+    labels = list(range(5))
+    
+    y_train_cls = pd.cut(y_train_price, bins=bins, labels=labels, include_lowest=True)
+    y_test_cls = pd.cut(y_test_price, bins=bins, labels=labels, include_lowest=True)
+    
+    model_cls = CatBoostClassifier(
+        iterations=300, learning_rate=0.05, depth=6,
+        loss_function='MultiClass', eval_metric='Accuracy',
+        cat_features=cat_idx, verbose=0, random_seed=42,
+        early_stopping_rounds=30,
+    )
+    model_cls.fit(X_train, y_train_cls, eval_set=(X_test, y_test_cls), verbose=0)
+    
+    for nome, X_eval, y_eval in [('Treino', X_train, y_train_cls), ('Teste', X_test, y_test_cls)]:
+        pred = model_cls.predict(X_eval).flatten()
+        acc = accuracy_score(y_eval, pred)
+        f1 = f1_score(y_eval, pred, average='weighted')
+        print(f'  {prefix}Cls {nome}: Acc={acc:.2%} | F1={f1:.3f}')
+    
+    # Matriz de confusão
+    y_pred_test = model_cls.predict(X_test).flatten()
+    cm = confusion_matrix(y_test_cls, y_pred_test)
+    print(f'  {prefix}Matriz de confusão (teste):')
+    for i in range(len(cm)):
+        line = f'    Bin {PRICE_BINS[i]:15s}: '
+        for j in range(len(cm[i])):
+            line += f'{cm[i][j]:4d} '
+        print(line)
+    real_bins = np.expm1(bins[1:5])
+    if prefix == 'BRL ':
+        print(f'    Limites: R${real_bins[0]:.2f}, R${real_bins[1]:.2f}, R${real_bins[2]:.2f}, R${real_bins[3]:.2f}')
+    else:
+        print(f'    Limites: ${real_bins[0]:.2f}, ${real_bins[1]:.2f}, ${real_bins[2]:.2f}, ${real_bins[3]:.2f}')
+    
+    return model_cls
 
 
 def load_model():
@@ -606,6 +660,10 @@ def train_model_brl(max_sets=50):
     
     model.save_model(str(BRL_MODEL_PATH))
     print(f'✅ Modelo BRL salvo em {BRL_MODEL_PATH} ({len(df)} cartas, melhor iteração: {model.get_best_iteration()})')
+    
+    # Classificador de faixa de preço
+    print()
+    train_price_classifier(X_train, train_df['log_target_brl'], X_test, test_df['log_target_brl'], cat_idx, prefix='BRL ')
     return model
 
 
