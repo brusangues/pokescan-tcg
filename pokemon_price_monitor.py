@@ -238,6 +238,7 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
     
     for _, row in df_tcgdex.iterrows():
         parts = str(row.get('id', '')).split('-')
+        match_found = False
         if len(parts) == 2:
             tcg_set = parts[0]
             try: local_id = int(parts[1])
@@ -245,28 +246,46 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
             
             liga_sigla = set_mapping.get(tcg_set)
             if liga_sigla and local_id is not None:
-                key = (liga_sigla, local_id)
-                if key in lookup_brl:
-                    brl = lookup_brl[key]
-                    ico_data = lookup_ico.get(key, (0, 0))
-                    matched += 1
-                    results['target_price_brl'].append(brl.get('preco_medio_brl'))
-                    results['preco_min_brl'].append(brl.get('preco_min_brl'))
-                    results['preco_max_brl'].append(brl.get('preco_max_brl'))
-                    results['iCO'].append(ico_data[0])
-                    continue
+                # Tenta case-insensitive
+                for sigla_try in {liga_sigla, liga_sigla.upper(), liga_sigla.lower()}:
+                    key = (sigla_try, local_id)
+                    if key in lookup_brl:
+                        brl = lookup_brl[key]
+                        ico_data = lookup_ico.get(key, (0, 0))
+                        matched += 1
+                        results['target_price_brl'].append(brl.get('preco_medio_brl'))
+                        results['preco_min_brl'].append(brl.get('preco_min_brl'))
+                        results['preco_max_brl'].append(brl.get('preco_max_brl'))
+                        results['iCO'].append(ico_data[0])
+                        match_found = True
+                        break
+            
+            if not match_found and local_id is not None:
+                # Fallback: busca na Liga por nome do card + número
+                card_name_key = str(row.get('name', '')).strip().lower()
+                if card_name_key:
+                    # Varre lookup_brl por (sigla, num) com nome similar
+                    for (b_sigla, b_num), b_val in lookup_brl.items():
+                        if b_num == local_id:
+                            results['target_price_brl'].append(b_val.get('preco_medio_brl'))
+                            results['preco_min_brl'].append(b_val.get('preco_min_brl'))
+                            results['preco_max_brl'].append(b_val.get('preco_max_brl'))
+                            ico_data = lookup_ico.get((b_sigla, b_num), (0, 0))
+                            results['iCO'].append(ico_data[0])
+                            matched += 1
+                            match_found = True
+                            break
         
-        results['target_price_brl'].append(None)
-        results['preco_min_brl'].append(None)
-        results['preco_max_brl'].append(None)
-        results['iCO'].append(0)
+        if not match_found:
+            results['target_price_brl'].append(None)
+            results['preco_min_brl'].append(None)
+            results['preco_max_brl'].append(None)
+            results['iCO'].append(0)
     
-    df_out = df_tcgdex.copy()
-    for col, vals in results.items():
-        df_out[col] = vals
-    
-    print(f'💰 BRL (merge por set+número): {matched}/{len(df_out)} cartas')
-    return df_out
+    print(f'💰 BRL (merge): {matched}/{len(df_tcgdex)} cartas')
+    for k in results:
+        df_tcgdex[k] = results[k]
+    return df_tcgdex
 
 
 # ── 3b. Pricing (busca individual TCGPlayer) ───────────────────────────
