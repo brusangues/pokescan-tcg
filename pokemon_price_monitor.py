@@ -268,23 +268,43 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
                         break
             
             if not match_found and local_id is not None:
-                # Fallback: busca na Liga por NOME do card
-                card_name_key = str(row.get('name', '')).strip().lower()
+                # Fallback: busca na Liga por NOME do card (todas as siglas)
+                card_name_key = str(row.get('name', '')).strip().lower() or str(row.get('name_en', '')).strip().lower()
                 if card_name_key:
+                    best = None
                     for (b_sigla, b_num), b_val in lookup_brl.items():
-                        if b_num == local_id:
-                            # Verifica se o nome do card Liga corresponde ao TCGdex
-                            # Constrói o nome do card Liga a partir do nEN
+                        if b_num != local_id:
+                            continue
+                        nen_key = str(b_val.get('nome_liga', '')).lower()
+                        # Extrai só o nome do Pokémon antes do (#xx/yy)
+                        pokemon_name = re.sub(r'\s*\([^)]*\)\s*$', '', nen_key).strip()
+                        if pokemon_name and (card_name_key in pokemon_name or pokemon_name in card_name_key):
+                            best = (b_sigla, b_val)
+                            break
+                    
+                    if best is None:
+                        # Segunda tentativa: match parcial (aceita 3+ chars em comum)
+                        card_words = set(card_name_key.split())
+                        for (b_sigla, b_num), b_val in lookup_brl.items():
+                            if b_num != local_id:
+                                continue
                             nen_key = str(b_val.get('nome_liga', '')).lower()
-                            if not nen_key or card_name_key in nen_key or nen_key in card_name_key:
-                                results['target_price_brl'].append(b_val.get('preco_medio_brl'))
-                                results['preco_min_brl'].append(b_val.get('preco_min_brl'))
-                                results['preco_max_brl'].append(b_val.get('preco_max_brl'))
-                                ico_data = lookup_ico.get((b_sigla, b_num), (0, 0))
-                                results['iCO'].append(ico_data[0])
-                                matched += 1
-                                match_found = True
-                                break
+                            pokemon_name = re.sub(r'\s*\([^)]*\)\s*$', '', nen_key).strip()
+                            if pokemon_name:
+                                common = card_words & set(pokemon_name.split())
+                                if len(common) >= 2 or (len(common) >= 1 and min(len(card_name_key), len(pokemon_name)) >= 5):
+                                    best = (b_sigla, b_val)
+                                    break
+                    
+                    if best:
+                        b_sigla, b_val = best
+                        results['target_price_brl'].append(b_val.get('preco_medio_brl'))
+                        results['preco_min_brl'].append(b_val.get('preco_min_brl'))
+                        results['preco_max_brl'].append(b_val.get('preco_max_brl'))
+                        ico_data = lookup_ico.get((b_sigla, local_id), (0, 0))
+                        results['iCO'].append(ico_data[0])
+                        matched += 1
+                        match_found = True
         
         if not match_found:
             results['target_price_brl'].append(None)
