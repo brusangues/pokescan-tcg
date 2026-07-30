@@ -281,21 +281,62 @@ def enrich_pricing(df):
 # ── 4. Features ─────────────────────────────────────────────────────
 
 CAT_FEATURES = ['rarity', 'primary_type', 'set_series', 'price_type', 'supertype']
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO']
+EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
+
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO'] + [f'emb_{i}' for i in range(16)]
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
 
 def prepare_features(df):
-    # Adiciona popularidade se tiver nome
-    X = df.copy()
-    if 'name_en' in X.columns:
-        X['pokemon_popularity'] = X['name_en'].apply(
+    """Prepara features (numéricas + categóricas) para o modelo."""
+    # Carrega embeddings
+    emb_cache = getattr(prepare_features, '_emb_cache', None)
+    if emb_cache is None:
+        if EMBEDDINGS_FILE.exists():
+            emb_cache = pd.read_csv(EMBEDDINGS_FILE)
+            emb_cache.columns = emb_cache.columns.str.strip()
+            prepare_features._emb_cache = emb_cache
+        else:
+            prepare_features._emb_cache = pd.DataFrame()
+    
+    X = df[[c for c in ['id'] + CAT_FEATURES + NUM_FEATURES if c in df.columns]].copy() if df is not None else pd.DataFrame()
+    
+    # Popularidade por nome
+    import pokemon_popularity as pop
+    if 'name_en' in df.columns and 'pokemon_popularity' not in X.columns:
+        X['pokemon_popularity'] = df['name_en'].apply(
             lambda n: pop.get_popularity(n) if pd.notna(n) else 10.0
         )
     elif 'pokemon_popularity' not in X.columns:
         X['pokemon_popularity'] = 10.0
     
-    # Seleciona apenas as features
+    # iCO default
+    if 'iCO' not in X.columns:
+        X['iCO'] = 0
+    
+    # Merge embeddings
+    if not emb_cache.empty:
+        X = X.merge(emb_cache, on='id', how='left')
+        for i in range(16):
+            col = f'emb_{i}'
+            if col in X.columns:
+                X[col] = X[col].fillna(0.0)
+            else:
+                X[col] = 0.0
+    
+    # Categorias
+    for c in CAT_FEATURES:
+        if c in X.columns:
+            X[c] = X[c].astype(str)
+    
+    # Fallbacks
+    X['pokemon_popularity'] = X.get('pokemon_popularity', 0.0)
+    if 'pokemon_popularity' in X.columns:
+        X['pokemon_popularity'] = pd.to_numeric(X['pokemon_popularity'], errors='coerce').fillna(0.0)
+    else:
+        X['pokemon_popularity'] = 10.0
+    
+    # Seleciona apenas as features disponíveis
     avail = [c for c in FEATURE_COLS if c in X.columns]
     X = X[avail].copy()
     X['hp'] = X['hp'].fillna(X['hp'].median())
@@ -303,6 +344,7 @@ def prepare_features(df):
     X['release_year'] = X['release_year'].fillna(2016)
     X['card_age_years'] = X['card_age_years'].fillna(10)
     X['pokedex_number'] = X['pokedex_number'].fillna(0)
+    X['iCO'] = X.get('iCO', 0).fillna(0)
     X = X.infer_objects(copy=False)
     return X
 
