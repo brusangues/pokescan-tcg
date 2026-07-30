@@ -284,11 +284,17 @@ CAT_FEATURES = ['rarity', 'primary_type', 'set_series', 'price_type', 'supertype
 EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
 
 NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO'] + [f'emb_{i}' for i in range(16)]
+NUM_FEATURES_BRL = NUM_FEATURES + ['target_price_usd']  # USD price como feature para modelo BRL
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
 
-def prepare_features(df):
-    """Prepara features (numéricas + categóricas) para o modelo."""
+def prepare_features(df, extra_features=None):
+    """Prepara features (numéricas + categóricas) para o modelo.
+    
+    Args:
+        df: DataFrame com as cartas.
+        extra_features: Lista opcional de features extras p/ incluir (ex: target_price_usd no BRL).
+    """
     # Carrega embeddings
     emb_cache = getattr(prepare_features, '_emb_cache', None)
     if emb_cache is None:
@@ -299,7 +305,11 @@ def prepare_features(df):
         else:
             prepare_features._emb_cache = pd.DataFrame()
     
-    X = df[[c for c in ['id'] + CAT_FEATURES + NUM_FEATURES if c in df.columns]].copy() if df is not None else pd.DataFrame()
+    # Features úteis
+    extra_features = extra_features or []
+    feature_cols_total = FEATURE_COLS + [c for c in extra_features if c not in FEATURE_COLS]
+    
+    X = df[[c for c in ['id'] + feature_cols_total if c in df.columns]].copy() if df is not None else pd.DataFrame()
     
     # Popularidade por nome
     import pokemon_popularity as pop
@@ -337,7 +347,7 @@ def prepare_features(df):
         X['pokemon_popularity'] = 10.0
     
     # Seleciona apenas as features disponíveis
-    avail = [c for c in FEATURE_COLS if c in X.columns]
+    avail = [c for c in feature_cols_total if c in X.columns]
     X = X[avail].copy()
     X['hp'] = X['hp'].fillna(X['hp'].median())
     X['set_printed_total'] = X['set_printed_total'].fillna(X['set_printed_total'].median())
@@ -345,6 +355,7 @@ def prepare_features(df):
     X['card_age_years'] = X['card_age_years'].fillna(10)
     X['pokedex_number'] = X['pokedex_number'].fillna(0)
     X['iCO'] = X.get('iCO', 0).fillna(0)
+    X['target_price_usd'] = X.get('target_price_usd', 0).fillna(0)
     X = X.infer_objects(copy=False)
     return X
 
@@ -426,7 +437,8 @@ def train_model_brl(max_sets=50):
     
     df['log_target_brl'] = np.log1p(df['target_price_brl'])
     
-    cat_idx = [i for i, c in enumerate(FEATURE_COLS) if c in CAT_FEATURES]
+    # USD price como feature de entrada para o modelo BRL
+    df['target_price_usd'] = df['target_price'].fillna(df['target_price'].median())
     
     # Split temporal: 80% antigas treino, 20% recentes teste
     df_sorted = df.sort_values('release_year', na_position='first')
@@ -434,10 +446,12 @@ def train_model_brl(max_sets=50):
     train_df = df_sorted.iloc[:split]
     test_df = df_sorted.iloc[split:]
     
-    X_train = prepare_features(train_df)
+    X_train = prepare_features(train_df, extra_features=['target_price_usd'])
     y_train = train_df['log_target_brl']
-    X_test = prepare_features(test_df)
+    X_test = prepare_features(test_df, extra_features=['target_price_usd'])
     y_test = test_df['log_target_brl']
+    
+    cat_idx = [i for i, c in enumerate(X_train.columns) if c in CAT_FEATURES]
     
     print(f'  Treino: {len(train_df)} | Teste: {len(test_df)} (split temporal BRL)')
     
