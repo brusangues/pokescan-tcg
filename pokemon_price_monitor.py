@@ -113,6 +113,8 @@ def fetch_card_pricing(card_id):
     
     # Nome em inglês (da EN endpoint)
     name_en = data.get('name', '')
+    illustrator = data.get('illustrator', '')
+    shiny_name = 'shiny' in name_en.lower() or 'brilhante' in data.get('name', '').lower()
     
     return {
         'target_price_usd': holofoil.get('marketPrice') or normal.get('marketPrice'),
@@ -122,6 +124,8 @@ def fetch_card_pricing(card_id):
         'is_reverse': is_reverse,
         'is_normal': is_normal,
         'name_en': name_en,
+        'illustrator': illustrator,
+        'is_shiny': int(shiny_name),
     }
 
 
@@ -189,17 +193,17 @@ def parse_card(c):
 LIGA_PATH = DATA_DIR / 'liga' / 'liga_all_cards.csv'
 
 def build_liga_lookup():
-    """Constrói lookups de BRL + iCO."""
+    """Constrói lookups de BRL + iCO + tcg_set → liga_sigla."""
     import re
     
-    # Carrega mapping TCGdex set_id → Liga sigla
-    mapping_path = BASE_DIR / 'set_mapping.json'
-    if mapping_path.exists():
-        set_mapping = json.loads(mapping_path.read_text())
+    # Carrega mapping TCGdex set_id → Liga sigla (via nome)
+    liga_map_path = DATA_DIR / 'liga' / 'liga_set_sigla.json'
+    if liga_map_path.exists():
+        set_mapping = json.loads(liga_map_path.read_text())
     else:
-        set_mapping = {}
+        set_mapping = json.loads((BASE_DIR / 'set_mapping.json').read_text()) if (BASE_DIR / 'set_mapping.json').exists() else {}
     
-    # Lookup Liga: (sigla, num) → preços
+    # Lookup Liga: (sigla, num) → preços + nome
     liga_dir = DATA_DIR / 'liga'
     lookup_brl = {}
     lookup_ico = {}
@@ -215,12 +219,15 @@ def build_liga_lookup():
                 ico = c.get('iCO', 0) or 0
                 
                 if p_med > 0:
+                    # Extrai nome do card do nEN (ex: "Stunky (#76/124)")
+                    nome_liga = str(c.get('nEN', ''))
                     key = (sigla, num)
                     if key not in lookup_brl or p_med < lookup_brl[key].get('preco_medio_brl', float('inf')):
                         lookup_brl[key] = {
                             'preco_min_brl': float(c.get('p1a', 0) or 0),
                             'preco_medio_brl': p_med,
                             'preco_max_brl': float(c.get('p1c', 0) or 0),
+                            'nome_liga': nome_liga,
                         }
                     if key not in lookup_ico or ico > lookup_ico[key][0]:
                         lookup_ico[key] = (ico, p_med)
@@ -261,20 +268,23 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
                         break
             
             if not match_found and local_id is not None:
-                # Fallback: busca na Liga por nome do card + número
+                # Fallback: busca na Liga por NOME do card
                 card_name_key = str(row.get('name', '')).strip().lower()
                 if card_name_key:
-                    # Varre lookup_brl por (sigla, num) com nome similar
                     for (b_sigla, b_num), b_val in lookup_brl.items():
                         if b_num == local_id:
-                            results['target_price_brl'].append(b_val.get('preco_medio_brl'))
-                            results['preco_min_brl'].append(b_val.get('preco_min_brl'))
-                            results['preco_max_brl'].append(b_val.get('preco_max_brl'))
-                            ico_data = lookup_ico.get((b_sigla, b_num), (0, 0))
-                            results['iCO'].append(ico_data[0])
-                            matched += 1
-                            match_found = True
-                            break
+                            # Verifica se o nome do card Liga corresponde ao TCGdex
+                            # Constrói o nome do card Liga a partir do nEN
+                            nen_key = str(b_val.get('nome_liga', '')).lower()
+                            if not nen_key or card_name_key in nen_key or nen_key in card_name_key:
+                                results['target_price_brl'].append(b_val.get('preco_medio_brl'))
+                                results['preco_min_brl'].append(b_val.get('preco_min_brl'))
+                                results['preco_max_brl'].append(b_val.get('preco_max_brl'))
+                                ico_data = lookup_ico.get((b_sigla, b_num), (0, 0))
+                                results['iCO'].append(ico_data[0])
+                                matched += 1
+                                match_found = True
+                                break
         
         if not match_found:
             results['target_price_brl'].append(None)
@@ -315,6 +325,8 @@ def enrich_pricing(df):
     df['is_holo'] = df_prices['is_holo'].fillna(False).astype(int)
     df['is_reverse'] = df_prices['is_reverse'].fillna(False).astype(int)
     df['is_normal'] = df_prices['is_normal'].fillna(False).astype(int)
+    df['is_shiny'] = df_prices['is_shiny'].fillna(0).astype(int)
+    df['illustrator'] = df_prices['illustrator'].fillna('')
     # Nome EN vindo do endpoint individual (mais confiável)
     en_names = df_prices['name_en'].fillna('')
     df['name_en'] = df['name_en'].combine_first(en_names)
@@ -327,15 +339,65 @@ def enrich_pricing(df):
 
 # ── 4. Features ─────────────────────────────────────────────────────
 
-CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype']
+CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype', 'illustrator']
 EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
 
 # Flags binárias de arte
-ART_FEATURES = ['is_holo', 'is_reverse', 'is_normal']
-# Raridade TCGdex numérica ordinal
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO'] + ART_FEATURES + [f'emb_{i}' for i in range(16)]
+ART_FEATURES = ['is_holo', 'is_reverse', 'is_normal', 'is_shiny', 'is_legendary']
+# Grail score e popularidade
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO', 'pokemon_grail_score'] + ART_FEATURES + [f'emb_{i}' for i in range(16)]
 NUM_FEATURES_BRL = NUM_FEATURES + ['target_price_usd']  # USD price como feature para modelo BRL
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
+
+# ── 4a. Grail Score & Legendary ────────────────────────────────────
+
+GRAIL_SCORE = {
+    'charizard': 10, 'pikachu': 9, 'mewtwo': 9, 'mew': 8, 'lugia': 8,
+    'ho-oh': 8, 'rayquaza': 8, 'gengar': 9, 'umbreon': 8, 'eevee': 7,
+    'espeon': 7, 'dragonite': 7, 'gyarados': 7, 'blastoise': 7,
+    'venusaur': 7, 'tyranitar': 7, 'mimikyu': 6, 'lucario': 6,
+    'greninja': 6, 'gardevoir': 6, 'sylveon': 7, 'glaceon': 6,
+    'leafeon': 6, 'vaporeon': 6, 'flareon': 6, 'jolteon': 6,
+    'charmander': 8, 'charmeleon': 8, 'charizard': 10,
+    'squirtle': 6, 'wartortle': 6, 'blastoise': 7,
+    'bulbasaur': 6, 'ivysaur': 6, 'venusaur': 7,
+    'celebi': 7, 'jirachi': 7, 'deoxys': 7, 'miltank': 5,
+    'darkrai': 7, 'latias': 7, 'latios': 7, 'keldeo': 6,
+}
+
+LEGENDARY_DEX = {144, 145, 146, 150, 151, 243, 244, 245, 249, 250,
+                 377, 378, 379, 380, 381, 382, 383, 384, 385, 386,
+                 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493,
+                 494, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649,
+                 716, 717, 718, 719, 720, 721,
+                 772, 773, 785, 786, 787, 788, 789, 790, 791, 792, 793, 794, 795, 796, 797, 798, 799, 800, 801, 802,
+                 803, 804, 805, 806, 807,
+                 888, 889, 890, 891, 892, 893, 894, 895, 896, 897, 898,
+                 899, 900, 901, 902, 903, 904, 905,
+                 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004}
+
+def calc_grail_score(name, name_en, dex_id):
+    """Calcula grail score (0-10) para um Pokémon."""
+    if not name and not name_en:
+        return 0
+    name_lower = (str(name) + ' ' + str(name_en)).lower()
+    
+    # Tenta match direto no dicionário
+    for pokemon, score in GRAIL_SCORE.items():
+        if pokemon in name_lower:
+            return score
+    
+    # Fallback: lendários/míticos ganham 4 se não estiverem no dicionário
+    if dex_id and int(dex_id) in LEGENDARY_DEX:
+        return 4
+    
+    return 0
+
+def is_legendary(dex_id):
+    """Retorna 1 se o Pokémon é lendário/mítico."""
+    if not dex_id:
+        return 0
+    return 1 if int(dex_id) in LEGENDARY_DEX else 0
 
 
 def prepare_features(df, extra_features=None):
@@ -374,6 +436,18 @@ def prepare_features(df, extra_features=None):
     if 'iCO' not in X.columns:
         X['iCO'] = 0
     
+    # Grail score
+    X['pokemon_grail_score'] = df.apply(
+        lambda r: calc_grail_score(r.get('name', ''), r.get('name_en', ''), r.get('pokedex_number', None)),
+        axis=1
+    ) if 'pokemon_grail_score' not in X.columns else X['pokemon_grail_score']
+    
+    # Legendary flag
+    X['is_legendary'] = df.apply(
+        lambda r: is_legendary(r.get('pokedex_number', None)),
+        axis=1
+    ) if 'is_legendary' not in X.columns else X['is_legendary']
+    
     # Merge embeddings
     if not emb_cache.empty:
         X = X.merge(emb_cache, on='id', how='left')
@@ -403,12 +477,13 @@ def prepare_features(df, extra_features=None):
     X['set_printed_total'] = X['set_printed_total'].fillna(X['set_printed_total'].median())
     X['release_year'] = X['release_year'].fillna(2016)
     X['card_age_years'] = X['card_age_years'].fillna(10)
-    X['pokedex_number'] = X['pokedex_number'].fillna(0)
+    X['pokedex_number'] = X['pokedex_number'].fillna(0).astype(int)
     X['iCO'] = X.get('iCO', 0).fillna(0) if isinstance(X.get('iCO', 0), pd.Series) else 0
+    X['pokemon_grail_score'] = pd.to_numeric(X.get('pokemon_grail_score', 0)).fillna(0).astype(int)
     if 'target_price_usd' in X.columns:
         X['target_price_usd'] = X['target_price_usd'].fillna(0)
     # Flags de arte default
-    for col in ['is_holo', 'is_reverse', 'is_normal']:
+    for col in ['is_holo', 'is_reverse', 'is_normal', 'is_shiny', 'is_legendary']:
         if col not in X.columns:
             X[col] = 0
         else:
