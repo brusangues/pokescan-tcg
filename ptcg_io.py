@@ -75,6 +75,54 @@ def fetch_set_cards(set_id, set_info_extra=None):
     return all_cards
 
 
+def fetch_all_cards_global():
+    """Busca TODAS as cartas de uma vez via paginação global (250/página).
+
+    Muito mais eficiente que fetch por set: ~82 requests em vez de 174+.
+    Anexa '_set' com infos do set em cada carta.
+    """
+    sets_map = {s['id']: s for s in fetch_all_sets()}
+
+    all_cards = []
+    page = 1
+    total = None
+    empty_streak = 0
+    while True:
+        params = {'page': page, 'pageSize': MAX_PAGE, 'orderBy': 'id'}
+        data = fetch_json(f'{API}/cards', params=params)
+        if not data:
+            # Rate limit: espera mais e tenta de novo a mesma página
+            empty_streak += 1
+            if empty_streak > 5:
+                print(f'  ⚠️ Desistindo na página {page} após 5 falhas')
+                break
+            time.sleep(8 * empty_streak)
+            continue
+        empty_streak = 0
+        cards = data.get('data', [])
+        if not cards:
+            break
+        for c in cards:
+            sid = (c.get('set') or {}).get('id', '')
+            s = sets_map.get(sid, {})
+            c['_set'] = {
+                'set_id': sid,
+                'set_name': s.get('name', ''),
+                'set_series': s.get('series', ''),
+                'set_release_date': s.get('releaseDate', ''),
+                'set_printed_total': s.get('printedTotal', 0) or s.get('total', 0),
+            }
+        all_cards.extend(cards)
+        total = data.get('totalCount', 0)
+        print(f'  Página {page}: {len(all_cards)}/{total} cartas')
+        if len(all_cards) >= total or len(cards) < MAX_PAGE:
+            break
+        page += 1
+        time.sleep(0.5)
+
+    return all_cards
+
+
 def fetch_all_cards(max_sets=50, min_release_year=None):
     """Coleta cartas dos N sets mais recentes (ou os primeiros por id).
 

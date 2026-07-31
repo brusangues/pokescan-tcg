@@ -512,9 +512,10 @@ def prepare_features(df, extra_features=None):
 
 # ── 5. Modelo ───────────────────────────────────────────────────────
 
-def train_model(max_sets=20):
+def train_model(max_sets=20, cards=None):
     print('\n📦 Treinando modelo...')
-    cards = fetch_all_cards(max_sets=max_sets)
+    if cards is None:
+        cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
     df['_raw'] = cards  # payload bruto com pricing embutido (pokemontcg.io)
     df = enrich_pricing(df)
@@ -623,10 +624,14 @@ def load_model():
 
 # ── 5b. Modelo BRL ────────────────────────────────────────────────
 
-def train_model_brl(max_sets=50):
-    """Treina modelo com target BRL (preços brasileiros)."""
+def train_model_brl(max_sets=50, cards=None):
+    """Treina modelo com target BRL (preços brasileiros).
+
+    cards: lista opcional de cards já buscados (evita re-fetch e rate limit).
+    """
     print('\n📦 Treinando modelo BRL...')
-    cards = fetch_all_cards(max_sets=max_sets)
+    if cards is None:
+        cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
     df['_raw'] = cards
     df = enrich_pricing(df)
