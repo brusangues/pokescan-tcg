@@ -184,7 +184,17 @@ def fetch_all_cards(max_sets=50, min_release_year=None):
 
 def parse_card(c):
     """Extrai features de uma carta pokemontcg.io (mesmas chaves do TCGdex)."""
-    set_info = c.get('_set', {})
+    set_info = c.get('_set', {}) or {}
+    # Fallback: usar set embutido do card quando _set veio vazio
+    if not set_info.get('set_release_date'):
+        embedded = c.get('set', {}) or {}
+        set_info = {
+            'set_id': embedded.get('id', set_info.get('set_id', '')),
+            'set_name': embedded.get('name', set_info.get('set_name', '')),
+            'set_series': embedded.get('series', set_info.get('set_series', '')),
+            'set_release_date': embedded.get('releaseDate', set_info.get('set_release_date', '')),
+            'set_printed_total': embedded.get('printedTotal', set_info.get('set_printed_total', 0)),
+        }
     rel_date = set_info.get('set_release_date', '')
     rel_year = None
     if rel_date:
