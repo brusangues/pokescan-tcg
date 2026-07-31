@@ -1,7 +1,8 @@
 """
 crawler/crawler_liga_hits.py
 ============================
-Raspa cartas em alta/queda da Liga Pokémon usando URLs do crawler_liga_pages.
+Raspa cartas em alta/queda da Liga Pokémon.
+6 combinacoes: {day, week, month} x {alta, queda}
 """
 
 import sys, json, time, re
@@ -14,20 +15,19 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 sys.path.insert(0, str(BASE_DIR / 'crawler'))
 from scrapers import get_driver
 
-URLS = {
-    'week_alta': 'https://www.ligapokemon.com.br/?view=cards/variacao&show=alta&formato=&order=2',
-    'week_queda': 'https://www.ligapokemon.com.br/?view=cards/variacao&show=queda&formato=&order=2',
-    'mais_vistas': 'https://www.ligapokemon.com.br/?view=cards/cards_mostviewed',
-    'mais_vistas_15': 'https://www.ligapokemon.com.br/?view=cards/cards_mostviewed&days=15',
-    'novas': 'https://www.ligapokemon.com.br/?view=cards/cards_mostviewed&days=1',
-}
+PERIOD_MAP = {'day': 1, 'week': 7, 'month': 30}
+ORDER_MAP = {'alta': 2, 'queda': 1}
 
-def scrape(nome, url):
+def scrape(periodo, tipo):
+    p = PERIOD_MAP[periodo]
+    order = ORDER_MAP[tipo]
+    url = f'https://www.ligapokemon.com.br/?view=cards/variacao&formato=&period={p}&order={order}'
+    nome = f'{periodo}_{tipo}'
     print(f'🌐 {nome}: {url}')
+
     driver = get_driver()
     driver.get(url)
     time.sleep(3)
-
     for _ in range(60):
         time.sleep(1)
         src = driver.page_source
@@ -37,7 +37,7 @@ def scrape(nome, url):
     src = driver.page_source
     if '_cf_chl_opt' in src:
         print(f'  ❌ Cloudflare')
-        return
+        return 0
 
     cards = []
     if 'cardsjson' in src:
@@ -58,13 +58,7 @@ def scrape(nome, url):
                     try:
                         nome_c = tds[1].text.strip()
                         if nome_c and any(c.isalpha() for c in nome_c):
-                            cards.append({
-                                'nome': nome_c,
-                                'posicao': tds[0].text.strip() if len(tds) > 0 else '',
-                                'edicao': tds[2].text.strip() if len(tds) > 2 else '',
-                                'preco': tds[-2].text.strip() if len(tds) > 3 else '',
-                                'variacao': tds[-1].text.strip() if len(tds) > 1 else '',
-                            })
+                            cards.append({'nome': nome_c, 'preco': tds[-2].text.strip(), 'variacao': tds[-1].text.strip()})
                     except:
                         continue
             if cards:
@@ -74,18 +68,28 @@ def scrape(nome, url):
     path = DATA_DIR / fname
     path.write_text(json.dumps(cards, indent=2, ensure_ascii=False))
     print(f'  ✅ {len(cards)} cartas → {fname}')
+    return len(cards)
+
+
+def scrape_all():
+    for periodo in ['day', 'week', 'month']:
+        for tipo in ['alta', 'queda']:
+            try:
+                scrape(periodo, tipo)
+            except Exception as e:
+                print(f'  ❌ Erro: {e}')
+            time.sleep(3)
 
 
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--tipo', default='all',
-                        choices=['all', 'week_alta', 'week_queda', 'mais_vistas', 'mais_vistas_15', 'novas'])
+    parser.add_argument('--tipo', default='all', choices=['all', 'day', 'week', 'month'])
     args = parser.parse_args()
 
     if args.tipo == 'all':
-        for nome, url in URLS.items():
-            scrape(nome, url)
-            time.sleep(3)
+        scrape_all()
     else:
-        scrape(args.tipo, URLS[args.tipo])
+        for t in ['alta', 'queda']:
+            scrape(args.tipo, t)
+            time.sleep(3)
