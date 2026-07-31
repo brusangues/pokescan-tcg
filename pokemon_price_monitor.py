@@ -910,6 +910,7 @@ def score_hits(model=None, model_brl=None):
     resultados = []
 
     # 1. Escorar arquivos de hits
+    import json
     hits_files = sorted(glob.glob(str(HITS_DIR / '*alta*.json')) + glob.glob(str(HITS_DIR / '*queda*.json')))
     print(f'\n📊 Escorando {len(hits_files)} arquivos de hits...')
 
@@ -976,36 +977,70 @@ def score_hits(model=None, model_brl=None):
         if len(df_merged) == 0:
             continue
 
-        # Prepara features completas (inclui as computadas)
-        # Escora usando as features pre-computadas do df_base_feat
+        # Prepara features: escora df_base e match por liga_id
         df_base_feat = df_base.copy()
         df_base_feat['id'] = df_base_feat['id'].astype(str)
-        df_merged['id'] = df_merged['id'].astype(str)
 
-        # Computa features no df_base_feat E ja escora
         X_base = prepare_features(df_base_feat)
-        # Garantir que nao tem NaN nas cat features
         for c in CAT_FEATURES:
             if c in X_base.columns:
                 X_base[c] = X_base[c].fillna('Unknown').astype(str)
         pred_log_all = model.predict(X_base)
         df_base_feat['predicted_price'] = np.expm1(pred_log_all)
 
-        # Agora so faz merge da predicao
-        df_merged = df_merged.merge(df_base_feat[['id', 'predicted_price']], on='id', how='left', suffixes=('', '_feat'))
-        # Remove colunas duplicadas
-        df_merged = df_merged.loc[:, ~df_merged.columns.str.endswith('_feat')].copy()
-        df_merged['predicted_price'] = df_merged['predicted_price'].fillna(0)
-        df_merged['residual'] = df_merged['target_price'] - df_merged['predicted_price']
-        df_merged['residual'] = df_merged['target_price'] - df_merged['predicted_price']
-        df_merged['residual_pct'] = (df_merged['residual'] / df_merged['target_price'] * 100).clip(-500, 500)
-        df_merged['oportunidade'] = df_merged['residual_pct'].apply(
+        # Cria liga_id no df_base_feat
+        import json
+        set_sigla_path = DATA_DIR / 'liga' / 'liga_set_sigla.json'
+        set_sigla = json.loads(set_sigla_path.read_text()) if set_sigla_path.exists() else {}
+
+        def tcgdex_to_liga_id(tcg_id):
+            parts = str(tcg_id).split('-')
+            if len(parts) != 2: return None
+            sigla = set_sigla.get(parts[0])
+            if not sigla: return None
+            return sigla.upper() + '-' + parts[1].lstrip('0')
+
+        df_base_feat['liga_id'] = df_base_feat['id'].apply(tcgdex_to_liga_id)
+
+        # Cria liga_id nos hits
+        df_hits['liga_id'] = (df_hits['sSigla'].str.strip().str.upper() + '-' +
+                               df_hits['sNumber'].str.strip().str.lstrip('0'))
+
+        # Match nivel 1: liga_id
+        merged_liga = df_hits.merge(
+            df_base_feat[['liga_id', 'predicted_price', 'target_price']],
+            on='liga_id', how='inner')
+        df_result = merged_liga.copy()
+
+        # Match nivel 2: fallback nome + numero
+        if len(merged_liga) < len(df_hits):
+            hit_ids_l = set(merged_liga['liga_id']) if len(merged_liga) > 0 else set()
+            rest = df_hits[~df_hits['liga_id'].isin(hit_ids_l)].copy()
+            nome_col = ('sNomeIngles' if 'sNomeIngles' in rest.columns
+                        else ('sNomePortugues' if 'sNomePortugues' in rest.columns else None))
+            if nome_col:
+                rest['nome_match'] = rest[nome_col].str.lower().str.strip()
+                rest['card_num'] = rest['sNumber'].str.strip().str.lstrip('0')
+                df_base_feat['nome_match'] = df_base_feat.get('name_en', df_base_feat['name']).str.lower().str.strip()
+                df_base_feat['card_num'] = df_base_feat['id'].str.split('-').str[-1].str.lstrip('0')
+                mais = rest.merge(
+                    df_base_feat[['nome_match', 'card_num', 'predicted_price', 'target_price']],
+                    on=['nome_match', 'card_num'], how='inner')
+                if len(mais) > 0:
+                    df_result = pd.concat([df_result, mais], ignore_index=True) if len(df_result) > 0 else mais
+
+        if len(df_result) == 0:
+            continue
+
+        df_result['residual'] = df_result['target_price'] - df_result['predicted_price']
+        df_result['residual_pct'] = (df_result['residual'] / df_result['target_price'] * 100).clip(-500, 500)
+        df_result['oportunidade'] = df_result['residual_pct'].apply(
             lambda x: '🔥 Barata' if x > 30 else ('👍 Leve' if x > 10 else ('💀 Cara' if x < -30 else ''))
         )
-        df_merged['fonte'] = fname
-        df_merged['data_score'] = datetime.now().strftime('%Y-%m-%d %H:%M')
+        df_result['fonte'] = fname
+        df_result['data_score'] = datetime.now().strftime('%Y-%m-%d %H:%M')
 
-        resultados.append(df_merged)
+        resultados.append(df_result)
 
     if not resultados:
         print('  Nenhum hit com match encontrado.')
@@ -1043,6 +1078,114 @@ def score_hits(model=None, model_brl=None):
 
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
     path = LIGA_SCORE_DIR / f'scored_hits_{ts}.csv'
+    df_out.to_csv(path, index=False)
+    print(f'\n💾 Salvo: {path} ({len(df_out)} linhas)')
+    return df_out
+
+
+def score_snapshot(snapshot_path=None, model=None, model_brl=None):
+    """Escora o snapshot semanal com o modelo atual e marca oportunidades."""
+    if snapshot_path is None:
+        snapshot_path = get_last_snapshot()
+        if snapshot_path is None:
+            print('  Nenhum snapshot encontrado.')
+            return None
+
+    print(f'\n📊 Escorando snapshot: {Path(snapshot_path).name}')
+    df_snap = pd.read_csv(snapshot_path)
+
+    # Garante id como string
+    df_snap['id'] = df_snap['id'].astype(str)
+
+    # Carrega modelos
+    if model is None:
+        model = load_model()
+    if model_brl is None:
+        model_brl = load_model_brl() if BRL_MODEL_PATH.exists() else None
+
+    # Busca base TCGdex para features
+    cards = fetch_all_cards(max_sets=50)
+    df_base = pd.DataFrame([parse_card(c) for c in cards])
+    df_base = enrich_pricing(df_base)
+    df_base['id'] = df_base['id'].astype(str)
+
+    X_base = prepare_features(df_base)
+    for c in CAT_FEATURES:
+        if c in X_base.columns:
+            X_base[c] = X_base[c].fillna('Unknown').astype(str)
+
+    # Predicao USD
+    pred_usd = np.expm1(model.predict(X_base))
+    df_base['predicted_price'] = pred_usd
+
+    # Predicao BRL (se modelo existe)
+    if model_brl is not None:
+        try:
+            pred_brl = np.expm1(model_brl.predict(X_base))
+            df_base['predicted_price_brl'] = pred_brl
+        except Exception:
+            pass
+
+    # Merge com snapshot
+    cols = ['id', 'predicted_price']
+    if 'predicted_price_brl' in df_base.columns:
+        cols.append('predicted_price_brl')
+    df_out = df_snap.merge(df_base[cols], on='id', how='left', suffixes=('', '_novo'))
+
+    # Se o snapshot ja tinha predicao, prefere a nova
+    if 'predicted_price_novo' in df_out.columns:
+        df_out['predicted_price'] = df_out['predicted_price_novo'].fillna(df_out['predicted_price'])
+        df_out.drop(columns=['predicted_price_novo'], inplace=True)
+    if 'predicted_price_brl_novo' in df_out.columns:
+        df_out['predicted_price_brl'] = df_out['predicted_price_brl_novo'].fillna(df_out['predicted_price_brl'])
+        df_out.drop(columns=['predicted_price_brl_novo'], inplace=True)
+
+    # Marca oportunidades: compara real vs pred
+    # Usa BRL se disponivel, senao USD
+    if 'target_price_brl' in df_out.columns:
+        df_out['tem_brl'] = df_out['target_price_brl'].notna() & (df_out['target_price_brl'] > 0) & df_out['predicted_price_brl'].notna()
+    else:
+        df_out['tem_brl'] = False
+
+    df_out['real_ref'] = np.where(df_out['tem_brl'], df_out['target_price_brl'], df_out['target_price'])
+    df_out['pred_ref'] = np.where(df_out['tem_brl'], df_out['predicted_price_brl'], df_out['predicted_price'])
+
+    df_out['residual'] = df_out['real_ref'] - df_out['pred_ref']
+    df_out['residual_pct'] = (df_out['residual'] / df_out['real_ref'] * 100).clip(-500, 500)
+    df_out['oportunidade'] = df_out['residual_pct'].apply(
+        lambda x: '🔥 Barata' if x > 30 else ('👍 Leve' if x > 10 else ('💀 Cara' if x < -30 else '⚖️ Justa'))
+    )
+
+    baratas = df_out[df_out['oportunidade'] == '🔥 Barata'].sort_values('residual_pct', ascending=False)
+    caras = df_out[df_out['oportunidade'] == '💀 Cara'].sort_values('residual_pct')
+
+    print(f'\n🏆 OPORTUNIDADES NO SNAPSHOT')
+    print(f'  Total cartas: {len(df_out)}')
+    print(f'  🔥 Baratas (pred >30% acima do real): {len(baratas)}')
+    print(f'  👍 Leves (pred 10-30% acima):         {len(df_out[df_out["oportunidade"] == "👍 Leve"])}')
+    print(f'  ⚖️ Justas:                            {len(df_out[df_out["oportunidade"] == "⚖️ Justa"])}')
+    print(f'  💀 Caras (real >30% acima do pred):   {len(caras)}')
+
+    if len(baratas) > 0:
+        print(f'\n🔥 Top 15 baratas:')
+        for _, r in baratas.head(15).iterrows():
+            nome = r.get('name', r.get('name_en', '?'))
+            real = r['real_ref']
+            pred = r['pred_ref']
+            moeda = 'R$' if r['tem_brl'] else '$'
+            print(f'  {str(nome):35s} | Real: {moeda}{real:>8.2f} | Pred: {moeda}{pred:>8.2f} | Diff: {r["residual_pct"]:+.0f}%')
+
+    if len(caras) > 0:
+        print(f'\n💀 Top 10 caras (superfaturadas):')
+        for _, r in caras.head(10).iterrows():
+            nome = r.get('name', r.get('name_en', '?'))
+            real = r['real_ref']
+            pred = r['pred_ref']
+            moeda = 'R$' if r['tem_brl'] else '$'
+            print(f'  {str(nome):35s} | Real: {moeda}{real:>8.2f} | Pred: {moeda}{pred:>8.2f} | Diff: {r["residual_pct"]:+.0f}%')
+
+    ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+    path = LIGA_SCORE_DIR / f'scored_snapshot_{ts}.csv'
     df_out.to_csv(path, index=False)
     print(f'\n💾 Salvo: {path} ({len(df_out)} linhas)')
     return df_out
