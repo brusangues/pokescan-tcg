@@ -116,6 +116,12 @@ def fetch_card_pricing(card_id):
     illustrator = data.get('illustrator', '')
     shiny_name = 'shiny' in name_en.lower() or 'brilhante' in data.get('name', '').lower()
     
+    # Gênero do treinador
+    category = data.get('category', '')
+    trainer_gender = 'neutral'
+    if category == 'Trainer' or category == 'Supporter':
+        trainer_gender = infer_trainer_gender(name_en)
+    
     return {
         'target_price_usd': holofoil.get('marketPrice') or normal.get('marketPrice'),
         'price_type': 'holofoil' if holofoil.get('marketPrice') else ('normal' if normal.get('marketPrice') else None),
@@ -126,7 +132,59 @@ def fetch_card_pricing(card_id):
         'name_en': name_en,
         'illustrator': illustrator,
         'is_shiny': int(shiny_name),
+        'trainer_gender': trainer_gender,
     }
+
+
+def infer_trainer_gender(name):
+    if not name:
+        return 'neutral'
+    male_keywords = [
+        'Brock', 'Misty', 'Lt. Surge', 'Erika', 'Koga', 'Sabrina', 'Giovanni',
+        'Lance', 'Steven', 'Wallace', 'Sidney', 'Phoebe', 'Glacia', 'Drake',
+        'Roxanne', 'Brawly', 'Wattson', 'Flannery', 'Norman', 'Winona', 'Tate', 'Liza',
+        'Skye', 'Archie', 'Maxie', 'Ghetsis', 'N', 'Cheren', 'Bianca',
+        'Guzma', 'Kukui', 'Hau', 'Mallow', 'Kiawe', 'Hala', 'Olivia', 'Nanu', 'Hapu',
+        'Cyrus', 'Mars', 'Jupiter', 'Saturn', 'Charon',
+        'Hop', 'Bede', 'Marnie', 'Rose', 'Oleana', 'Piers', 'Raihan', 'Leon',
+        'Victor', 'Gloria', 'Mustard', 'Avery', 'Klara', 'Peony', 'Peonia',
+        'Geeta', 'Sada', 'Turo', 'Arven', 'Nemona', 'Clavell', 'Larry', 'Rika',
+        'Poppy', 'Hassel', 'Kieran', 'Briar', 'Carmine',
+        'Leaf', 'Red', 'Blue', 'Green', 'Yellow', 'Gold', 'Silver', 'Crystal',
+        'Professor', 'Youngster', 'Lass', 'Fisherman', 'Hiker', 'Bug Catcher',
+        'Scientist', 'Beauty', 'Breeder', 'Roughneck', 'Team Flare',
+        'Lisia', 'Zinnia', 'Wally', 'Courtney', 'Tabitha', 'Matt', 'Shelly',
+        'Iris', 'Cilan', 'Chili', 'Cress', 'Brycen', 'Drayden', 'Skyla', 'Elesa',
+        'Clay', 'Burgh', 'Lenora', 'Whitney', 'Jasmine', 'Clair', 'Morty', 'Chuck',
+        'Pryce', 'Falkner', 'Bugsy', 'Janine', 'Flannery',
+    ]
+    male_set = {k.lower() for k in male_keywords}
+    # Palavras tipicamente femininas
+    female_words = ['Lass', 'Beauty', 'Misty', 'Sabrina', 'Erika', 'Winona', 'Flannery',
+                    'Liza', 'Bianca', 'Gloria', 'Marnie', 'Oleana', 'Klara', 'Peonia',
+                    'Geeta', 'Sada', 'Nemona', 'Rika', 'Poppy', 'Briar', 'Carmine',
+                    'Green', 'Yellow', 'Crystal', 'Lisia', 'Zinnia', 'Courtney', 'Shelly',
+                    'Skyla', 'Elesa', 'Lenora', 'Whitney', 'Clair', 'Janine', 'Phoebe',
+                    'Glacia', 'Roxanne', 'Olivia', 'Nanu', 'Hapu', 'Lillie', 'Rosa', 'Hilda',
+                    'Mallow', 'Lana', 'Mina', 'Acerola', 'Kahili', 'Diantha',
+                    'Iris', 'Hilbert', 'Hilda', 'Rosa', 'Nate', 'Yancy', 'Curtis',
+                    'May', 'Brendan', 'Dawn', 'Lucas', 'Serena', 'Calem', 'Selene', 'Elio',
+                    'Juniper', 'Sonia', 'Hop', 'Bede', 'Milo', 'Nessa', 'Kabu', 'Opal']
+    female_set = {k.lower() for k in female_words}
+    
+    name_lower = name.lower()
+    
+    # Verificar nomes femininos conhecidos
+    for f in female_set:
+        if f in name_lower:
+            return 'female'
+    
+    # Verificar nomes masculinos conhecidos
+    for m in male_set:
+        if m in name_lower:
+            return 'male'
+    
+    return 'neutral'
 
 
 def fetch_all_cards(max_sets=50):
@@ -268,22 +326,37 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
                         break
             
             if not match_found and local_id is not None:
-                # Fallback: busca na Liga por NOME do card (todas as siglas)
+                # Fallback: busca na Liga por NOME + número (prioriza siglas do mapping)
                 card_name_key = str(row.get('name', '')).strip().lower() or str(row.get('name_en', '')).strip().lower()
                 if card_name_key:
                     best = None
-                    for (b_sigla, b_num), b_val in lookup_brl.items():
-                        if b_num != local_id:
-                            continue
-                        nen_key = str(b_val.get('nome_liga', '')).lower()
-                        # Extrai só o nome do Pokémon antes do (#xx/yy)
-                        pokemon_name = re.sub(r'\s*\([^)]*\)\s*$', '', nen_key).strip()
-                        if pokemon_name and (card_name_key in pokemon_name or pokemon_name in card_name_key):
-                            best = (b_sigla, b_val)
-                            break
+                    sigla_principal = set_mapping.get(tcg_set)
+                    siglas_prioridade = {sigla_principal, sigla_principal.upper(), sigla_principal.lower()} if sigla_principal else set()
                     
+                    # Primeira passada: só siglas do mapping
+                    if siglas_prioridade:
+                        for (b_sigla, b_num), b_val in lookup_brl.items():
+                            if b_sigla not in siglas_prioridade or b_num != local_id:
+                                continue
+                            nen_key = str(b_val.get('nome_liga', '')).lower()
+                            pokemon_name = re.sub(r'\s*\([^)]*\)\s*$', '', nen_key).strip()
+                            if pokemon_name and (card_name_key in pokemon_name or pokemon_name in card_name_key):
+                                best = (b_sigla, b_val)
+                                break
+                    
+                    # Segunda passada: qualquer sigla
                     if best is None:
-                        # Segunda tentativa: match parcial (aceita 3+ chars em comum)
+                        for (b_sigla, b_num), b_val in lookup_brl.items():
+                            if b_num != local_id:
+                                continue
+                            nen_key = str(b_val.get('nome_liga', '')).lower()
+                            pokemon_name = re.sub(r'\s*\([^)]*\)\s*$', '', nen_key).strip()
+                            if pokemon_name and (card_name_key in pokemon_name or pokemon_name in card_name_key):
+                                best = (b_sigla, b_val)
+                                break
+                    
+                    # Terceira passada: match parcial
+                    if best is None:
                         card_words = set(card_name_key.split())
                         for (b_sigla, b_num), b_val in lookup_brl.items():
                             if b_num != local_id:
@@ -293,8 +366,10 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
                             if pokemon_name:
                                 common = card_words & set(pokemon_name.split())
                                 if len(common) >= 2 or (len(common) >= 1 and min(len(card_name_key), len(pokemon_name)) >= 5):
-                                    best = (b_sigla, b_val)
-                                    break
+                                    # Match parcial só aceita se for da sigla principal
+                                    if sigla_principal and b_sigla in {sigla_principal, sigla_principal.upper(), sigla_principal.lower()}:
+                                        best = (b_sigla, b_val)
+                                        break
                     
                     if best:
                         b_sigla, b_val = best
@@ -347,6 +422,7 @@ def enrich_pricing(df):
     df['is_normal'] = df_prices['is_normal'].fillna(False).astype(int)
     df['is_shiny'] = df_prices['is_shiny'].fillna(0).astype(int)
     df['illustrator'] = df_prices['illustrator'].fillna('')
+    df['trainer_gender'] = df_prices['trainer_gender'].fillna('neutral')
     # Nome EN vindo do endpoint individual (mais confiável)
     en_names = df_prices['name_en'].fillna('')
     df['name_en'] = df['name_en'].combine_first(en_names)
@@ -359,7 +435,7 @@ def enrich_pricing(df):
 
 # ── 4. Features ─────────────────────────────────────────────────────
 
-CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype', 'illustrator']
+CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype', 'illustrator', 'trainer_gender']
 EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
 
 # Flags binárias de arte
