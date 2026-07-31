@@ -1,2 +1,0 @@
-=== Train USD ===
-USD trained: True
