@@ -20,6 +20,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from sklearn.metrics import mean_absolute_error, r2_score
 sys.path.insert(0, str(Path(__file__).parent))
 import pokemon_popularity as pop
+import ptcg_io
 
 BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / 'data'
@@ -56,95 +57,18 @@ def fetch_json(url):
 
 
 def fetch_all_sets():
-    """Lista todos os sets disponíveis em pt-BR."""
-    data = fetch_json(f'{TCGDEX}/pt/sets')
-    if not data:
-        return []
-    print(f'  Sets disponíveis: {len(data)}')
-    return data
+    """Lista todos os sets via pokemontcg.io."""
+    return ptcg_io.fetch_all_sets()
 
 
 def fetch_set_cards(set_id):
-    """Retorna cartas de um set com dados completos. Tenta pt-BR, fallback EN."""
-    data = fetch_json(f'{TCGDEX}/pt/sets/{set_id}')
-    if not data:
-        return []
-    cards = data.get('cards', [])
-    # Se vazio em pt-BR, tenta EN
-    if not cards:
-        data_en = fetch_json(f'{TCGDEX}/en/sets/{set_id}')
-        if data_en:
-            cards = data_en.get('cards', [])
-            # Usa nome pt-BR do set se disponível
-            if cards:
-                pass
-    set_info = {
-        'set_id': data.get('id', set_id),
-        'set_name': data.get('name', ''),
-        'set_series': data.get('series', ''),
-        'set_release_date': data.get('releaseDate', ''),
-        'set_printed_total': data.get('cardCount', {}).get('total', 0),
-    }
-    for c in cards:
-        c['_set'] = set_info
-    return cards
+    """Retorna cartas de um set via pokemontcg.io."""
+    return ptcg_io.fetch_set_cards(set_id)
 
 
 def fetch_card_pricing(card_id):
-    """Busca pricing individual + raridade + variantes de uma carta."""
-    clean_id = card_id.replace('pt/', '')
-    data = fetch_json(f'{TCGDEX}/en/cards/{clean_id}')
-    if not data:
-        return {}
-    pricing = data.get('pricing', {})
-    tcg = pricing.get('tcgplayer', {}) if pricing else {}
-    holofoil = tcg.get('holofoil', {}) if tcg else {}
-    normal = tcg.get('normal', {}) if tcg else {}
-    cm = pricing.get('cardmarket', {}) if pricing else {}
-    if cm is None:
-        cm = {}
-    
-    # Extrai info de arte/raridade
-    rarity_tcg = data.get('rarity', 'Unknown')
-    variants = data.get('variants', {}) or {}
-    variants_detailed = data.get('variants_detailed', [])
-    
-    # Flags de arte
-    is_holo = variants.get('holo', False) or any(v.get('type') == 'holo' for v in variants_detailed)
-    is_reverse = variants.get('reverse', False)
-    is_normal = variants.get('normal', False)
-    
-    # Nome em inglês (da EN endpoint)
-    name_en = data.get('name', '')
-    illustrator = data.get('illustrator', '')
-    shiny_name = 'shiny' in name_en.lower() or 'brilhante' in data.get('name', '').lower()
-    
-    # Gênero do treinador
-    category = data.get('category', '')
-    trainer_gender = 'neutral'
-    if category == 'Trainer' or category == 'Supporter':
-        trainer_gender = infer_trainer_gender(name_en)
-    
-    return {
-        'target_price_usd': holofoil.get('marketPrice') or normal.get('marketPrice'),
-        'price_type': 'holofoil' if holofoil.get('marketPrice') else ('normal' if normal.get('marketPrice') else None),
-        'rarity_tcg': rarity_tcg,
-        'is_holo': is_holo,
-        'is_reverse': is_reverse,
-        'is_normal': is_normal,
-        'name_en': name_en,
-        'illustrator': illustrator,
-        'is_shiny': int(shiny_name),
-        'trainer_gender': trainer_gender,
-        # Precos historicos Cardmarket (EUR) — medias moveis
-        'cardmarket_avg': cm.get('avg'),
-        'cardmarket_avg1': cm.get('avg1'),
-        'cardmarket_avg7': cm.get('avg7'),
-        'cardmarket_avg30': cm.get('avg30'),
-        'cardmarket_trend': cm.get('trend'),
-        'cardmarket_low': cm.get('low'),
-        'cardmarket_updated': cm.get('updated'),
-    }
+    """Busca pricing individual + raridade + variantes (pokemontcg.io)."""
+    return ptcg_io.fetch_card_pricing(card_id)
 
 
 def infer_trainer_gender(name):
@@ -199,62 +123,15 @@ def infer_trainer_gender(name):
 
 
 def fetch_all_cards(max_sets=50):
-    """Coleta cartas de N sets via TCGdex (pt-BR)."""
-    sets = fetch_all_sets()
-    if not sets:
-        return []
-
-    # Filtra sets com cards (exclui promos avulsas)
-    valid_sets = [s for s in sets if s.get('cardCount', {}).get('total', 0) > 0]
-    print(f'  Sets com cartas: {len(valid_sets)}')
-
-    all_cards = []
-    for i, s in enumerate(valid_sets[:max_sets]):
-        sid = s.get('id')
-        set_name = s.get('name', sid)
-        cards = fetch_set_cards(sid)
-        all_cards.extend(cards)
-        print(f'  Set {i+1}/{min(max_sets, len(valid_sets))}: {set_name} ({len(cards)} cartas, total: {len(all_cards)})')
-        time.sleep(0.3)
-
-    return all_cards
+    """Coleta cartas de N sets via pokemontcg.io."""
+    return ptcg_io.fetch_all_cards(max_sets=max_sets)
 
 
 # ── 2. Parse (TCGdex → df) ─────────────────────────────────────────
 
 def parse_card(c):
-    """Extrai features de uma carta TCGdex."""
-    set_info = c.get('_set', {})
-    rel_date = set_info.get('set_release_date', '')
-    rel_year = int(rel_date.split('-')[0]) if rel_date and '-' in rel_date else None
-
-    types = c.get('types', [])
-    dex_id = c.get('dexId', [])
-    hp_str = c.get('hp')
-    try:
-        hp = float(hp_str) if hp_str else None
-    except:
-        hp = None
-
-    return {
-        'id': c.get('id', ''),
-        'name': c.get('name', ''),           # pt-BR
-        'name_en': c.get('name', ''),         # fallback
-        'hp': hp,
-        'supertype': c.get('category', 'Pokémon'),
-        'subtypes_count': 1 if c.get('stage') not in (None, 'Basic') else 0,
-        'primary_type': types[0] if types else 'Colorless',
-        'rarity': c.get('rarity', 'Unknown'),
-        'stage': c.get('stage', 'Basic'),
-        'set_id': set_info.get('set_id', ''),
-        'set_name': set_info.get('set_name', ''),
-        'set_series': set_info.get('set_series', ''),
-        'set_printed_total': set_info.get('set_printed_total', 0),
-        'release_year': rel_year,
-        'card_age_years': (datetime.now().year - rel_year) if rel_year else None,
-        'pokedex_number': dex_id[0] if dex_id else None,
-        'image': c.get('image'),
-    }
+    """Extrai features de uma carta pokemontcg.io."""
+    return ptcg_io.parse_card(c)
 
 
 # ── 3a. Merge BRL (Liga Pokémon) ────────────────────────────────────
@@ -265,8 +142,10 @@ def build_liga_lookup():
     """Constrói lookups de BRL + iCO + tcg_set → liga_sigla."""
     import re
     
-    # Carrega mapping TCGdex set_id → Liga sigla (via nome)
-    liga_map_path = DATA_DIR / 'liga' / 'liga_set_sigla.json'
+    # Carrega mapping set_id (pokemontcg.io) → Liga sigla
+    liga_map_path = DATA_DIR / 'liga' / 'liga_set_sigla_ptcg.json'
+    if not liga_map_path.exists():
+        liga_map_path = DATA_DIR / 'liga' / 'liga_set_sigla.json'  # fallback TCGdex
     if liga_map_path.exists():
         set_mapping = json.loads(liga_map_path.read_text())
     else:
@@ -407,24 +286,38 @@ def enrich_brl(df_tcgdex, lookup_brl, lookup_ico, set_mapping):
 # ── 3b. Pricing (busca individual TCGPlayer) ───────────────────────────
 
 def enrich_pricing(df):
-    """Busca pricing TCGPlayer USD via requisições paralelas."""
-    cids = df['id'].str.replace('pt/', '', regex=False).tolist()
-    total = len(cids)
-    print(f'\n📡 Buscando preços ({total} cartas, 20 threads)...')
+    """Busca pricing TCGPlayer USD.
 
-    results = [{}] * total
-    done_count = 0
+    Se os cards já vieram com pricing embutido (pokemontcg.io traz
+    tcgplayer/cardmarket no payload), usa direto. Caso contrário,
+    faz requisições paralelas individuais.
+    """
+    # Verifica se o df ainda tem o payload bruto (came de ptcg_io.fetch_all_cards)
+    # A coluna '_raw' é anexada por train_model/run_snapshot quando disponível
+    has_raw = '_raw' in df.columns
 
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        fut_map = {executor.submit(fetch_card_pricing, cid): i for i, cid in enumerate(cids)}
-        for fut in as_completed(fut_map):
-            idx = fut_map[fut]
-            results[idx] = fut.result()
-            done_count += 1
-            if done_count % 200 == 0:
-                print(f'  Preços: {done_count}/{total}')
+    total = len(df)
+    if has_raw:
+        print(f'\n📡 Usando pricing embutido ({total} cartas)...')
+        results = df['_raw'].apply(fetch_card_pricing)
+        df_prices = pd.DataFrame(results.tolist())
+    else:
+        cids = df['id'].str.replace('pt/', '', regex=False).tolist()
+        print(f'\n📡 Buscando preços ({total} cartas, 20 threads)...')
+        results = [{}] * total
+        done_count = 0
 
-    df_prices = pd.DataFrame(results)
+        with ThreadPoolExecutor(max_workers=20) as executor:
+            fut_map = {executor.submit(fetch_card_pricing, cid): i for i, cid in enumerate(cids)}
+            for fut in as_completed(fut_map):
+                idx = fut_map[fut]
+                results[idx] = fut.result()
+                done_count += 1
+                if done_count % 200 == 0:
+                    print(f'  Preços: {done_count}/{total}')
+
+        df_prices = pd.DataFrame(results)
+
     df['target_price'] = df_prices['target_price_usd']
     df['price_type'] = df_prices['price_type']
     df['rarity_tcg'] = df_prices['rarity_tcg'].fillna('Unknown')
@@ -445,7 +338,7 @@ def enrich_pricing(df):
     # Nome EN vindo do endpoint individual (mais confiável)
     en_names = df_prices['name_en'].fillna('')
     df['name_en'] = df['name_en'].combine_first(en_names)
-    # TCGdex rarity pura (sem mapping)
+    # rarity pura (sem mapping)
     df['rarity'] = df['rarity_tcg']
     has_price = df['target_price'].notna().sum()
     print(f'  Cartas com preço: {has_price}/{total}')
@@ -505,16 +398,24 @@ def calc_grail_score(name, name_en, dex_id):
             return score
     
     # Fallback: lendários/míticos ganham 4 se não estiverem no dicionário
-    if dex_id and int(dex_id) in LEGENDARY_DEX:
+    try:
+        dex_int = int(float(dex_id)) if dex_id is not None and str(dex_id) != 'nan' else None
+    except (TypeError, ValueError):
+        dex_int = None
+    if dex_int and dex_int in LEGENDARY_DEX:
         return 4
     
     return 0
 
 def is_legendary(dex_id):
     """Retorna 1 se o Pokémon é lendário/mítico."""
-    if not dex_id:
+    try:
+        dex_int = int(float(dex_id)) if dex_id is not None and str(dex_id) != 'nan' else None
+    except (TypeError, ValueError):
+        dex_int = None
+    if not dex_int:
         return 0
-    return 1 if int(dex_id) in LEGENDARY_DEX else 0
+    return 1 if dex_int in LEGENDARY_DEX else 0
 
 
 def prepare_features(df, extra_features=None):
@@ -615,6 +516,7 @@ def train_model(max_sets=20):
     print('\n📦 Treinando modelo...')
     cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
+    df['_raw'] = cards  # payload bruto com pricing embutido (pokemontcg.io)
     df = enrich_pricing(df)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     df['log_target'] = np.log1p(df['target_price'])
@@ -726,6 +628,7 @@ def train_model_brl(max_sets=50):
     print('\n📦 Treinando modelo BRL...')
     cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
+    df['_raw'] = cards
     df = enrich_pricing(df)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     
@@ -807,6 +710,7 @@ def run_snapshot(model=None, max_sets=50):
         return None
 
     df = pd.DataFrame([parse_card(c) for c in cards])
+    df['_raw'] = cards  # payload com pricing embutido
     print(f'📊 Metadados: {df.shape}')
 
     df = enrich_pricing(df)
@@ -899,10 +803,11 @@ def score_hits(model=None, model_brl=None):
     if model_brl is None:
         model_brl = load_model_brl()
 
-    # Carrega dados TCGdex (features) para match com os hits
-    print('\n📦 Carregando features TCGdex...')
+    # Carrega dados pokemontcg.io (features) para match com os hits
+    print('\n📦 Carregando features pokemontcg.io...')
     cards = fetch_all_cards(max_sets=50)
     df_base = pd.DataFrame([parse_card(c) for c in cards])
+    df_base['_raw'] = cards
     df_base = enrich_pricing(df_base)
 
     _lookup_brl, _lookup_ico, _set_map = build_liga_lookup()
@@ -990,7 +895,9 @@ def score_hits(model=None, model_brl=None):
 
         # Cria liga_id no df_base_feat
         import json
-        set_sigla_path = DATA_DIR / 'liga' / 'liga_set_sigla.json'
+        set_sigla_path = DATA_DIR / 'liga' / 'liga_set_sigla_ptcg.json'
+        if not set_sigla_path.exists():
+            set_sigla_path = DATA_DIR / 'liga' / 'liga_set_sigla.json'
         set_sigla = json.loads(set_sigla_path.read_text()) if set_sigla_path.exists() else {}
 
         def tcgdex_to_liga_id(tcg_id):
@@ -1103,9 +1010,10 @@ def score_snapshot(snapshot_path=None, model=None, model_brl=None):
     if model_brl is None:
         model_brl = load_model_brl() if BRL_MODEL_PATH.exists() else None
 
-    # Busca base TCGdex para features
+    # Busca base pokemontcg.io para features
     cards = fetch_all_cards(max_sets=50)
     df_base = pd.DataFrame([parse_card(c) for c in cards])
+    df_base['_raw'] = cards
     df_base = enrich_pricing(df_base)
     df_base['id'] = df_base['id'].astype(str)
 
