@@ -1150,39 +1150,41 @@ def score_snapshot(snapshot_path=None, model=None, model_brl=None):
     df_out['real_ref'] = np.where(df_out['tem_brl'], df_out['target_price_brl'], df_out['target_price'])
     df_out['pred_ref'] = np.where(df_out['tem_brl'], df_out['predicted_price_brl'], df_out['predicted_price'])
 
-    df_out['residual'] = df_out['real_ref'] - df_out['pred_ref']
-    df_out['residual_pct'] = (df_out['residual'] / df_out['real_ref'] * 100).clip(-500, 500)
-    df_out['oportunidade'] = df_out['residual_pct'].apply(
-        lambda x: '🔥 Barata' if x > 30 else ('👍 Leve' if x > 10 else ('💀 Cara' if x < -30 else '⚖️ Justa'))
+    # Marca oportunidades: compara prediz vs real
+    # Se PREDIÇÃO > REAL: a carta está SUBVALORIZADA (ótima oportunidade de compra)
+    # Se REAL > PREDIÇÃO: a carta está SOBREVALORIZADA / INFLACIONADA no mercado
+    df_out['diff_pct'] = ((df_out['pred_ref'] - df_out['real_ref']) / df_out['real_ref'] * 100).clip(-500, 500)
+    df_out['oportunidade'] = df_out['diff_pct'].apply(
+        lambda x: '🔥 Subvalorizada' if x > 25 else ('👍 Leve Desconto' if x > 10 else ('💀 Inflacionada' if x < -25 else '⚖️ Preço Justo'))
     )
 
-    baratas = df_out[df_out['oportunidade'] == '🔥 Barata'].sort_values('residual_pct', ascending=False)
-    caras = df_out[df_out['oportunidade'] == '💀 Cara'].sort_values('residual_pct')
+    baratas = df_out[df_out['oportunidade'] == '🔥 Subvalorizada'].sort_values('diff_pct', ascending=False)
+    caras = df_out[df_out['oportunidade'] == '💀 Inflacionada'].sort_values('diff_pct')
 
     print(f'\n🏆 OPORTUNIDADES NO SNAPSHOT')
     print(f'  Total cartas: {len(df_out)}')
-    print(f'  🔥 Baratas (pred >30% acima do real): {len(baratas)}')
-    print(f'  👍 Leves (pred 10-30% acima):         {len(df_out[df_out["oportunidade"] == "👍 Leve"])}')
-    print(f'  ⚖️ Justas:                            {len(df_out[df_out["oportunidade"] == "⚖️ Justa"])}')
-    print(f'  💀 Caras (real >30% acima do pred):   {len(caras)}')
+    print(f'  🔥 Subvalorizadas (Pred > Real +25%): {len(baratas)}')
+    print(f'  👍 Leve Desconto (Pred > Real +10-25%): {len(df_out[df_out["oportunidade"] == "👍 Leve Desconto"])}')
+    print(f'  ⚖️ Preço Justo (-25% a +10%):           {len(df_out[df_out["oportunidade"] == "⚖️ Preço Justo"])}')
+    print(f'  💀 Inflacionadas (Real > Pred +25%):   {len(caras)}')
 
     if len(baratas) > 0:
-        print(f'\n🔥 Top 15 baratas:')
+        print(f'\n🔥 Top 15 Subvalorizadas (Oportunidades de Compra):')
         for _, r in baratas.head(15).iterrows():
             nome = r.get('name', r.get('name_en', '?'))
             real = r['real_ref']
             pred = r['pred_ref']
             moeda = 'R$' if r['tem_brl'] else '$'
-            print(f'  {str(nome):35s} | Real: {moeda}{real:>8.2f} | Pred: {moeda}{pred:>8.2f} | Diff: {r["residual_pct"]:+.0f}%')
+            print(f'  {str(nome):35s} | Real: {moeda}{real:>8.2f} | Pred: {moeda}{pred:>8.2f} | Upside: {r["diff_pct"]:+.0f}%')
 
     if len(caras) > 0:
-        print(f'\n💀 Top 10 caras (superfaturadas):')
+        print(f'\n💀 Top 10 Inflacionadas (evitar compra):')
         for _, r in caras.head(10).iterrows():
             nome = r.get('name', r.get('name_en', '?'))
             real = r['real_ref']
             pred = r['pred_ref']
             moeda = 'R$' if r['tem_brl'] else '$'
-            print(f'  {str(nome):35s} | Real: {moeda}{real:>8.2f} | Pred: {moeda}{pred:>8.2f} | Diff: {r["residual_pct"]:+.0f}%')
+            print(f'  {str(nome):35s} | Real: {moeda}{real:>8.2f} | Pred: {moeda}{pred:>8.2f} | Upside: {r["diff_pct"]:+.0f}%')
 
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
     path = LIGA_SCORE_DIR / f'scored_snapshot_{ts}.csv'
