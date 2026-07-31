@@ -932,37 +932,71 @@ def score_hits(model=None, model_brl=None):
             pass
 
         # Tenta match por sNomeIngles ou nEN com nome TCGdex
+        df_hits['nome_match'] = ''
         if 'sNomeIngles' in df_hits.columns:
             df_hits['nome_match'] = df_hits['sNomeIngles'].str.lower().str.strip()
         elif 'sNomePortugues' in df_hits.columns:
             df_hits['nome_match'] = df_hits['sNomePortugues'].str.lower().str.strip()
-        else:
-            df_hits['nome_match'] = df_hits.get('nome', '').str.lower().str.strip()
+        elif 'nome' in df_hits.columns:
+            df_hits['nome_match'] = df_hits['nome'].str.lower().str.strip()
 
-        # Match com base TCGdex
+        # Adiciona número da carta se disponível (desambigua)
+        df_hits['card_num'] = ''
+        if 'sNumber' in df_hits.columns:
+            df_hits['card_num'] = df_hits['sNumber'].str.strip()
+        elif 'sN' in df_hits.columns:
+            df_hits['card_num'] = df_hits['sN'].str.strip()
+
+        # Match com base TCGdex: tentar (nome, numero) primeiro
         df_base['nome_match'] = df_base.get('name_en', df_base['name']).str.lower().str.strip()
-        cols_base = ['id', 'nome_match', 'target_price']
-        df_merged = df_hits.merge(df_base[cols_base], on='nome_match', how='inner', suffixes=('', '_tcg'))
+        # Extrair numero do id TCGdex (ex: base1-4 -> "4")
+        df_base['card_num'] = df_base['id'].str.split('-').str[-1]
+        # Remove leading zeros
+        df_base['card_num'] = df_base['card_num'].str.lstrip('0')
+
+        merged_total = 0
+        # Match nível 1: nome + número
+        if df_hits['card_num'].str.len().sum() > 0:
+            df_merged = df_hits.merge(df_base[['id', 'nome_match', 'card_num', 'target_price']],
+                                      on=['nome_match', 'card_num'], how='inner', suffixes=('', '_tcg'))
+            merged_total += len(df_merged)
+        else:
+            df_merged = pd.DataFrame()
+
+        # Match nível 2: só nome (quando não tem número)
+        df_hits_semn = df_hits[~df_hits['nome_match'].isin(df_merged['nome_match'])] if len(df_merged) > 0 else df_hits
+        if len(df_hits_semn) > 0:
+            mais = df_hits_semn.merge(df_base[['id', 'nome_match', 'target_price']],
+                                      on='nome_match', how='inner', suffixes=('', '_tcg'))
+            df_merged = pd.concat([df_merged, mais], ignore_index=True) if len(df_merged) > 0 else mais
+            merged_total += len(mais)
+
+        df_merged = df_merged.drop_duplicates(subset=['id'] + [c for c in df_merged.columns if c != 'fonte'] if 'fonte' in df_merged.columns else ['id'])
 
         if len(df_merged) == 0:
             continue
 
         # Prepara features completas (inclui as computadas)
-        # Escora usando o df_base enriquecido
+        # Escora usando as features pre-computadas do df_base_feat
         df_base_feat = df_base.copy()
-        # Adicionar as features computadas
-        df_base_X = prepare_features(df_base_feat)
-        for col in df_base_X.columns:
-            if col not in df_base_feat.columns:
-                df_base_feat[col] = df_base_X[col]
+        df_base_feat['id'] = df_base_feat['id'].astype(str)
+        df_merged['id'] = df_merged['id'].astype(str)
 
-        df_merged = df_merged.merge(df_base_feat[['id'] + list(df_base_X.columns)], on='id', how='left', suffixes=('', '_feat'))
-        # Reconstroi X apenas com as colunas que o modelo espera
-        X_cols = [c for c in FEATURE_COLS if c in df_merged.columns]
-        X = df_merged[X_cols].fillna(0)
-        pred_log = model.predict(X)
-        pred_log = model.predict(X)
-        df_merged['predicted_price'] = np.expm1(pred_log)
+        # Computa features no df_base_feat E ja escora
+        X_base = prepare_features(df_base_feat)
+        # Garantir que nao tem NaN nas cat features
+        for c in CAT_FEATURES:
+            if c in X_base.columns:
+                X_base[c] = X_base[c].fillna('Unknown').astype(str)
+        pred_log_all = model.predict(X_base)
+        df_base_feat['predicted_price'] = np.expm1(pred_log_all)
+
+        # Agora so faz merge da predicao
+        df_merged = df_merged.merge(df_base_feat[['id', 'predicted_price']], on='id', how='left', suffixes=('', '_feat'))
+        # Remove colunas duplicadas
+        df_merged = df_merged.loc[:, ~df_merged.columns.str.endswith('_feat')].copy()
+        df_merged['predicted_price'] = df_merged['predicted_price'].fillna(0)
+        df_merged['residual'] = df_merged['target_price'] - df_merged['predicted_price']
         df_merged['residual'] = df_merged['target_price'] - df_merged['predicted_price']
         df_merged['residual_pct'] = (df_merged['residual'] / df_merged['target_price'] * 100).clip(-500, 500)
         df_merged['oportunidade'] = df_merged['residual_pct'].apply(
