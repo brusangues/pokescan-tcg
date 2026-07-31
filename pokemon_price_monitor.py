@@ -100,6 +100,9 @@ def fetch_card_pricing(card_id):
     tcg = pricing.get('tcgplayer', {}) if pricing else {}
     holofoil = tcg.get('holofoil', {}) if tcg else {}
     normal = tcg.get('normal', {}) if tcg else {}
+    cm = pricing.get('cardmarket', {}) if pricing else {}
+    if cm is None:
+        cm = {}
     
     # Extrai info de arte/raridade
     rarity_tcg = data.get('rarity', 'Unknown')
@@ -133,6 +136,14 @@ def fetch_card_pricing(card_id):
         'illustrator': illustrator,
         'is_shiny': int(shiny_name),
         'trainer_gender': trainer_gender,
+        # Precos historicos Cardmarket (EUR) — medias moveis
+        'cardmarket_avg': cm.get('avg'),
+        'cardmarket_avg1': cm.get('avg1'),
+        'cardmarket_avg7': cm.get('avg7'),
+        'cardmarket_avg30': cm.get('avg30'),
+        'cardmarket_trend': cm.get('trend'),
+        'cardmarket_low': cm.get('low'),
+        'cardmarket_updated': cm.get('updated'),
     }
 
 
@@ -423,6 +434,14 @@ def enrich_pricing(df):
     df['is_shiny'] = df_prices['is_shiny'].fillna(0).astype(int)
     df['illustrator'] = df_prices['illustrator'].fillna('')
     df['trainer_gender'] = df_prices['trainer_gender'].fillna('neutral')
+    # Precos historicos Cardmarket
+    df['cardmarket_avg'] = pd.to_numeric(df_prices['cardmarket_avg'], errors='coerce')
+    df['cardmarket_avg1'] = pd.to_numeric(df_prices['cardmarket_avg1'], errors='coerce')
+    df['cardmarket_avg7'] = pd.to_numeric(df_prices['cardmarket_avg7'], errors='coerce')
+    df['cardmarket_avg30'] = pd.to_numeric(df_prices['cardmarket_avg30'], errors='coerce')
+    df['cardmarket_trend'] = pd.to_numeric(df_prices['cardmarket_trend'], errors='coerce')
+    df['cardmarket_low'] = pd.to_numeric(df_prices['cardmarket_low'], errors='coerce')
+    df['cardmarket_updated'] = df_prices['cardmarket_updated'].fillna('')
     # Nome EN vindo do endpoint individual (mais confiável)
     en_names = df_prices['name_en'].fillna('')
     df['name_en'] = df['name_en'].combine_first(en_names)
@@ -438,10 +457,12 @@ def enrich_pricing(df):
 CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype', 'illustrator', 'trainer_gender']
 EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
 
-# Flags binárias de arte
+# Precos historicos (cardmarket)
+CM_FEATURES = ['cardmarket_avg', 'cardmarket_avg1', 'cardmarket_avg7', 'cardmarket_avg30', 'cardmarket_trend', 'cardmarket_low']
+# Flags binarias de arte
 ART_FEATURES = ['is_holo', 'is_reverse', 'is_normal', 'is_shiny', 'is_legendary']
 # Grail score e popularidade
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO', 'pokemon_grail_score'] + ART_FEATURES + [f'emb_{i}' for i in range(16)]
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO', 'pokemon_grail_score'] + CM_FEATURES + ART_FEATURES + [f'emb_{i}' for i in range(16)]
 NUM_FEATURES_BRL = NUM_FEATURES + ['target_price_usd']  # USD price como feature para modelo BRL
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
