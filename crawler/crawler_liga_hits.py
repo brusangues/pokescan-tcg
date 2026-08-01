@@ -23,7 +23,7 @@ def scrape(periodo, tipo):
     order = ORDER_MAP[tipo]
     url = f'https://www.ligapokemon.com.br/?view=cards/variacao&formato=&period={p}&order={order}'
     nome = f'{periodo}_{tipo}'
-    print(f'🌐 {nome}: {url}')
+    print(f'🌐 {nome}')
 
     driver = get_driver()
     driver.get(url)

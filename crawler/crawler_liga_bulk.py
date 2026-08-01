@@ -30,12 +30,13 @@ KNOWN_SET_IDS = sorted({
 })
 
 
-def discover_set_ids(max_range=1000):
+def discover_set_ids(max_range=1000, quiet=True):
     """Tenta descobrir novos IDs de sets varrendo ranges."""
     known = set(KNOWN_SET_IDS)
     discovered = set()
     
-    print(f'🔎 Descobrindo sets (já temos {len(known)})...')
+    if not quiet:
+        print(f'🔎 Descobrindo sets (já temos {len(known)})...')
     
     # Varre ranges ao redor dos IDs conhecidos
     ranges = []
@@ -50,22 +51,24 @@ def discover_set_ids(max_range=1000):
         to_test.update(r)
     to_test -= known  # só testa os que não temos
     
-    print(f'  Testando {len(to_test)} possíveis IDs...')
+    if not quiet:
+        print(f'  Testando {len(to_test)} possíveis IDs...')
     
     for eid in sorted(to_test):
         if eid in discovered:
             continue
         url = f'https://www.ligapokemon.com.br/?view=cards/search&card=edid={eid}%20ed=POR'
         try:
-            resp = selenium_get(url)
+            resp = selenium_get(url, quiet=quiet)
             match = re.search(r'var cardsjson = (\[.*?\]);', resp.text, re.DOTALL)
             if match:
                 cards = json.loads(match.group(1))
                 if cards:
                     discovered.add(eid)
-                    nome = cards[0].get('ed_sNomePortugues') or cards[0].get('edicao', '?')
-                    qtd = len(cards)
-                    print(f'  ✅ ID {eid}: {nome} ({qtd} cartas)')
+                    if not quiet:
+                        nome = cards[0].get('ed_sNomePortugues') or cards[0].get('edicao', '?')
+                        qtd = len(cards)
+                        print(f'  ✅ ID {eid}: {nome} ({qtd} cartas)')
         except Exception as e:
             pass  # 403 ou sem cardsjson = set inexistente
         time.sleep(1)
@@ -73,7 +76,8 @@ def discover_set_ids(max_range=1000):
     # Salva descobertos
     all_ids = sorted(known | discovered)
     SETS_KNOWN_PATH.write_text(json.dumps(all_ids, indent=2))
-    print(f'\n📦 Total de sets: {len(all_ids)} (novos: {len(discovered)})')
+    if not quiet:
+        print(f'\n📦 Total de sets: {len(all_ids)} (novos: {len(discovered)})')
     return all_ids
 
 

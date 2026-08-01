@@ -44,14 +44,16 @@ def get_driver():
     return DRIVER
 
 
-def selenium_get(url, retries=3):
-    print(f"selenium_get: {url=}")
+def selenium_get(url, retries=3, quiet=True):
+    if not quiet:
+        print(f"selenium_get: {url=}")
     
     driver = get_driver()
     
     for attempt in range(retries):
         try:
-            print(f"Attempt {attempt + 1}/{retries}: Loading page...")
+            if not quiet:
+                print(f"Attempt {attempt + 1}/{retries}: Loading page...")
             driver.get(url)
             
             # Espera até 30s para o Cloudflare resolver
@@ -69,16 +71,19 @@ def selenium_get(url, retries=3):
             
             # Verifica se passou do Cloudflare (não tem _cf_chl_opt)
             if '_cf_chl_opt' not in page_source and ('cardsjson' in page_source or 'p1b' in page_source or 'nPT' in page_source):
-                print(f"Success! Page loaded with card data.")
+                if not quiet:
+                    print(f"Success! Page loaded with card data.")
                 return type('Response', (), {'text': page_source, 'status_code': 200})()
             else:
-                print(f"Attempt {attempt + 1}/{retries}: Cloudflare still blocking. Retrying...")
+                if not quiet:
+                    print(f"Attempt {attempt + 1}/{retries}: Cloudflare still blocking. Retrying...")
                 if attempt < retries - 1:
                     time.sleep(5 + (attempt * 3))
                 continue
                 
         except Exception as e:
-            print(f"Attempt {attempt + 1}/{retries}: Error - {e}")
+            if not quiet:
+                print(f"Attempt {attempt + 1}/{retries}: Error - {e}")
             if attempt == retries - 1:
                 raise
             time.sleep(3)
