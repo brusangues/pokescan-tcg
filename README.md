@@ -87,6 +87,8 @@ public/fetch_result.json    — Fallback offline da API
 
 Scripts em Python que alimentam datasets de cartas. Usam requests + BeautifulSoup ou APIs diretas para baixar metadados de cartas Pokémon em CSV.
 
+> **Pipeline de predição de preços** (treino CatBoost USD/BRL, escoragem de oportunidades, crawlers da Liga Pokémon): veja [`PIPELINE.md`](PIPELINE.md) e [`MODEL_CARD.md`](MODEL_CARD.md).
+
 ## Variáveis de ambiente
 
 | Variável | Obrigatória | Descrição |

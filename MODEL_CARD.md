@@ -1,35 +1,37 @@
 # Model Card — Previsão de Preço Pokémon TCG
 
 ## Objetivo
-Prever o preço de mercado (TCGPlayer USD) de cartas Pokémon TCG usando dados da API TCGdex, e monitorar periodicamente outliers e variações de preço.
+Prever o preço de mercado de cartas Pokémon TCG (USD TCGPlayer + BRL Liga Pokémon) usando features da API pokemontcg.io, e monitorar oportunidades de compra (cartas subvalorizadas vs. predição).
 
 ---
 
 ## Etapas da Pipeline
 
 ```
-TCGdex API → Coleta de sets (50 sets, ~5800 cartas)
+pokemontcg.io API → Coleta (174 sets, ~20k cartas, até 2026)
                  ↓
-          Metadados (nome, raridade, tipo, etc.)
+          Metadados (nome, raridade, tipos, hp, set, release_date)
                  ↓
-          Enrich Pricing (TCGPlayer USD via TCGdex individual)
+          Pricing embutido (TCGPlayer USD + Cardmarket EUR avg1/7/30)
                  ↓
-          Feature Engineering
+          Merge BRL (Liga Pokémon via mapping de siglas + iCO)
                  ↓
-          CatBoost Regressor
+          Feature Engineering (embeddings DINOv2, grail, popularidade)
                  ↓
-          Snapshot CSV (preço real, predito, resíduo, outliers)
+          CatBoost Regressor + Classificador de bins
+                 ↓
+          Escoragem (hits diários, snapshots, sets recentes)
 ```
 
 ---
 
 ## Fontes de Dados
 
-| Fonte | Dados | Estabilidade |
+| Fonte | Dados | Cobertura |
 |---|---|---|
-| **TCGdex** | Metadados das cartas em pt-BR (nome, raridade, tipo, set, HP, estágio, Pokédex #) | ✅ Estável, sem Cloudflare |
-| **TCGdex (pricing EN)** | Preço TCGPlayer USD (holofoil/normal) via endpoint individual | ✅ Estável (~0.3s por carta) |
-| **Popularidade** | Score heurístico calculado a partir da própria base TCGdex | ✅ Offline, sem dependência externa |
+| **pokemontcg.io** | Features (rarity, types, hp, set, release_date), USD TCGPlayer (`market`), Cardmarket EUR (`avg1/7/30`, trend) — embutidos no payload | 174 sets, até jul/2026 |
+| **Liga Pokémon** | Preços BRL (`p1b`), `iCO` (nº vendedores), nome pt-BR — **fonte canônica pt-BR** | atualizado |
+| TCGdex | Legado (descontinuado — sem sets 2024+) | até 2023 |
 
 ---
 
@@ -127,6 +129,8 @@ normalizado para 0-100
 | 2026-07-29 | v3 | — | — | — | — | TCGdex | Feature pokemon_popularity |
 | 2026-07-29 | v4 | — | — | — | — | TCGdex + Liga | Integração preços BRL |
 | 2026-07-29 | **v5** | $6.90 | R$14.11 | 0.077 | 0.006 | TCGdex + Liga (bulk) | Split temporal corrigido + eval_set pra early stopping |
+| 2026-07-29 | v6 | $4.20 | — | 0.279 | — | TCGdex | Features cardmarket avg1/7/30/trend + rarity_tcg + grail + illustrator |
+| 2026-07-31 | **v7** | $5.61 | R$43.35 | 0.289 | 0.040 | **pokemontcg.io** (20.479 cartas) | Migração p/ pokemontcg.io, 174 sets até 2026; merge BRL 7.908 cartas; USD Acc 85% / BRL Acc 56% |
 
 ---
 
@@ -134,20 +138,26 @@ normalizado para 0-100
 
 | Arquivo | Descrição |
 |---|---|
-| `pokemon_price_monitor.py` | Pipeline completa (coleta → features → predição → snapshot) |
+| `pokemon_price_monitor.py` | Pipeline completa (coleta → features → predição → escoragem) |
+| `ptcg_io.py` | Cliente da API pokemontcg.io (fetch/parse/pricing) |
+| `poke_embeddings.py` | Embeddings DINOv2-small → PCA 16d |
 | `pokemon_popularity.py` | Geração do score de popularidade |
-| `01_coleta.ipynb` | Coleta via TCGdex |
-| `02_eda_features.ipynb` | EDA e feature engineering |
-| `03_modelagem.ipynb` | Treino e avaliação do modelo |
-| `data/catboost_model.cbm` | Modelo serializado |
-| `data/pokemon_popularity.json` | Cache dos scores de popularidade |
-| `data/monitoring/snapshot_*.csv` | Snapshots periódicos com predições |
+| `script/score_sets_recentes.py` | Escoragem de sets recentes (ano parametrizável) |
+| `crawler/crawler_liga_hits.py` | Crawler de cartas em alta/queda da Liga |
+| `crawler/crawler_liga_snapshot.py` | Snapshot semanal da Liga |
+| `PIPELINE.md` | **Documentação completa do pipeline (scripts, parâmetros, dados)** |
+| `data/catboost_model.cbm` | Modelo USD serializado |
+| `data/catboost_model_brl.cbm` | Modelo BRL serializado |
+| `data/ptcg_cards_cache.json` | Cache de cartas pokemontcg.io (20.479, com pricing) |
+| `data/scored/scored_*.csv` | Resultados de escoragem (hits, snapshots, recentes) |
 
 ---
 
 ## Próximas Melhorias Potenciais
 - [x] Preços brasileiros (BRL) via crawler Liga Pokémon — integrado no snapshot
-- [ ] Modelo de previsão em BRL (target separado)
-- [ ] R² na pipeline de monitoramento
+- [x] Modelo de previsão em BRL (target separado)
+- [x] Migração para pokemontcg.io (sets até 2026)
+- [x] Escoragem de oportunidades (subvalorizadas vs. predição)
+- [ ] Modelo de previsão temporal (preço futuro) usando snapshots acumulados
 - [ ] Features de texto (nome do artista, flavor text via embeddings)
 - [ ] Data augmentation (preços históricos)
