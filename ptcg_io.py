@@ -278,9 +278,9 @@ def fetch_card_pricing(card):
 
     # Nome + ilustrador
     name_en = data.get('name', '')
-    illustrator = (data.get('tcgplayer') or {}).get('url', '')
-    # pokemontcg.io NAO tem illustrator — deixamos vazio
-    # (pode ser extraído do cardmarket ou da imagem depois)
+    # illustrator é usado como CATEGORICA no modelo — alta cardinalidade
+    # (300+ artistas) causa overfitting; o sinal de artista é capturado
+    # numericamente por artist_premium (E2). Mantemos vazio aqui.
     illustrator = ''
 
     shiny_name = 'shiny' in name_en.lower()

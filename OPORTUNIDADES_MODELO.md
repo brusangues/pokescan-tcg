@@ -95,7 +95,7 @@ Ele descobriu na prática que **não dá para um modelo único cobrir tudo**: "v
 | # | Oportunidade | Esforço | Impacto esperado | Dados necessários | Origem |
 |---|---|---|---|---|---|
 | **E1** | **Pull Cost + rarity_pool_size** como features (supply) | ✅ **IMPLEMENTADO** (2026-08-02) | Alto: captura a variável #1 do modelo dele | Cache atual (contagem por set×raridade) | T3, T7, T13 |
-| **E2** | **Character Premium real** (agregação de preço médio por pokedex, normalizado por era) | Baixo | Alto: demanda de verdade, substitui/refina `pokemon_popularity` heurístico | Cache atual | T7, T13, T18 |
+| **E2** | **Character Premium real** (agregação de preço médio por pokedex, normalizado por era) | ❌ **TESTADO — SEM GANHO** (2026-08-02) | Alto na teoria; sem ganho empírico no nosso CatBoost | Cache atual | T7, T13, T18 |
 | **E3** | **Preço normalizado multi-fonte + flag de anomalia** (guardrails) | Médio (3–4h) | Alto: melhora target e escoragem (menos falsos "subvalorizada") | Cache + Liga p1b + cardmarket (já temos tudo) | T6, T11 |
 | **E4** | **Modelos por cluster** (era × raridade) em vez de 1 CatBoost único | Médio | Alto: ataca o erro estrutural (WOTC vs. moderno) | Cache atual | T8, T18 |
 | **E5** | **Features de liquidez temporal** (ΔiCO, Δpreço 7d/30d a partir dos snapshots acumulados) | Médio | Médio: sinal de momentum/leading indicator | Snapshots semanais (já acumulando) | T5, T8, T9 |
@@ -126,7 +126,7 @@ pool = df.groupby(['set_id', 'rarity_tcg']).size()   # já temos tudo no cache
 - **BRL**: MAE R$43.35 → **R$28.19** (-35%), R² 0.040 → **0.304** (+7,6×), Acc 58.5%. (Merge BRL também subiu p/ 9.693 cartas — snapshot da Liga atualizado.)
 - Commit `9eb699e`.
 
-### E2 — Character Premium real (demand)
+### E2 — Character Premium real (demand) — ❌ testado, sem ganho
 ```python
 # Preço médio histórico por espécie, normalizado por era
 prem = df.groupby('pokedex_number')['target_price'].median()
@@ -136,6 +136,12 @@ character_premium = prem_era / mediana_do_ano
 - Substitui ou complementa `pokemon_popularity` (que hoje é contagem × gen × lendário).
 - **Como testar**: A/B — modelo com `pokemon_popularity` vs. com `character_premium` vs. ambos; medir importância (feature importance CatBoost) e R² no split temporal.
 - **Bônus**: derivar `artist_premium` do mesmo jeito (agregar por `illustrator` — temos artista em 19.202 cartas!). O Youtuber cita o "Artista Clout" do Magikarp do Shinji Kanda como anomalia que o modelo não pega — nosso `illustrator` já é feature, mas **categórico cru**; um score numérico agregado por artista seria mais forte.
+
+**Resultado (2026-08-02) — NEGATIVO, revertido**:
+- Implementado `character_premium.py` com rank percentil do preço dentro da década + leave-one-out (sem vazamento da própria carta). `character_premium` (Umbreon 1.93x, Rayquaza 1.92x, Mew 1.91x, Charizard 1.89x) e `artist_premium` (Shinji Higuchi 1.96x) — ranking coerente, correlação forte com log(preço) por década (+0.42 a +0.68).
+- **A/B no split temporal**: com premiums calculados só no treino (sem vazamento), o resultado foi **idêntico ao baseline** (R² 0.3185, mesmas iterações) — o CatBoost não usou as features. Com premiums do cache completo, houve vazamento temporal (R² 0.333, "melhora" artificial).
+- **Conclusão**: o sinal de demanda já é capturado por features existentes (`rarity_tcg`, `cardmarket`, `pokemon_grail_score`). E2 não agrega no modelo atual; revertido para E1 puro (USD MAE $4.91 / R² 0.3565). Os JSONs `character_premium.json`/`artist_premium.json` e o módulo ficam para uso futuro (ex: análise exploratória), mas fora das features do modelo.
+- ⚠️ **Lição**: validar features com A/B no split temporal ANTES de integrar; cuidado com vazamento temporal em features derivadas do target.
 
 ### E3 — Preço normalizado multi-fonte + guardrail (target de qualidade)
 - Hoje o `target_price` vem só do `tcgplayer.market` da pokemontcg.io (vulnerável a 1–4 vendas/dia, como ele demonstrou).
