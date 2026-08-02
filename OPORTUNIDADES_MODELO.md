@@ -94,7 +94,7 @@ Ele descobriu na prática que **não dá para um modelo único cobrir tudo**: "v
 
 | # | Oportunidade | Esforço | Impacto esperado | Dados necessários | Origem |
 |---|---|---|---|---|---|
-| **E1** | **Pull Cost + rarity_pool_size** como features (supply) | Baixo (1–2h) | Alto: captura a variável #1 do modelo dele | Cache atual (contagem por set×raridade) | T3, T7, T13 |
+| **E1** | **Pull Cost + rarity_pool_size** como features (supply) | ✅ **IMPLEMENTADO** (2026-08-02) | Alto: captura a variável #1 do modelo dele | Cache atual (contagem por set×raridade) | T3, T7, T13 |
 | **E2** | **Character Premium real** (agregação de preço médio por pokedex, normalizado por era) | Baixo | Alto: demanda de verdade, substitui/refina `pokemon_popularity` heurístico | Cache atual | T7, T13, T18 |
 | **E3** | **Preço normalizado multi-fonte + flag de anomalia** (guardrails) | Médio (3–4h) | Alto: melhora target e escoragem (menos falsos "subvalorizada") | Cache + Liga p1b + cardmarket (já temos tudo) | T6, T11 |
 | **E4** | **Modelos por cluster** (era × raridade) em vez de 1 CatBoost único | Médio | Alto: ataca o erro estrutural (WOTC vs. moderno) | Cache atual | T8, T18 |
@@ -108,7 +108,8 @@ Ele descobriu na prática que **não dá para um modelo único cobrir tudo**: "v
 
 ## 4. Detalhamento dos experimentos prioritários
 
-### E1 — Pull Cost & rarity_pool_size (supply)
+### E1 — Pull Cost & rarity_pool_size (supply) — ✅ implementado
+
 ```python
 # Por set: quantas cartas competem em cada slot de raridade?
 pool = df.groupby(['set_id', 'rarity_tcg']).size()   # já temos tudo no cache
@@ -117,6 +118,13 @@ pool = df.groupby(['set_id', 'rarity_tcg']).size()   # já temos tudo no cache
 ```
 - **Como testar**: adicionar 2 features (`rarity_pool_size`, `pull_cost_log`), retreinar, comparar R²/MAE vs. baseline. Esperado: melhora em cartas modernas (2020+) onde o pool de SIR/IR domina o preço.
 - **Armadilha conhecida**: vazar informação do set inteiro para a carta (usar só features agregadas por raridade, não por carta).
+
+**Resultado (2026-08-02)**:
+- `add_supply_features()` em `pokemon_price_monitor.py`: `rarity_pool_size` (contagem por set×raridade) + `pull_cost_log` (pack_price_est por era × packs_por_carta por raridade × pool_size), com tabela `PULL_RATE_PACKS` (aproximação pública da era moderna).
+- Chamado **antes** do filtro de preço (pool reflete o set completo) em `train_model`, `train_model_brl`, `run_snapshot`, `score_hits`, `score_snapshot`, `score_apos_crawl.py` e `score_sets_recentes.py`.
+- **USD**: MAE $5.61 → **$4.91** (-12%), R² 0.289 → **0.357** (+23%), Acc bins 85.5%. `pull_cost_log` ficou na **posição #11** de 45 em importância (acima de `set_printed_total`, `is_holo`).
+- **BRL**: MAE R$43.35 → **R$28.19** (-35%), R² 0.040 → **0.304** (+7,6×), Acc 58.5%. (Merge BRL também subiu p/ 9.693 cartas — snapshot da Liga atualizado.)
+- Commit `9eb699e`.
 
 ### E2 — Character Premium real (demand)
 ```python
