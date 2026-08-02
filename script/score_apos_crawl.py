@@ -41,6 +41,7 @@ def load_base_features():
     df_base = pd.DataFrame([pm.parse_card(c) for c in cards])
     df_base['_raw'] = cards
     df_base = pm.enrich_pricing(df_base)
+    df_base = pm.add_supply_features(df_base)  # E1: rarity_pool_size + pull_cost
     df_base['id'] = df_base['id'].astype(str)
     return df_base
 

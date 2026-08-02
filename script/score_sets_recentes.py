@@ -51,6 +51,7 @@ def main():
     df = pd.DataFrame([pm.parse_card(c) for c in novos])
     df['_raw'] = novos
     df = pm.enrich_pricing(df)
+    df = pm.add_supply_features(df)  # E1: rarity_pool_size + pull_cost (antes do filtro)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
 
     # 4. Merge BRL (Liga Pokémon)

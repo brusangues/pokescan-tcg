@@ -356,10 +356,73 @@ CM_FEATURES = ['cardmarket_avg', 'cardmarket_avg1', 'cardmarket_avg7', 'cardmark
 ART_FEATURES = ['is_holo', 'is_reverse', 'is_normal', 'is_shiny', 'is_legendary']
 # Grail score e popularidade
 NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO', 'pokemon_grail_score'] + CM_FEATURES + ART_FEATURES + [f'emb_{i}' for i in range(16)]
+# Features de supply (E1): pool de raridade + pull cost
+SUPPLY_FEATURES = ['rarity_pool_size', 'pull_cost_log']
+NUM_FEATURES = NUM_FEATURES + SUPPLY_FEATURES
 NUM_FEATURES_BRL = NUM_FEATURES + ['target_price_usd']  # USD price como feature para modelo BRL
 FEATURE_COLS = CAT_FEATURES + NUM_FEATURES
 
-# ── 4a. Grail Score & Legendary ────────────────────────────────────
+# ── 4b. Supply: Pull Cost & Rarity Pool (E1) ───────────────────────
+
+# Packs estimados para acertar UMA carta do slot de raridade
+# (aproximação pública da era moderna; varia por set — usado como baseline)
+PULL_RATE_PACKS = {
+    'Common': 1/6, 'Uncommon': 1/4, 'Rare': 1/2, 'Rare Holo': 5,
+    'Double Rare': 7, 'Ultra Rare': 9, 'Illustration Rare': 11,
+    'Rare Ultra': 18, 'Special Illustration Rare': 45, 'Rare Secret': 65,
+    'Rare Rainbow': 90, 'Rare Holo V': 12, 'Rare Holo VMAX': 15,
+    'Rare Holo VSTAR': 15, 'Rare Holo EX': 12, 'Rare BREAK': 15,
+    'LEGEND': 20, 'Promo': 1, 'Unknown': 5,
+}
+
+def pack_price_estimado(release_year):
+    """Preço médio de booster (USD) por era."""
+    if release_year is None:
+        return 4.0
+    if release_year >= 2020:
+        return 4.5
+    if release_year >= 2014:
+        return 4.0
+    if release_year >= 2003:
+        return 3.5
+    return 3.0  # WOTC
+
+
+def add_supply_features(df):
+    """E1: features de oferta — rarity_pool_size e pull_cost.
+
+    rarity_pool_size: quantas cartas competem no mesmo slot (set × raridade).
+    pull_cost: custo monetário estimado para puxar a carta específica:
+        pull_cost = pack_price × packs_por_carta(raridade) × rarity_pool_size
+    (mesma lógica do PokeDataDadGuy: pull rate × pool size × pack price)
+
+    Deve ser chamado ANTES de filtrar por preço, para o pool refletir
+    o set completo (não só as cartas com preço).
+    """
+    df = df.copy()
+
+    # Pool: quantas cartas competem no mesmo slot (set_id, rarity_tcg)
+    if 'rarity_pool_size' not in df.columns:
+        pool = df.groupby(['set_id', 'rarity_tcg']).size().reset_index(name='rarity_pool_size')
+        df = df.merge(pool, on=['set_id', 'rarity_tcg'], how='left')
+        df['rarity_pool_size'] = df['rarity_pool_size'].fillna(1).clip(lower=1)
+
+    # Pack price por era
+    if 'pack_price_est' not in df.columns:
+        df['pack_price_est'] = df['release_year'].apply(pack_price_estimado)
+
+    # Packs p/ acertar 1 carta do slot (fator por raridade)
+    if 'packs_por_carta' not in df.columns:
+        df['packs_por_carta'] = df['rarity_tcg'].map(PULL_RATE_PACKS).fillna(5.0)
+
+    # Pull cost = pack_price × (packs/1 carta do slot) × pool_size
+    if 'pull_cost_log' not in df.columns:
+        pull_cost = df['pack_price_est'] * df['packs_por_carta'] * df['rarity_pool_size']
+        df['pull_cost_log'] = np.log1p(pull_cost)
+
+    return df
+
+# ── 4c. Grail Score & Legendary ────────────────────────────────────
 
 GRAIL_SCORE = {
     'charizard': 10, 'pikachu': 9, 'mewtwo': 9, 'mew': 8, 'lugia': 8,
@@ -491,6 +554,11 @@ def prepare_features(df, extra_features=None):
     # Seleciona apenas as features disponíveis
     avail = [c for c in feature_cols_total if c in X.columns]
     X = X[avail].copy()
+    # Fallbacks E1 (supply) — caso o df não tenha passado por add_supply_features
+    if 'rarity_pool_size' in feature_cols_total and 'rarity_pool_size' not in X.columns:
+        X['rarity_pool_size'] = 1
+    if 'pull_cost_log' in feature_cols_total and 'pull_cost_log' not in X.columns:
+        X['pull_cost_log'] = 0.0
     X['hp'] = X['hp'].fillna(X['hp'].median())
     X['set_printed_total'] = X['set_printed_total'].fillna(X['set_printed_total'].median())
     X['release_year'] = X['release_year'].fillna(2016)
@@ -519,6 +587,7 @@ def train_model(max_sets=20, cards=None):
     df = pd.DataFrame([parse_card(c) for c in cards])
     df['_raw'] = cards  # payload bruto com pricing embutido (pokemontcg.io)
     df = enrich_pricing(df)
+    df = add_supply_features(df)  # E1: rarity_pool_size + pull_cost (antes do filtro)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     df['log_target'] = np.log1p(df['target_price'])
 
@@ -635,6 +704,7 @@ def train_model_brl(max_sets=50, cards=None):
     df = pd.DataFrame([parse_card(c) for c in cards])
     df['_raw'] = cards
     df = enrich_pricing(df)
+    df = add_supply_features(df)  # E1: rarity_pool_size + pull_cost (antes do filtro)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     
     # Merge BRL
@@ -719,6 +789,7 @@ def run_snapshot(model=None, max_sets=50):
     print(f'📊 Metadados: {df.shape}')
 
     df = enrich_pricing(df)
+    df = add_supply_features(df)  # E1: rarity_pool_size + pull_cost (antes do filtro)
     df_valid = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     print(f'💰 USD: {len(df_valid)} cartas com preço')
 
@@ -814,6 +885,7 @@ def score_hits(model=None, model_brl=None):
     df_base = pd.DataFrame([parse_card(c) for c in cards])
     df_base['_raw'] = cards
     df_base = enrich_pricing(df_base)
+    df_base = add_supply_features(df_base)  # E1: rarity_pool_size + pull_cost
 
     _lookup_brl, _lookup_ico, _set_map = build_liga_lookup()
 
@@ -1020,6 +1092,7 @@ def score_snapshot(snapshot_path=None, model=None, model_brl=None):
     df_base = pd.DataFrame([parse_card(c) for c in cards])
     df_base['_raw'] = cards
     df_base = enrich_pricing(df_base)
+    df_base = add_supply_features(df_base)  # E1: rarity_pool_size + pull_cost
     df_base['id'] = df_base['id'].astype(str)
 
     X_base = prepare_features(df_base)
