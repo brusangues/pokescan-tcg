@@ -1,6 +1,6 @@
 
 import Scanner from '@/app/components/Scanner';
-import { Sparkles, Camera, Search, Layers } from 'lucide-react';
+import { Sparkles, Camera, Zap } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -19,9 +19,9 @@ export default function Home() {
               <Camera className="w-4 h-4" />
               Scanner
             </a>
-            <a href="#" className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors">
-              <Layers className="w-4 h-4" />
-              My Collection
+            <a href="/hits" className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors">
+              <Zap className="w-4 h-4" />
+              Hits
             </a>
           </nav>
         </div>
