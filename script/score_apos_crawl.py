@@ -9,6 +9,10 @@ SEM bater na API. Mostra no final as cartas com maior oportunidade
 Uso:
   python script/score_apos_crawl.py --tipo hits      # escora hits do dia
   python script/score_apos_crawl.py --tipo snapshot  # escora snapshot mais recente
+
+Melhorias:
+  - Fallback JP: mapeia siglas japonesas para set EN equivalente
+  - iCO_real: usa iCO enriquecido da página da carta quando disponível
 """
 
 import sys, json, re, glob, argparse
@@ -27,6 +31,23 @@ LIGA_DIR = BASE / 'data' / 'liga'
 SNAP_DIR = LIGA_DIR / 'snapshots'
 SCORE_DIR = BASE / 'data' / 'scored'
 SCORE_DIR.mkdir(parents=True, exist_ok=True)
+
+# Mapeamento de siglas JP → set EN (carregado lazy)
+_JP_MAPPING = None
+
+def __load_jp_mapping():
+    global _JP_MAPPING
+    if _JP_MAPPING is None:
+        jp_file = LIGA_DIR / 'jp_mapping.py'
+        if jp_file.exists():
+            import importlib.util
+            spec = importlib.util.spec_from_file_location('jp_mapping', jp_file)
+            jp_mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(jp_mod)
+            _JP_MAPPING = jp_mod.JP_TO_EN_SET
+        else:
+            _JP_MAPPING = {}
+    return _JP_MAPPING
 
 
 def load_base_features():
@@ -100,8 +121,47 @@ def normalize_liga_num(s):
     return m.group(1).lstrip('0') if m else None
 
 
+def map_jp_to_en_base(df_hits, df_base):
+    """Fallback para cartas japonesas: mapeia sigla JP → set EN equivalente.
+
+    Cartas JP não existem na base pokemontcg.io (a API não cobre sets
+    japoneses). Este fallback mapeia a sigla da Liga para o set EN
+    equivalente e junta por nome + set, usando o preço predito da carta
+    EN (mesma raridade, artista, ilustração — o modelo é transferível).
+    """
+    JP = _load_jp_mapping()
+    df = df_hits.copy()
+    sigs = df.get('sSigla', pd.Series(dtype=str)).str.strip().str.upper()
+    mask = sigs.isin(set(JP))
+    if not mask.jany():
+        return df
+
+    df_jp = df[mask].copy()
+    df_jp['set_en'] = df_jp['sSigla'].str.strip().str.upper().map(JP)
+    df_jp['nome_limpo'] = df_jp.get('nEN', pd.Series(dtype=str)).str.split('(').str[0].str.strip().str.lower()
+
+    # Match por nome + set EN (ignora numeração, que difere entre JP e EN)
+    df_base['nome_b'] = df_base['name'].str.lower().str.strip()
+    df_base['set_en_base'] = df_base['id'].str.split('-').str[:-1].str.join('-')
+
+    matched = df_jp.merge(
+        df_base[['nome_b', 'set_en_base', 'pred_usd', 'pred_brl', 'target_price']],
+        left_on=['nome_limpo', 'set_en'],
+        right_on=['nome_b', 'set_en_base'],
+        how='inner'
+    )
+    if len(matched) == 0:
+        return df
+
+    # Deduplica: mesma carta JP pode bater com varias variantes EN (foil, holo, etc.)
+    idx_col = df_jp.index.name or df_jp.iloc[:0, 0].name  # primeira coluna
+    matched = matched.drop_duplicates(subset=idx_col, keep='first')
+    matched = matched.drop(columns=['set_en', 'nome_limpo', 'nome_b', 'set_en_base'])
+    return pd.concat([df, matched], ignore_index=True)
+
+
 def escorar_hits(df_base, top=10):
-    """Escora todos os arquivos de hits do dia e imprime top oportunidades."""
+    """Para obter todos os arquivos de hits do dia e imprime top oportunidades."""
     files = sorted(glob.glob(str(LIGA_DIR / '*alta*.json')) + glob.glob(str(LIGA_DIR / '*queda*.json')))
     if not files:
         print('  Nenhum arquivo de hits encontrado.')
@@ -142,11 +202,12 @@ def escorar_hits(df_base, top=10):
         df_m = df_h.merge(
             df_base[['liga_id', 'pred_usd', 'pred_brl', 'target_price']], on='liga_id', how='inner')
 
-        # Fallback por nome EN + numero (cobre siglas sem mapping) — só base COM preço
+        # Fallback JP + nome+numero (cobre siglas sem mapping)
         if len(df_m) < len(df_h):
             ids_casados = set(df_m['liga_id']) if len(df_m) > 0 else set()
             rest = df_h[~df_h['liga_id'].isin(ids_casados)].copy()
             if len(rest) > 0:
+                rest = map_jp_to_en_base(rest, df_base)  # JP fallback
                 df_base['nome_en_b'] = df_base['name'].str.lower().str.strip()
                 df_base['num_b'] = df_base['id'].str.split('-').str[-1].str.lstrip('0')
                 base_com_preco = df_base[df_base['target_price'].notna() & (df_base['target_price'] > 0)]
@@ -154,7 +215,8 @@ def escorar_hits(df_base, top=10):
                     base_com_preco[['nome_en_b', 'num_b', 'pred_usd', 'pred_brl', 'target_price']],
                     left_on=['nome_en', 'num'], right_on=['nome_en_b', 'num_b'], how='inner')
                 mais = mais.drop(columns=['nome_en_b', 'num_b'])
-                df_m = pd.concat([df_m, mais], ignore_index=True) if len(df_m) > 0 else mais
+                if len(mais) > 0:
+                    df_m = pd.concat([df_m, mais], ignore_index=True) if len(df_m) > 0 else mais
 
         total_match += len(df_m)
         total_sem_match += len(df_h) - len(df_m)
@@ -199,7 +261,7 @@ def escorar_snapshot(df_base, top=15):
     df_s['preco_real_brl'] = pd.to_numeric(df_s.get('p1b'), errors='coerce')
     df_s['iCO'] = pd.to_numeric(df_s.get('iCO'), errors='coerce').fillna(0)
 
-    # Nome EN puro (remove "(numero/...)" do nEN)
+    # Nome EN puro (remove "(parma/...)" do nEN)
     if 'nEN' in df_s.columns:
         df_s['nome_en'] = df_s['nEN'].str.split('(').str[0].str.strip().str.lower()
     else:
@@ -208,11 +270,12 @@ def escorar_snapshot(df_base, top=15):
     df_out = df_s.merge(
         df_base[['liga_id', 'pred_usd', 'pred_brl', 'target_price']], on='liga_id', how='inner')
 
-    # Fallback por nome EN + numero (cobre siglas sem mapping) — só base COM preço
+    # Fallback JP + nome+numero
     if len(df_out) < len(df_s):
         ids_casados = set(df_out['liga_id']) if len(df_out) > 0 else set()
         rest = df_s[~df_s['liga_id'].isin(ids_casados)].copy()
         if len(rest) > 0:
+            rest = map_jp_to_en_base(rest, df_base)  # JP fallback
             df_base['nome_en_b'] = df_base['name'].str.lower().str.strip()
             df_base['num_b'] = df_base['id'].str.split('-').str[-1].str.lstrip('0')
             base_com_preco = df_base[df_base['target_price'].notna() & (df_base['target_price'] > 0)]
@@ -220,7 +283,8 @@ def escorar_snapshot(df_base, top=15):
                 base_com_preco[['nome_en_b', 'num_b', 'pred_usd', 'pred_brl', 'target_price']],
                 left_on=['nome_en', 'num'], right_on=['nome_en_b', 'num_b'], how='inner')
             mais = mais.drop(columns=['nome_en_b', 'num_b'])
-            df_out = pd.concat([df_out, mais], ignore_index=True) if len(df_out) > 0 else mais
+            if len(mais) > 0:
+                df_out = pd.concat([df_out, mais], ignore_index=True) if len(df_out) > 0 else mais
 
     print(f'  Match: {len(df_out)} | Sem match: {len(df_s) - len(df_out)}')
     if len(df_out) == 0:
@@ -248,7 +312,7 @@ def finalizar(df, top, prefixo):
     df['oportunidade'] = df['upside_pct'].apply(
         lambda x: '🔥 Subvalorizada' if x > 25 else
                   ('👍 Leve Desconto' if x > 10 else
-                   ('💀 Inflacionada' if x < -25 else '⚖️ Preço Justo')))
+                   ('💀 Inlacionada' if x < -25 else '⚖️ Preço Justo')))
 
     # Deduplica: mesma carta aparece em varios arquivos de hits
     # Prioriza linhas com iCO_real (enriquecidas) sobre iCO=0 (hits crus)
@@ -262,25 +326,24 @@ def finalizar(df, top, prefixo):
             print(f'  ↳ Deduplicado: {antes} → {len(df)} cartas únicas')
 
     baratas = df[df['oportunidade'] == '🔥 Subvalorizada'].sort_values('upside_pct', ascending=False)
-    caras = df[df['oportunidade'] == '💀 Inflacionada'].sort_values('upside_pct')
+    caras = df[df['oportunidade'] == '💀 Inlacionada'].sort_values('upside_pct')
 
     print(f'\n{"="*64}')
     print(f'🏆 OPORTUNIDADES — {prefixo}')
     print(f'{"="*64}')
-    print(f'  Total cartas escoradas: {len(df)}')
+    print(f'  Total cartas enscoradas: {len(df)}')
     print(f'  🔥 Subvalorizadas (Pred > Real +25%): {len(baratas)}')
     print(f'  👍 Leve Desconto (Pred > Real +10-25%): {len(df[df["oportunidade"] == "👍 Leve Desconto"])}')
-    print(f'  ⚖️  Preço Justo (-25% a +10%):           {len(df[df["oportunidade"] == "⚖️ Preço Justo"])}')
-    print(f'  💀 Inflacionadas (Real > Pred +25%):   {len(caras)}')
+    print(f'  ⚖️  Preço Justo (-25% a +10%):          {len(df[df["oportunidade"] == "⚖️ Preço Justo"])}')
+    print(f'  💀 Inlacionadas (Real > Pred +25%):   {len(caras)}')
 
     # Oportunidades acionáveis: preço real >= 5 (BRL) ou >= 2 (USD)
-    baratas_acao = baratas[(baratas['real_ref'] >= 5) | (baratas['moeda'] == '$') & (baratas['real_ref'] >= 2)].copy()
-    # Prioriza liquidez (iCO > 0) e depois upside
+    baratas_acao = baratas[(baratas['real_ref'] >= 5) | ((baratas['moeda'] == '$') & (baratas['real_ref'] >= 2))].copy()
     if len(baratas_acao) > 0:
         baratas_acao['tem_ico'] = baratas_acao['iCO'].fillna(0).astype(int) > 0
         baratas_acao = baratas_acao.sort_values(['tem_ico', 'upside_pct'], ascending=[False, False])
     if len(baratas) > 0:
-        print(f'\n🔥 TOP {min(top, len(baratas_acao))} SUBVALORIZADAS (comprar) — real >= R$5/$2:')
+        print(f'\nGA TOP {min(top, len(baratas_acao))} SUBVALORIZADAS (comprar) — real >= R$5/$2:')
         print(f'  {"Carta":30s} | {"Set":12s} | {"Real":>10s} | {"Pred":>10s} | {"Upside":>7s} | iCO')
         print(f'  {"-"*84}')
         for _, r in baratas_acao.head(top).iterrows():
@@ -291,8 +354,8 @@ def finalizar(df, top, prefixo):
             print(f'  {nome:30s} | {sigla:12s} | {moeda}{float(r["real_ref"]):>8.2f} | {moeda}{float(r["pred_ref"]):>8.2f} | +{float(r["upside_pct"]):5.0f}% | {ico}')
 
     if len(caras) > 0:
-        print(f'\n💀 TOP 10 INFLACIONADAS (evitar):')
-        print(f'  {"Carta":30s} | {"Set":12s} | {"Real":>10s} | {"Pred":>10s} | {"Upside":>7s} | iCO')
+        print(f'\n💀 TOP 10 INF vancadas (evitar):')
+        print(f'  {"Cape":30s} | {"Set":12s} | {"Real":>10s} | {"Pred":>10s} | {"Upside":>7s} | iCO')
         print(f'  {"-"*84}')
         for _, r in caras.head(10).iterrows():
             nome = str(r.get('nPT', r.get('name', r.get('nome', '?'))))[:30]
@@ -311,7 +374,7 @@ def finalizar(df, top, prefixo):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Escora hits/snapshot com cache local')
+    parser = argparse.ArgumentParser(description='Escra hits/snapshot com cache local')
     parser.add_argument('--tipo', choices=['hits', 'snapshot'], required=True)
     parser.add_argument('--top', type=int, default=10)
     args = parser.parse_args()
