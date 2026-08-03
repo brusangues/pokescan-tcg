@@ -99,7 +99,7 @@ Ele descobriu na prática que **não dá para um modelo único cobrir tudo**: "v
 | **E3** | **Preço normalizado multi-fonte + flag de anomalia** (guardrails) | Médio (3–4h) | Alto: melhora target e escoragem (menos falsos "subvalorizada") | Cache + Liga p1b + cardmarket (já temos tudo) | T6, T11 |
 | **E4** | **Modelos por cluster** (era × raridade) em vez de 1 CatBoost único | Médio | Alto: ataca o erro estrutural (WOTC vs. moderno) | Cache atual | T8, T18 |
 | **E5** | **Features de liquidez temporal** (ΔiCO, Δpreço 7d/30d a partir dos snapshots acumulados) | Médio | Médio: sinal de momentum/leading indicator | Snapshots semanais (já acumulando) | T5, T8, T9 |
-| **E6** | **Sazonalidade cíclica** (sin/cos do mês) + interação com card_age | Baixo (30 min) | Médio: captura summer slump | Cache (release date) | T14, T19 |
+| **E6** | **Sazonalidade cíclica** (sin/cos do mês) + interação com card_age | ❌ **TESTADO — SEM GANHO** (2026-08-02) | Médio na teoria; sem ganho empírico | Cache (release date) | T14, T19 |
 | **E7** | **PSA pop / gem rate / grading intensity** | Alto (fonte externa nova) | Alto: maior multiplicador do mercado moderno | PSA pop reports / gemrate | T1, T13, T15 |
 | **E8** | **EV de abertura de pacotes (ROV)** por set | Médio-Alto | Médio: rank de "set vale abrir?" — exige pull rates reais | Pull rates públicos + pack price | T1, T2, T4 |
 | E9 | JP→EN pre-market | Alto (sem dados JP no cache) | Médio | Sets JP (fonte nova) | T3 |
@@ -162,25 +162,38 @@ character_premium = prem_era / mediana_do_ano
   - `demand_pressure_aprox` = (preço subiu + iCO caiu) → sinal de tightening
 - **Como testar**: feature engineering sobre a série temporal; depois validar se `delta_ico_7d` prediz direção de preço (correlação/backtest simples antes de entrar no modelo).
 
+### E6 — Sazonalidade cíclica (sin/cos do mês) + interação com card_age — ❌ testado, sem ganho
+- **Conceito**: encoding cíclico do mês de release (`seasonality_sin/cos`) para capturar o summer slump (maio–julho) e a alta de fim de ano; `age_months` para o decaimento pós-release (~42% no Mês 1, estabiliza no Mês 3).
+- **Como testar**: A/B no split temporal — baseline E1 vs. E1 + sazonalidade.
+
+**Resultado (2026-08-02) — NEGATIVO, revertido**:
+- `sin/cos` (ciclo anual): R² 0.3293 vs. baseline 0.3565 — **piora**.
+- `age_months`: R² 0.3295 — **piora** (redundante com `card_age_years` já existente).
+- `release_phase` categórica (hype/estabilização/madura): R² idêntico ao baseline (0.3565) — CatBoost **ignorou** a feature.
+- `release_month` categórica: R² 0.1818 — **piora muito** (overfit, alta cardinalidade).
+- **Conclusão**: a sazonalidade do Youtuber é sobre **quando vender** (série temporal de preço futuro), não sobre preço pontual atual — nosso target é preço justo de hoje, onde `release_year` + `card_age_years` já capturam o efeito. E6 só faria sentido num modelo de previsão temporal (preço futuro), fora do escopo atual.
+- ⚠️ **Lição**: features de tempo devem ser testadas contra o que já existe (`card_age_years`); encoding cíclico não agrega quando o modelo já tem a idade em anos.
+
 ---
 
 ## 5. O que NÃO fazer (filtros do nosso contexto)
 
 - ❌ **Plataforma/website** (leaderboards, watchlists, dark mode, planos pagos) — fora do escopo declarado.
 - ❌ **Scraping de eBay em tempo real** por enquanto — alto custo operacional (anti-bot, Cloudflare); usar snapshots da Liga como proxy (E5).
-- ❌ **Google Trends** (pytrends) como prioridade inicial — frágil e rate-limitado; a encoding cíclica (E6) cobre o essencial da sazonalidade.
+- ❌ **Google Trends** (pytrends) como prioridade inicial — frágil e rate-limitado.
 - ⚠️ **E8 (EV de ripping)** e **E9 (JP→EN)** dependem de dados que não temos (pull rates oficiais, sets JP) — deixar para depois.
 
 ---
 
 ## 6. Ordem recomendada de execução
 
-1. **E6** (30 min) — sazonalidade cíclica: ganho imediato trivial.
-2. **E1 + E2** (meio dia) — as duas features mais importantes do modelo dele, 100% deriváveis do nosso cache.
-3. **E3** (1 dia) — target limpo multi-fonte: melhora tudo que vem depois (retreinos).
-4. **E4** (1 dia) — modelos por cluster: maior ganho estrutural esperado.
-5. **E5** (contínuo) — alimentar com os snapshots que já acumulam; feature de momentum.
-6. **E7** (semanas) — PSA/grading: única fonte externa nova, maior recompensa de longo prazo.
+1. ~~**E6**~~ (testado, sem ganho — não executar)
+2. ✅ **E1** (implementado: MAE $4.91, R² 0.357)
+3. ❌ **E2** (testado, sem ganho — não executar)
+4. **E3** (1 dia) — target limpo multi-fonte: melhora tudo que vem depois (retreinos).
+5. **E4** (1 dia) — modelos por cluster: maior ganho estrutural esperado.
+6. **E5** (contínuo) — alimentar com os snapshots que já acumulam; feature de momentum.
+7. **E7** (semanas) — PSA/grading: única fonte externa nova, maior recompensa de longo prazo.
 
 ---
 

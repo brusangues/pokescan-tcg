@@ -423,7 +423,6 @@ def add_supply_features(df):
     return df
 
 # ── 4c. Grail Score & Legendary ────────────────────────────────────
-
 GRAIL_SCORE = {
     'charizard': 10, 'pikachu': 9, 'mewtwo': 9, 'mew': 8, 'lugia': 8,
     'ho-oh': 8, 'rayquaza': 8, 'gengar': 9, 'umbreon': 8, 'eevee': 7,
