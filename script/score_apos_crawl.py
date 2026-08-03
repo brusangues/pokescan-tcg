@@ -35,7 +35,7 @@ SCORE_DIR.mkdir(parents=True, exist_ok=True)
 # Mapeamento de siglas JP → set EN (carregado lazy)
 _JP_MAPPING = None
 
-def __load_jp_mapping():
+def _load_jp_mapping():
     global _JP_MAPPING
     if _JP_MAPPING is None:
         jp_file = LIGA_DIR / 'jp_mapping.py'
@@ -133,7 +133,7 @@ def map_jp_to_en_base(df_hits, df_base):
     df = df_hits.copy()
     sigs = df.get('sSigla', pd.Series(dtype=str)).str.strip().str.upper()
     mask = sigs.isin(set(JP))
-    if not mask.jany():
+    if not mask.any():
         return df
 
     df_jp = df[mask].copy()
@@ -343,7 +343,7 @@ def finalizar(df, top, prefixo):
         baratas_acao['tem_ico'] = baratas_acao['iCO'].fillna(0).astype(int) > 0
         baratas_acao = baratas_acao.sort_values(['tem_ico', 'upside_pct'], ascending=[False, False])
     if len(baratas) > 0:
-        print(f'\nGA TOP {min(top, len(baratas_acao))} SUBVALORIZADAS (comprar) — real >= R$5/$2:')
+        print(f'\n🔥 TOP {min(top, len(baratas_acao))} SUBVALORIZADAS (comprar) — real >= R$5/$2:')
         print(f'  {"Carta":30s} | {"Set":12s} | {"Real":>10s} | {"Pred":>10s} | {"Upside":>7s} | iCO')
         print(f'  {"-"*84}')
         for _, r in baratas_acao.head(top).iterrows():
