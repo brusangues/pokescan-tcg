@@ -126,7 +126,12 @@ def escorar_hits(df_base, top=10):
         df_h['num'] = df_h['sNumber'].apply(normalize_liga_num)
         df_h['liga_id'] = df_h['sSigla'].str.strip().str.upper() + '-' + df_h['num']
         df_h['preco_real_brl'] = pd.to_numeric(df_h.get('p1b'), errors='coerce')
-        df_h['iCO'] = pd.to_numeric(df_h.get('iCO'), errors='coerce').fillna(0)
+        # iCO real (enriquecido da página individual) quando disponível
+        if 'iCO_real' in df_h.columns:
+            df_h['iCO'] = pd.to_numeric(df_h.get('iCO_real'), errors='coerce').fillna(
+                pd.to_numeric(df_h.get('iCO'), errors='coerce')).fillna(0)
+        else:
+            df_h['iCO'] = pd.to_numeric(df_h.get('iCO'), errors='coerce').fillna(0)
 
         # Nome EN puro (remove "(numero/...)" do nEN)
         if 'nEN' in df_h.columns:
@@ -246,9 +251,13 @@ def finalizar(df, top, prefixo):
                    ('💀 Inflacionada' if x < -25 else '⚖️ Preço Justo')))
 
     # Deduplica: mesma carta aparece em varios arquivos de hits
+    # Prioriza linhas com iCO_real (enriquecidas) sobre iCO=0 (hits crus)
     if 'liga_id' in df.columns:
         antes = len(df)
-        df = df.sort_values('upside_pct', ascending=False).drop_duplicates(subset=['liga_id'], keep='first')
+        df['_tem_ico_real'] = df.get('iCO_real', pd.Series(0, index=df.index)).fillna(0).astype(int) > 0
+        df = df.sort_values(['_tem_ico_real', 'upside_pct'], ascending=[False, False]) \
+               .drop_duplicates(subset=['liga_id'], keep='first')
+        df = df.drop(columns=['_tem_ico_real'])
         if len(df) < antes:
             print(f'  ↳ Deduplicado: {antes} → {len(df)} cartas únicas')
 
