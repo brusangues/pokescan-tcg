@@ -97,7 +97,7 @@ Ele descobriu na prática que **não dá para um modelo único cobrir tudo**: "v
 | **E1** | **Pull Cost + rarity_pool_size** como features (supply) | ✅ **IMPLEMENTADO** (2026-08-02) | Alto: captura a variável #1 do modelo dele | Cache atual (contagem por set×raridade) | T3, T7, T13 |
 | **E2** | **Character Premium real** (agregação de preço médio por pokedex, normalizado por era) | ❌ **TESTADO — SEM GANHO** (2026-08-02) | Alto na teoria; sem ganho empírico no nosso CatBoost | Cache atual | T7, T13, T18 |
 | **E3** | **Preço normalizado multi-fonte + flag de anomalia** (guardrails) | Médio (3–4h) | Alto: melhora target e escoragem (menos falsos "subvalorizada") | Cache + Liga p1b + cardmarket (já temos tudo) | T6, T11 |
-| **E4** | **Modelos por cluster** (era × raridade) em vez de 1 CatBoost único | Médio | Alto: ataca o erro estrutural (WOTC vs. moderno) | Cache atual | T8, T18 |
+| **E4** | **Modelos por cluster** (era × raridade) em vez de 1 CatBoost único | ❌ **TESTADO — SEM GANHO** (2026-08-02) | Alto na teoria; ensemble piorou em todos os clusters | Cache atual | T8, T18 |
 | **E5** | **Features de liquidez temporal** (ΔiCO, Δpreço 7d/30d a partir dos snapshots acumulados) | Médio | Médio: sinal de momentum/leading indicator | Snapshots semanais (já acumulando) | T5, T8, T9 |
 | **E6** | **Sazonalidade cíclica** (sin/cos do mês) + interação com card_age | ❌ **TESTADO — SEM GANHO** (2026-08-02) | Médio na teoria; sem ganho empírico | Cache (release date) | T14, T19 |
 | **E7** | **PSA pop / gem rate / grading intensity** | Alto (fonte externa nova) | Alto: maior multiplicador do mercado moderno | PSA pop reports / gemrate | T1, T13, T15 |
@@ -149,11 +149,16 @@ character_premium = prem_era / mediana_do_ano
 - **Como testar**: retreinar com target limpo; medir se MAE cai e se a escoragem gera menos falsos positivos.
 - Isso também alimenta o **watchlist/alertas**: "preço anômalo (4 vendas)" vs. "preço confirmado (30+ vendas)".
 
-### E4 — Modelos por cluster (era × raridade)
+### E4 — Modelos por cluster (era × raridade) — ❌ testado, sem ganho
 - Clusters sugeridos: (1) WOTC 1999–2003, (2) 2004–2013, (3) 2014–2020, (4) 2021+ comum/rare, (5) 2021+ SIR/UR/secret, (6) Treinadores/supporter.
 - Treinar 1 CatBoost por cluster + manter o global como fallback para cartas sem cluster.
-- **Como testar**: comparar MAE por cluster do modelo único vs. especializado. Esperado: o maior ganho em cartas antigas (hoje nosso modelo erra feio em WOTC holo) e em SIRs modernas.
-- Também ataca o problema BRL: hoje R² 0.04 — cluster BRL por faixa de preço (comum vs. cara) pode ajudar.
+- **Como testar**: A/B no split temporal — global vs. ensemble de clusters.
+
+**Resultado (2026-08-02) — NEGATIVO, revertido**:
+- Clusters implementados por era × raridade (wotc ≤2003, antigo 2004–2013, moderno_sir/rare/comum ≥2014, trainer).
+- **Ensemble piorou em TODOS os clusters**: trainer R² 0.584 vs. global 0.641; moderno_sir 0.169 vs. 0.226; moderno_rare 0.286 vs. 0.475; moderno_comum 0.078 vs. 0.529. Global: 0.3565 → ensemble 0.2420.
+- **Causa**: o modelo global aprende com 14.955 cartas e a feature dominante (`cardmarket_avg30`) é **universal** — fragmentar em clusters reduz os dados de treino de cada modelo sem ganho de especialização. O insight do Youtuber (clusterizar) valia para modelos de features fracas; no nosso caso o conhecimento compartilhado vence.
+- ⚠️ **Lição**: clusterização só vale quando há features específicas de subgrupo que o modelo global não captura — não é o caso com cardmarket embutido.
 
 ### E5 — Liquidez temporal (snapshots acumulados)
 - Os snapshots semanais (`data/liga/snapshots/liga_snapshot_*.json`) já têm 3 execuções. A cada semana, calcular por carta:
@@ -190,8 +195,8 @@ character_premium = prem_era / mediana_do_ano
 1. ~~**E6**~~ (testado, sem ganho — não executar)
 2. ✅ **E1** (implementado: MAE $4.91, R² 0.357)
 3. ❌ **E2** (testado, sem ganho — não executar)
-4. **E3** (1 dia) — target limpo multi-fonte: melhora tudo que vem depois (retreinos).
-5. **E4** (1 dia) — modelos por cluster: maior ganho estrutural esperado.
+4. ~~**E4**~~ (testado, sem ganho — não executar)
+5. **E3** (1 dia) — target limpo multi-fonte: melhora tudo que vem depois (retreinos).
 6. **E5** (contínuo) — alimentar com os snapshots que já acumulam; feature de momentum.
 7. **E7** (semanas) — PSA/grading: única fonte externa nova, maior recompensa de longo prazo.
 
