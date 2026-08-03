@@ -1,6 +1,6 @@
 
 import Scanner from '@/app/components/Scanner';
-import { Sparkles, Camera, Zap } from 'lucide-react';
+import { Sparkles, Camera, Zap, LayoutDashboard } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -14,14 +14,18 @@ export default function Home() {
             </div>
             <h1 className="text-xl font-bold text-gray-900 tracking-tight">PokéScan TCG</h1>
           </div>
-          <nav className="hidden md:flex gap-6">
-            <a href="#" className="flex items-center gap-2 text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
-              <Camera className="w-4 h-4" />
-              Scanner
+          <nav className="hidden md:flex gap-6 items-center">
+            <a href="/dashboard" className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors">
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
             </a>
             <a href="/hits" className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors">
               <Zap className="w-4 h-4" />
               Hits
+            </a>
+            <a href="#" className="flex items-center gap-2 text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-full">
+              <Camera className="w-4 h-4" />
+              Scanner
             </a>
           </nav>
         </div>

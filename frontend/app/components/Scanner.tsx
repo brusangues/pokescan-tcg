@@ -3,7 +3,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Upload, Camera, Loader2, Search, CheckCircle2, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
 import { useDropzone } from 'react-dropzone';
 import PipelineSingleton from '@/app/lib/pipeline';
 import { fetchCards, PokemonCard } from '@/app/lib/pokemon';
@@ -205,10 +204,9 @@ export default function Scanner() {
               <span>{progress}%</span>
             </div>
             <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-              <motion.div 
-                className="h-full bg-indigo-600"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress}%` }}
+              <div
+                className="h-full bg-indigo-600 transition-all duration-500"
+                style={{ width: `${progress}%` }}
               />
             </div>
           </div>
@@ -279,28 +277,16 @@ export default function Scanner() {
         {/* Results Area */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-900">Match Result</h3>
-          <AnimatePresence mode="wait">
-            {matchedCard ? (
-              <motion.div
-                key="result"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-              >
-                <CardDisplay card={matchedCard.card} similarity={matchedCard.score} />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50"
-              >
-                <Search className="w-12 h-12 mb-3 opacity-20" />
-                <p>No card scanned yet</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {matchedCard ? (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <CardDisplay card={matchedCard.card} similarity={matchedCard.score} />
+            </div>
+          ) : (
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
+              <Search className="w-12 h-12 mb-3 opacity-20" />
+              <p>No card scanned yet</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

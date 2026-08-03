@@ -36,6 +36,10 @@ const nextConfig: NextConfig = {
   experimental: {
     prerenderEarlyExit: false,
   },
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
+  },
 };
 
 export default nextConfig;
