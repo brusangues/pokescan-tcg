@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, FileText } from 'lucide-react';
 
+import { cardLink } from '@/app/lib/cards';
+
 interface ScoredCard {
   nome: string;
   sigla: string;
@@ -65,7 +67,7 @@ export default function HitsPage() {
       `}>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold text-gray-900 truncate">{card.nome}</p>
+            <a href={cardLink({nome_en: (card as any).nEN || card.nome, sSigla: card.sigla})} className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 truncate hover:underline">{card.nome}</a>
             <span className="text-[10px] font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 shrink-0">
               {card.sigla}
             </span>
