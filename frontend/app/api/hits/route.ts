@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { readFileSync, readdirSync, statSync } from 'fs';
+import { readdirSync, statSync } from 'fs';
 import { join } from 'path';
+import { parseScoredCSV } from '@/app/lib/scored';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +23,6 @@ export async function GET(request: Request) {
     // Se não especificou, usa o mais recente
     const target = selected && files.includes(selected) ? selected : files[0];
     const latestFile = join(scoredDir, target);
-    const raw = readFileSync(latestFile, 'utf-8');
     const stats = statSync(latestFile);
 
     // Lista de arquivos disponíveis, agrupados por dia
@@ -48,32 +48,8 @@ export async function GET(request: Request) {
       });
     }
 
-    // Parse CSV
-    const lines = raw.trim().split('\n');
-    const headers = lines[0].split(',');
-
-    const records: any[] = [];
-    for (let i = 1; i < lines.length; i++) {
-      const vals = lines[i].split(',');
-      const rec: any = {};
-      headers.forEach((h, j) => { rec[h.trim()] = vals[j]?.trim(); });
-      records.push(rec);
-    }
-
-    const cards = records
-      .filter((r: any) => r.oportunidade && r.real_ref && r.pred_ref)
-      .map((r: any) => ({
-        nome: r.nPT || r.name || r.nome || r.nEN || 'Unknown',
-        sigla: r.sSigla || r.set_id || '',
-        real: parseFloat(r.real_ref),
-        pred: parseFloat(r.pred_ref),
-        upside: parseFloat(r.upside_pct),
-        oportunidade: r.oportunidade,
-        iCO: parseInt(r.iCO || '0', 10),
-        moeda: r.moeda || 'R$',
-        liga_id: r.liga_id || '',
-        nEN: r.nEN || '',
-      }))
+    // Parse CSV (usa csv-parse que respeita aspas e vírgulas internas)
+    const cards = parseScoredCSV(latestFile)
       .sort((a: any, b: any) => b.upside - a.upside);
 
     const subvalorizadas = cards.filter((c: any) => c.oportunidade === '🔥 Subvalorizada' && c.real >= 5);

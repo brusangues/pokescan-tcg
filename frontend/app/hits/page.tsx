@@ -55,7 +55,12 @@ export default function HitsPage() {
   };
 
   const CardRow = ({ card }: { card: ScoredCard }) => {
-    const isUp = card.upside > 0;
+    // Valores defensivos: protege contra null/undefined vindos da API
+    const real = Number(card.real) || 0;
+    const pred = Number(card.pred) || 0;
+    const upside = Number(card.upside) || 0;
+    const ico = Number(card.iCO) || 0;
+    const isUp = upside > 0;
     const isSub = card.oportunidade === '🔥 Subvalorizada';
     const isInfla = card.oportunidade === '💀 Inflacionada';
 
@@ -74,22 +79,22 @@ export default function HitsPage() {
           </div>
         </div>
         <div className="text-right shrink-0 w-24">
-          <p className="text-sm font-bold text-gray-800">{card.moeda}{card.real.toFixed(2)}</p>
+          <p className="text-sm font-bold text-gray-800">{card.moeda}{real.toFixed(2)}</p>
         </div>
         <div className="text-right shrink-0 w-24">
-          <p className="text-sm text-gray-600">{card.moeda}{card.pred.toFixed(2)}</p>
+          <p className="text-sm text-gray-600">{card.moeda}{pred.toFixed(2)}</p>
         </div>
         <div className="text-right shrink-0 w-20">
           <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${
             isUp ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
           }`}>
             {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-            {isUp ? '+' : ''}{card.upside.toFixed(0)}%
+            {isUp ? '+' : ''}{upside.toFixed(0)}%
           </span>
         </div>
         <div className="text-right shrink-0 w-12">
-          {card.iCO > 0 ? (
-            <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{card.iCO}</span>
+          {ico > 0 ? (
+            <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{ico}</span>
           ) : (
             <span className="text-[11px] text-gray-300">—</span>
           )}

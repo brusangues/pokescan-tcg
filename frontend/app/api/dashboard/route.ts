@@ -1,37 +1,9 @@
 import { NextResponse } from 'next/server';
-import { readFileSync, readdirSync, statSync } from 'fs';
+import { readdirSync, statSync } from 'fs';
 import { join } from 'path';
+import { parseScoredCSV } from '@/app/lib/scored';
 
 export const dynamic = 'force-dynamic';
-
-function parseScoredCSV(filePath: string) {
-  const raw = readFileSync(filePath, 'utf-8');
-  const lines = raw.trim().split('\n');
-  if (lines.length < 2) return [];
-  const headers = lines[0].split(',');
-
-  return lines.slice(1).map(line => {
-    const vals = line.split(',');
-    const rec: any = {};
-    headers.forEach((h, j) => { rec[h.trim()] = vals[j]?.trim(); });
-    return rec;
-  })
-  .filter((r: any) => r.oportunidade && r.real_ref && r.pred_ref)
-  .map((r: any) => ({
-    nome: r.nPT || r.name || r.nome || r.nEN || 'Unknown',
-    sigla: r.sSigla || r.set_id || '',
-    real: parseFloat(r.real_ref),
-    pred: parseFloat(r.pred_ref),
-    upside: parseFloat(r.upside_pct),
-    oportunidade: r.oportunidade,
-    iCO: parseInt(r.iCO || '0', 10),
-    moeda: r.moeda || 'R$',
-    liga_id: r.liga_id || '',
-    nEN: r.nEN || '',
-    fonte: r.fonte || '',
-  }))
-  .filter((c: any) => !Number.isNaN(c.upside) && !Number.isNaN(c.real));
-}
 
 export async function GET() {
   try {
