@@ -8,6 +8,6 @@ export function cardLink(card: {
 }): string {
   const nome = card.nome_en || card.nEN || card.nome || '';
   const sigla = card.sSigla || card.sigla || '';
-  const cleanNome = nome.split('(')[0].trim();
+  const cleanNome = (nome || '').split('(')[0].trim();
   return `/card?nome=${encodeURIComponent(cleanNome)}&sigla=${encodeURIComponent(sigla)}`;
 }
