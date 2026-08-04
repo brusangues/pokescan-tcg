@@ -6,6 +6,7 @@ import {
   Zap, Loader, LayoutDashboard, BarChart3, PieChart,
   ArrowUpCircle, ArrowDownCircle, Target, Layers, DollarSign
 } from 'lucide-react';
+import NavBar from '@/app/components/NavBar';
 
 interface ScoredCard {
   nome: string;
@@ -102,7 +103,8 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-slate-50 pb-12">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+      <NavBar />
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -117,7 +119,7 @@ export default function DashboardPage() {
             <RefreshCw className="w-4 h-4 text-gray-500" />
           </button>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 py-6 space-y-8">
 

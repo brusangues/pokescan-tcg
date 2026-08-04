@@ -1,0 +1,66 @@
+## Error Type
+Runtime TypeError
+
+## Error Message
+Cannot read properties of null (reading 'toFixed')
+
+
+    at CardRow (app\hits\page.tsx:87:43)
+    at eval (app\hits\page.tsx:274:15)
+    at Array.map (<anonymous>:null:null)
+    at HitsPage (app\hits\page.tsx:273:19)
+
+## Code Frame
+  85 |           }`}>
+  86 |             {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+> 87 |             {isUp ? '+' : ''}{card.upside.toFixed(0)}%
+     |                                           ^
+  88 |           </span>
+  89 |         </div>
+  90 |         <div className="text-right shrink-0 w-12">
+
+Next.js version: 15.5.12 (Webpack)
+
+
+
+
+Call Stack
+18
+
+Hide 14 ignore-listed frame(s)
+CardRow
+app\hits\page.tsx (87:43)
+Object.react_stack_bottom_frame
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (23583:1)
+renderWithHooks
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (6792:1)
+updateFunctionComponent
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (9246:1)
+beginWork
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (10857:1)
+runWithFiberInDEV
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (871:1)
+performUnitOfWork
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (15726:1)
+workLoopSync
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (15546:39)
+renderRootSync
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (15526:1)
+performWorkOnRoot
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (15033:1)
+performSyncWorkOnRoot
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (16830:1)
+flushSyncWorkAcrossRoots_impl
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (16676:1)
+processRootScheduleInMicrotask
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (16714:1)
+eval
+node_modules\next\dist\compiled\react-dom\cjs\react-dom-client.development.js (16849:1)
+eval
+app\hits\page.tsx (274:15)
+Array.map
+<anonymous>
+HitsPage
+app\hits\page.tsx (273:19)
+ClientPageRoot
+..\src\client\components\client-page.tsx (60:12)

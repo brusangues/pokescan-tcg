@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { TrendingUp, TrendingDown, RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, FileText } from 'lucide-react';
 
 import { cardLink } from '@/app/lib/cards';
+import NavBar from '@/app/components/NavBar';
 
 interface ScoredCard {
   nome: string;
@@ -147,7 +148,8 @@ export default function HitsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
+      <NavBar />
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
@@ -164,7 +166,7 @@ export default function HitsPage() {
             <RefreshCw className="w-4 h-4 text-gray-500" />
           </button>
         </div>
-      </header>
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
         {/* Seletor de data e janela */}

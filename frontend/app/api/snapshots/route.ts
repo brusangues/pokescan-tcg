@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { readdirSync, statSync } from 'fs';
+import { readFileSync, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 import { parseScoredCSV } from '@/app/lib/scored';
 
