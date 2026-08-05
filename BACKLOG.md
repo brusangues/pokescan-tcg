@@ -46,6 +46,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - `data/ptcg_cards_cache.json` tem 20.479 cartas; sets novos (ex. sv8pt5 Prismatic Evolutions) foram adicionados manualmente no mapping mas o cache precisa refresh periódico
 - **Ideia**: script de refresh incremental do cache (pokemontcg.io paginado) + rodar no cron mensal
 - Tags: backend, dados
+- **Status**: ✅ `script/refresh_ptcg_cache.py` integrado ao liga-snapshot.sh (antes do crawler) — incremental (30 dias), retry anti-rate-limit, backup automático (`5b8d210`)
 
 ### [P2] 9. Dashboard com mais métricas
 - `/dashboard` tem métricas agregadas; **Ideia**: adicionar evolução temporal de oportunidades (subvalorizadas por dia), top sets por upside médio, distribuição de iCO
@@ -83,6 +84,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 
 | Item | Commit |
 |---|---|
+| P2.8: refresh incremental do cache ptcg no cron semanal | `5b8d210` |
 | P1: fallback offline scanner + sync mapping no cron + badge carta JP | `4f53558` |
 | BACKLOG.md centralizado | `0d99794` |
 | Changelog page (commits + ablações) | `f214b7f` |
