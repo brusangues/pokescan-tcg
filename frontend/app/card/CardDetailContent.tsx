@@ -63,6 +63,7 @@ interface CardData {
     sigla: string;
     setNome: string;
     fonte: string;
+    ligaOk?: boolean;
   } | null;
   error?: string;
   }
@@ -175,8 +176,9 @@ interface CardData {
               </div>
             )}
 
-            {/* Link para a Liga Pokémon */}
-            {card.modelo && card.modelo.nEN && (
+            {/* Link para a Liga Pokémon — só quando a carta exibida
+                corresponde ao registro escorado (ligaOk) */}
+            {card.modelo && card.modelo.nEN && card.modelo.ligaOk && (
               <a
                 href={`https://www.ligapokemon.com.br/?view=cards/card&card=${encodeURIComponent(card.modelo.nEN)}&ed=${encodeURIComponent(card.modelo.sigla)}&num=${encodeURIComponent(card.modelo.num || card.modelo.sNumber || '')}`}
                 target="_blank"

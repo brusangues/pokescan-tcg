@@ -48,13 +48,25 @@ function loadScoredLatest(): any[] {
 }
 
 function loadSetMapping(): Record<string, string> {
+  // Arquivo mapeia set_id ptcg → sigla Liga (ex: "sv3pt5" → "MEW")
+  // Precisamos do INVERSO (sigla Liga → set ptcg) para buscar no cache.
   try {
     const path1 = join(process.cwd(), '..', 'data', 'liga', 'liga_set_sigla_ptcg.json');
-    return JSON.parse(readFileSync(path1, 'utf-8'));
+    const raw = JSON.parse(readFileSync(path1, 'utf-8'));
+    const inv: Record<string, string> = {};
+    for (const [ptcg, liga] of Object.entries(raw)) {
+      inv[String(liga).toLowerCase()] = ptcg;
+    }
+    return inv;
   } catch {
     try {
       const path2 = join(process.cwd(), '..', 'data', 'liga', 'liga_set_sigla.json');
-      return JSON.parse(readFileSync(path2, 'utf-8'));
+      const raw = JSON.parse(readFileSync(path2, 'utf-8'));
+      const inv: Record<string, string> = {};
+      for (const [ptcg, liga] of Object.entries(raw)) {
+        inv[String(liga).toLowerCase()] = ptcg;
+      }
+      return inv;
     } catch {
       return {};
     }
@@ -94,8 +106,9 @@ export async function GET(request: Request) {
     if (!card) {
       const nomeBusca = searchParams.get('nome')?.toLowerCase();
       if (nomeBusca) {
-        // Determina optcgSetId para filtrar pelo set
-        const rawSigla = ligaId?.split('-')[0]?.toLowerCase();
+        // Determina ptcgSetId para filtrar pelo set.
+        // Prioridade: sigla (query) → liga_id → setId
+        const rawSigla = sigla || ligaId?.split('-')[0]?.toLowerCase() || '';
         const ptcgSet = rawSigla ? setMap[rawSigla] : (setId || '');
         for (const [key, c] of cache) {
           if (c.name?.toLowerCase() === nomeBusca && (!ptcgSet || key.startsWith(ptcgSet))) {
@@ -103,6 +116,8 @@ export async function GET(request: Request) {
             break;
           }
         }
+        // Se achou com filtro, ótimo. Senão tenta sem filtro (último recurso)
+        // mas SEMPRE priorizando set com match de nome exato.
       }
     }
 
@@ -182,6 +197,12 @@ export async function GET(request: Request) {
         sigla: scored.sigla,
         setNome: scored.setNome,
         fonte: scored.fonte,
+        // Só mostra link da Liga se a sigla do modelo corresponde ao set
+        // da carta exibida (evita link errado: ex. Mew ex Celebrations
+        // casando com MEW-151 por nome).
+        ligaOk: scored.sigla
+          ? (setMap[String(scored.sigla).toLowerCase()] === card.set.id || !setMap[String(scored.sigla).toLowerCase()] ? true : false)
+          : false,
       } : null,
     });
   } catch (error) {
