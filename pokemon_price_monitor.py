@@ -169,7 +169,10 @@ def build_liga_lookup():
                 if p_med > 0:
                     # Extrai nome do card do nEN (ex: "Stunky (#76/124)")
                     nome_liga = str(c.get('nEN', ''))
-                    key = (sigla, num)
+                    # Chave com sigla NORMALIZADA (upper) — os set_*.json da
+                    # Liga têm siglas mixed-case (SV8a, M2a, SM12a) e o enrich
+                    # testa upper/lower; normalizar aqui garante o match.
+                    key = (sigla.upper(), num)
                     if key not in lookup_brl or p_med < lookup_brl[key].get('preco_medio_brl', float('inf')):
                         lookup_brl[key] = {
                             'preco_min_brl': float(c.get('p1a', 0) or 0),

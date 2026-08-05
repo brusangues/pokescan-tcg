@@ -44,12 +44,30 @@ def main():
     df = pm.add_supply_features(df)
     df['id'] = df['id'].astype(str)
 
+    # BRL: merge com a Liga Pokémon (preços reais em R$ + iCO)
+    print('📦 Merge BRL com a Liga Pokémon...')
+    try:
+        _lookup_brl, _lookup_ico, _set_map = pm.build_liga_lookup()
+        df = pm.enrich_brl(df, _lookup_brl, _lookup_ico, _set_map)
+        n_brl = df['target_price_brl'].notna().sum()
+        print(f'  BRL: {n_brl}/{len(df)} cartas com preço em R$')
+    except Exception as e:
+        print(f'  ⚠️ Merge BRL falhou: {e}')
+
     if args.top:
         # 'mais recentes' ≈ maior release_year + maior id
         df = df.sort_values(['release_year', 'id'], ascending=[False, False])
         # Amostra estratificada por set: pega floor(top/sets) de cada set,
         # evitando que 1 set recente domine a amostra (ex. me5 sem preço)
-        if 'set_id' in df.columns:
+        if 'set_id' in df.columns and 'target_price_brl' in df.columns:
+            n_sets = df['set_id'].nunique()
+            por_set = max(1, args.top // n_sets)
+            # Prioriza cartas COM BRL dentro de cada set (útil p/ debug)
+            df = df.sort_values(
+                ['set_id', 'target_price_brl'],
+                ascending=[True, False], na_position='last'
+            ).groupby('set_id', group_keys=False).head(por_set).head(args.top)
+        elif 'set_id' in df.columns:
             n_sets = df['set_id'].nunique()
             por_set = max(1, args.top // n_sets)
             df = df.groupby('set_id', group_keys=False).head(por_set).head(args.top)
