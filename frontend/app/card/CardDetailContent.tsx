@@ -310,7 +310,7 @@ interface CardData {
                         <span className="text-gray-500 capitalize">{variant.replace(/([-H])/g, ' $1')}</span>
                         <span className="font-medium text-gray-900">
                           ${p.market.toFixed(2)}
-                          {p.high ? <span className="text-xs text-gray-400 ml-1">(Low${p.low.toFixed(2)} — High ${p.high.toFixed(2)})</span> : ''}
+                          {p.high ? <span className="text-xs text-gray-400 ml-1">(Low${p.low?.toFixed(2)} — High ${p.high.toFixed(2)})</span> : ''}
                         </span>
                       </div>
                     );
@@ -405,7 +405,7 @@ interface CardData {
                   {card.retreatCost != null && (
                     <div className="bg-gray-50 rounded-lg p-3 text-center">
                       <p className="text-xs text-gray-500">Recuo</p>
-                      <p className="font-bold text-gray-700">{'⚪'.repeat(card.retreatCost)}</p>
+                      <p className="font-bold text-gray-700">{'⚪'.repeat(card.retreatCost.length)}</p>
                     </div>
                   )}
                 </div>

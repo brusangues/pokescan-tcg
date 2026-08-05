@@ -110,7 +110,7 @@ export default function HitsPage() {
               )}
             </p>
           </div>
-          <button onClick={() => fetchData(selectedFile)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Atualizar">
+          <button onClick={() => fetchData(selectedFile ?? undefined)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Atualizar">
             <RefreshCw className="w-4 h-4 text-gray-500" />
           </button>
         </div>

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { readdirSync, statSync } from 'fs';
-import { join } from 'path';
 import { parseScoredCSV } from '@/app/lib/scored';
+import { SCORED_DIR } from '@/app/lib/paths';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +9,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const selected = searchParams.get('arquivo');
-    const scoredDir = join(process.cwd(), '..', 'data', 'scored');
+    const scoredDir = SCORED_DIR;
 
     const files = readdirSync(scoredDir)
       .filter(f => f.startsWith('scored_hits_') && f.endsWith('.csv'))
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
     // Se não especificou, usa o mais recente
     const target = selected && files.includes(selected) ? selected : files[0];
-    const latestFile = join(scoredDir, target);
+    const latestFile = `${scoredDir}/${target}`;
     const stats = statSync(latestFile);
 
     // Lista de arquivos disponíveis, agrupados por dia

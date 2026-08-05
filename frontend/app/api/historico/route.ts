@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
 import { parseScoredCSV } from '@/app/lib/scored';
+import { SCORED_DIR } from '@/app/lib/paths';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
     const sigla = searchParams.get('sigla')?.trim().toUpperCase() || '';
     const limite = parseInt(searchParams.get('limite') || '60', 10) || 60;
 
-    const scoredDir = join(process.cwd(), '..', 'data', 'scored');
+    const scoredDir = SCORED_DIR;
     const files = readdirSync(scoredDir)
       .filter(f => /^scored_(hits|snapshot)_\d{8}_\d{6}\.csv$/.test(f))
       .sort();
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 
       let cards: any[];
       try {
-        cards = parseScoredCSV(join(scoredDir, f));
+        cards = parseScoredCSV(`${scoredDir}/${f}`);
       } catch {
         continue; // CSV corrompido/incompleto — pula
       }

@@ -138,7 +138,7 @@ export default function SnapshotPage() {
           </div>
           <div className="flex items-center gap-2">
             {loading && <Loader className="w-4 h-4 animate-spin text-gray-400" />}
-            <button onClick={() => fetchData(selectedFile)} className="p-2 hover:bg-gray-100 rounded-lg" title="Atualizar">
+            <button onClick={() => fetchData(selectedFile ?? undefined)} className="p-2 hover:bg-gray-100 rounded-lg" title="Atualizar">
               <RefreshCw className="w-4 h-4 text-gray-500" />
             </button>
           </div>

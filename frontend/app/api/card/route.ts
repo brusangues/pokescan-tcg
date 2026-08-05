@@ -1,49 +1,78 @@
 import { NextResponse } from 'next/server';
-import { readFileSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { readFileSync, readdirSync, statSync } from 'fs';
 import { parseScoredCSV } from '@/app/lib/scored';
+import { PTCG_CACHE_PATH, SCORED_DIR, LIGA_DIR, SET_MAPPING_PATH, SET_MAPPING_FALLBACK_PATH } from '@/app/lib/paths';
 
 export const dynamic = 'force-dynamic';
 
-let _cacheMap: Map<string | number, any> | null = null;
+// Cache com invalidação por mtime: recarrega quando o arquivo mudar no
+// disco (cron de hits das 07:00, refresh semanal do cache ptcg, etc.).
+// Evita cache stale em servidor long-running.
+let _cacheMap: Map<string, any> | null = null;
+let _cacheMtime = 0;
 
-function loadCache() {
-  if (_cacheMap) return _cacheMap;
-  const cachePath = join(process.cwd(), '..', 'data', 'ptcg_cards_cache.json');
-  const raw = readFileSync(cachePath, 'utf-8');
+function loadCache(): Map<string, any> {
+  let mtime = 0;
+  try {
+    mtime = statSync(PTCG_CACHE_PATH).mtimeMs;
+  } catch {
+    /* arquivo sumiu — força recarga */
+  }
+  if (_cacheMap && _cacheMtime === mtime) return _cacheMap;
+
+  const raw = readFileSync(PTCG_CACHE_PATH, 'utf-8');
   const cards = JSON.parse(raw);
   _cacheMap = new Map();
   for (const c of cards) {
-    // Index by id
-    _cacheMap.set(c.id, c);
+    _cacheMap.set(String(c.id), c);
   }
+  _cacheMtime = mtime;
   return _cacheMap;
 }
 
 // Carrega o CSV escorado mais recente (hits e snapshot) para cruzar
 // com o modelo (pred_usd, pred_brl, upside, oportunidade, iCO).
 let _scoredLatest: any[] | null = null;
-function loadScoredLatest(): any[] {
-  if (_scoredLatest) return _scoredLatest;
-  const scoredDir = join(process.cwd(), '..', 'data', 'scored');
+let _scoredKey = '';
+
+function _latestScoredKey(): string {
   try {
-    const hits = readdirSync(scoredDir)
-      .filter(f => f.startsWith('scored_hits_') && f.endsWith('.csv'))
-      .sort().reverse()[0];
-    const snap = readdirSync(scoredDir)
-      .filter(f => f.startsWith('scored_snapshot_') && f.endsWith('.csv'))
-      .sort().reverse()[0];
-    const all: any[] = [];
-    for (const f of [hits, snap]) {
-      if (!f) continue;
-      try {
-        all.push(...parseScoredCSV(join(scoredDir, f)));
-      } catch { /* ignora arquivo corrompido */ }
-    }
-    _scoredLatest = all;
+    const files = readdirSync(SCORED_DIR)
+      .filter(f => /^scored_(hits|snapshot)_\d{8}_\d{6}\.csv$/.test(f))
+      .sort()
+      .reverse();
+    if (files.length === 0) return '';
+    const hits = files.find(f => f.startsWith('scored_hits_')) || files[0];
+    const snap = files.find(f => f.startsWith('scored_snapshot_')) || '';
+    // Key = nomes + mtimes dos 2 arquivos mais recentes
+    const parts = [hits];
+    if (snap && snap !== hits) parts.push(snap);
+    return parts.map(f => `${f}:${statSync(`${SCORED_DIR}/${f}`).mtimeMs}`).join('|');
   } catch {
-    _scoredLatest = [];
+    return '';
   }
+}
+
+function loadScoredLatest(): any[] {
+  const key = _latestScoredKey();
+  if (_scoredLatest && _scoredKey === key) return _scoredLatest;
+
+  const files = readdirSync(SCORED_DIR)
+    .filter(f => /^scored_(hits|snapshot)_\d{8}_\d{6}\.csv$/.test(f))
+    .sort()
+    .reverse();
+  const hits = files.find(f => f.startsWith('scored_hits_'));
+  const snap = files.find(f => f.startsWith('scored_snapshot_'));
+
+  const all: any[] = [];
+  for (const f of [hits, snap]) {
+    if (!f) continue;
+    try {
+      all.push(...parseScoredCSV(`${SCORED_DIR}/${f}`));
+    } catch { /* ignora arquivo corrompido */ }
+  }
+  _scoredLatest = all;
+  _scoredKey = key;
   return _scoredLatest;
 }
 
@@ -51,8 +80,7 @@ function loadSetMapping(): Record<string, string> {
   // Arquivo mapeia set_id ptcg → sigla Liga (ex: "sv3pt5" → "MEW")
   // Precisamos do INVERSO (sigla Liga → set ptcg) para buscar no cache.
   try {
-    const path1 = join(process.cwd(), '..', 'data', 'liga', 'liga_set_sigla_ptcg.json');
-    const raw = JSON.parse(readFileSync(path1, 'utf-8'));
+    const raw = JSON.parse(readFileSync(SET_MAPPING_PATH, 'utf-8'));
     const inv: Record<string, string> = {};
     for (const [ptcg, liga] of Object.entries(raw)) {
       inv[String(liga).toLowerCase()] = ptcg;
@@ -60,8 +88,7 @@ function loadSetMapping(): Record<string, string> {
     return inv;
   } catch {
     try {
-      const path2 = join(process.cwd(), '..', 'data', 'liga', 'liga_set_sigla.json');
-      const raw = JSON.parse(readFileSync(path2, 'utf-8'));
+      const raw = JSON.parse(readFileSync(SET_MAPPING_FALLBACK_PATH, 'utf-8'));
       const inv: Record<string, string> = {};
       for (const [ptcg, liga] of Object.entries(raw)) {
         inv[String(liga).toLowerCase()] = ptcg;
@@ -111,7 +138,7 @@ export async function GET(request: Request) {
         const rawSigla = sigla || ligaId?.split('-')[0]?.toLowerCase() || '';
         const ptcgSet = rawSigla ? setMap[rawSigla] : (setId || '');
         for (const [key, c] of cache) {
-          if (c.name?.toLowerCase() === nomeBusca && (!ptcgSet || key.startsWith(ptcgSet))) {
+          if (c.name?.toLowerCase() === nomeBusca && (!ptcgSet || String(key).startsWith(ptcgSet))) {
             card = c;
             break;
           }
@@ -209,6 +236,8 @@ export async function GET(request: Request) {
       } : null,
     });
   } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : 'Erro' }, { status: 500 });
+    return NextResponse.json({
+      error: error instanceof Error ? error.message : 'Erro ao buscar carta'
+    }, { status: 500 });
   }
 }

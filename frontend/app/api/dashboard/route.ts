@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { readdirSync, statSync } from 'fs';
-import { join } from 'path';
 import { parseScoredCSV } from '@/app/lib/scored';
+import { SCORED_DIR } from '@/app/lib/paths';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const scoredDir = join(process.cwd(), '..', 'data', 'scored');
+    const scoredDir = SCORED_DIR;
 
     // Latest hits
     const hitsFiles = readdirSync(scoredDir)
@@ -20,20 +20,20 @@ export async function GET() {
       .sort().reverse();
 
     const hitsData = hitsFiles.length > 0
-      ? parseScoredCSV(join(scoredDir, hitsFiles[0]))
+      ? parseScoredCSV(`${scoredDir}/${hitsFiles[0]}`)
       : [];
     const snapData = snapFiles.length > 0
-      ? parseScoredCSV(join(scoredDir, snapFiles[0]))
+      ? parseScoredCSV(`${scoredDir}/${snapFiles[0]}`)
       : [];
 
     const hitsMeta = hitsFiles[0] ? {
       arquivo: hitsFiles[0],
-      data: statSync(join(scoredDir, hitsFiles[0])).mtime.toISOString(),
+      data: statSync(`${scoredDir}/${hitsFiles[0]}`).mtime.toISOString(),
     } : null;
 
     const snapMeta = snapFiles[0] ? {
       arquivo: snapFiles[0],
-      data: statSync(join(scoredDir, snapFiles[0])).mtime.toISOString(),
+      data: statSync(`${scoredDir}/${snapFiles[0]}`).mtime.toISOString(),
     } : null;
 
     const allCards = [...hitsData, ...snapData];

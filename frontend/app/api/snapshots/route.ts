@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { readFileSync, readdirSync, statSync } from 'fs';
-import { join } from 'path';
 import { parseScoredCSV } from '@/app/lib/scored';
+import { SCORED_DIR } from '@/app/lib/paths';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const selected = searchParams.get('arquivo');
-    const scoredDir = join(process.cwd(), '..', 'data', 'scored');
+    const scoredDir = SCORED_DIR;
 
     const files = readdirSync(scoredDir)
       .filter(f => f.startsWith('scored_snapshot_') && f.endsWith('.csv'))
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       const time = `${m[2].slice(0, 2)}:${m[2].slice(2, 4)}`;
 
       // Conta rapidamente quantas linhas (sem parse completo)
-      const raw = readFileSync(join(scoredDir, f), 'utf-8');
+      const raw = readFileSync(`${scoredDir}/${f}`, 'utf-8');
       const lineCount = raw.split('\n').filter(l => l.trim()).length - 1; // -header
 
       disponiveis.push({
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
 
     // Seleciona o arquivo alvo
     const target = selected && files.includes(selected) ? selected : files[0];
-    const targetPath = join(scoredDir, target);
+    const targetPath = `${scoredDir}/${target}`;
     const stats = statSync(targetPath);
 
     const cards = parseScoredCSV(targetPath);

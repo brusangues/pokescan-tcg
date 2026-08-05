@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { spawnSync } from 'child_process';
 import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
 import { parse } from 'csv-parse/sync';
+import { LIGA_DIR, ABLATIONS_CSV } from '@/app/lib/paths';
 
 export const dynamic = 'force-dynamic';
 
-const REPO_DIR = join(process.cwd(), '..'); // raiz do repo pokescan-tcg
-const ABLATIONS_CSV = join(process.cwd(), '..', 'experiments', 'ablation_results.csv');
+const REPO_DIR = `${LIGA_DIR}/..`; // raiz do repo pokescan-tcg
 
 function getCommits() {
   try {

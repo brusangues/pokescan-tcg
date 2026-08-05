@@ -390,7 +390,7 @@ def finalizar(df, top, prefixo):
     df['oportunidade'] = df['upside_pct'].apply(
         lambda x: '🔥 Subvalorizada' if x > 25 else
                   ('👍 Leve Desconto' if x > 10 else
-                   ('💀 Inlacionada' if x < -25 else '⚖️ Preço Justo')))
+                   ('💀 Inflacionada' if x < -25 else '⚖️ Preço Justo')))
 
     # Deduplica: mesma carta aparece em varios arquivos de hits
     # Prioriza linhas com iCO_real (enriquecidas) sobre iCO=0 (hits crus)
@@ -404,7 +404,7 @@ def finalizar(df, top, prefixo):
             print(f'  ↳ Deduplicado: {antes} → {len(df)} cartas únicas')
 
     baratas = df[df['oportunidade'] == '🔥 Subvalorizada'].sort_values('upside_pct', ascending=False)
-    caras = df[df['oportunidade'] == '💀 Inlacionada'].sort_values('upside_pct')
+    caras = df[df['oportunidade'] == '💀 Inflacionada'].sort_values('upside_pct')
 
     print(f'\n{"="*64}')
     print(f'🏆 OPORTUNIDADES — {prefixo}')
@@ -413,7 +413,7 @@ def finalizar(df, top, prefixo):
     print(f'  🔥 Subvalorizadas (Pred > Real +25%): {len(baratas)}')
     print(f'  👍 Leve Desconto (Pred > Real +10-25%): {len(df[df["oportunidade"] == "👍 Leve Desconto"])}')
     print(f'  ⚖️  Preço Justo (-25% a +10%):          {len(df[df["oportunidade"] == "⚖️ Preço Justo"])}')
-    print(f'  💀 Inlacionadas (Real > Pred +25%):   {len(caras)}')
+    print(f'  💀 Inflacionadas (Real > Pred +25%):   {len(caras)}')
 
     # Oportunidades acionáveis: preço real >= 5 (BRL) ou >= 2 (USD)
     baratas_acao = baratas[(baratas['real_ref'] >= 5) | ((baratas['moeda'] == '$') & (baratas['real_ref'] >= 2))].copy()
@@ -432,8 +432,8 @@ def finalizar(df, top, prefixo):
             print(f'  {nome:30s} | {sigla:12s} | {moeda}{float(r["real_ref"]):>8.2f} | {moeda}{float(r["pred_ref"]):>8.2f} | +{float(r["upside_pct"]):5.0f}% | {ico}')
 
     if len(caras) > 0:
-        print(f'\n💀 TOP 10 INF vancadas (evitar):')
-        print(f'  {"Cape":30s} | {"Set":12s} | {"Real":>10s} | {"Pred":>10s} | {"Upside":>7s} | iCO')
+        print(f'\n💀 TOP 10 INFLACIONADAS (evitar):')
+        print(f'  {"Carta":30s} | {"Set":12s} | {"Real":>10s} | {"Pred":>10s} | {"Upside":>7s} | iCO')
         print(f'  {"-"*84}')
         for _, r in caras.head(10).iterrows():
             nome = str(r.get('nPT', r.get('name', r.get('nome', '?'))))[:30]
