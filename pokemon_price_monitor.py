@@ -71,54 +71,117 @@ def fetch_card_pricing(card_id):
     return ptcg_io.fetch_card_pricing(card_id)
 
 
+# ── Gênero dos treinadores (P1.7) ─────────────────────────────────
+# Dicionário explícito nome → gênero (fonte: Bulbapedia, canônico TCG).
+# Substitui as listas antigas que tinham homens na lista feminina
+# (Hop, Bede, Nanu, Hilbert, Nate, Curtis, Brendan, Lucas, Calem,
+# Elio, Milo, Kabu) e mulheres na masculina (Misty, Erika, etc.).
+TRAINER_GENDER = {
+    # Kanto / Johto
+    'brock': 'male', 'lt. surge': 'male', 'koga': 'male', 'giovanni': 'male',
+    'lance': 'male', 'misty': 'female', 'erika': 'female', 'sabrina': 'female',
+    'falkner': 'male', 'bugsy': 'male', 'whitney': 'female', 'morty': 'male',
+    'chuck': 'male', 'jasmine': 'female', 'pryce': 'male', 'clair': 'female',
+    'janine': 'female', 'professor oak': 'male', 'oak': 'male',
+    'youngster': 'male', 'lass': 'female', 'beauty': 'female',
+    'fisherman': 'male', 'hiker': 'male', 'bug catcher': 'male',
+    'scientist': 'male', 'breeder': 'neutral', 'roughneck': 'male',
+    'red': 'male', 'blue': 'male', 'green': 'female', 'yellow': 'female',
+    'gold': 'male', 'silver': 'male', 'crystal': 'female', 'leaf': 'female',
+    # Hoenn
+    'steven': 'male', 'wallace': 'male', 'sydney': 'male', 'phoebe': 'female',
+    'glacia': 'female', 'drake': 'male', 'roxanne': 'female', 'brawly': 'male',
+    'wattson': 'male', 'flannery': 'female', 'norman': 'male', 'winona': 'female',
+    'tate': 'male', 'liza': 'female', 'archie': 'male', 'maxie': 'male',
+    'wally': 'male', 'may': 'female', 'brendan': 'male', 'courtney': 'female',
+    'shelly': 'female', 'tabitha': 'male', 'matt': 'male',
+    # Sinnoh
+    'cyrus': 'male', 'mars': 'female', 'jupiter': 'female', 'saturn': 'male',
+    'charon': 'male', 'candice': 'female', 'cynthia': 'female',
+    'lucas': 'male', 'dawn': 'female', 'fantina': 'female', 'gardenia': 'female',
+    'maylene': 'female', 'roark': 'male', 'byron': 'male', 'volkner': 'male',
+    'aaron': 'male', 'bertha': 'female', 'flint': 'male', 'lucian': 'male',
+    # Unova
+    'ghetsis': 'male', 'cheren': 'male', 'bianca': 'female',
+    'cilan': 'male', 'chili': 'male', 'cress': 'male', 'lenora': 'female',
+    'burgh': 'male', 'elesa': 'female', 'clay': 'male', 'skyla': 'female',
+    'brycen': 'male', 'drayden': 'male', 'iris': 'female',
+    'hilbert': 'male', 'hilda': 'female', 'nate': 'male', 'rosa': 'female',
+    'hugh': 'male', 'juniper': 'female', 'yancy': 'female', 'curtis': 'male',
+    'shauntal': 'female', 'marshal': 'male', 'grimsley': 'male', 'caitlin': 'female',
+    'alder': 'male', 'roxie': 'female', 'marlon': 'male', 'colress': 'male',
+    'professor juniper': 'female',
+    # Kalos
+    'professor sycamore': 'male', 'diantha': 'female', 'serena': 'female',
+    'calem': 'male', 'shauna': 'female', 'tierno': 'male', 'trevor': 'male',
+    'viola': 'female', 'grant': 'male', 'korrina': 'female', 'ramos': 'male',
+    'clemont': 'male', 'valerie': 'female', 'olympia': 'female', 'wulfric': 'male',
+    'malva': 'female', 'siebold': 'male', 'wikstrom': 'male', 'drasna': 'female',
+    # Alola
+    'guzma': 'male', 'kukui': 'male', 'professor kukui': 'male', 'hau': 'male',
+    'lillie': 'female', 'gladion': 'male', 'lusamine': 'female',
+    'mallow': 'female', 'lana': 'female', 'kiawe': 'male', 'olivia': 'female',
+    'sophocles': 'male', 'mina': 'female', 'hala': 'male', 'nanu': 'male',
+    'hapu': 'female', 'acerola': 'female', 'kahili': 'female', 'molayne': 'male', 'ryuki': 'male',
+    'selene': 'female', 'elio': 'male', 'plumeria': 'female', 'faba': 'male',
+    # Galar
+    'hop': 'male', 'bede': 'male', 'marnie': 'female', 'rose': 'male',
+    'oleana': 'female', 'piers': 'male', 'raihan': 'male', 'leon': 'male',
+    'victor': 'male', 'gloria': 'female', 'mustard': 'male', 'avery': 'male',
+    'klara': 'female', 'peony': 'male', 'peonia': 'female',
+    'sonia': 'female', 'professor magnolia': 'female', 'magnolia': 'female',
+    'milo': 'male', 'nessa': 'female', 'kabu': 'male', 'bea': 'female',
+    'allister': 'male', 'opal': 'female', 'gordie': 'male', 'melony': 'female',
+    'melony': 'female',
+    # Hisui / Paldea
+    'geeta': 'female', 'sada': 'female', 'turo': 'male', 'arven': 'male',
+    'nemona': 'female', 'clavell': 'male', 'larry': 'male', 'rika': 'female',
+    'poppy': 'female', 'hassel': 'male', 'kieran': 'male', 'briar': 'female',
+    'carmine': 'female', 'penny': 'female', 'juliana': 'female', 'florian': 'male',
+    'iono': 'female', 'grusha': 'male', 'brassius': 'male', 'katy': 'female',
+    'brains': 'male',
+    # Outros / treinadores diversos
+    'lisia': 'female', 'zinnia': 'female', 'team flare': 'male',
+    'professor': 'male', 'pokémon breeder': 'neutral', 'breeder': 'neutral',
+}
+
+# Classes de treinador genéricas (fallback por palavra-chave)
+TRAINER_CLASS_GENDER = {
+    'youngster': 'male', 'lass': 'female', 'beauty': 'female',
+    'fisherman': 'male', 'hiker': 'male', 'bug catcher': 'male',
+    'scientist': 'male', 'roughneck': 'male', 'pokémon breeder': 'neutral',
+    'breeder': 'neutral', 'team flare': 'male',
+}
+
+
 def infer_trainer_gender(name):
+    """Infere gênero do treinador por nome canônico (dicionário explícito).
+
+    Usa match de substring com fronteiras de palavra para nomes curtos
+    (ex: 'N' não casa dentro de 'Lenora') e prioriza nomes mais longos.
+    """
     if not name:
         return 'neutral'
-    male_keywords = [
-        'Brock', 'Misty', 'Lt. Surge', 'Erika', 'Koga', 'Sabrina', 'Giovanni',
-        'Lance', 'Steven', 'Wallace', 'Sidney', 'Phoebe', 'Glacia', 'Drake',
-        'Roxanne', 'Brawly', 'Wattson', 'Flannery', 'Norman', 'Winona', 'Tate', 'Liza',
-        'Skye', 'Archie', 'Maxie', 'Ghetsis', 'N', 'Cheren', 'Bianca',
-        'Guzma', 'Kukui', 'Hau', 'Mallow', 'Kiawe', 'Hala', 'Olivia', 'Nanu', 'Hapu',
-        'Cyrus', 'Mars', 'Jupiter', 'Saturn', 'Charon',
-        'Hop', 'Bede', 'Marnie', 'Rose', 'Oleana', 'Piers', 'Raihan', 'Leon',
-        'Victor', 'Gloria', 'Mustard', 'Avery', 'Klara', 'Peony', 'Peonia',
-        'Geeta', 'Sada', 'Turo', 'Arven', 'Nemona', 'Clavell', 'Larry', 'Rika',
-        'Poppy', 'Hassel', 'Kieran', 'Briar', 'Carmine',
-        'Leaf', 'Red', 'Blue', 'Green', 'Yellow', 'Gold', 'Silver', 'Crystal',
-        'Professor', 'Youngster', 'Lass', 'Fisherman', 'Hiker', 'Bug Catcher',
-        'Scientist', 'Beauty', 'Breeder', 'Roughneck', 'Team Flare',
-        'Lisia', 'Zinnia', 'Wally', 'Courtney', 'Tabitha', 'Matt', 'Shelly',
-        'Iris', 'Cilan', 'Chili', 'Cress', 'Brycen', 'Drayden', 'Skyla', 'Elesa',
-        'Clay', 'Burgh', 'Lenora', 'Whitney', 'Jasmine', 'Clair', 'Morty', 'Chuck',
-        'Pryce', 'Falkner', 'Bugsy', 'Janine', 'Flannery',
-    ]
-    male_set = {k.lower() for k in male_keywords}
-    # Palavras tipicamente femininas
-    female_words = ['Lass', 'Beauty', 'Misty', 'Sabrina', 'Erika', 'Winona', 'Flannery',
-                    'Liza', 'Bianca', 'Gloria', 'Marnie', 'Oleana', 'Klara', 'Peonia',
-                    'Geeta', 'Sada', 'Nemona', 'Rika', 'Poppy', 'Briar', 'Carmine',
-                    'Green', 'Yellow', 'Crystal', 'Lisia', 'Zinnia', 'Courtney', 'Shelly',
-                    'Skyla', 'Elesa', 'Lenora', 'Whitney', 'Clair', 'Janine', 'Phoebe',
-                    'Glacia', 'Roxanne', 'Olivia', 'Nanu', 'Hapu', 'Lillie', 'Rosa', 'Hilda',
-                    'Mallow', 'Lana', 'Mina', 'Acerola', 'Kahili', 'Diantha',
-                    'Iris', 'Hilbert', 'Hilda', 'Rosa', 'Nate', 'Yancy', 'Curtis',
-                    'May', 'Brendan', 'Dawn', 'Lucas', 'Serena', 'Calem', 'Selene', 'Elio',
-                    'Juniper', 'Sonia', 'Hop', 'Bede', 'Milo', 'Nessa', 'Kabu', 'Opal']
-    female_set = {k.lower() for k in female_words}
-    
-    name_lower = name.lower()
-    
-    # Verificar nomes femininos conhecidos
-    for f in female_set:
-        if f in name_lower:
-            return 'female'
-    
-    # Verificar nomes masculinos conhecidos
-    for m in male_set:
-        if m in name_lower:
-            return 'male'
-    
+    name_lower = str(name).lower().strip()
+
+    # Caso especial: treinador N (Unova) — nome de 1 letra, aparece como
+    # "N's Resolve" etc. Só casa se for a palavra inteira ou "n's ..."
+    if name_lower == 'n' or name_lower.startswith("n's") or name_lower.startswith('n '):
+        return 'male'
+
+    # Match no dicionário: prioriza o nome mais longo que casar
+    best = None
+    for key, gender in TRAINER_GENDER.items():
+        if key in name_lower and (best is None or len(key) > len(best)):
+            best = key
+    if best:
+        return TRAINER_GENDER[best]
+
+    # Fallback: classes de treinador
+    for key, gender in TRAINER_CLASS_GENDER.items():
+        if key in name_lower:
+            return gender
+
     return 'neutral'
 
 
@@ -817,7 +880,10 @@ def run_snapshot(model=None, max_sets=50):
         model_brl = load_model_brl()
         if model_brl:
             brl_idx = df_valid['target_price_brl'].notna()
-            X_brl = prepare_features(df_valid[brl_idx])
+            # USD price é feature do modelo BRL (como no treino) — sem isso o
+            # predict falha/divergia (shape diferente do treino)
+            df_valid['target_price_usd'] = df_valid['target_price'].fillna(df_valid['target_price'].median())
+            X_brl = prepare_features(df_valid[brl_idx], extra_features=['target_price_usd'])
             log_pred_brl = model_brl.predict(X_brl)
             df_valid.loc[brl_idx, 'predicted_price_brl'] = np.expm1(log_pred_brl)
             df_valid.loc[brl_idx, 'residual_brl'] = df_valid.loc[brl_idx, 'target_price_brl'] - df_valid.loc[brl_idx, 'predicted_price_brl']
