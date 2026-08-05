@@ -53,21 +53,21 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - Refresh do cache ptcg roda semanalmente (adiciona sets novos como me5), mas os modelos USD/BRL só são re-treinados manualmente (`script/retrain_models.py`)
 - **Ideia**: adicionar `retrain_models.py` ao cron semanal (depois do refresh, antes do snapshot) — ou rodar mensalmente
 - Tags: backend, modelagem, crons
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em 8167f16 (dicionário explícito TRAINER_GENDER)
 
 ### [P1] 7. `infer_trainer_gender` retorna gênero errado para vários treinadores
 - `pokemon_price_monitor.py`: 'Hop', 'Bede', 'Nanu' aparecem nas listas masculina E feminina → a feminina ganha → retornam `female` (são masculinos)
 - Vários outros (Misty, Sabrina, Erika, etc.) estão nas duas listas por redundância (feminina correta)
 - **Fix**: remover duplicatas da lista masculina ou verificar masculino primeiro
 - Tags: backend, features
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em 8167f16 (extra_features target_price_usd)
 
 ### [P1] 8. `run_snapshot` do pm.py faz predição BRL com shape errado
 - `pokemon_price_monitor.py:817`: `prepare_features(df_valid[brl_idx])` SEM `extra_features=['target_price_usd']` — mas o modelo BRL foi treinado COM essa feature
 - Impacto: predição BRL falha ou diverge no fluxo legado (o fluxo de produção `score_apos_crawl.predict_base` está correto — só o `run_snapshot` legado está quebrado)
 - **Fix**: passar `extra_features=['target_price_usd']` na linha 817
 - Tags: backend, modelagem
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em 8167f16 (extra_features target_price_usd)
 
 ---
 
@@ -111,11 +111,13 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - 25 sets ptcg sem sigla Liga (incl. **me5** que o refresh adicionou ao cache — precisa mapear)
 - **Fix**: revisar duplicatas (qual set ptcg é o "oficial" de cada sigla); me5 → descobrir sigla na Liga
 - Tags: backend, mapping, dados
+- **Status**: ✅ corrigido em `8167f16` — sv8→SSP, sv6→TWM, sv9→JTG, bwp→BWPR, sv6pt5→SFA, me5→M5; 18 fantasmas removidos; duplicatas 11→1 (HIF legítima); snapshot +549 matches
 
 ### [P2] 16. JP mapping: 4 alvos sem set no cache (auditoria 05/08)
 - `JP_TO_EN_SET` aponta SV9A→sv9pt5, s3A→swsh3pt5, s4A→swsh4pt5, s6A→swsh6pt5 — sets **não existem** no ptcg_cards_cache (fallback JP falha silenciosamente para essas siglas)
 - **Fix**: adicionar os sets ao cache (refresh --full) ou corrigir o mapeamento
 - Tags: backend, fallback JP, dados
+- **Status**: ✅ corrigido em `8167f16` — alvos corrigidos p/ sets reais (SV9A→sv10, s3A→swsh35, s4A→swsh45, s6A→swsh7) + 28 chaves mixed-case normalizadas p/ UPPER (nunca casavam) — 0 alvos fantasmas
 
 ---
 
@@ -170,6 +172,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 
 | Item | Commit |
 |---|---|
+| P1.7+P1.8+P2.15+P2.16: gênero treinadores, BRL snapshot, mapping, JP | `8167f16` |
 | Página /features (debug: predições + todas as features) | `b56162a` |
 | P0.2-P0.5: inflacionadas visíveis + build TS + cache mtime + paths | `44a2f3e` |
 | Auditoria completa 05/08: 8 bugs novos (P0.2-P0.5, P1.6-P1.8) + 6 itens P2/P3 registrados | `—` (ver BACKLOG) |
