@@ -7,6 +7,7 @@ import {
   Loader, AlertCircle, TrendingUp, TrendingDown, ArrowLeft,
   DollarSign, Palette, Hash, Shield, Layers,
 } from 'lucide-react';
+import PriceHistory from '@/app/components/PriceHistory';
 
 interface CardData {
   id: string;
@@ -244,6 +245,13 @@ interface CardData {
                     </p>
                   </div>
                 )}
+                {/* Histórico de preços (hits diários + snapshots) */}
+                <PriceHistory
+                  ligaId={card.modelo.liga_id || undefined}
+                  nome={card.modelo.nEN ? card.modelo.nEN.split('(')[0].trim() : undefined}
+                  sigla={card.modelo.sigla || undefined}
+                  moeda={card.modelo.moeda}
+                />
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Preço real (Liga)</span>

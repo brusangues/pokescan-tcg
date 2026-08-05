@@ -334,8 +334,46 @@ def escorar_snapshot(df_base, top=15):
     return finalizar(df_out, top, prefixo='SNAPSHOT')
 
 
+def _set_nome_cache():
+    """Cache do mapa sigla-Liga → nome do set (via mapping inverso + cache ptcg)."""
+    if not hasattr(_set_nome_cache, '_cache'):
+        import json
+        from pathlib import Path
+        base_dir = Path(__file__).resolve().parent.parent
+        _set_nome_cache._cache = {}
+        # mapping ptcg→sigla Liga
+        map_path = base_dir / 'data' / 'liga' / 'liga_set_sigla_ptcg.json'
+        if map_path.exists():
+            ptcg2liga = json.loads(map_path.read_text(encoding='utf-8'))
+        else:
+            ptcg2liga = {}
+        liga2ptcg = {v: k for k, v in ptcg2liga.items()}
+        # nomes dos sets ptcg no cache
+        cache_path = base_dir / 'data' / 'ptcg_cards_cache.json'
+        if cache_path.exists():
+            cards = json.loads(cache_path.read_text(encoding='utf-8'))
+            set_nomes = {}
+            for c in cards:
+                sid = (c.get('set') or {}).get('id', '')
+                if sid and sid not in set_nomes:
+                    set_nomes[sid] = (c.get('set') or {}).get('name', '')
+            for sigla, ptcg_id in liga2ptcg.items():
+                nome = set_nomes.get(ptcg_id)
+                if nome:
+                    _set_nome_cache._cache[sigla.upper()] = nome
+    return _set_nome_cache._cache
+
+
 def finalizar(df, top, prefixo):
     """Calcula upside (BRL preferencial), marca oportunidades, imprime top e salva."""
+    # Nome do set: usa ed_sNome se existir; senão resolve via mapping
+    if 'ed_sNome' not in df.columns:
+        df['ed_sNome'] = ''
+    nomes = _set_nome_cache()
+    sem_nome = df['ed_sNome'].fillna('').astype(str).str.strip() == ''
+    if sem_nome.any() and 'sSigla' in df.columns:
+        df.loc[sem_nome, 'ed_sNome'] = df.loc[sem_nome, 'sSigla'].astype(str).str.strip().str.upper().map(nomes).fillna('')
+
     # Real BRL se tiver preço; pred BRL se tiver; senão USD
     tem_brl = df['preco_real_brl'].notna() & (df['preco_real_brl'] > 0)
     df['moeda'] = np.where(tem_brl, 'R$', '$')
