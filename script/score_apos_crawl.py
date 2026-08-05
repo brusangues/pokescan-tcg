@@ -151,13 +151,15 @@ def map_jp_to_en_base(df_hits, df_base):
         how='inner'
     )
     if len(matched) == 0:
-        return df
+        return pd.DataFrame()  # nada casou — retorna vazio (não inflar)
 
     # Deduplica: mesma carta JP pode bater com varias variantes EN (foil, holo, etc.)
     idx_col = df_jp.index.name or df_jp.iloc[:0, 0].name  # primeira coluna
     matched = matched.drop_duplicates(subset=idx_col, keep='first')
     matched = matched.drop(columns=['set_en', 'nome_limpo', 'nome_b', 'set_en_base'])
-    return pd.concat([df, matched], ignore_index=True)
+    # Retorna SÓ as linhas matched (não concat com df original — senão as
+    # cartas JP aparecem 2x: cruas + matched, inflando df_out no chamador)
+    return matched
 
 
 def escorar_hits(df_base, top=10):
@@ -217,6 +219,10 @@ def escorar_hits(df_base, top=10):
                 mais = mais.drop(columns=['nome_en_b', 'num_b'])
                 if len(mais) > 0:
                     df_m = pd.concat([df_m, mais], ignore_index=True) if len(df_m) > 0 else mais
+
+        # Colapsa liga_ids duplicados (base com sets ptcg → mesma sigla Liga)
+        if len(df_m) > 0:
+            df_m = df_m.drop_duplicates(subset=['liga_id'], keep='first')
 
         total_match += len(df_m)
         total_sem_match += len(df_h) - len(df_m)
@@ -285,6 +291,17 @@ def escorar_snapshot(df_base, top=15):
             mais = mais.drop(columns=['nome_en_b', 'num_b'])
             if len(mais) > 0:
                 df_out = pd.concat([df_out, mais], ignore_index=True) if len(df_out) > 0 else mais
+
+    # Deduplica ANTES da contagem: base com liga_id duplicado (101 casos:
+    # sets ptcg diferentes → mesma sigla Liga) e snapshot com variantes
+    # (ex: WAK-45 ×8). O merge multiplica linhas; aqui colapsa para o
+    # primeiro match (o dedup final por liga_id faria o mesmo, mas a
+    # contagem de Sem match sairia negativa).
+    if len(df_out) > 0 and 'liga_id' in df_out.columns:
+        antes = len(df_out)
+        df_out = df_out.drop_duplicates(subset=['liga_id'], keep='first')
+        if len(df_out) < antes:
+            print(f'  ↳ Colapsado no merge: {antes} → {len(df_out)} (liga_ids duplicados)')
 
     print(f'  Match: {len(df_out)} | Sem match: {len(df_s) - len(df_out)}')
     if len(df_out) == 0:
