@@ -153,6 +153,9 @@ def map_jp_to_en_base(df_hits, df_base):
     if len(matched) == 0:
         return pd.DataFrame()  # nada casou — retorna vazio (não inflar)
 
+    # Marca como carta japonesa (preço estimado do equivalente EN)
+    matched['is_jp'] = True
+
     # Deduplica: mesma carta JP pode bater com varias variantes EN (foil, holo, etc.)
     idx_col = df_jp.index.name or df_jp.iloc[:0, 0].name  # primeira coluna
     matched = matched.drop_duplicates(subset=idx_col, keep='first')
@@ -209,16 +212,27 @@ def escorar_hits(df_base, top=10):
             ids_casados = set(df_m['liga_id']) if len(df_m) > 0 else set()
             rest = df_h[~df_h['liga_id'].isin(ids_casados)].copy()
             if len(rest) > 0:
-                rest = map_jp_to_en_base(rest, df_base)  # JP fallback
+                # JP fallback: já retorna linhas COM pred (match por nome+set EN)
+                jp_matched = map_jp_to_en_base(rest, df_base)
+                if len(jp_matched) > 0 and 'pred_usd' in jp_matched.columns:
+                    jp_prontas = jp_matched[jp_matched['pred_usd'].notna()].copy()
+                    if len(jp_prontas) > 0:
+                        # Mantém apenas as que realmente casaram (tem pred da base)
+                        df_m = pd.concat([df_m, jp_prontas], ignore_index=True) if len(df_m) > 0 else jp_prontas
+                        # As não-casadas pelo JP seguem para o fallback nome+num
+                        jp_ids = set(jp_prontas['liga_id']) if 'liga_id' in jp_prontas.columns else set()
+                        rest = rest[~rest['liga_id'].isin(jp_ids)] if jp_ids else rest
+
                 df_base['nome_en_b'] = df_base['name'].str.lower().str.strip()
                 df_base['num_b'] = df_base['id'].str.split('-').str[-1].str.lstrip('0')
                 base_com_preco = df_base[df_base['target_price'].notna() & (df_base['target_price'] > 0)]
-                mais = rest.merge(
-                    base_com_preco[['nome_en_b', 'num_b', 'pred_usd', 'pred_brl', 'target_price']],
-                    left_on=['nome_en', 'num'], right_on=['nome_en_b', 'num_b'], how='inner')
-                mais = mais.drop(columns=['nome_en_b', 'num_b'])
-                if len(mais) > 0:
-                    df_m = pd.concat([df_m, mais], ignore_index=True) if len(df_m) > 0 else mais
+                if len(rest) > 0:
+                    mais = rest.merge(
+                        base_com_preco[['nome_en_b', 'num_b', 'pred_usd', 'pred_brl', 'target_price']],
+                        left_on=['nome_en', 'num'], right_on=['nome_en_b', 'num_b'], how='inner')
+                    mais = mais.drop(columns=['nome_en_b', 'num_b'])
+                    if len(mais) > 0:
+                        df_m = pd.concat([df_m, mais], ignore_index=True) if len(df_m) > 0 else mais
 
         # Colapsa liga_ids duplicados (base com sets ptcg → mesma sigla Liga)
         if len(df_m) > 0:
@@ -281,16 +295,25 @@ def escorar_snapshot(df_base, top=15):
         ids_casados = set(df_out['liga_id']) if len(df_out) > 0 else set()
         rest = df_s[~df_s['liga_id'].isin(ids_casados)].copy()
         if len(rest) > 0:
-            rest = map_jp_to_en_base(rest, df_base)  # JP fallback
+            # JP fallback: já retorna linhas COM pred (match por nome+set EN)
+            jp_matched = map_jp_to_en_base(rest, df_base)
+            if len(jp_matched) > 0 and 'pred_usd' in jp_matched.columns:
+                jp_prontas = jp_matched[jp_matched['pred_usd'].notna()].copy()
+                if len(jp_prontas) > 0:
+                    df_out = pd.concat([df_out, jp_prontas], ignore_index=True) if len(df_out) > 0 else jp_prontas
+                    jp_ids = set(jp_prontas['liga_id']) if 'liga_id' in jp_prontas.columns else set()
+                    rest = rest[~rest['liga_id'].isin(jp_ids)] if jp_ids else rest
+
             df_base['nome_en_b'] = df_base['name'].str.lower().str.strip()
             df_base['num_b'] = df_base['id'].str.split('-').str[-1].str.lstrip('0')
             base_com_preco = df_base[df_base['target_price'].notna() & (df_base['target_price'] > 0)]
-            mais = rest.merge(
-                base_com_preco[['nome_en_b', 'num_b', 'pred_usd', 'pred_brl', 'target_price']],
-                left_on=['nome_en', 'num'], right_on=['nome_en_b', 'num_b'], how='inner')
-            mais = mais.drop(columns=['nome_en_b', 'num_b'])
-            if len(mais) > 0:
-                df_out = pd.concat([df_out, mais], ignore_index=True) if len(df_out) > 0 else mais
+            if len(rest) > 0:
+                mais = rest.merge(
+                    base_com_preco[['nome_en_b', 'num_b', 'pred_usd', 'pred_brl', 'target_price']],
+                    left_on=['nome_en', 'num'], right_on=['nome_en_b', 'num_b'], how='inner')
+                mais = mais.drop(columns=['nome_en_b', 'num_b'])
+                if len(mais) > 0:
+                    df_out = pd.concat([df_out, mais], ignore_index=True) if len(df_out) > 0 else mais
 
     # Deduplica ANTES da contagem: base com liga_id duplicado (101 casos:
     # sets ptcg diferentes → mesma sigla Liga) e snapshot com variantes

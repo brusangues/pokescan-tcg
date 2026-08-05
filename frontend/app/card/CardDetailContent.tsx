@@ -63,6 +63,7 @@ interface CardData {
     sigla: string;
     setNome: string;
     fonte: string;
+    is_jp?: boolean;
     ligaOk?: boolean;
   } | null;
   error?: string;
@@ -231,6 +232,18 @@ interface CardData {
             {card.modelo && (
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                 <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-3">Previsão do Modelo</h2>
+                {card.modelo.is_jp && (
+                  <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5 mb-4">
+                    <svg className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-xs text-amber-800 leading-relaxed">
+                      <span className="font-semibold">Carta japonesa.</span> A Liga não tem preço de mercado
+                      global (TCGPlayer/Cardmarket) para cartas JP — a previsão usa o equivalente EN
+                      (mesma arte/raridade) como referência de preço justo.
+                    </p>
+                  </div>
+                )}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Preço real (Liga)</span>

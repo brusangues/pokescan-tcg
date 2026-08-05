@@ -197,12 +197,15 @@ export async function GET(request: Request) {
         sigla: scored.sigla,
         setNome: scored.setNome,
         fonte: scored.fonte,
+        is_jp: scored.is_jp || false,
         // Só mostra link da Liga se a sigla do modelo corresponde ao set
         // da carta exibida (evita link errado: ex. Mew ex Celebrations
-        // casando com MEW-151 por nome).
-        ligaOk: scored.sigla
-          ? (setMap[String(scored.sigla).toLowerCase()] === card.set.id || !setMap[String(scored.sigla).toLowerCase()] ? true : false)
-          : false,
+        // casando com MEW-151 por nome). Cartas JP (is_jp) SEMPRE têm link:
+        // a sigla é real da Liga (ex. SV4M-84) e o link funciona direto.
+        ligaOk: scored.is_jp ? true
+          : scored.sigla
+            ? (setMap[String(scored.sigla).toLowerCase()] === card.set.id || !setMap[String(scored.sigla).toLowerCase()] ? true : false)
+            : false,
       } : null,
     });
   } catch (error) {

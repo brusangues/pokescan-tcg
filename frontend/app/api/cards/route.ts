@@ -1,7 +1,21 @@
 
 import { NextResponse } from 'next/server';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 export const dynamic = 'force-dynamic';
+
+// Bucket offline: usado quando a API pokemontcg falha (gera com
+// script/gen_fetch_result.py — amostra real do cache local)
+const BUCKET_PATH = join(process.cwd(), 'public', 'fetch_result.json');
+
+function readBucket() {
+  try {
+    return JSON.parse(readFileSync(BUCKET_PATH, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
 
 // Helper function to fetch with retries and timeout
 async function fetchWithRetry(
@@ -104,6 +118,17 @@ export async function GET(request: Request) {
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error occurred';
     console.error('Proxy error:', errorMessage);
+
+    // Bucket offline: devolve amostra local em vez de 503
+    const bucket = readBucket();
+    if (bucket) {
+      console.warn('Usando bucket offline (fetch_result.json)');
+      return NextResponse.json({
+        ...bucket,
+        offline: true,
+        erro: errorMessage,
+      });
+    }
 
     return NextResponse.json(
       {

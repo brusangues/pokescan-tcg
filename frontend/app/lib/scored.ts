@@ -32,6 +32,7 @@ export function parseScoredCSV(filePath: string): any[] {
       sNumber: r.sNumber || '',
       num: r.num || '',
       fonte: r.fonte || '',
+      is_jp: r.is_jp === 'True' || r.is_jp === 'true' || r.is_jp === '1',
     }))
     .filter((c: any) => {
       const ok = !Number.isNaN(c.upside) && !Number.isNaN(c.real) && !Number.isNaN(c.pred);
