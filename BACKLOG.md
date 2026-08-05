@@ -33,6 +33,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - Tabela de hits mostra "sigla + nome do set" (`ed_sNome`); snapshot não tem `ed_sNome` no CSV → mostra só sigla
 - **Ideia**: incluir `ed_sNome` no CSV do snapshot (crawler já tem o dado?) ou resolver via mapping no front
 - Tags: frontend, snapshot
+- **Status**: ✅ `finalizar` resolve `ed_sNome` via mapping inverso (sigla → ptcg → nome); 91% dos sets com nome (`6ca38e0`)
 
 ### [P2] 6. Alertas de oportunidade (Telegram)
 - Crons já escoram e formatam top 10; **Ideia**: alerta dedicado quando uma carta cruza thresholds (ex. upside > +50% e iCO >= 3) — hoje é só na listagem
@@ -41,6 +42,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 ### [P2] 7. Histórico de preços por carta (time series)
 - Temos snapshots semanais + hits diários acumulando; **Ideia**: gráfico de evolução de preço real vs predito por carta no `/card`
 - Tags: frontend, dados
+- **Status**: ✅ API `/api/historico` + componente `PriceHistory` (SVG puro) no `/card` — real vs predito, hits + snapshots (`6ca38e0`)
 
 ### [P2] 8. Cache de cartas ptcg desatualizado
 - `data/ptcg_cards_cache.json` tem 20.479 cartas; sets novos (ex. sv8pt5 Prismatic Evolutions) foram adicionados manualmente no mapping mas o cache precisa refresh periódico
@@ -84,6 +86,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 
 | Item | Commit |
 |---|---|
+| P2.5+P2.7: nome do set no /snapshot + histórico no /card | `6ca38e0` |
 | P2.8: refresh incremental do cache ptcg no cron semanal | `5b8d210` |
 | P1: fallback offline scanner + sync mapping no cron + badge carta JP | `4f53558` |
 | BACKLOG.md centralizado | `0d99794` |
