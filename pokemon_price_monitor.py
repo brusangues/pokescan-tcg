@@ -348,14 +348,16 @@ def enrich_pricing(df):
 # ── 4. Features ─────────────────────────────────────────────────────
 
 CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype', 'illustrator', 'trainer_gender']
-EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_16d.csv'
+# Embeddings: dinov2-base + cls+mean + PCA32 (vencedor das ablações, Ago/2026)
+N_EMB = 32
+EMBEDDINGS_FILE = DATA_DIR / 'pokemon_embeddings_base32.csv'
 
 # Precos historicos (cardmarket)
 CM_FEATURES = ['cardmarket_avg', 'cardmarket_avg1', 'cardmarket_avg7', 'cardmarket_avg30', 'cardmarket_trend', 'cardmarket_low']
 # Flags binarias de arte
 ART_FEATURES = ['is_holo', 'is_reverse', 'is_normal', 'is_shiny', 'is_legendary']
 # Grail score e popularidade
-NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO', 'pokemon_grail_score'] + CM_FEATURES + ART_FEATURES + [f'emb_{i}' for i in range(16)]
+NUM_FEATURES = ['hp', 'subtypes_count', 'set_printed_total', 'release_year', 'card_age_years', 'pokedex_number', 'pokemon_popularity', 'iCO', 'pokemon_grail_score'] + CM_FEATURES + ART_FEATURES + [f'emb_{i}' for i in range(N_EMB)]
 # Features de supply (E1): pool de raridade + pull cost
 SUPPLY_FEATURES = ['rarity_pool_size', 'pull_cost_log']
 NUM_FEATURES = NUM_FEATURES + SUPPLY_FEATURES
@@ -531,7 +533,7 @@ def prepare_features(df, extra_features=None):
     # Merge embeddings
     if not emb_cache.empty:
         X = X.merge(emb_cache, on='id', how='left')
-        for i in range(16):
+        for i in range(N_EMB):
             col = f'emb_{i}'
             if col in X.columns:
                 X[col] = X[col].fillna(0.0)
