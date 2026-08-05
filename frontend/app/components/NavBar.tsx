@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, Camera, Zap, LayoutDashboard, BarChart3, Home } from 'lucide-react';
+import { Sparkles, Camera, Zap, LayoutDashboard, BarChart3, History } from 'lucide-react';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/hits', label: 'Hits', icon: Zap },
   { href: '/snapshot', label: 'Snapshot', icon: BarChart3 },
   { href: '/scanner', label: 'Scanner', icon: Camera },
+  { href: '/changelog', label: 'Changelog', icon: History },
 ];
 
 export default function NavBar() {
