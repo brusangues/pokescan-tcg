@@ -20,6 +20,7 @@ export function parseScoredCSV(filePath: string): any[] {
     .map((r: any) => ({
       nome: r.nPT || r.name || r.nome || r.nEN || 'Unknown',
       sigla: r.sSigla || r.set_id || '',
+      setNome: r.ed_sNome || r.ed_sNomePortugues || r.set_name || '',
       real: parseFloat(String(r.real_ref).replace(',', '.')),
       pred: parseFloat(String(r.pred_ref).replace(',', '.')),
       upside: parseFloat(String(r.upside_pct).replace(',', '.')),
@@ -28,6 +29,8 @@ export function parseScoredCSV(filePath: string): any[] {
       moeda: r.moeda || 'R$',
       liga_id: r.liga_id || '',
       nEN: r.nEN || '',
+      sNumber: r.sNumber || '',
+      num: r.num || '',
       fonte: r.fonte || '',
     }))
     .filter((c: any) => {

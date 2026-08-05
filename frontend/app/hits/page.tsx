@@ -1,20 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TrendingUp, TrendingDown, RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, FileText } from 'lucide-react';
+import { RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, FileText } from 'lucide-react';
 
-import { cardLink } from '@/app/lib/cards';
 import NavBar from '@/app/components/NavBar';
+import ScoredTable from '@/app/components/ScoredTable';
 
 interface ScoredCard {
   nome: string;
   sigla: string;
+  setNome?: string;
   real: number;
   pred: number;
   upside: number;
   oportunidade: string;
   iCO: number;
   moeda: string;
+  nEN?: string;
+  sNumber?: string;
+  num?: string;
 }
 
 interface Dia {
@@ -53,62 +57,6 @@ export default function HitsPage() {
   const selectArquivo = (f: string) => {
     setSelectedFile(f);
     fetchData(f);
-  };
-
-  const CardRow = ({ card }: { card: ScoredCard }) => {
-    // Valores defensivos: protege contra null/undefined vindos da API
-    const real = Number(card.real) || 0;
-    const pred = Number(card.pred) || 0;
-    const upside = Number(card.upside) || 0;
-    const ico = Number(card.iCO) || 0;
-    const isUp = upside > 0;
-    const isSub = card.oportunidade === '🔥 Subvalorizada';
-    const isInfla = card.oportunidade === '💀 Inflacionada';
-
-    return (
-      <div className={`
-        flex items-center gap-3 px-4 py-3 border-b border-gray-100 last:border-0
-        hover:bg-gray-50 transition-colors
-        ${isSub ? 'bg-green-50/30' : isInfla ? 'bg-red-50/30' : ''}
-      `}>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <a href={cardLink({nome_en: (card as any).nEN || card.nome, sSigla: card.sigla})} className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 truncate hover:underline">{card.nome}</a>
-            <span className="text-[10px] font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 shrink-0">
-              {card.sigla}
-            </span>
-          </div>
-        </div>
-        <div className="text-right shrink-0 w-24">
-          <p className="text-sm font-bold text-gray-800">{card.moeda}{real.toFixed(2)}</p>
-        </div>
-        <div className="text-right shrink-0 w-24">
-          <p className="text-sm text-gray-600">{card.moeda}{pred.toFixed(2)}</p>
-        </div>
-        <div className="text-right shrink-0 w-20">
-          <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${
-            isUp ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
-          }`}>
-            {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-            {isUp ? '+' : ''}{upside.toFixed(0)}%
-          </span>
-        </div>
-        <div className="text-right shrink-0 w-12">
-          {ico > 0 ? (
-            <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{ico}</span>
-          ) : (
-            <span className="text-[11px] text-gray-300">—</span>
-          )}
-        </div>
-        <div className="shrink-0 w-28 text-right">
-          <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${
-            isSub ? 'text-green-700 bg-green-100' : isInfla ? 'text-red-700 bg-red-100' : 'text-gray-500 bg-gray-100'
-          }`}>
-            {card.oportunidade.replace('🔥 ', '').replace('💀 ', '')}
-          </span>
-        </div>
-      </div>
-    );
   };
 
   if (loading) {
@@ -264,24 +212,7 @@ export default function HitsPage() {
         </div>
 
         {/* Cards Table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-            <span className="flex-1">Nome</span>
-            <span className="w-24 text-right hidden sm:inline">Real</span>
-            <span className="w-24 text-right hidden sm:inline">Predito</span>
-            <span className="w-20 text-right">Variação</span>
-            <span className="w-12 text-right">iCO</span>
-            <span className="w-28 text-right">Status</span>
-          </div>
-
-          {cards.length === 0 ? (
-            <div className="px-6 py-12 text-center text-gray-400">Nenhuma carta encontrada nessa categoria.</div>
-          ) : (
-            cards.map((card: ScoredCard, i: number) => (
-              <CardRow key={`${card.nome}-${card.sigla}-${i}`} card={card} />
-            ))
-          )}
-        </div>
+        <ScoredTable cards={cards} />
 
         {data.ultimaAtualizacao && (
           <p className="text-xs text-gray-400 text-right pt-3">

@@ -49,6 +49,21 @@ interface CardData {
   weaknesses?: { type: string; value: string }[];
   resistances?: { type: string; value: string }[];
   retreatCost?: string[];
+  modelo?: {
+    real: number;
+    pred: number;
+    upside: number;
+    oportunidade: string;
+    iCO: number;
+    moeda: string;
+    liga_id: string;
+    nEN: string;
+    sNumber: string;
+    num: string;
+    sigla: string;
+    setNome: string;
+    fonte: string;
+  } | null;
   error?: string;
   }
 
@@ -159,6 +174,22 @@ interface CardData {
                 )}
               </div>
             )}
+
+            {/* Link para a Liga Pokémon */}
+            {card.modelo && card.modelo.nEN && (
+              <a
+                href={`https://www.ligapokemon.com.br/?view=cards/card&card=${encodeURIComponent(card.modelo.nEN)}&ed=${encodeURIComponent(card.modelo.sigla)}&num=${encodeURIComponent(card.modelo.num || card.modelo.sNumber || '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-2xl p-4 border border-gray-200 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all group"
+              >
+                <h3 className="text-xs font-semibold text-gray-500 uppercase mb-1">Ver na Liga Pokémon</h3>
+                <p className="text-sm font-medium text-indigo-600 group-hover:underline flex items-center gap-1">
+                  {card.modelo.sigla} #{card.modelo.sNumber || card.modelo.num}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </p>
+              </a>
+            )}
           </div>
 
           {/* Detalhes */}
@@ -193,6 +224,53 @@ interface CardData {
                 </div>
               </div>
             </div>
+
+            {/* Previsão do Modelo (do CSV escorado) */}
+            {card.modelo && (
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-3">Previsão do Modelo</h2>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Preço real (Liga)</span>
+                    <span className="font-bold text-gray-900">{card.modelo.moeda}{card.modelo.real.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Preço justo (modelo)</span>
+                    <span className="font-bold text-indigo-700">{card.modelo.moeda}{card.modelo.pred.toFixed(2)}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Upside</span>
+                    <span className={`inline-flex items-center gap-1 text-sm font-bold px-2.5 py-1 rounded-full ${
+                      card.modelo.upside > 0 ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'
+                    }`}>
+                      {card.modelo.upside > 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                      {card.modelo.upside > 0 ? '+' : ''}{card.modelo.upside.toFixed(0)}%
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Classificação</span>
+                    <span className="text-sm font-semibold text-gray-800">{card.modelo.oportunidade}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Vendedores (iCO)</span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {card.modelo.iCO > 0 ? card.modelo.iCO : '—'}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">Set (Liga)</span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {card.modelo.sigla}{card.modelo.setNome ? ` — ${card.modelo.setNome}` : ''}
+                    </span>
+                  </div>
+                  {card.modelo.fonte && (
+                    <p className="text-[10px] text-gray-400 pt-2 border-t border-gray-100">
+                      Fonte: {card.modelo.fonte}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Mercado detalhado */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">

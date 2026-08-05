@@ -2,21 +2,26 @@
 
 import { useState, useEffect } from 'react';
 import {
-  TrendingUp, TrendingDown, RefreshCw, AlertCircle,
+  RefreshCw, AlertCircle,
   Clock, Loader, BarChart3, Calendar, ChevronDown,
   FileText, Target, ArrowUpCircle, ArrowDownCircle, DollarSign,
 } from 'lucide-react';
 import NavBar from '@/app/components/NavBar';
+import ScoredTable from '@/app/components/ScoredTable';
 
 interface ScoredCard {
   nome: string;
   sigla: string;
+  setNome?: string;
   real: number;
   pred: number;
   upside: number;
   oportunidade: string;
   iCO: number;
   moeda: string;
+  nEN?: string;
+  sNumber?: string;
+  num?: string;
 }
 
 interface ArquivoDisponivel {
@@ -77,32 +82,7 @@ export default function SnapshotPage() {
     </div>
   );
 
-  // Row compacto para tabela
-  const CardRow = ({ card }: { card: ScoredCard }) => {
-    const isUp = card.upside > 0;
-    const isSub = card.oportunidade === '🔥 Subvalorizada';
-    const isInfla = card.oportunidade === '💀 Inflacionada';
-
-    return (
-      <div className={`flex items-center gap-3 px-4 py-2.5 text-sm border-b border-gray-100 last:border-0 hover:bg-gray-50 ${isSub ? 'bg-green-50/30' : isInfla ? 'bg-red-50/30' : ''}`}>
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-gray-900 truncate">{card.nome}</p>
-        </div>
-        <span className="w-12 text-right font-mono text-xs text-gray-400 shrink-0">{card.sigla}</span>
-        <span className="w-20 text-right font-medium text-gray-800 shrink-0">{card.moeda}{card.real.toFixed(0)}</span>
-        <span className="w-20 text-right text-gray-500 hidden sm:inline shrink-0">{card.moeda}{card.pred.toFixed(0)}</span>
-        <span className={`w-16 text-right font-semibold shrink-0 ${isUp ? 'text-green-600' : 'text-red-600'}`}>
-          {isUp ? '+' : ''}{card.upside.toFixed(0)}%
-        </span>
-        <span className="w-10 text-right text-xs text-blue-500 shrink-0">{card.iCO > 0 ? card.iCO : '—'}</span>
-        <span className={`w-20 text-right text-[10px] uppercase tracking-wide font-semibold shrink-0 px-1.5 py-0.5 rounded-full ${
-          isSub ? 'text-green-700 bg-green-100' : isInfla ? 'text-red-700 bg-red-100' : 'text-gray-500 bg-gray-100'
-        }`}>
-          {card.oportunidade.replace('🔥 ', '').replace('💀 ', '')}
-        </span>
-      </div>
-    );
-  };
+  // Row compacto para tabela (substituído pelo componente ScoredCardRow)
 
   if (loading && !data) {
     return (
@@ -253,25 +233,7 @@ export default function SnapshotPage() {
         </div>
 
         {/* Tabela */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="flex items-center gap-3 px-4 py-2 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-            <span className="flex-1">Nome</span>
-            <span className="w-12 text-right">Set</span>
-            <span className="w-20 text-right">Real</span>
-            <span className="w-20 text-right hidden sm:inline">Predito</span>
-            <span className="w-16 text-right">Variação</span>
-            <span className="w-10 text-right">iCO</span>
-            <span className="w-20 text-right">Status</span>
-          </div>
-
-          {cards.length === 0 ? (
-            <div className="px-6 py-12 text-center text-gray-400">Nenhuma carta nessa categoria.</div>
-          ) : (
-            cards.map((card: ScoredCard, i: number) => (
-              <CardRow key={`${card.nome}-${card.sigla}-${i}`} card={card} />
-            ))
-          )}
-        </div>
+        <ScoredTable cards={cards} />
 
         {/* Footer */}
         <div className="text-center text-xs text-gray-400 pt-4">
