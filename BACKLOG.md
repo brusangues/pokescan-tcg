@@ -19,7 +19,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - `script/score_sets_recentes.py` usa a string correta → inconsistência entre scripts
 - **Fix**: normalizar a string no `score_apos_crawl.py` (ou aceitar ambas no frontend)
 - Tags: backend, frontend, dados
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em `44a2f3e`
 
 ### [P0] 3. Build de produção quebra: 5 erros de TypeScript (auditoria 05/08)
 - `npx tsc --noEmit` acusa 5 erros → `next build` falha (dev tolera via HMR, produção não):
@@ -29,21 +29,21 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
   - `app/hits/page.tsx(113)` e `app/snapshot/page.tsx(141)`: `selectedFile` pode ser `null` no onClick
 - **Fix**: correções pontuais de tipo (String(key), optional chaining, repeat com length, `?? undefined`)
 - Tags: frontend, build
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em `44a2f3e`
 
 ### [P0] 4. Cache de módulo do /api/card nunca é invalidado
 - `_cacheMap` (ptcg_cards_cache.json) e `_scoredLatest` (CSVs escorados) são variáveis de módulo **sem invalidação**
 - Em produção (long-running), o servidor NÃO vê: novos CSVs do cron das 07:00, cartas novas do refresh semanal, nem mudanças no mapping — só após restart
 - **Fix**: cache com TTL (ex. 5 min) ou invalidação por mtime dos arquivos
 - Tags: frontend, API
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em `44a2f3e`
 
 ### [P0] 5. `process.cwd()` como base de paths nas APIs — frágil
 - TODAS as rotas de API usam `join(process.cwd(), '..', 'data', ...)` para achar o repo
 - Se o servidor subir de outro diretório (ex. `cd / && npm run dev --prefix ...`), **todas as APIs quebram** silenciosamente (404/500)
 - **Fix**: usar caminho absoluto derivado de `__dirname` ou variável de ambiente
 - Tags: frontend, API, robustez
-- **Status**: descoberto na auditoria de 05/08/2026 — NÃO corrigido
+- **Status**: ✅ corrigido em `44a2f3e`
 
 ---
 
@@ -170,6 +170,8 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 
 | Item | Commit |
 |---|---|
+| Página /features (debug: predições + todas as features) | `b56162a` |
+| P0.2-P0.5: inflacionadas visíveis + build TS + cache mtime + paths | `44a2f3e` |
 | Auditoria completa 05/08: 8 bugs novos (P0.2-P0.5, P1.6-P1.8) + 6 itens P2/P3 registrados | `—` (ver BACKLOG) |
 | P2.5+P2.7: nome do set no /snapshot + histórico no /card | `6ca38e0` |
 | P2.8: refresh incremental do cache ptcg no cron semanal | `5b8d210` |
