@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, Camera, Zap, LayoutDashboard, BarChart3, History } from 'lucide-react';
+import { Sparkles, Camera, Zap, LayoutDashboard, BarChart3, History, Bug } from 'lucide-react';
+
+// Página de debug/features: só aparece no menu quando habilitada (dev).
+// Em produção (sem NEXT_PUBLIC_FEATURES=1) some do menu e a rota retorna 404.
+const FEATURES_ENABLED = process.env.NEXT_PUBLIC_FEATURES === '1';
 
 const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -10,6 +14,7 @@ const NAV_ITEMS = [
   { href: '/snapshot', label: 'Snapshot', icon: BarChart3 },
   { href: '/scanner', label: 'Scanner', icon: Camera },
   { href: '/changelog', label: 'Changelog', icon: History },
+  ...(FEATURES_ENABLED ? [{ href: '/features', label: 'Features', icon: Bug }] : []),
 ];
 
 export default function NavBar() {
