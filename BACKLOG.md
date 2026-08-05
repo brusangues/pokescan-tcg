@@ -17,16 +17,13 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - `data/liga/liga_set_sigla_ptcg.json` (233 sets) foi completado manualmente via `script/rebuild_set_mapping.py`
 - **Ideia**: rodar o rebuild no cron (antes da escoragem) para pegar sets novos automaticamente; só adiciona, não remove
 - Tags: backend, mapping, crons
+- **Status**: ✅ integrado nos wrappers de cron (`4f53558`)
 
 ### [P1] 3. Cartas JP na página de detalhe
 - Fallback JP mapeia sigla JP → set EN por nome; a página `/card` mostra a carta EN equivalente (preço, imagem) em vez da carta JP real
 - **Ideia**: quando o match é por fallback JP, exibir badge "Carta japonesa — preço estimado do equivalente EN" e o nome/número real da Liga
 - Tags: frontend, fallback JP
-
-### [P1] 4. `fetch_result.json` vazio (fallback offline do scanner)
-- `frontend/public/fetch_result.json` é o bucket quando a API pokemontcg cai; está vazio/reduzido
-- **Ideia**: popular com amostra real de cartas (ex. 20 do cache local) para o scanner não quebrar offline
-- Tags: frontend, resiliência
+- **Status**: ✅ badge implementado (`4f53558`). Pendente: mostrar nome/número real da Liga JP na página (hoje mostra o EN)
 
 ---
 
@@ -86,6 +83,8 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 
 | Item | Commit |
 |---|---|
+| P1: fallback offline scanner + sync mapping no cron + badge carta JP | `4f53558` |
+| BACKLOG.md centralizado | `0d99794` |
 | Changelog page (commits + ablações) | `f214b7f` |
 | Bug link Liga no `/card` (Mew ex MEW vs Celebrations) + mapping completo | `07b5679` |
 | Contagem negativa snapshot + duplicação fallback JP + limpeza crawler | `0d9ff28` |
