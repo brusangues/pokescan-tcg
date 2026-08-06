@@ -104,8 +104,9 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
       const peri = cv.arcLength(cnt, true);
       let approx = new cv.Mat();
       let quadPts: { x: number; y: number }[] | null = null;
-      // múltiplos epsilons: bordas curvas (lente/perspectiva) precisam de eps maior
-      for (const eps of [0.02, 0.03, 0.04, 0.05, 0.06]) {
+      // múltiplos epsilons: bordas curvas (lente/perspectiva) e diferenças
+      // WASM float32 vs CPU precisam de eps maior no browser
+      for (const eps of [0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.10]) {
         cv.approxPolyDP(cnt, approx, eps * peri, true);
         if (approx.rows === 4) {
           const pts = [];
@@ -123,23 +124,29 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
           }
         }
       }
-      // fallback: caixa rotacionada mínima (robusto a ângulos)
+      // fallback: caixa rotacionada mínima (robusto a ângulos e bordas curvas)
       if (!quadPts) {
         try {
           const rect = cv.minAreaRect(cnt);
-          const box = cv.boxPoints(rect);
+          // cv.boxPoints NÃO funciona no OpenCV.js 5.0 — calcula os 4 cantos na mão
+          const cx = rect.center.x, cy = rect.center.y;
+          const w = rect.size.width, h = rect.size.height;
+          const theta = (rect.angle * Math.PI) / 180;
+          const cos = Math.cos(theta), sin = Math.sin(theta);
           const pts = [];
-          for (let p = 0; p < 4; p++) {
+          for (const [ox, oy] of [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]) {
             pts.push({
-              x: Math.round(box.data32F[p * 2] / scale),
-              y: Math.round(box.data32F[p * 2 + 1] / scale),
+              x: Math.round((cx + ox * cos - oy * sin) / scale),
+              y: Math.round((cy + ox * sin + oy * cos) / scale),
             });
           }
           const o = orderPoints(pts);
           const ratio = aspectRatio(o);
-          if (ratio >= 0.45 && ratio <= 0.95) quadPts = o;
-        } catch {
-          // boxPoints pode não estar disponível — segue sem fallback
+          if (ratio >= 0.45 && ratio <= 0.95) {
+            quadPts = o;
+          }
+        } catch (e) {
+          console.warn('minAreaRect fallback falhou', e);
         }
       }
       approx.delete();
