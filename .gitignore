@@ -377,7 +377,8 @@ marimo/_lsp/
 __marimo__/
 
 # Streamlit
-.streamlit/secrets.tomlexperiments/models/*.onnx
+.streamlit/secrets.toml
+experiments/models/*.onnx
 
 
 # Notas internas do agente (não público)
