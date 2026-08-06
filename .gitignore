@@ -379,3 +379,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.tomlexperiments/models/*.onnx
 
+
+# Notas internas do agente (não público)
+.hermes.md
