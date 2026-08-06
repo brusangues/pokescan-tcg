@@ -102,31 +102,55 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
         rect.y + rect.height >= src.rows - 2;
       if (touchesBorder) { cnt.delete(); continue; }
       const peri = cv.arcLength(cnt, true);
-      const approx = new cv.Mat();
-      cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
-      if (approx.rows === 4) {
-        const pts = [];
-        for (let p = 0; p < 4; p++) {
-          const x = approx.data32S[p * 2];
-          const y = approx.data32S[p * 2 + 1];
-          pts.push({ x: Math.round(x / scale), y: Math.round(y / scale) });
+      let approx = new cv.Mat();
+      let quadPts: { x: number; y: number }[] | null = null;
+      // múltiplos epsilons: bordas curvas (lente/perspectiva) precisam de eps maior
+      for (const eps of [0.02, 0.03, 0.04, 0.05, 0.06]) {
+        cv.approxPolyDP(cnt, approx, eps * peri, true);
+        if (approx.rows === 4) {
+          const pts = [];
+          for (let p = 0; p < 4; p++) {
+            pts.push({
+              x: Math.round(approx.data32S[p * 2] / scale),
+              y: Math.round(approx.data32S[p * 2 + 1] / scale),
+            });
+          }
+          const o = orderPoints(pts);
+          const ratio = aspectRatio(o);
+          if (ratio >= 0.45 && ratio <= 0.95) {
+            quadPts = o;
+            break;
+          }
         }
-        // valida razão de aspecto da carta (63×88 ≈ 0.716, tolerância ±30%)
-        const o = orderPoints(pts);
-        const l1 = Math.hypot(o[1].x - o[0].x, o[1].y - o[0].y);
-        const l2 = Math.hypot(o[2].x - o[1].x, o[2].y - o[1].y);
-        const ratio = Math.min(l1, l2) / Math.max(l1, l2);
-        if (ratio >= 0.50 && ratio <= 0.93) {
-          best = { points: o, area: area / (scale * scale) };
-          approx.delete();
-          cnt.delete();
-          contours.delete();
-          src.delete(); gray.delete(); edges.delete();
-          kernel.delete(); hierarchy.delete();
-          return best;
+      }
+      // fallback: caixa rotacionada mínima (robusto a ângulos)
+      if (!quadPts) {
+        try {
+          const rect = cv.minAreaRect(cnt);
+          const box = cv.boxPoints(rect);
+          const pts = [];
+          for (let p = 0; p < 4; p++) {
+            pts.push({
+              x: Math.round(box.data32F[p * 2] / scale),
+              y: Math.round(box.data32F[p * 2 + 1] / scale),
+            });
+          }
+          const o = orderPoints(pts);
+          const ratio = aspectRatio(o);
+          if (ratio >= 0.45 && ratio <= 0.95) quadPts = o;
+        } catch {
+          // boxPoints pode não estar disponível — segue sem fallback
         }
       }
       approx.delete();
+      if (quadPts) {
+        best = { points: quadPts, area: area / (scale * scale) };
+        cnt.delete();
+        contours.delete();
+        src.delete(); gray.delete(); edges.delete();
+        kernel.delete(); hierarchy.delete();
+        return best;
+      }
       cnt.delete();
     }
     contours.delete();
@@ -150,6 +174,13 @@ function orderPoints(pts: { x: number; y: number }[]): { x: number; y: number }[
     pts[idxSum[3]],  // BR (maior soma)
     pts[idxDiff[3]], // BL (maior y-x)
   ];
+}
+
+/** Razão de aspecto (menor lado / maior lado) de um quadrilátero ordenado. */
+function aspectRatio(o: { x: number; y: number }[]): number {
+  const l1 = Math.hypot(o[1].x - o[0].x, o[1].y - o[0].y);
+  const l2 = Math.hypot(o[2].x - o[1].x, o[2].y - o[1].y);
+  return Math.min(l1, l2) / Math.max(l1, l2);
 }
 
 /**
