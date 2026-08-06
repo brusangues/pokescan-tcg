@@ -1,4 +1,6 @@
 /** Constrói a URL de detalhe da carta a partir dos campos do CSV escorado. */
+import { getBasePath } from '@/app/lib/basePath';
+
 export function cardLink(card: {
   nome_en?: string;
   nEN?: string;
@@ -9,7 +11,9 @@ export function cardLink(card: {
   const nome = card.nome_en || card.nEN || card.nome || '';
   const sigla = card.sSigla || card.sigla || '';
   const cleanNome = (nome || '').split('(')[0].trim();
-  return `/card?nome=${encodeURIComponent(cleanNome)}&sigla=${encodeURIComponent(sigla)}`;
+  // getBasePath() explícito: hrefs criados em runtime (client) NÃO são
+  // prefixados pelo next/link (só os pré-renderizados no build recebem o basePath)
+  return `${getBasePath()}/card?nome=${encodeURIComponent(cleanNome)}&sigla=${encodeURIComponent(sigla)}`;
 }
 
 /**

@@ -42,6 +42,8 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
     <div className={`flex items-center gap-2 px-4 py-2.5 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors ${isSub ? 'bg-green-50/30' : isInfla ? 'bg-red-50/30' : ''}`}>
       {/* Nome */}
       <div className="flex-1 min-w-0">
+        {/* <a> com href já prefixado por cardLink (getBasePath) — o next/link
+            duplica o basePath em hrefs com query no client */}
         <a
           href={cardLink({ nome_en: card.nEN || card.nome, sSigla: card.sigla })}
           className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 hover:underline truncate block"

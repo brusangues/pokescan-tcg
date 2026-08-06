@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import PriceHistory from '@/app/components/PriceHistory';
 import { lookupCard } from '@/app/lib/cardLookup';
+import { getBasePath } from '@/app/lib/basePath';
 
 interface CardData {
   id: string;
@@ -125,7 +126,7 @@ interface CardData {
           </div>
           <h2 className="text-lg font-bold text-gray-900">Carta não encontrada</h2>
           <p className="text-sm text-gray-500">{error || card?.error}</p>
-          <a href="/" className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">
+          <a href={`${getBasePath()}/`} className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">
             <ArrowLeft className="w-4 h-4" /> Voltar
           </a>
         </div>
@@ -142,7 +143,7 @@ interface CardData {
       {/* Header */}
       <div className="bg-indigo-900 text-white py-6">
         <div className="max-w-5xl mx-auto px-4">
-          <a href="/" className="inline-flex items-center gap-2 text-indigo-300 text-sm hover:text-white transition-colors mb-4">
+          <a href={`${getBasePath()}/`} className="inline-flex items-center gap-2 text-indigo-300 text-sm hover:text-white transition-colors mb-4">
             <ArrowLeft className="w-4 h-4" /> Voltar
           </a>
           <h1 className="text-3xl font-bold tracking-tight">{card.name}</h1>
