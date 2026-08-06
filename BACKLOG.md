@@ -166,6 +166,13 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - `layout.tsx`: `lang="en"` em app pt-BR
 - Tags: cosmético
 
+### [P3] 26. Alternativa jsfeat para o clipping (sem OpenCV.js)
+- **Contexto**: Fase 1 do clipping implementada com OpenCV.js (`@techstark/opencv-js`, `/scanner/opencv.js` ~13 MB WASM embutido) em `app/lib/cardClip.ts` — Canny multi-passada + contorno + warpPerspective
+- **Ideia (usuário)**: implementar tudo na mão com **jsfeat** (~150 KB, JS puro) para reduzir o download (~53 MB → ~40 MB) e eliminar a dependência do WASM
+- **O que falta no jsfeat**: não tem `approxPolyDP`/`warpPerspective` nativos — precisaria implementar (Douglas-Peucker ~40 linhas; transform de perspectiva via math manual ou rasterização) — e validar razão de aspecto igual
+- **Plano**: só se o download virar problema real (GitHub Pages/dados móveis); manter OpenCV.js como implementação canônica da Fase 1
+- Tags: scanner, clipping, frontend, P3
+
 ---
 
 ## ✅ Recentes (resolvidos — referência)

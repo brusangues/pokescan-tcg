@@ -4,8 +4,19 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalLink, ImageOff } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 import ScannerEngine, { ScanResult } from '@/app/lib/scannerEngine';
+import { detectCardQuad, warpCard } from '@/app/lib/cardClip';
 import Image from 'next/image';
 import Link from 'next/link';
+
+/** Carrega um dataURL em um elemento <img> (para processar no OpenCV). */
+function loadImage(dataUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = document.createElement('img');
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Imagem inválida'));
+    img.src = dataUrl;
+  });
+}
 
 export default function Scanner() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'scanning' | 'error'>('idle');
@@ -15,6 +26,7 @@ export default function Scanner() {
   const [preview, setPreview] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cardCount, setCardCount] = useState(0);
+  const [clipped, setClipped] = useState<boolean | null>(null);
   const loadRef = useRef<Promise<void> | null>(null);
 
   // Cleanup preview URL
@@ -56,11 +68,31 @@ export default function Scanner() {
       setPreview(dataUrl);
       setResults(null);
       setErrorMsg(null);
+      setClipped(null);
       setPhase('scanning');
 
       try {
         const engine = ScannerEngine.instance;
-        const top = await engine.search(dataUrl, 5);
+
+        // 1. Clipping: detecta a carta e corrige a perspectiva
+        let matchImg = dataUrl;
+        try {
+          const imgEl = await loadImage(dataUrl);
+          const quad = await detectCardQuad(imgEl);
+          if (quad) {
+            const canvas = await warpCard(imgEl, quad);
+            matchImg = canvas.toDataURL('image/jpeg', 0.92);
+            setClipped(true);
+          } else {
+            setClipped(false);
+          }
+        } catch (clipErr) {
+          console.warn('Clipping falhou, usando imagem original:', clipErr);
+          setClipped(false);
+        }
+
+        // 2. Match no índice
+        const top = await engine.search(matchImg, 5);
         setResults(top);
       } catch (err) {
         console.error(err);
@@ -106,8 +138,8 @@ export default function Scanner() {
           <div className="space-y-4">
             <div className="text-sm text-gray-600 leading-relaxed">
               O scanner roda 100% no seu navegador (nada é enviado a servidores). Para usar, é preciso
-              baixar <strong>~40 MB</strong> na primeira vez (modelo de visão + índice de 20.4 mil cartas).
-              Depois disso, tudo fica em cache.
+              baixar <strong>~53 MB</strong> na primeira vez (modelo de visão, detector de bordas e índice de
+              20.4 mil cartas). Depois disso, tudo fica em cache.
             </div>
             <button
               onClick={startLoad}
@@ -138,6 +170,16 @@ export default function Scanner() {
           <div className="flex items-center gap-2 text-sm text-green-600">
             <CheckCircle2 className="w-4 h-4" />
             Scanner pronto. Índice com {cardCount.toLocaleString('pt-BR')} cartas.
+          </div>
+        )}
+
+        {clipped !== null && phase === 'ready' && (
+          <div className={`mt-3 text-xs px-3 py-2 rounded-lg ${
+            clipped ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+          }`}>
+            {clipped
+              ? '✓ Carta detectada: bordas encontradas e perspectiva corrigida antes do match.'
+              : '⚠ Carta não detectada: usando a imagem original (fundo incluso).'}
           </div>
         )}
 
