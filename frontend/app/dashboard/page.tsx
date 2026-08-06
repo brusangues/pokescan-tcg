@@ -7,6 +7,7 @@ import {
   ArrowUpCircle, ArrowDownCircle, Target, Layers, DollarSign
 } from 'lucide-react';
 import NavBar from '@/app/components/NavBar';
+import { getBasePath } from '@/app/lib/basePath';
 
 interface ScoredCard {
   nome: string;
@@ -28,8 +29,8 @@ export default function DashboardPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/dashboard');
-      if (!res.ok) throw new Error((await res.json()).error || 'Erro');
+      const res = await fetch(`${getBasePath()}/data/dashboard.json`);
+      if (!res.ok) throw new Error('Erro ao carregar');
       setData(await res.json());
     } catch (e: any) {
       setError(e.message);

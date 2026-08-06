@@ -5,6 +5,7 @@ import {
   History, FlaskConical, RefreshCw, AlertCircle,
   Trophy, TrendingUp, X, Check, GitBranch,
 } from 'lucide-react';
+import { getBasePath } from '@/app/lib/basePath';
 
 type Commit = {
   hash: string;
@@ -66,7 +67,7 @@ export default function ChangelogPage() {
     setLoading(true);
     setErro('');
     try {
-      const res = await fetch('/api/changelog');
+      const res = await fetch(`${getBasePath()}/data/changelog.json`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       setCommits(data.commits || []);

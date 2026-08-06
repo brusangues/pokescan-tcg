@@ -32,7 +32,7 @@ export default function NavBar() {
         <nav className="hidden md:flex gap-2 items-center">
           {NAV_ITEMS.map(item => {
             const Icon = item.icon;
-            const active = pathname === item.href || pathname.startsWith(item.href + '/');
+            const active = pathname === item.href || pathname?.startsWith(item.href + '/');
             return (
               <Link
                 key={item.href}

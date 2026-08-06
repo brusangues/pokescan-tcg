@@ -1,5 +1,7 @@
 import type {NextConfig} from 'next';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || undefined;
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   eslint: {
@@ -8,33 +10,13 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  // Export estático 100% front (GitHub Pages). Build de deploy:
+  //   NEXT_PUBLIC_BASE_PATH=/pokescan-tcg npm run build
+  output: 'export',
+  trailingSlash: true,
+  ...(basePath ? { basePath, assetPrefix: basePath } : {}),
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.pokemontcg.io',
-        port: '',
-        pathname: '/**',
-      },
-    ],
-  },
-  output: 'standalone',
-  transpilePackages: ['motion'],
-  webpack: (config, {dev}) => {
-    if (dev && process.env.DISABLE_HMR === 'true') {
-      config.watchOptions = { ignored: /.*/ };
-    }
-    return config;
-  },
-  // Avoid prebuild error with motion (framer-motion) in _error.js
-  experimental: {
-    prerenderEarlyExit: false,
+    unoptimized: true,
   },
   devIndicators: {
     appIsrStatus: false,

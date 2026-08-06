@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { lookupHistorico } from '@/app/lib/cardLookup';
 
 interface Ponto {
   data: string;
@@ -19,22 +20,18 @@ interface PriceHistoryProps {
 
 /**
  * Gráfico de evolução de preço (real vs predito) da carta.
- * Busca /api/historico e desenha um line chart em SVG puro (sem lib).
+ * Busca /data/historico.json (via lookupHistorico) e desenha um line chart
+ * em SVG puro (sem lib).
  */
 export default function PriceHistory({ ligaId, nome, sigla, moeda }: PriceHistoryProps) {
   const [serie, setSerie] = useState<Ponto[] | null>(null);
   const [erro, setErro] = useState(false);
 
   useEffect(() => {
-    let params = new URLSearchParams();
-    if (ligaId) params.set('liga_id', ligaId);
-    else if (nome) { params.set('nome', nome); if (sigla) params.set('sigla', sigla); }
-    if (!params.toString()) return;
+    if (!ligaId && !nome) return;
 
-    fetch(`/api/historico?${params.toString()}`)
-      .then(r => r.json())
+    lookupHistorico({ ligaId, nome, sigla })
       .then(d => {
-        if (d.error) { setErro(true); return; }
         setSerie(d.serie && d.serie.length >= 2 ? d.serie : null);
       })
       .catch(() => setErro(true));

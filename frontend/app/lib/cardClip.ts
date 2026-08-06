@@ -5,6 +5,8 @@
 // Retorna um canvas com a carta reta, ou null se não encontrar quadrilátero
 // confiável (o chamador usa a imagem original como fallback).
 
+import { getBasePath } from '@/app/lib/basePath';
+
 let cvPromise: Promise<any> | null = null;
 
 /** Carrega o OpenCV.js uma única vez (script tag + window.cv — Promise). */
@@ -33,7 +35,7 @@ export function loadOpenCV(): Promise<any> {
 
     if (w.cv) return ready();
     const script = document.createElement('script');
-    script.src = '/scanner/opencv.js';
+    script.src = `${getBasePath()}/scanner/opencv.js`;
     script.async = true;
     script.onload = ready;
     script.onerror = () => reject(new Error('Falha ao carregar OpenCV.js'));

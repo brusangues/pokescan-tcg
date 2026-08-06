@@ -8,6 +8,7 @@ import {
   DollarSign, Palette, Hash, Shield, Layers,
 } from 'lucide-react';
 import PriceHistory from '@/app/components/PriceHistory';
+import { lookupCard } from '@/app/lib/cardLookup';
 
 interface CardData {
   id: string;
@@ -72,9 +73,10 @@ interface CardData {
 
   export default function CardDetailContent() {
   const searchParams = useSearchParams();
-  const nome = searchParams.get('nome');
-  const sigla = searchParams.get('sigla');
-  const num = searchParams.get('num');
+  const nome = searchParams?.get('nome');
+  const sigla = searchParams?.get('sigla');
+  const num = searchParams?.get('num');
+  const set = searchParams?.get('set');
 
   const displayId = nome || `${sigla}-${num}`;
 
@@ -83,25 +85,25 @@ interface CardData {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    if (nome) params.set('nome', nome);
-    if (sigla) params.set('sigla', sigla);
-    if (num) params.set('num', num);
-    const query = params.toString();
-    if (!query) { setError('Nenhum parâmetro de busca'); setLoading(false); return; }
+    if (!nome && !sigla && !num) { setError('Nenhum parâmetro de busca'); setLoading(false); return; }
 
     (async () => {
       try {
-        const res = await fetch(`/api/card?${query}`);
-        if (!res.ok) throw new Error((await res.json()).error || 'Carta não encontrada');
-        setCard(await res.json());
+        const cardData = await lookupCard({
+          nome,
+          sigla,
+          num,
+          set,
+          liga_id: undefined,
+        });
+        setCard(cardData);
       } catch (e: any) {
-        setError(e.message);
+        setError(e.message || 'Carta não encontrada');
       } finally {
         setLoading(false);
       }
     })();
-  }, [nome, sigla, num]);
+  }, [nome, sigla, num, set]);
 
   if (loading) {
     return (

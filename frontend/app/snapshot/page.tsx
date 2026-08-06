@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import NavBar from '@/app/components/NavBar';
 import ScoredTable from '@/app/components/ScoredTable';
+import { getBasePath } from '@/app/lib/basePath';
 
 interface ScoredCard {
   nome: string;
@@ -43,17 +44,23 @@ export default function SnapshotPage() {
   const [tab, setTab] = useState<'oportunidades' | 'inflacionadas' | 'todas'>('oportunidades');
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [expandedWeek, setExpandedWeek] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
 
   const fetchData = async (arquivo?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const url = arquivo ? `/api/snapshots?arquivo=${encodeURIComponent(arquivo)}` : '/api/snapshots';
-      const res = await fetch(url);
-      if (!res.ok) throw new Error((await res.json()).error || 'Erro ao carregar');
+      // Build estático: dados pré-gerados em public/data/snapshots.json
+      // (apenas o snapshot mais recente; disponiveis/semanas preservam o histórico)
+      const res = await fetch(`${getBasePath()}/data/snapshots.json`);
+      if (!res.ok) throw new Error('Erro ao carregar');
       const json = await res.json();
       setData(json);
       if (!arquivo) setSelectedFile(json.arquivo);
+      else if (arquivo !== json.arquivo) {
+        setAviso('Snapshots antigos não estão no build estático — mostrando o mais recente.');
+        setSelectedFile(json.arquivo);
+      }
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -146,6 +153,13 @@ export default function SnapshotPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
+
+        {aviso && (
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-lg px-3 py-2 flex items-center justify-between">
+            <span>{aviso}</span>
+            <button onClick={() => setAviso(null)} className="ml-2 font-bold hover:text-amber-900">✕</button>
+          </div>
+        )}
 
         {/* Seletor de semana/arquivo */}
         {semanas && semanas.length > 0 && (

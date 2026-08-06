@@ -3,6 +3,7 @@
 // explícito (botão "Carregar") e o modelo/índice ficam em public/scanner/.
 
 import { env, pipeline } from '@xenova/transformers';
+import { getBasePath } from '@/app/lib/basePath';
 
 export interface ScannerCard {
   id: string;
@@ -27,7 +28,7 @@ const N_PATCH = 256;     // 16x16 patches (sem CLS)
 const D_RAW = HIDDEN * 2; // cls + mean = 768
 const N_COMP = 128;      // PCA components
 
-const BASE = '/scanner/';
+const BASE = `${getBasePath()}/scanner/`;
 
 function halfToFloat(h: number): number {
   const s = (h & 0x8000) >> 15;

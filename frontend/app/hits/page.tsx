@@ -5,6 +5,7 @@ import { RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, File
 
 import NavBar from '@/app/components/NavBar';
 import ScoredTable from '@/app/components/ScoredTable';
+import { getBasePath } from '@/app/lib/basePath';
 
 interface ScoredCard {
   nome: string;
@@ -34,17 +35,23 @@ export default function HitsPage() {
   const [tab, setTab] = useState<'oportunidades' | 'inflacionadas' | 'todas'>('oportunidades');
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const [expandedDay, setExpandedDay] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
 
   const fetchData = async (arquivo?: string) => {
     setLoading(true);
     setError(null);
     try {
-      const url = arquivo ? `/api/hits?arquivo=${encodeURIComponent(arquivo)}` : '/api/hits';
-      const res = await fetch(url);
-      if (!res.ok) throw new Error((await res.json()).error || 'Erro ao carregar');
+      // Build estático: os dados são pré-gerados em public/data/hits.json
+      // (apenas o arquivo mais recente; a lista `dias` preserva o histórico)
+      const res = await fetch(`${getBasePath()}/data/hits.json`);
+      if (!res.ok) throw new Error('Erro ao carregar');
       const json = await res.json();
       setData(json);
       if (!arquivo) setSelectedFile(json.arquivo);
+      else if (arquivo !== json.arquivo) {
+        setAviso('Execuções antigas não estão no build estático — mostrando a mais recente.');
+        setSelectedFile(json.arquivo);
+      }
     } catch (e: any) {
       setError(e.message);
     } finally {
@@ -117,6 +124,12 @@ export default function HitsPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6">
+        {aviso && (
+          <div className="bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-lg px-3 py-2 mb-4 flex items-center justify-between">
+            <span>{aviso}</span>
+            <button onClick={() => setAviso(null)} className="ml-2 font-bold hover:text-amber-900">✕</button>
+          </div>
+        )}
         {/* Seletor de data e janela */}
         {dias && dias.length > 0 && (
           <div className="bg-white rounded-2xl p-4 border border-gray-200 mb-6 shadow-sm">
