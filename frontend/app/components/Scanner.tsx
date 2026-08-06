@@ -24,6 +24,7 @@ export default function Scanner() {
   const [progressLabel, setProgressLabel] = useState('');
   const [results, setResults] = useState<ScanResult[] | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [clippedPreview, setClippedPreview] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cardCount, setCardCount] = useState(0);
   const [clipped, setClipped] = useState<boolean | null>(null);
@@ -66,6 +67,7 @@ export default function Scanner() {
     reader.onload = async (e) => {
       const dataUrl = e.target?.result as string;
       setPreview(dataUrl);
+      setClippedPreview(null);
       setResults(null);
       setErrorMsg(null);
       setClipped(null);
@@ -82,6 +84,7 @@ export default function Scanner() {
           if (quad) {
             const canvas = await warpCard(imgEl, quad);
             matchImg = canvas.toDataURL('image/jpeg', 0.92);
+            setClippedPreview(matchImg);
             setClipped(true);
           } else {
             setClipped(false);
@@ -208,7 +211,33 @@ export default function Scanner() {
             <input {...getInputProps()} />
 
             {preview ? (
-              <Image src={preview} alt="Preview" fill className="object-contain p-4" unoptimized />
+              <div className="w-full h-full grid grid-cols-2 gap-2 p-4">
+                <div className="relative flex flex-col min-h-0">
+                  <Image src={preview} alt="Foto original" fill className="object-contain" unoptimized />
+                  <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-gray-500 bg-white/80 py-0.5">
+                    Original
+                  </span>
+                </div>
+                <div className="relative flex flex-col min-h-0">
+                  {clippedPreview ? (
+                    <>
+                      <Image src={clippedPreview} alt="Após clipping" fill className="object-contain" unoptimized />
+                      <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-emerald-700 bg-emerald-50/90 py-0.5">
+                        Após clipping
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-full h-full flex items-center justify-center text-gray-300">
+                        <ImageOff className="w-8 h-8" />
+                      </div>
+                      <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-gray-400 bg-white/80 py-0.5">
+                        Sem clipping
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
             ) : (
               <>
                 <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-4">
