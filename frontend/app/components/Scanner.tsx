@@ -5,6 +5,7 @@ import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalL
 import { useDropzone } from 'react-dropzone';
 import ScannerEngine, { ScanResult } from '@/app/lib/scannerEngine';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Scanner() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'scanning' | 'error'>('idle');
@@ -230,14 +231,12 @@ export default function Scanner() {
                         <span className="font-medium text-emerald-600">${r.card.p.toFixed(2)}</span>
                       )}
                     </div>
-                    <a
-                      href={`https://www.tcgplayer.com/search/pokemon/productname=${encodeURIComponent(r.card.n)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      href={`/card?set=${encodeURIComponent(r.card.s)}&num=${encodeURIComponent(r.card.num)}&nome=${encodeURIComponent(r.card.n)}`}
                       className="inline-flex items-center gap-1 mt-2 text-xs text-indigo-600 hover:underline"
                     >
-                      <ExternalLink className="w-3 h-3" /> Ver no TCGplayer
-                    </a>
+                      <ExternalLink className="w-3 h-3" /> Ver detalhes e escoragem
+                    </Link>
                   </div>
                 </div>
               ))}
