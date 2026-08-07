@@ -6,6 +6,7 @@ import {
   Trophy, TrendingUp, X, Check, GitBranch,
 } from 'lucide-react';
 import { getBasePath } from '@/app/lib/basePath';
+import NavBar from '@/app/components/NavBar';
 
 type Commit = {
   hash: string;
@@ -83,7 +84,9 @@ export default function ChangelogPage() {
   useEffect(() => { load(); }, []);
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-slate-50">
+      <NavBar />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center gap-3 mb-2">
         <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-sm">
           <History className="w-5 h-5" />
@@ -203,6 +206,7 @@ export default function ChangelogPage() {
           </section>
         </>
       )}
+      </div>
     </div>
   );
 }
