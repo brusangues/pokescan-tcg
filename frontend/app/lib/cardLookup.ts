@@ -98,6 +98,12 @@ export async function loadCardDetalhe(id: string): Promise<any | null> {
   return cards.find((c: any) => c.id === id) || null;
 }
 
+/** Normaliza nome p/ comparação: minúsculas + remove pontuação/hífens/espaços
+ *  ('Alolan Exeggutor-V' == 'Alolan Exeggutor V' == 'alolanexeggutorv'). */
+export function normNome(n: string): string {
+  return (n || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
 /**
  * Busca a carta pelos mesmos parâmetros da antiga API:
  * { nome?, sigla?, num?, set?, liga_id? } → carta básica + detalhe + modelo.
@@ -119,12 +125,15 @@ export async function lookupCard(params: {
 
   // Estratégia 0 (preferida): card_id canônico '{idE}-{lang}-{num}' — ex: '411-en-4'.
   // setMap['411'] → set ptcg (o edicoes_liga.json entra no set_map como idE→set).
+  // SÓ para lang 'en': a numeração JP ≠ EN (ex: PGOJP 72 = Exeggutor-V, mas o
+  // pgo-72 EN é o Mewtwo V) — card_id jp resolve pelo fallback scored (nome).
   if (params.card_id) {
     const parts = params.card_id.split('-');
     const eid = parts[0];
+    const lang = parts[1];
     const number = parts[2] ?? parts[1];
     const ptcgSet = setMap[eid];
-    if (ptcgSet && number) {
+    if (lang !== 'jp' && ptcgSet && number) {
       card = byId.get(`${ptcgSet}-${number}`) || byId.get(`${ptcgSet}-${parseInt(number)}`);
     }
   }
@@ -145,18 +154,18 @@ export async function lookupCard(params: {
 
   // Estratégia 3: nome com filtro de set
   if (!card && params.nome) {
-    const nomeBusca = params.nome.toLowerCase();
+    const nomeBusca = normNome(params.nome);
     const ptcgSet = sigla ? setMap[sigla] : (params.set || '');
     const cards = [...byId.values()];
     if (ptcgSet) {
-      card = cards.find((c) => c.n?.toLowerCase() === nomeBusca && c.s === ptcgSet) || null;
+      card = cards.find((c) => normNome(c.n) === nomeBusca && c.s === ptcgSet) || null;
     } else {
-      card = cards.find((c) => c.n?.toLowerCase() === nomeBusca) || null;
+      card = cards.find((c) => normNome(c.n) === nomeBusca) || null;
     }
     if (!card) {
       // Estratégia 4: nome global com igualdade
       card = cards.find((c) => {
-        const n = c.n?.toLowerCase() || '';
+        const n = normNome(c.n || '');
         return n === nomeBusca;
       }) || null;
     }
@@ -169,14 +178,16 @@ export async function lookupCard(params: {
     const scoredCards = await loadScoredLatest();
     const reg = scoredCards.find((s: any) => s.card_id === params.card_id);
     if (reg) {
-      const nomeBusca = String(reg.nome || reg.nEN || '').toLowerCase().split('(')[0].trim();
+      // nEN tem o nome EN (ex: 'Alolan Exeggutor-V (#072/071)') — o nome PT não
+      // casa com o catálogo (que é EN); normNome ignora hífen/espaço
+      const nomeBusca = normNome(String(reg.nEN || reg.nome || '').split('(')[0]);
       const ptcgSet = reg.sigla ? setMap[String(reg.sigla).toLowerCase()] : '';
       const cards = [...byId.values()];
       if (nomeBusca && ptcgSet) {
-        card = cards.find((c) => c.n?.toLowerCase() === nomeBusca && c.s === ptcgSet) || null;
+        card = cards.find((c) => normNome(c.n) === nomeBusca && c.s === ptcgSet) || null;
       }
       if (!card && nomeBusca) {
-        card = cards.find((c) => c.n?.toLowerCase() === nomeBusca) || null;
+        card = cards.find((c) => normNome(c.n) === nomeBusca) || null;
       }
     }
   }
@@ -188,12 +199,15 @@ export async function lookupCard(params: {
   // Detalhe completo (ataques, habilidades, preços detalhados…)
   const detalhe = await loadCardDetalhe(card.id);
 
-  // Registro escorado (modelo) — mesmo critério da API: nome exato,
-  // priorizando sigla igual + registro mais rico (setNome/sNumber/nEN)
+  // Registro escorado (modelo) — mesmo critério da API: nome exato (EN via nEN
+  // — o nome PT não casa com o catálogo), priorizando sigla igual + registro
+  // mais rico (setNome/sNumber/nEN); normNome ignora hífen/espaço
   const scoredCards = await loadScoredLatest();
-  const nomeCard = (card.n || '').toLowerCase();
+  const nomeCard = normNome(card.n || '');
+  const nomeScored = (s: any) =>
+    normNome(String(s.nEN || s.nome || '').split('(')[0]);
   const scored = scoredCards
-    .filter((s: any) => s.nome && s.nome.toLowerCase() === nomeCard)
+    .filter((s: any) => nomeScored(s) === nomeCard)
     .sort((a: any, b: any) => {
       const sigA = a.sigla?.toLowerCase() === sigla ? 1 : 0;
       const sigB = b.sigla?.toLowerCase() === sigla ? 1 : 0;

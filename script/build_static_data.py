@@ -25,20 +25,37 @@ SET_MAPPING_FALLBACK = REPO / 'data' / 'liga' / 'liga_set_sigla.json'
 EDICOES = REPO / 'data' / 'liga' / 'edicoes_liga.json'
 
 
-def _card_id(r: dict) -> str:
-    """Chave canônica da carta: '{idE}-{lang}-{sN}' (lang: en|jp).
+_EDICOES_LANG: dict | None = None
 
-    Usa a coluna card_id quando presente (CSV novo); senão deriva de idE/sN/is_jp
-    (CSVs antigos) — assim o histórico acumulado casa entre dias.
+
+def _lang_por_edicao() -> dict:
+    """{idE: lang} do edicoes_liga.json (índice canônico) — a linguagem NUNCA vem
+    do CSV (is_jp/card_id podem estar errados — ex: PGOJP saiu como 'en')."""
+    global _EDICOES_LANG
+    if _EDICOES_LANG is None:
+        _EDICOES_LANG = {}
+        if EDICOES.exists():
+            try:
+                ed = json.loads(EDICOES.read_text(encoding='utf-8'))
+                for eid, info in ed.items():
+                    _EDICOES_LANG[str(eid)] = info.get('lang') or 'en'
+            except Exception:
+                pass
+    return _EDICOES_LANG
+
+
+def _card_id(r: dict) -> str:
+    """Chave canônica da carta: '{idE}-{lang}-{sN}' (lang do edicoes_liga.json).
+
+    Deriva SEMPRE de idE/sN (não confia na coluna card_id do CSV — pode ter sido
+    gerada antes da correção de linguagem) — assim o payload é consistente mesmo
+    com CSVs antigos, e o histórico acumulado casa entre dias.
     """
-    cid = (r.get('card_id') or '').strip()
-    if cid:
-        return cid
     eid = str(r.get('idE') or '').strip()
     sN = str(r.get('sN') or r.get('num') or '').strip().lstrip('0') or '0'
     if not eid:
         return ''
-    lang = 'jp' if str(r.get('is_jp', '')).lower() in ('true', '1') else 'en'
+    lang = _lang_por_edicao().get(eid, 'en')
     return f'{eid}-{lang}-{sN}'
 ABLATIONS = REPO / 'experiments' / 'ablation_results.csv'
 OUT = Path(sys.argv[sys.argv.index('--out') + 1]) if '--out' in sys.argv else REPO / 'frontend' / 'public' / 'data'

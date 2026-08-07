@@ -427,7 +427,7 @@
   "sigla": "KCGSD"
  },
  "319": {
-  "lang": "en",
+  "lang": "jp",
   "n": 102,
   "n_overlap": 7,
   "set": "xy12",
@@ -465,7 +465,7 @@
   "sigla": "IPTHD"
  },
  "324": {
-  "lang": "en",
+  "lang": "jp",
   "n": 104,
   "n_overlap": 47,
   "set": "pgo",
@@ -679,20 +679,20 @@
   "sigla": "sv1a"
  },
  "368": {
-  "lang": null,
+  "lang": "jp",
   "n": 48,
   "set": null,
   "sigla": "JU-JP"
  },
  "369": {
-  "lang": "en",
+  "lang": "jp",
   "n": 65,
   "n_overlap": 3,
   "set": "g1",
   "sigla": "RG-JP"
  },
  "370": {
-  "lang": null,
+  "lang": "jp",
   "n": 96,
   "set": null,
   "sigla": "LS-JP"
@@ -1772,7 +1772,7 @@
   "sigla": "MEG"
  },
  "731": {
-  "lang": null,
+  "lang": "jp",
   "n": 51,
   "set": null,
   "sigla": "MAJP"
@@ -1994,7 +1994,7 @@
   "sigla": "M3"
  },
  "765": {
-  "lang": null,
+  "lang": "jp",
   "n": 19,
   "set": null,
   "sigla": "SVJP"
@@ -2045,7 +2045,7 @@
   "sigla": "M4"
  },
  "772": {
-  "lang": null,
+  "lang": "jp",
   "n": 18,
   "set": null,
   "sigla": "SI-JP"

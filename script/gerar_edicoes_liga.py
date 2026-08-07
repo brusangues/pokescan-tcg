@@ -52,6 +52,20 @@ def _parse_nen(nEN: str):
     return m.group(1).strip().lower(), _norm_num(num_raw), jp
 
 
+def _eh_jp(sigla: str, nEN_jp: bool) -> bool:
+    """Edição japonesa? Sufixo 'JP'/'JPN'/'Jp' na SIGLA (PGOJP, SVPJp, EPJPN),
+    sufixo 'JP' no número do nEN, ou sigla na lista explícita."""
+    if nEN_jp:
+        return True
+    s = sigla.upper()
+    if s in JP_SIGLAS:
+        return True
+    if s.endswith('JP') or s.endswith('JPN'):
+        return True
+    # 'SV2A' (151 JP) não tem sufixo — fica na lista explícita
+    return False
+
+
 def edicoes_da_liga():
     ed = {}
     for f in sorted(glob.glob(str(LIGA / 'set_*.json'))):
@@ -136,14 +150,14 @@ def main():
             sid, n = usados[eid]
             info['set'] = sid
             info['n_overlap'] = n
-            lang = 'jp' if (por_ed[eid][1] or info['sigla'].upper() in JP_SIGLAS) else 'en'
+            lang = 'jp' if _eh_jp(info['sigla'], por_ed[eid][1]) else 'en'
             info['lang'] = lang
             mapping[sid] = info['sigla']  # sigla canônica (sem duplicatas)
 
     # edições sem set ptcg: lang por heurística
     for eid, info in ed.items():
         if info['lang'] is None:
-            info['lang'] = 'jp' if info['sigla'].upper() in JP_SIGLAS else None
+            info['lang'] = 'jp' if _eh_jp(info['sigla'], False) else None
 
     OUT.write_text(json.dumps(ed, ensure_ascii=False, indent=1, sort_keys=True), encoding='utf-8')
     print(f'salvo {OUT.name}: {len(ed)} edições, {len(mapping)} sets mapeados')

@@ -172,19 +172,6 @@ interface CardData {
               </div>
             </div>
 
-            {/* Mini preview da imagem small */}
-            {price !== undefined && (
-              <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Preço de Mercado</h3>
-                <p className="text-3xl font-bold text-indigo-700">${price.toFixed(2)}</p>
-                {card.tcgplayer?.updatedAt && (
-                  <p className="text-xs text-gray-400 mt-1">
-                    Atualizado: {new Date(card.tcgplayer.updatedAt).toLocaleDateString('pt-BR')}
-                  </p>
-                )}
-              </div>
-            )}
-
             {/* Link para a Liga Pokémon — só quando a carta exibida
                 corresponde ao registro escorado (ligaOk) */}
             {card.modelo && card.modelo.nEN && card.modelo.ligaOk && (
@@ -260,6 +247,12 @@ interface CardData {
                   moeda={card.modelo.moeda}
                 />
                 <div className="space-y-3">
+                  {price !== undefined && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500">Mercado global (USD)</span>
+                      <span className="font-bold text-gray-700">${price.toFixed(2)}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Preço real (Liga)</span>
                     <span className="font-bold text-gray-900">{card.modelo.moeda}{card.modelo.real.toFixed(2)}</span>

@@ -104,6 +104,10 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - `fetch_result.json` na raiz (2 cartas, obsoleto) vs `frontend/public/fetch_result.json` (29 cartas, atual) — duplicata stale versionada
 - `pokéscan-tcg.zip` ainda rastreado no git (marcado D no working tree, commit pendente)
 - **Fix**: script de limpeza (prune órfãos + git rm dos lixos) rodando no cron ou manual
+
+### [P2] 17. Links para a Liga abrirem em nova aba + preço USD na seção do modelo
+- **Pedido do usuário (07/08)**: todos os links externos para a Liga Pokémon devem abrir em **nova aba** (`target="_blank" rel="noopener noreferrer"`) — verificado: já é o caso nos 2 lugares (ScoredCardRow, CardDetailContent); manter o padrão em links novos
+- **Pedido do usuário (07/08)**: o preço de mercado em **dólares** (TCGPlayer/Cardmarket) não deve ficar no topo da página de carta — mover para a seção "Previsão do Modelo" junto dos outros preços. **Status**: ✅ removido do bloco da imagem; agora é a linha "Mercado global (USD)" na seção do modelo (CardDetailContent)
 - Tags: dados, repo, manutenção
 
 ### [P2] 15. Mapping: 11 siglas Liga duplicadas + 25 sets sem mapping (auditoria 05/08)
