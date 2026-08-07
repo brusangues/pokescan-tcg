@@ -139,6 +139,51 @@ def load_precos_setjson() -> dict:
     return out
 
 
+def load_precos_por_edicao() -> dict:
+    """{idE: {(nome, num): preco}} — set_*.json da Liga (p1b médio), POR EDIÇÃO (chave canônica).
+
+    Preferível ao índice por sigla: o idE é único e imutável (a sigla pode variar
+    em caixa, ter edições JP duplicadas etc.).
+    """
+    out: dict[str, dict] = {}
+    for f in glob.glob(str(REPO / 'data' / 'liga' / 'set_*.json')):
+        try:
+            d = json.loads(Path(f).read_text(encoding='utf-8'))
+        except Exception:
+            continue
+        if isinstance(d, dict):
+            d = d.get('cards') or []
+        if not isinstance(d, list) or not d:
+            continue
+        eid = str(d[0].get('idE') or '')
+        if not eid:
+            continue
+        sub = out.setdefault(eid, {})
+        for c in d:
+            try:
+                preco = float(c.get('p1b') or 0)
+            except (TypeError, ValueError):
+                continue
+            if preco <= 0:
+                continue
+            parsed = _parse_nen(c.get('nEN') or '')
+            if parsed:
+                sub[parsed] = preco
+    return out
+
+
+def edicao_do_set() -> dict:
+    """{set_id ptcg: idE} — do índice canônico data/liga/edicoes_liga.json."""
+    f = REPO / 'data' / 'liga' / 'edicoes_liga.json'
+    if not f.exists():
+        return {}
+    try:
+        ed = json.loads(f.read_text(encoding='utf-8'))
+    except Exception:
+        return {}
+    return {info['set']: str(eid) for eid, info in ed.items() if info.get('set')}
+
+
 def melhor_sigla(set_id: str, cards: list, por_sigla: dict, min_matches: int = 3) -> str | None:
     """Acha a sigla da Liga com maior overlap de cartas com o set (nome+num)."""
     alvo = set()
@@ -199,6 +244,9 @@ def main():
         pull_en = json.loads(f_en.read_text(encoding='utf-8'))
     por_sigla_scored = load_precos_por_sigla()
     por_sigla_setjson = load_precos_setjson()
+    por_edicao = load_precos_por_edicao()
+    set_edicao = edicao_do_set()
+    print(f'edições canônicas: {len(set_edicao)} sets → idE')
     # funde as duas fontes por sigla (setjson sobrepõe o scored no mesmo (nome, num))
     por_sigla = {}
     for sigla, sub in por_sigla_scored.items():
@@ -237,9 +285,13 @@ def main():
         if ano is None and info['cards']:
             rd = (info['cards'][0].get('set') or {}).get('releaseDate') or ''
             ano = rd.split('/')[0] if rd else None
-        # sigla da Liga com maior overlap → preços SEM colisão entre sets
-        sigla = melhor_sigla(set_id, info['cards'], por_sigla)
-        precos = por_sigla.get(sigla) if sigla else None
+        # preços da edição canônica (idE via edicoes_liga.json) — sem depender da
+        # sigla; fallback: sigla com maior overlap (sets sem edição no índice)
+        eid = set_edicao.get(set_id)
+        precos = por_edicao.get(eid) if eid else None
+        if precos is None:
+            sigla = melhor_sigla(set_id, info['cards'], por_sigla)
+            precos = por_sigla.get(sigla) if sigla else None
         soma = {b: 0.0 for b in BUCKET_LABEL}
         n = {b: 0 for b in BUCKET_LABEL}
         com_preco = 0

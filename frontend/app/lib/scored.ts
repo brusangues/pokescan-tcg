@@ -28,6 +28,7 @@ export function parseScoredCSV(filePath: string): any[] {
       iCO: parseInt(r.iCO || r.iCO_real || '0', 10),
       moeda: r.moeda || 'R$',
       liga_id: r.liga_id || '',
+      card_id: r.card_id || '',
       nEN: r.nEN || '',
       sNumber: r.sNumber || '',
       num: r.num || '',

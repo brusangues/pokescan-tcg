@@ -68,11 +68,24 @@ def load_base_features():
 
 
 def build_liga_id_from_base(df_base):
-    """Cria liga_id (SIGLA-NUMERO) para cada carta da base pokemontcg."""
+    """Cria liga_id (SIGLA-NUMERO) e card_id (idE-lang-num) para cada carta da base pokemontcg.
+
+    card_id é a CHAVE CANÔNICA da carta (mesma usada no front e no EV):
+    '{idE da edição canônica}-{lang}-{num}' — via data/liga/edicoes_liga.json.
+    """
     set_map_path = LIGA_DIR / 'liga_set_sigla_ptcg.json'
     if not set_map_path.exists():
         set_map_path = LIGA_DIR / 'liga_set_sigla.json'
     set_sigla = json.loads(set_map_path.read_text()) if set_map_path.exists() else {}
+
+    # índice canônico invertido: set ptcg → (idE, lang)
+    set_ed = {}
+    ed_path = LIGA_DIR / 'edicoes_liga.json'
+    if ed_path.exists():
+        ed = json.loads(ed_path.read_text(encoding='utf-8'))
+        for eid, info in ed.items():
+            if info.get('set'):
+                set_ed[info['set']] = (eid, info.get('lang') or 'en')
 
     def tcgdex_to_liga_id(tcg_id):
         parts = str(tcg_id).split('-')
@@ -83,7 +96,17 @@ def build_liga_id_from_base(df_base):
             return None
         return sigla.upper() + '-' + parts[1].lstrip('0')
 
+    def tcgdex_to_card_id(tcg_id):
+        parts = str(tcg_id).split('-')
+        if len(parts) != 2:
+            return None
+        info = set_ed.get(parts[0])
+        if not info:
+            return None
+        return f'{info[0]}-{info[1]}-{parts[1].lstrip("0")}'
+
     df_base['liga_id'] = df_base['id'].apply(tcgdex_to_liga_id)
+    df_base['card_id'] = df_base['id'].apply(tcgdex_to_card_id)
     return df_base
 
 
@@ -119,6 +142,35 @@ def normalize_liga_num(s):
     s = str(s)
     m = re.search(r'(\d+)', s)
     return m.group(1).lstrip('0') if m else None
+
+
+# linguagem por edição (idE) — do índice canônico; default 'en'
+_EDICOES_LANG = None
+
+
+def _lang_por_edicao() -> dict:
+    global _EDICOES_LANG
+    if _EDICOES_LANG is None:
+        _EDICOES_LANG = {}
+        ed_path = LIGA_DIR / 'edicoes_liga.json'
+        if ed_path.exists():
+            try:
+                ed = json.loads(ed_path.read_text(encoding='utf-8'))
+                for eid, info in ed.items():
+                    _EDICOES_LANG[str(eid)] = info.get('lang') or 'en'
+            except Exception:
+                pass
+    return _EDICOES_LANG
+
+
+def card_id_da_linha(r) -> str:
+    """Chave canônica da carta da Liga: '{idE}-{lang}-{num}' (lang do edicoes_liga.json)."""
+    eid = str(r.get('idE') or r.get('IDE_Edicao') or '').strip()
+    num = str(r.get('num') or '').strip()
+    if not eid or not num:
+        return ''
+    lang = _lang_por_edicao().get(eid, 'en')
+    return f'{eid}-{lang}-{num.lstrip("0")}'
 
 
 def map_jp_to_en_base(df_hits, df_base):
@@ -190,6 +242,9 @@ def escorar_hits(df_base, top=10):
 
         df_h['num'] = df_h['sNumber'].apply(normalize_liga_num)
         df_h['liga_id'] = df_h['sSigla'].str.strip().str.upper() + '-' + df_h['num']
+        if 'idE' not in df_h.columns and 'IDE_Edicao' in df_h.columns:
+            df_h['idE'] = df_h['IDE_Edicao']
+        df_h['card_id'] = df_h.apply(card_id_da_linha, axis=1)
         df_h['preco_real_brl'] = pd.to_numeric(df_h.get('p1b'), errors='coerce')
         # iCO real (enriquecido da página individual) quando disponível
         if 'iCO_real' in df_h.columns:
@@ -204,13 +259,13 @@ def escorar_hits(df_base, top=10):
         else:
             df_h['nome_en'] = ''
 
-        df_m = df_h.merge(
-            df_base[['liga_id', 'pred_usd', 'pred_brl', 'target_price']], on='liga_id', how='inner')
+        df_m = df_h[df_h['card_id'] != ''].merge(
+            df_base[['card_id', 'pred_usd', 'pred_brl', 'target_price']], on='card_id', how='inner')
 
-        # Fallback JP + nome+numero (cobre siglas sem mapping)
+        # Fallback JP + nome+numero (cobre siglas sem mapping / sem idE)
         if len(df_m) < len(df_h):
-            ids_casados = set(df_m['liga_id']) if len(df_m) > 0 else set()
-            rest = df_h[~df_h['liga_id'].isin(ids_casados)].copy()
+            ids_casados = set(df_m['card_id']) if len(df_m) > 0 else set()
+            rest = df_h[~df_h['card_id'].isin(ids_casados)].copy()
             if len(rest) > 0:
                 # JP fallback: já retorna linhas COM pred (match por nome+set EN)
                 jp_matched = map_jp_to_en_base(rest, df_base)
@@ -220,8 +275,8 @@ def escorar_hits(df_base, top=10):
                         # Mantém apenas as que realmente casaram (tem pred da base)
                         df_m = pd.concat([df_m, jp_prontas], ignore_index=True) if len(df_m) > 0 else jp_prontas
                         # As não-casadas pelo JP seguem para o fallback nome+num
-                        jp_ids = set(jp_prontas['liga_id']) if 'liga_id' in jp_prontas.columns else set()
-                        rest = rest[~rest['liga_id'].isin(jp_ids)] if jp_ids else rest
+                        jp_ids = set(jp_prontas['card_id']) if 'card_id' in jp_prontas.columns else set()
+                        rest = rest[~rest['card_id'].isin(jp_ids)] if jp_ids else rest
 
                 df_base['nome_en_b'] = df_base['name'].str.lower().str.strip()
                 df_base['num_b'] = df_base['id'].str.split('-').str[-1].str.lstrip('0')
@@ -234,9 +289,9 @@ def escorar_hits(df_base, top=10):
                     if len(mais) > 0:
                         df_m = pd.concat([df_m, mais], ignore_index=True) if len(df_m) > 0 else mais
 
-        # Colapsa liga_ids duplicados (base com sets ptcg → mesma sigla Liga)
-        if len(df_m) > 0:
-            df_m = df_m.drop_duplicates(subset=['liga_id'], keep='first')
+        # Colapsa card_ids duplicados (base com sets ptcg → mesma edição Liga)
+        if len(df_m) > 0 and 'card_id' in df_m.columns:
+            df_m = df_m.drop_duplicates(subset=['card_id'], keep='first')
 
         total_match += len(df_m)
         total_sem_match += len(df_h) - len(df_m)
@@ -278,6 +333,9 @@ def escorar_snapshot(df_base, top=15):
     else:
         df_s['num'] = df_s['nEN'].apply(normalize_liga_num)
     df_s['liga_id'] = df_s['sSigla'].str.strip().str.upper() + '-' + df_s['num']
+    if 'idE' not in df_s.columns:
+        df_s['idE'] = ''
+    df_s['card_id'] = df_s.apply(card_id_da_linha, axis=1)
     df_s['preco_real_brl'] = pd.to_numeric(df_s.get('p1b'), errors='coerce')
     df_s['iCO'] = pd.to_numeric(df_s.get('iCO'), errors='coerce').fillna(0)
 
@@ -287,13 +345,13 @@ def escorar_snapshot(df_base, top=15):
     else:
         df_s['nome_en'] = ''
 
-    df_out = df_s.merge(
-        df_base[['liga_id', 'pred_usd', 'pred_brl', 'target_price']], on='liga_id', how='inner')
+    df_out = df_s[df_s['card_id'] != ''].merge(
+        df_base[['card_id', 'pred_usd', 'pred_brl', 'target_price']], on='card_id', how='inner')
 
     # Fallback JP + nome+numero
     if len(df_out) < len(df_s):
-        ids_casados = set(df_out['liga_id']) if len(df_out) > 0 else set()
-        rest = df_s[~df_s['liga_id'].isin(ids_casados)].copy()
+        ids_casados = set(df_out['card_id']) if len(df_out) > 0 else set()
+        rest = df_s[~df_s['card_id'].isin(ids_casados)].copy()
         if len(rest) > 0:
             # JP fallback: já retorna linhas COM pred (match por nome+set EN)
             jp_matched = map_jp_to_en_base(rest, df_base)
@@ -301,8 +359,8 @@ def escorar_snapshot(df_base, top=15):
                 jp_prontas = jp_matched[jp_matched['pred_usd'].notna()].copy()
                 if len(jp_prontas) > 0:
                     df_out = pd.concat([df_out, jp_prontas], ignore_index=True) if len(df_out) > 0 else jp_prontas
-                    jp_ids = set(jp_prontas['liga_id']) if 'liga_id' in jp_prontas.columns else set()
-                    rest = rest[~rest['liga_id'].isin(jp_ids)] if jp_ids else rest
+                    jp_ids = set(jp_prontas['card_id']) if 'card_id' in jp_prontas.columns else set()
+                    rest = rest[~rest['card_id'].isin(jp_ids)] if jp_ids else rest
 
             df_base['nome_en_b'] = df_base['name'].str.lower().str.strip()
             df_base['num_b'] = df_base['id'].str.split('-').str[-1].str.lstrip('0')
@@ -315,16 +373,14 @@ def escorar_snapshot(df_base, top=15):
                 if len(mais) > 0:
                     df_out = pd.concat([df_out, mais], ignore_index=True) if len(df_out) > 0 else mais
 
-    # Deduplica ANTES da contagem: base com liga_id duplicado (101 casos:
-    # sets ptcg diferentes → mesma sigla Liga) e snapshot com variantes
-    # (ex: WAK-45 ×8). O merge multiplica linhas; aqui colapsa para o
-    # primeiro match (o dedup final por liga_id faria o mesmo, mas a
-    # contagem de Sem match sairia negativa).
-    if len(df_out) > 0 and 'liga_id' in df_out.columns:
+    # Deduplica ANTES da contagem: base com card_id duplicado (sets ptcg
+    # diferentes → mesma edição Liga) e snapshot com variantes. O merge
+    # multiplica linhas; aqui colapsa para o primeiro match.
+    if len(df_out) > 0 and 'card_id' in df_out.columns:
         antes = len(df_out)
-        df_out = df_out.drop_duplicates(subset=['liga_id'], keep='first')
+        df_out = df_out.drop_duplicates(subset=['card_id'], keep='first')
         if len(df_out) < antes:
-            print(f'  ↳ Colapsado no merge: {antes} → {len(df_out)} (liga_ids duplicados)')
+            print(f'  ↳ Colapsado no merge: {antes} → {len(df_out)} (card_ids duplicados)')
 
     print(f'  Match: {len(df_out)} | Sem match: {len(df_s) - len(df_out)}')
     if len(df_out) == 0:
@@ -394,11 +450,17 @@ def finalizar(df, top, prefixo):
 
     # Deduplica: mesma carta aparece em varios arquivos de hits
     # Prioriza linhas com iCO_real (enriquecidas) sobre iCO=0 (hits crus)
-    if 'liga_id' in df.columns:
+    if 'card_id' in df.columns:
+        chave = 'card_id' if (df['card_id'].astype(str).str.strip() != '').any() else 'liga_id'
+    elif 'liga_id' in df.columns:
+        chave = 'liga_id'
+    else:
+        chave = None
+    if chave:
         antes = len(df)
         df['_tem_ico_real'] = df.get('iCO_real', pd.Series(0, index=df.index)).fillna(0).astype(int) > 0
         df = df.sort_values(['_tem_ico_real', 'upside_pct'], ascending=[False, False]) \
-               .drop_duplicates(subset=['liga_id'], keep='first')
+               .drop_duplicates(subset=[chave], keep='first')
         df = df.drop(columns=['_tem_ico_real'])
         if len(df) < antes:
             print(f'  ↳ Deduplicado: {antes} → {len(df)} cartas únicas')

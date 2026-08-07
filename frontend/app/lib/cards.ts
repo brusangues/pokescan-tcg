@@ -2,12 +2,17 @@
 import { getBasePath } from '@/app/lib/basePath';
 
 export function cardLink(card: {
+  card_id?: string;
   nome_en?: string;
   nEN?: string;
   nome?: string;
   sSigla?: string;
   sigla?: string;
 }): string {
+  // Índice canônico: card_id '{idE}-{lang}-{num}' — resolve direto no catálogo
+  if (card.card_id) {
+    return `${getBasePath()}/card?card_id=${encodeURIComponent(card.card_id)}`;
+  }
   const nome = card.nome_en || card.nEN || card.nome || '';
   const sigla = card.sSigla || card.sigla || '';
   const cleanNome = (nome || '').split('(')[0].trim();

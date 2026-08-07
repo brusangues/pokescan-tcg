@@ -109,6 +109,7 @@ export async function lookupCard(params: {
   num?: string | null;
   set?: string | null;
   liga_id?: string | null;
+  card_id?: string | null;
 }): Promise<any> {
   const [byId, setMap] = await Promise.all([loadCards(), loadSetMap()]);
 
@@ -116,8 +117,20 @@ export async function lookupCard(params: {
     ?.toLowerCase() || '';
   let card = null;
 
-  // Estratégia 1: liga_id
-  if (params.liga_id) {
+  // Estratégia 0 (preferida): card_id canônico '{idE}-{lang}-{num}' — ex: '411-en-4'.
+  // setMap['411'] → set ptcg (o edicoes_liga.json entra no set_map como idE→set).
+  if (params.card_id) {
+    const parts = params.card_id.split('-');
+    const eid = parts[0];
+    const number = parts[2] ?? parts[1];
+    const ptcgSet = setMap[eid];
+    if (ptcgSet && number) {
+      card = byId.get(`${ptcgSet}-${number}`) || byId.get(`${ptcgSet}-${parseInt(number)}`);
+    }
+  }
+
+  // Estratégia 1: liga_id legado ('SIGLA-num') — links antigos continuam funcionando
+  if (!card && params.liga_id) {
     const number = params.liga_id.split('-')[1];
     const ptcgSet = setMap[sigla];
     if (ptcgSet) {
@@ -146,6 +159,25 @@ export async function lookupCard(params: {
         const n = c.n?.toLowerCase() || '';
         return n === nomeBusca;
       }) || null;
+    }
+  }
+
+  // Estratégia 5: card_id de edição SEM set mapeado (ex: '298-en-13' — set antigo
+  // sem equivalente no catálogo ptcg): procura o registro escorado pelo card_id
+  // e resolve pelo nome+sigla dele.
+  if (!card && params.card_id) {
+    const scoredCards = await loadScoredLatest();
+    const reg = scoredCards.find((s: any) => s.card_id === params.card_id);
+    if (reg) {
+      const nomeBusca = String(reg.nome || reg.nEN || '').toLowerCase().split('(')[0].trim();
+      const ptcgSet = reg.sigla ? setMap[String(reg.sigla).toLowerCase()] : '';
+      const cards = [...byId.values()];
+      if (nomeBusca && ptcgSet) {
+        card = cards.find((c) => c.n?.toLowerCase() === nomeBusca && c.s === ptcgSet) || null;
+      }
+      if (!card && nomeBusca) {
+        card = cards.find((c) => c.n?.toLowerCase() === nomeBusca) || null;
+      }
     }
   }
 
@@ -208,6 +240,7 @@ export async function lookupCard(params: {
           iCO: scored.iCO,
           moeda: scored.moeda,
           liga_id: scored.liga_id,
+          card_id: scored.card_id || '',
           nEN: scored.nEN,
           sNumber: scored.sNumber,
           num: scored.num,
@@ -223,6 +256,7 @@ export async function lookupCard(params: {
 
 /** Série de histórico da carta — réplica do /api/historico (client-side). */
 export async function lookupHistorico(params: {
+  cardId?: string;
   ligaId?: string;
   nome?: string;
   sigla?: string;
@@ -233,7 +267,9 @@ export async function lookupHistorico(params: {
   const hist = await _promises.historico;
 
   let serie: any[] = [];
-  if (params.ligaId) {
+  if (params.cardId) {
+    serie = hist.porLiga[params.cardId] || [];
+  } else if (params.ligaId) {
     serie = hist.porLiga[params.ligaId] || [];
   } else if (params.nome) {
     const siglas = hist.porNome[params.nome.toLowerCase()] || {};
@@ -247,6 +283,6 @@ export async function lookupHistorico(params: {
   return {
     serie,
     total: serie.length,
-    liga_id: params.ligaId || (params.sigla ? `${params.sigla}-` : ''),
+    liga_id: params.cardId || params.ligaId || (params.sigla ? `${params.sigla}-` : ''),
   };
 }

@@ -1,0 +1,2131 @@
+{
+ "157": {
+  "lang": null,
+  "n": 30,
+  "set": null,
+  "sigla": "TK4G"
+ },
+ "158": {
+  "lang": "en",
+  "n": 261,
+  "n_overlap": 251,
+  "set": "sm11",
+  "sigla": "UNM"
+ },
+ "159": {
+  "lang": "en",
+  "n": 163,
+  "n_overlap": 94,
+  "set": "sma",
+  "sigla": "HIF"
+ },
+ "162": {
+  "lang": null,
+  "n": 74,
+  "set": null,
+  "sigla": "JPR"
+ },
+ "163": {
+  "lang": "en",
+  "n": 272,
+  "n_overlap": 267,
+  "set": "sm12",
+  "sigla": "CEC"
+ },
+ "164": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd19",
+  "sigla": "MCD19"
+ },
+ "165": {
+  "lang": "en",
+  "n": 321,
+  "n_overlap": 151,
+  "set": "swshp",
+  "sigla": "SSPR"
+ },
+ "166": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd16",
+  "sigla": "MCD16"
+ },
+ "167": {
+  "lang": "en",
+  "n": 225,
+  "n_overlap": 170,
+  "set": "swsh1",
+  "sigla": "SSH"
+ },
+ "17": {
+  "lang": "en",
+  "n": 113,
+  "n_overlap": 109,
+  "set": "bw5",
+  "sigla": "DEX"
+ },
+ "18": {
+  "lang": "en",
+  "n": 103,
+  "n_overlap": 102,
+  "set": "bw4",
+  "sigla": "NXD"
+ },
+ "19": {
+  "lang": "en",
+  "n": 102,
+  "n_overlap": 102,
+  "set": "bw3",
+  "sigla": "NVI"
+ },
+ "20": {
+  "lang": "en",
+  "n": 98,
+  "n_overlap": 97,
+  "set": "bw2",
+  "sigla": "EPO"
+ },
+ "21": {
+  "lang": "en",
+  "n": 115,
+  "n_overlap": 113,
+  "set": "bw1",
+  "sigla": "BLW"
+ },
+ "22": {
+  "lang": "en",
+  "n": 108,
+  "n_overlap": 98,
+  "set": "bwp",
+  "sigla": "BWPR"
+ },
+ "23": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd11",
+  "sigla": "MCD1"
+ },
+ "24": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd12",
+  "sigla": "MCD2"
+ },
+ "240": {
+  "lang": "en",
+  "n": 73,
+  "n_overlap": 55,
+  "set": "swsh45",
+  "sigla": "SHF"
+ },
+ "241": {
+  "lang": "en",
+  "n": 122,
+  "n_overlap": 104,
+  "set": "swsh45sv",
+  "sigla": "SFS"
+ },
+ "242": {
+  "lang": "en",
+  "n": 183,
+  "n_overlap": 140,
+  "set": "swsh5",
+  "sigla": "BST"
+ },
+ "243": {
+  "lang": "en",
+  "n": 233,
+  "n_overlap": 172,
+  "set": "swsh6",
+  "sigla": "CRE"
+ },
+ "244": {
+  "lang": null,
+  "n": 151,
+  "set": null,
+  "sigla": "VS"
+ },
+ "245": {
+  "lang": "en",
+  "n": 237,
+  "n_overlap": 153,
+  "set": "swsh7",
+  "sigla": "EVS"
+ },
+ "246": {
+  "lang": null,
+  "n": 25,
+  "set": null,
+  "sigla": "SMP2"
+ },
+ "247": {
+  "lang": "en",
+  "n": 25,
+  "n_overlap": 25,
+  "set": "mcd21",
+  "sigla": "MC21"
+ },
+ "248": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd18",
+  "sigla": "MC18E"
+ },
+ "249": {
+  "lang": null,
+  "n": 40,
+  "set": null,
+  "sigla": "MC18F"
+ },
+ "25": {
+  "lang": "en",
+  "n": 106,
+  "n_overlap": 106,
+  "set": "col1",
+  "sigla": "CL"
+ },
+ "250": {
+  "lang": null,
+  "n": 37,
+  "set": null,
+  "sigla": "VMS1"
+ },
+ "259": {
+  "lang": "en",
+  "n": 194,
+  "n_overlap": 134,
+  "set": "swsh9",
+  "sigla": "BRS"
+ },
+ "26": {
+  "lang": "en",
+  "n": 103,
+  "n_overlap": 92,
+  "set": "hgss4",
+  "sigla": "TM"
+ },
+ "260": {
+  "lang": "en",
+  "n": 30,
+  "n_overlap": 16,
+  "set": "swsh9tg",
+  "sigla": "BSTG"
+ },
+ "261": {
+  "lang": "jp",
+  "n": 93,
+  "set": null,
+  "sigla": "S9A"
+ },
+ "262": {
+  "lang": null,
+  "n": 22,
+  "set": null,
+  "sigla": "SLL"
+ },
+ "263": {
+  "lang": null,
+  "n": 21,
+  "set": null,
+  "sigla": "SLD"
+ },
+ "264": {
+  "lang": "jp",
+  "n": 285,
+  "set": null,
+  "sigla": "s8b"
+ },
+ "265": {
+  "lang": null,
+  "n": 88,
+  "set": null,
+  "sigla": "s10P"
+ },
+ "266": {
+  "lang": null,
+  "n": 88,
+  "set": null,
+  "sigla": "s10D"
+ },
+ "267": {
+  "lang": "en",
+  "n": 216,
+  "n_overlap": 155,
+  "set": "swsh10",
+  "sigla": "ASR"
+ },
+ "268": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd15",
+  "sigla": "MCD15"
+ },
+ "269": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd17",
+  "sigla": "MCD17"
+ },
+ "27": {
+  "lang": "en",
+  "n": 91,
+  "n_overlap": 84,
+  "set": "hgss3",
+  "sigla": "UD"
+ },
+ "270": {
+  "lang": "en",
+  "n": 12,
+  "n_overlap": 12,
+  "set": "mcd14",
+  "sigla": "MCD14"
+ },
+ "271": {
+  "lang": "en",
+  "n": 30,
+  "n_overlap": 17,
+  "set": "swsh10tg",
+  "sigla": "ARTG"
+ },
+ "28": {
+  "lang": "en",
+  "n": 96,
+  "n_overlap": 90,
+  "set": "hgss2",
+  "sigla": "UL"
+ },
+ "29": {
+  "lang": "en",
+  "n": 124,
+  "n_overlap": 113,
+  "set": "hgss1",
+  "sigla": "HS"
+ },
+ "30": {
+  "lang": "en",
+  "n": 25,
+  "n_overlap": 22,
+  "set": "hsp",
+  "sigla": "HSPR"
+ },
+ "302": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "11TH"
+ },
+ "303": {
+  "lang": "en",
+  "n": 13,
+  "n_overlap": 4,
+  "set": "bw8",
+  "sigla": "GHDPt"
+ },
+ "304": {
+  "lang": null,
+  "n": 13,
+  "set": null,
+  "sigla": "DHDPt"
+ },
+ "305": {
+  "lang": null,
+  "n": 13,
+  "set": null,
+  "sigla": "PHDPt"
+ },
+ "306": {
+  "lang": null,
+  "n": 18,
+  "set": null,
+  "sigla": "TLVSP"
+ },
+ "307": {
+  "lang": null,
+  "n": 11,
+  "set": null,
+  "sigla": "10THM"
+ },
+ "308": {
+  "lang": null,
+  "n": 18,
+  "set": null,
+  "sigla": "MOMP"
+ },
+ "309": {
+  "lang": null,
+  "n": 19,
+  "set": null,
+  "sigla": "MCSM"
+ },
+ "31": {
+  "lang": "en",
+  "n": 111,
+  "n_overlap": 111,
+  "set": "pl4",
+  "sigla": "AR"
+ },
+ "310": {
+  "lang": null,
+  "n": 20,
+  "set": null,
+  "sigla": "MCAL"
+ },
+ "311": {
+  "lang": null,
+  "n": 19,
+  "set": null,
+  "sigla": "MCSSD"
+ },
+ "312": {
+  "lang": null,
+  "n": 19,
+  "set": null,
+  "sigla": "MCVP"
+ },
+ "313": {
+  "lang": null,
+  "n": 25,
+  "set": null,
+  "sigla": "NCGD"
+ },
+ "314": {
+  "lang": null,
+  "n": 32,
+  "set": null,
+  "sigla": "QSG-R"
+ },
+ "315": {
+  "lang": null,
+  "n": 32,
+  "set": null,
+  "sigla": "QSG-G"
+ },
+ "316": {
+  "lang": null,
+  "n": 262,
+  "set": null,
+  "sigla": "s12a"
+ },
+ "317": {
+  "lang": null,
+  "n": 27,
+  "set": null,
+  "sigla": "TMCG"
+ },
+ "318": {
+  "lang": null,
+  "n": 24,
+  "set": null,
+  "sigla": "KCGSD"
+ },
+ "319": {
+  "lang": "en",
+  "n": 102,
+  "n_overlap": 7,
+  "set": "xy12",
+  "sigla": "EPJP"
+ },
+ "32": {
+  "lang": "en",
+  "n": 153,
+  "n_overlap": 153,
+  "set": "pl3",
+  "sigla": "SV"
+ },
+ "320": {
+  "lang": null,
+  "n": 41,
+  "set": null,
+  "sigla": "BDVHS"
+ },
+ "321": {
+  "lang": null,
+  "n": 41,
+  "set": null,
+  "sigla": "SDVHS"
+ },
+ "322": {
+  "lang": null,
+  "n": 40,
+  "set": null,
+  "sigla": "IPCHD"
+ },
+ "323": {
+  "lang": null,
+  "n": 40,
+  "set": null,
+  "sigla": "IPTHD"
+ },
+ "324": {
+  "lang": "en",
+  "n": 104,
+  "n_overlap": 47,
+  "set": "pgo",
+  "sigla": "PGOJP"
+ },
+ "325": {
+  "lang": null,
+  "n": 25,
+  "set": null,
+  "sigla": "s8a-P"
+ },
+ "326": {
+  "lang": null,
+  "n": 38,
+  "set": null,
+  "sigla": "s8a"
+ },
+ "327": {
+  "lang": null,
+  "n": 48,
+  "set": null,
+  "sigla": "MOTF"
+ },
+ "328": {
+  "lang": "en",
+  "n": 129,
+  "n_overlap": 5,
+  "set": "swsh8",
+  "sigla": "s8"
+ },
+ "329": {
+  "lang": null,
+  "n": 91,
+  "set": null,
+  "sigla": "s7R"
+ },
+ "33": {
+  "lang": "en",
+  "n": 120,
+  "n_overlap": 94,
+  "set": "pl2",
+  "sigla": "RR"
+ },
+ "330": {
+  "lang": null,
+  "n": 90,
+  "set": null,
+  "sigla": "s7D"
+ },
+ "331": {
+  "lang": null,
+  "n": 101,
+  "set": null,
+  "sigla": "s6a"
+ },
+ "332": {
+  "lang": null,
+  "n": 95,
+  "set": null,
+  "sigla": "s6K"
+ },
+ "333": {
+  "lang": null,
+  "n": 95,
+  "set": null,
+  "sigla": "s6H"
+ },
+ "334": {
+  "lang": null,
+  "n": 96,
+  "set": null,
+  "sigla": "s5a"
+ },
+ "335": {
+  "lang": "en",
+  "n": 92,
+  "n_overlap": 4,
+  "set": "sm4",
+  "sigla": "s5R"
+ },
+ "336": {
+  "lang": null,
+  "n": 91,
+  "set": null,
+  "sigla": "s5I"
+ },
+ "337": {
+  "lang": null,
+  "n": 330,
+  "set": null,
+  "sigla": "s4a"
+ },
+ "338": {
+  "lang": "en",
+  "n": 160,
+  "n_overlap": 127,
+  "set": "swsh12pt5",
+  "sigla": "CRZ"
+ },
+ "339": {
+  "lang": "en",
+  "n": 70,
+  "n_overlap": 44,
+  "set": "swsh12pt5gg",
+  "sigla": "CZGG"
+ },
+ "340": {
+  "lang": "jp",
+  "n": 108,
+  "set": null,
+  "sigla": "sv1S"
+ },
+ "341": {
+  "lang": "jp",
+  "n": 108,
+  "set": null,
+  "sigla": "sv1V"
+ },
+ "342": {
+  "lang": "en",
+  "n": 304,
+  "n_overlap": 199,
+  "set": "svp",
+  "sigla": "SVP"
+ },
+ "343": {
+  "lang": "en",
+  "n": 260,
+  "n_overlap": 248,
+  "set": "sv1",
+  "sigla": "SV1"
+ },
+ "344": {
+  "lang": "jp",
+  "n": 291,
+  "set": null,
+  "sigla": "SVPJp"
+ },
+ "345": {
+  "lang": null,
+  "n": 121,
+  "set": null,
+  "sigla": "s4"
+ },
+ "346": {
+  "lang": "en",
+  "n": 94,
+  "n_overlap": 9,
+  "set": "swsh4",
+  "sigla": "s3a"
+ },
+ "347": {
+  "lang": null,
+  "n": 119,
+  "set": null,
+  "sigla": "s3"
+ },
+ "357": {
+  "lang": "en",
+  "n": 140,
+  "n_overlap": 12,
+  "set": "xy1",
+  "sigla": "CP4"
+ },
+ "359": {
+  "lang": null,
+  "n": 1,
+  "set": null,
+  "sigla": "NBTHD"
+ },
+ "361": {
+  "lang": null,
+  "n": 156,
+  "set": null,
+  "sigla": "PCGPP"
+ },
+ "362": {
+  "lang": null,
+  "n": 86,
+  "set": null,
+  "sigla": "s1a"
+ },
+ "363": {
+  "lang": null,
+  "n": 75,
+  "set": null,
+  "sigla": "s1w"
+ },
+ "364": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "sp4"
+ },
+ "365": {
+  "lang": null,
+  "n": 6,
+  "set": null,
+  "sigla": "sp3"
+ },
+ "366": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "sp2"
+ },
+ "367": {
+  "lang": "jp",
+  "n": 103,
+  "set": null,
+  "sigla": "sv1a"
+ },
+ "368": {
+  "lang": null,
+  "n": 48,
+  "set": null,
+  "sigla": "JU-JP"
+ },
+ "369": {
+  "lang": "en",
+  "n": 65,
+  "n_overlap": 3,
+  "set": "g1",
+  "sigla": "RG-JP"
+ },
+ "370": {
+  "lang": null,
+  "n": 96,
+  "set": null,
+  "sigla": "LS-JP"
+ },
+ "371": {
+  "lang": null,
+  "n": 99,
+  "set": null,
+  "sigla": "CFTD"
+ },
+ "372": {
+  "lang": null,
+  "n": 57,
+  "set": null,
+  "sigla": "CTR"
+ },
+ "373": {
+  "lang": null,
+  "n": 57,
+  "set": null,
+  "sigla": "ALE"
+ },
+ "386": {
+  "lang": "en",
+  "n": 65,
+  "n_overlap": 3,
+  "set": "sm8",
+  "sigla": "BW6b"
+ },
+ "387": {
+  "lang": null,
+  "n": 79,
+  "set": null,
+  "sigla": "BW7"
+ },
+ "388": {
+  "lang": null,
+  "n": 58,
+  "set": null,
+  "sigla": "BW8"
+ },
+ "389": {
+  "lang": null,
+  "n": 58,
+  "set": null,
+  "sigla": "BW8b"
+ },
+ "390": {
+  "lang": "en",
+  "n": 86,
+  "n_overlap": 9,
+  "set": "bw10",
+  "sigla": "BW9"
+ },
+ "391": {
+  "lang": "en",
+  "n": 279,
+  "n_overlap": 274,
+  "set": "sv2",
+  "sigla": "PAL"
+ },
+ "392": {
+  "lang": "jp",
+  "n": 96,
+  "set": null,
+  "sigla": "EPJPN"
+ },
+ "393": {
+  "lang": null,
+  "n": 127,
+  "set": null,
+  "sigla": "DP-P"
+ },
+ "394": {
+  "lang": null,
+  "n": 38,
+  "set": null,
+  "sigla": "CP5"
+ },
+ "395": {
+  "lang": null,
+  "n": 7,
+  "set": null,
+  "sigla": "PPP"
+ },
+ "396": {
+  "lang": "jp",
+  "n": 210,
+  "set": null,
+  "sigla": "sV2a"
+ },
+ "397": {
+  "lang": null,
+  "n": 51,
+  "set": null,
+  "sigla": "DPt-P"
+ },
+ "398": {
+  "lang": "en",
+  "n": 96,
+  "n_overlap": 5,
+  "set": "sm9",
+  "sigla": "Pt1"
+ },
+ "399": {
+  "lang": null,
+  "n": 30,
+  "set": null,
+  "sigla": "MCRP"
+ },
+ "400": {
+  "lang": null,
+  "n": 15,
+  "set": null,
+  "sigla": "PKHDP"
+ },
+ "401": {
+  "lang": null,
+  "n": 15,
+  "set": null,
+  "sigla": "PPHDP"
+ },
+ "402": {
+  "lang": null,
+  "n": 14,
+  "set": null,
+  "sigla": "TUHDP"
+ },
+ "404": {
+  "lang": null,
+  "n": 90,
+  "set": null,
+  "sigla": "Pt2"
+ },
+ "405": {
+  "lang": "en",
+  "n": 141,
+  "n_overlap": 3,
+  "set": "xy6",
+  "sigla": "SV3"
+ },
+ "406": {
+  "lang": "en",
+  "n": 230,
+  "n_overlap": 228,
+  "set": "sv3",
+  "sigla": "OBF"
+ },
+ "407": {
+  "lang": null,
+  "n": 32,
+  "set": null,
+  "sigla": "WCS23"
+ },
+ "409": {
+  "lang": null,
+  "n": 2,
+  "set": null,
+  "sigla": "CPM2"
+ },
+ "411": {
+  "lang": "en",
+  "n": 215,
+  "n_overlap": 202,
+  "set": "sv3pt5",
+  "sigla": "MEW"
+ },
+ "416": {
+  "lang": null,
+  "n": 80,
+  "set": null,
+  "sigla": "sm11a"
+ },
+ "417": {
+  "lang": null,
+  "n": 150,
+  "set": null,
+  "sigla": "PTOS"
+ },
+ "418": {
+  "lang": null,
+  "n": 23,
+  "set": null,
+  "sigla": "CVSS"
+ },
+ "419": {
+  "lang": null,
+  "n": 21,
+  "set": null,
+  "sigla": "GVSS"
+ },
+ "420": {
+  "lang": null,
+  "n": 23,
+  "set": null,
+  "sigla": "CVSS2"
+ },
+ "421": {
+  "lang": null,
+  "n": 226,
+  "set": null,
+  "sigla": "SM12a"
+ },
+ "422": {
+  "lang": null,
+  "n": 7,
+  "set": null,
+  "sigla": "WOTCP"
+ },
+ "423": {
+  "lang": null,
+  "n": 38,
+  "set": null,
+  "sigla": "svF"
+ },
+ "424": {
+  "lang": "en",
+  "n": 27,
+  "n_overlap": 3,
+  "set": "sm75",
+  "sigla": "CHPR"
+ },
+ "425": {
+  "lang": "en",
+  "n": 30,
+  "n_overlap": 10,
+  "set": "swsh11",
+  "sigla": "TOT23"
+ },
+ "426": {
+  "lang": null,
+  "n": 117,
+  "set": null,
+  "sigla": "SM12"
+ },
+ "439": {
+  "lang": "en",
+  "n": 266,
+  "n_overlap": 266,
+  "set": "sv4",
+  "sigla": "PAR"
+ },
+ "440": {
+  "lang": null,
+  "n": 437,
+  "set": null,
+  "sigla": "SMPJ"
+ },
+ "441": {
+  "lang": null,
+  "n": 470,
+  "set": null,
+  "sigla": "XYPJ"
+ },
+ "442": {
+  "lang": null,
+  "n": 34,
+  "set": null,
+  "sigla": "CLF"
+ },
+ "443": {
+  "lang": null,
+  "n": 34,
+  "set": null,
+  "sigla": "CLL"
+ },
+ "444": {
+  "lang": null,
+  "n": 34,
+  "set": null,
+  "sigla": "CLK"
+ },
+ "445": {
+  "lang": null,
+  "n": 27,
+  "set": null,
+  "sigla": "YCGD"
+ },
+ "446": {
+  "lang": null,
+  "n": 82,
+  "set": null,
+  "sigla": "CBS"
+ },
+ "447": {
+  "lang": null,
+  "n": 69,
+  "set": null,
+  "sigla": "sm10b"
+ },
+ "448": {
+  "lang": null,
+  "n": 69,
+  "set": null,
+  "sigla": "sm10a"
+ },
+ "449": {
+  "lang": "en",
+  "n": 69,
+  "n_overlap": 4,
+  "set": "sm10",
+  "sigla": "sm9b"
+ },
+ "450": {
+  "lang": null,
+  "n": 21,
+  "set": null,
+  "sigla": "sGG"
+ },
+ "451": {
+  "lang": null,
+  "n": 24,
+  "set": null,
+  "sigla": "sGI"
+ },
+ "452": {
+  "lang": null,
+  "n": 70,
+  "set": null,
+  "sigla": "sm9a"
+ },
+ "453": {
+  "lang": "jp",
+  "n": 360,
+  "set": null,
+  "sigla": "sv4a"
+ },
+ "454": {
+  "lang": null,
+  "n": 250,
+  "set": null,
+  "sigla": "SM8B"
+ },
+ "455": {
+  "lang": null,
+  "n": 65,
+  "set": null,
+  "sigla": "SM8A"
+ },
+ "456": {
+  "lang": null,
+  "n": 63,
+  "set": null,
+  "sigla": "SM7B"
+ },
+ "457": {
+  "lang": null,
+  "n": 73,
+  "set": null,
+  "sigla": "SM7A"
+ },
+ "458": {
+  "lang": null,
+  "n": 72,
+  "set": null,
+  "sigla": "WAK"
+ },
+ "459": {
+  "lang": null,
+  "n": 112,
+  "set": null,
+  "sigla": "SM7"
+ },
+ "478": {
+  "lang": null,
+  "n": 62,
+  "set": null,
+  "sigla": "SM4S"
+ },
+ "479": {
+  "lang": null,
+  "n": 21,
+  "set": null,
+  "sigla": "XYA"
+ },
+ "48": {
+  "lang": "en",
+  "n": 114,
+  "n_overlap": 76,
+  "set": "ex11",
+  "sigla": "DS"
+ },
+ "480": {
+  "lang": null,
+  "n": 82,
+  "set": null,
+  "sigla": "SM3"
+ },
+ "481": {
+  "lang": "en",
+  "n": 105,
+  "n_overlap": 26,
+  "set": "xy3",
+  "sigla": "XY3"
+ },
+ "482": {
+  "lang": null,
+  "n": 64,
+  "set": null,
+  "sigla": "SM3N"
+ },
+ "483": {
+  "lang": null,
+  "n": 64,
+  "set": null,
+  "sigla": "SM3H"
+ },
+ "484": {
+  "lang": "en",
+  "n": 97,
+  "n_overlap": 28,
+  "set": "xy4",
+  "sigla": "XY4"
+ },
+ "485": {
+  "lang": null,
+  "n": 70,
+  "set": null,
+  "sigla": "SM2"
+ },
+ "486": {
+  "lang": null,
+  "n": 20,
+  "set": null,
+  "sigla": "XYB"
+ },
+ "487": {
+  "lang": "en",
+  "n": 62,
+  "n_overlap": 5,
+  "set": "sm2",
+  "sigla": "SM2K"
+ },
+ "488": {
+  "lang": null,
+  "n": 62,
+  "set": null,
+  "sigla": "SM2L"
+ },
+ "49": {
+  "lang": "en",
+  "n": 145,
+  "n_overlap": 141,
+  "set": "ex10",
+  "sigla": "UF"
+ },
+ "50": {
+  "lang": "en",
+  "n": 108,
+  "n_overlap": 107,
+  "set": "ex9",
+  "sigla": "EM"
+ },
+ "51": {
+  "lang": "en",
+  "n": 108,
+  "n_overlap": 105,
+  "set": "ex8",
+  "sigla": "DX"
+ },
+ "52": {
+  "lang": "en",
+  "n": 111,
+  "n_overlap": 108,
+  "set": "ex7",
+  "sigla": "TRR"
+ },
+ "529": {
+  "lang": "en",
+  "n": 218,
+  "n_overlap": 218,
+  "set": "sv5",
+  "sigla": "TEF"
+ },
+ "53": {
+  "lang": "en",
+  "n": 116,
+  "n_overlap": 113,
+  "set": "ex6",
+  "sigla": "FL"
+ },
+ "530": {
+  "lang": null,
+  "n": 23,
+  "set": null,
+  "sigla": "HACGD"
+ },
+ "531": {
+  "lang": null,
+  "n": 52,
+  "set": null,
+  "sigla": "HP"
+ },
+ "532": {
+  "lang": null,
+  "n": 131,
+  "set": null,
+  "sigla": "SMH"
+ },
+ "533": {
+  "lang": null,
+  "n": 38,
+  "set": null,
+  "sigla": "SMI"
+ },
+ "534": {
+  "lang": null,
+  "n": 128,
+  "set": null,
+  "sigla": "BEP"
+ },
+ "535": {
+  "lang": null,
+  "n": 68,
+  "set": null,
+  "sigla": "ODFE"
+ },
+ "536": {
+  "lang": "jp",
+  "n": 96,
+  "set": null,
+  "sigla": "sv5a"
+ },
+ "537": {
+  "lang": "en",
+  "n": 127,
+  "n_overlap": 3,
+  "set": "swsh35",
+  "sigla": "SD"
+ },
+ "538": {
+  "lang": "en",
+  "n": 226,
+  "n_overlap": 225,
+  "set": "sv6",
+  "sigla": "TWM"
+ },
+ "539": {
+  "lang": null,
+  "n": 133,
+  "set": null,
+  "sigla": "SV6"
+ },
+ "54": {
+  "lang": "en",
+  "n": 102,
+  "n_overlap": 99,
+  "set": "ex5",
+  "sigla": "HL"
+ },
+ "55": {
+  "lang": "en",
+  "n": 106,
+  "n_overlap": 97,
+  "set": "ex4",
+  "sigla": "MA"
+ },
+ "550": {
+  "lang": null,
+  "n": 34,
+  "set": null,
+  "sigla": "CLB"
+ },
+ "551": {
+  "lang": null,
+  "n": 34,
+  "set": null,
+  "sigla": "CLC"
+ },
+ "552": {
+  "lang": null,
+  "n": 34,
+  "set": null,
+  "sigla": "CLV"
+ },
+ "553": {
+  "lang": null,
+  "n": 92,
+  "set": null,
+  "sigla": "TTNM"
+ },
+ "554": {
+  "lang": null,
+  "n": 90,
+  "set": null,
+  "sigla": "WFTS"
+ },
+ "555": {
+  "lang": null,
+  "n": 91,
+  "set": null,
+  "sigla": "SPEA"
+ },
+ "556": {
+  "lang": null,
+  "n": 91,
+  "set": null,
+  "sigla": "MYMO"
+ },
+ "557": {
+  "lang": "en",
+  "n": 99,
+  "n_overlap": 95,
+  "set": "sv6pt5",
+  "sigla": "SFA"
+ },
+ "558": {
+  "lang": null,
+  "n": 15,
+  "set": null,
+  "sigla": "ELEA"
+ },
+ "559": {
+  "lang": null,
+  "n": 14,
+  "set": null,
+  "sigla": "EMET"
+ },
+ "56": {
+  "lang": "en",
+  "n": 100,
+  "n_overlap": 100,
+  "set": "ex3",
+  "sigla": "DR"
+ },
+ "560": {
+  "lang": null,
+  "n": 30,
+  "set": null,
+  "sigla": "SK"
+ },
+ "57": {
+  "lang": "en",
+  "n": 100,
+  "n_overlap": 100,
+  "set": "ex2",
+  "sigla": "SS"
+ },
+ "58": {
+  "lang": "en",
+  "n": 109,
+  "n_overlap": 108,
+  "set": "ex1",
+  "sigla": "RS"
+ },
+ "59": {
+  "lang": "en",
+  "n": 185,
+  "n_overlap": 173,
+  "set": "ecard3",
+  "sigla": "SKY"
+ },
+ "60": {
+  "lang": "en",
+  "n": 186,
+  "n_overlap": 180,
+  "set": "ecard2",
+  "sigla": "AQ"
+ },
+ "61": {
+  "lang": "en",
+  "n": 168,
+  "n_overlap": 165,
+  "set": "ecard1",
+  "sigla": "EX"
+ },
+ "612": {
+  "lang": "en",
+  "n": 175,
+  "n_overlap": 175,
+  "set": "sv7",
+  "sigla": "SCR"
+ },
+ "62": {
+  "lang": "en",
+  "n": 113,
+  "n_overlap": 100,
+  "set": "neo4",
+  "sigla": "N4"
+ },
+ "63": {
+  "lang": "en",
+  "n": 66,
+  "n_overlap": 62,
+  "set": "neo3",
+  "sigla": "N3"
+ },
+ "634": {
+  "lang": null,
+  "n": 12,
+  "set": null,
+  "sigla": "PTS"
+ },
+ "635": {
+  "lang": null,
+  "n": 12,
+  "set": null,
+  "sigla": "PTM"
+ },
+ "636": {
+  "lang": null,
+  "n": 12,
+  "set": null,
+  "sigla": "PTR"
+ },
+ "637": {
+  "lang": null,
+  "n": 90,
+  "set": null,
+  "sigla": "PT4"
+ },
+ "638": {
+  "lang": null,
+  "n": 81,
+  "set": null,
+  "sigla": "L3"
+ },
+ "639": {
+  "lang": "en",
+  "n": 252,
+  "n_overlap": 252,
+  "set": "sv8",
+  "sigla": "SSP"
+ },
+ "64": {
+  "lang": "en",
+  "n": 75,
+  "n_overlap": 65,
+  "set": "neo2",
+  "sigla": "N2"
+ },
+ "640": {
+  "lang": null,
+  "n": 86,
+  "set": null,
+  "sigla": "PPPS5"
+ },
+ "641": {
+  "lang": null,
+  "n": 175,
+  "set": null,
+  "sigla": "SVM"
+ },
+ "642": {
+  "lang": null,
+  "n": 25,
+  "set": null,
+  "sigla": "FPP"
+ },
+ "643": {
+  "lang": "en",
+  "n": 27,
+  "n_overlap": 8,
+  "set": "smp",
+  "sigla": "GM25"
+ },
+ "644": {
+  "lang": "jp",
+  "n": 237,
+  "set": null,
+  "sigla": "SV8a"
+ },
+ "649": {
+  "lang": "en",
+  "n": 180,
+  "n_overlap": 176,
+  "set": "sv8pt5",
+  "sigla": "PRE"
+ },
+ "65": {
+  "lang": "en",
+  "n": 111,
+  "n_overlap": 108,
+  "set": "neo1",
+  "sigla": "N1"
+ },
+ "653": {
+  "lang": null,
+  "n": 54,
+  "set": null,
+  "sigla": "ROTH"
+ },
+ "654": {
+  "lang": "en",
+  "n": 190,
+  "n_overlap": 187,
+  "set": "sv9",
+  "sigla": "JTG"
+ },
+ "655": {
+  "lang": null,
+  "n": 19,
+  "set": null,
+  "sigla": "L2TD"
+ },
+ "656": {
+  "lang": null,
+  "n": 26,
+  "set": null,
+  "sigla": "GTG"
+ },
+ "657": {
+  "lang": null,
+  "n": 55,
+  "set": null,
+  "sigla": "ADV"
+ },
+ "658": {
+  "lang": "en",
+  "n": 86,
+  "n_overlap": 4,
+  "set": "sm7",
+  "sigla": "MIFO"
+ },
+ "659": {
+  "lang": null,
+  "n": 31,
+  "set": null,
+  "sigla": "SMM"
+ },
+ "66": {
+  "lang": "en",
+  "n": 132,
+  "n_overlap": 130,
+  "set": "gym2",
+  "sigla": "G2"
+ },
+ "660": {
+  "lang": null,
+  "n": 10,
+  "set": null,
+  "sigla": "TBSD"
+ },
+ "661": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "MBSD"
+ },
+ "662": {
+  "lang": "en",
+  "n": 106,
+  "n_overlap": 5,
+  "set": "xy7",
+  "sigla": "GSSO"
+ },
+ "663": {
+  "lang": null,
+  "n": 16,
+  "set": null,
+  "sigla": "TYSD"
+ },
+ "668": {
+  "lang": null,
+  "n": 75,
+  "set": null,
+  "sigla": "MICR"
+ },
+ "669": {
+  "lang": null,
+  "n": 83,
+  "set": null,
+  "sigla": "UNSE"
+ },
+ "67": {
+  "lang": "en",
+  "n": 132,
+  "n_overlap": 132,
+  "set": "gym1",
+  "sigla": "G1"
+ },
+ "670": {
+  "lang": null,
+  "n": 15,
+  "set": null,
+  "sigla": "MKBQ"
+ },
+ "671": {
+  "lang": "en",
+  "n": 15,
+  "n_overlap": 3,
+  "set": "tk1a",
+  "sigla": "MKTQ"
+ },
+ "672": {
+  "lang": null,
+  "n": 12,
+  "set": null,
+  "sigla": "MKSD"
+ },
+ "673": {
+  "lang": null,
+  "n": 49,
+  "set": null,
+  "sigla": "MMBP"
+ },
+ "674": {
+  "lang": null,
+  "n": 49,
+  "set": null,
+  "sigla": "MMBS"
+ },
+ "675": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "EB11"
+ },
+ "676": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "EB13"
+ },
+ "677": {
+  "lang": null,
+  "n": 15,
+  "set": null,
+  "sigla": "M24"
+ },
+ "678": {
+  "lang": null,
+  "n": 20,
+  "set": null,
+  "sigla": "SVOM"
+ },
+ "706": {
+  "lang": "en",
+  "n": 244,
+  "n_overlap": 242,
+  "set": "sv10",
+  "sigla": "DRI"
+ },
+ "710": {
+  "lang": null,
+  "n": 143,
+  "set": null,
+  "sigla": "CS2B"
+ },
+ "711": {
+  "lang": "en",
+  "n": 184,
+  "n_overlap": 7,
+  "set": "sm3",
+  "sigla": "CS4AC"
+ },
+ "712": {
+  "lang": "en",
+  "n": 177,
+  "n_overlap": 6,
+  "set": "bw6",
+  "sigla": "CS4BC"
+ },
+ "713": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "NPF1"
+ },
+ "714": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "NPF2"
+ },
+ "715": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "NPF3"
+ },
+ "716": {
+  "lang": null,
+  "n": 140,
+  "set": null,
+  "sigla": "CBB2C"
+ },
+ "717": {
+  "lang": null,
+  "n": 52,
+  "set": null,
+  "sigla": "VCBSD"
+ },
+ "718": {
+  "lang": null,
+  "n": 4,
+  "set": null,
+  "sigla": "PPMYC"
+ },
+ "719": {
+  "lang": "jp",
+  "n": 174,
+  "set": null,
+  "sigla": "SV11B"
+ },
+ "72": {
+  "lang": "en",
+  "n": 102,
+  "n_overlap": 98,
+  "set": "base1",
+  "sigla": "BS"
+ },
+ "720": {
+  "lang": "jp",
+  "n": 174,
+  "set": null,
+  "sigla": "SV11W"
+ },
+ "721": {
+  "lang": "en",
+  "n": 172,
+  "n_overlap": 169,
+  "set": "zsv10pt5",
+  "sigla": "BLK"
+ },
+ "722": {
+  "lang": "en",
+  "n": 173,
+  "n_overlap": 173,
+  "set": "rsv10pt5",
+  "sigla": "WHT"
+ },
+ "723": {
+  "lang": null,
+  "n": 6,
+  "set": null,
+  "sigla": "EB06"
+ },
+ "724": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "EB07"
+ },
+ "725": {
+  "lang": null,
+  "n": 19,
+  "set": null,
+  "sigla": "PCSD"
+ },
+ "726": {
+  "lang": null,
+  "n": 192,
+  "set": null,
+  "sigla": "151C"
+ },
+ "727": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "EB10"
+ },
+ "728": {
+  "lang": null,
+  "n": 92,
+  "set": null,
+  "sigla": "M1L"
+ },
+ "729": {
+  "lang": null,
+  "n": 92,
+  "set": null,
+  "sigla": "M1S"
+ },
+ "73": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop1",
+  "sigla": "P1"
+ },
+ "730": {
+  "lang": "en",
+  "n": 188,
+  "n_overlap": 187,
+  "set": "me1",
+  "sigla": "MEG"
+ },
+ "731": {
+  "lang": null,
+  "n": 51,
+  "set": null,
+  "sigla": "MAJP"
+ },
+ "732": {
+  "lang": null,
+  "n": 143,
+  "set": null,
+  "sigla": "MEPR"
+ },
+ "733": {
+  "lang": null,
+  "n": 135,
+  "set": null,
+  "sigla": "MEP"
+ },
+ "735": {
+  "lang": null,
+  "n": 116,
+  "set": null,
+  "sigla": "m2"
+ },
+ "736": {
+  "lang": null,
+  "n": 18,
+  "set": null,
+  "sigla": "DP3SD"
+ },
+ "737": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "MEE"
+ },
+ "738": {
+  "lang": "en",
+  "n": 130,
+  "n_overlap": 130,
+  "set": "me2",
+  "sigla": "PFL"
+ },
+ "739": {
+  "lang": null,
+  "n": 8,
+  "set": null,
+  "sigla": "HC25"
+ },
+ "74": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop2",
+  "sigla": "P2"
+ },
+ "740": {
+  "lang": null,
+  "n": 250,
+  "set": null,
+  "sigla": "M2a"
+ },
+ "741": {
+  "lang": null,
+  "n": 136,
+  "set": null,
+  "sigla": "CBB3C"
+ },
+ "742": {
+  "lang": null,
+  "n": 766,
+  "set": null,
+  "sigla": "MC"
+ },
+ "743": {
+  "lang": null,
+  "n": 164,
+  "set": null,
+  "sigla": "CSV5C"
+ },
+ "744": {
+  "lang": null,
+  "n": 165,
+  "set": null,
+  "sigla": "CSV4C"
+ },
+ "745": {
+  "lang": null,
+  "n": 165,
+  "set": null,
+  "sigla": "CSV3C"
+ },
+ "746": {
+  "lang": "en",
+  "n": 169,
+  "n_overlap": 3,
+  "set": "dp6",
+  "sigla": "CS6AC"
+ },
+ "747": {
+  "lang": null,
+  "n": 172,
+  "set": null,
+  "sigla": "CS6BC"
+ },
+ "748": {
+  "lang": null,
+  "n": 96,
+  "set": null,
+  "sigla": "CS6.5"
+ },
+ "749": {
+  "lang": null,
+  "n": 178,
+  "set": null,
+  "sigla": "CS5BC"
+ },
+ "75": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop3",
+  "sigla": "P3"
+ },
+ "750": {
+  "lang": null,
+  "n": 176,
+  "set": null,
+  "sigla": "CS5AC"
+ },
+ "751": {
+  "lang": null,
+  "n": 23,
+  "set": null,
+  "sigla": "CS5.1"
+ },
+ "752": {
+  "lang": null,
+  "n": 167,
+  "set": null,
+  "sigla": "CSV1C"
+ },
+ "753": {
+  "lang": null,
+  "n": 179,
+  "set": null,
+  "sigla": "CS3BC"
+ },
+ "754": {
+  "lang": "en",
+  "n": 295,
+  "n_overlap": 294,
+  "set": "me2pt5",
+  "sigla": "ASC"
+ },
+ "755": {
+  "lang": null,
+  "n": 23,
+  "set": null,
+  "sigla": "mp1"
+ },
+ "756": {
+  "lang": null,
+  "n": 22,
+  "set": null,
+  "sigla": "mbd"
+ },
+ "757": {
+  "lang": null,
+  "n": 22,
+  "set": null,
+  "sigla": "mbg"
+ },
+ "758": {
+  "lang": "jp",
+  "n": 105,
+  "set": null,
+  "sigla": "M2aPB"
+ },
+ "759": {
+  "lang": "jp",
+  "n": 118,
+  "set": null,
+  "sigla": "M2aES"
+ },
+ "76": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 13,
+  "set": "pop4",
+  "sigla": "P4"
+ },
+ "760": {
+  "lang": null,
+  "n": 13,
+  "set": null,
+  "sigla": "M2aTR"
+ },
+ "761": {
+  "lang": null,
+  "n": 140,
+  "set": null,
+  "sigla": "ASCES"
+ },
+ "762": {
+  "lang": null,
+  "n": 130,
+  "set": null,
+  "sigla": "ASCPB"
+ },
+ "763": {
+  "lang": null,
+  "n": 10,
+  "set": null,
+  "sigla": "ASCTR"
+ },
+ "764": {
+  "lang": null,
+  "n": 117,
+  "set": null,
+  "sigla": "M3"
+ },
+ "765": {
+  "lang": null,
+  "n": 19,
+  "set": null,
+  "sigla": "SVJP"
+ },
+ "766": {
+  "lang": null,
+  "n": 21,
+  "set": null,
+  "sigla": "SVJL"
+ },
+ "767": {
+  "lang": null,
+  "n": 10,
+  "set": null,
+  "sigla": "PCFC"
+ },
+ "768": {
+  "lang": null,
+  "n": 45,
+  "set": null,
+  "sigla": "SVN"
+ },
+ "769": {
+  "lang": "en",
+  "n": 124,
+  "n_overlap": 117,
+  "set": "me3",
+  "sigla": "POR"
+ },
+ "77": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 7,
+  "set": "pop5",
+  "sigla": "P5"
+ },
+ "770": {
+  "lang": null,
+  "n": 90,
+  "set": null,
+  "sigla": "PPPS8"
+ },
+ "771": {
+  "lang": "en",
+  "n": 120,
+  "n_overlap": 3,
+  "set": "xy10",
+  "sigla": "M4"
+ },
+ "772": {
+  "lang": null,
+  "n": 18,
+  "set": null,
+  "sigla": "SI-JP"
+ },
+ "773": {
+  "lang": "en",
+  "n": 122,
+  "n_overlap": 120,
+  "set": "me4",
+  "sigla": "CRI"
+ },
+ "774": {
+  "lang": null,
+  "n": 193,
+  "set": null,
+  "sigla": "CSM2b"
+ },
+ "775": {
+  "lang": null,
+  "n": 192,
+  "set": null,
+  "sigla": "CSM2c"
+ },
+ "776": {
+  "lang": null,
+  "n": 194,
+  "set": null,
+  "sigla": "CSM2a"
+ },
+ "777": {
+  "lang": "en",
+  "n": 118,
+  "n_overlap": 9,
+  "set": "me5",
+  "sigla": "M5"
+ },
+ "778": {
+  "lang": null,
+  "n": 101,
+  "set": null,
+  "sigla": "s6aK"
+ },
+ "779": {
+  "lang": null,
+  "n": 90,
+  "set": null,
+  "sigla": "cs3.5"
+ },
+ "78": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop6",
+  "sigla": "P6"
+ },
+ "79": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop7",
+  "sigla": "P7"
+ },
+ "80": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop8",
+  "sigla": "P8"
+ },
+ "81": {
+  "lang": "en",
+  "n": 17,
+  "n_overlap": 17,
+  "set": "pop9",
+  "sigla": "P9"
+ },
+ "82": {
+  "lang": null,
+  "n": 9,
+  "set": null,
+  "sigla": "VM"
+ }
+}

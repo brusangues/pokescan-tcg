@@ -22,6 +22,24 @@ SCORED = REPO / 'data' / 'scored'
 PTCG_CACHE = REPO / 'data' / 'ptcg_cards_cache.json'
 SET_MAPPING = REPO / 'data' / 'liga' / 'liga_set_sigla_ptcg.json'
 SET_MAPPING_FALLBACK = REPO / 'data' / 'liga' / 'liga_set_sigla.json'
+EDICOES = REPO / 'data' / 'liga' / 'edicoes_liga.json'
+
+
+def _card_id(r: dict) -> str:
+    """Chave canônica da carta: '{idE}-{lang}-{sN}' (lang: en|jp).
+
+    Usa a coluna card_id quando presente (CSV novo); senão deriva de idE/sN/is_jp
+    (CSVs antigos) — assim o histórico acumulado casa entre dias.
+    """
+    cid = (r.get('card_id') or '').strip()
+    if cid:
+        return cid
+    eid = str(r.get('idE') or '').strip()
+    sN = str(r.get('sN') or r.get('num') or '').strip().lstrip('0') or '0'
+    if not eid:
+        return ''
+    lang = 'jp' if str(r.get('is_jp', '')).lower() in ('true', '1') else 'en'
+    return f'{eid}-{lang}-{sN}'
 ABLATIONS = REPO / 'experiments' / 'ablation_results.csv'
 OUT = Path(sys.argv[sys.argv.index('--out') + 1]) if '--out' in sys.argv else REPO / 'frontend' / 'public' / 'data'
 
@@ -53,6 +71,7 @@ def parse_scored_csv(path: Path) -> list:
                 'iCO': int(float(r.get('iCO') or r.get('iCO_real') or '0')),
                 'moeda': r.get('moeda') or 'R$',
                 'liga_id': r.get('liga_id') or '',
+                'card_id': _card_id(r),
                 'nEN': r.get('nEN') or '',
                 'sNumber': r.get('sNumber') or '',
                 'num': r.get('num') or '',
@@ -300,7 +319,7 @@ def scored_latest_payload() -> list:
 
 
 def historico_payload() -> dict:
-    """Séries por liga_id e por nome+sigla — mesmo filtro do /api/historico."""
+    """Séries por card_id (chave canônica idE-lang-sN) e por nome+sigla — mesmo filtro do /api/historico."""
     files = sorted([f for f in SCORED.glob('scored_*.csv')
                     if f.name.startswith(('scored_hits_', 'scored_snapshot_'))])
     por_liga = {}
@@ -326,8 +345,8 @@ def historico_payload() -> dict:
                 'moeda': c['moeda'] or 'R$',
                 'tipo': tipo,
             }
-            if c['liga_id']:
-                serie = por_liga.setdefault(c['liga_id'], {})
+            if c['card_id']:
+                serie = por_liga.setdefault(c['card_id'], {})
                 serie[f'{data}_{tipo}'] = ponto
             nome_key = (c['nEN'] or c['nome'] or '').lower()
             if nome_key:
@@ -344,13 +363,24 @@ def historico_payload() -> dict:
 
 
 def set_map_inv() -> dict:
+    """sigla→set ptcg E edid→set ptcg (o front resolve /card por ambos).
+
+    Usa o edicoes_liga.json (índice canônico) quando disponível — cobre PAR/OBF/MEG/…
+    que o mapping antigo não tinha — e complementa com o mapping ptcg→sigla.
+    """
+    inv = {}
+    if EDICOES.exists():
+        ed = json.loads(EDICOES.read_text(encoding='utf-8'))
+        for eid, info in ed.items():
+            if info.get('set'):
+                inv[str(eid)] = info['set']            # '439' → 'sv4'
+                inv[info['sigla'].lower()] = info['set']  # 'par' → 'sv4'
     try:
         raw = json.loads(SET_MAPPING.read_text(encoding='utf-8'))
     except Exception:
         raw = json.loads(SET_MAPPING_FALLBACK.read_text(encoding='utf-8'))
-    inv = {}
     for ptcg, liga in raw.items():
-        inv[str(liga).lower()] = ptcg
+        inv.setdefault(str(liga).lower(), ptcg)
     return inv
 
 

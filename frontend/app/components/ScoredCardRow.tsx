@@ -16,6 +16,7 @@ export interface ScoredCardRowData {
   nEN?: string;
   sNumber?: string;
   num?: string;
+  card_id?: string;
 }
 
 /**
@@ -45,7 +46,7 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
         {/* <a> com href já prefixado por cardLink (getBasePath) — o next/link
             duplica o basePath em hrefs com query no client */}
         <a
-          href={cardLink({ nome_en: card.nEN || card.nome, sSigla: card.sigla })}
+          href={cardLink({ card_id: card.card_id, nome_en: card.nEN || card.nome, sSigla: card.sigla })}
           className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 hover:underline truncate block"
         >
           {card.nome}

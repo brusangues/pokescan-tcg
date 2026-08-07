@@ -60,6 +60,7 @@ interface CardData {
     iCO: number;
     moeda: string;
     liga_id: string;
+    card_id?: string;
     nEN: string;
     sNumber: string;
     num: string;
@@ -78,15 +79,17 @@ interface CardData {
   const sigla = searchParams?.get('sigla');
   const num = searchParams?.get('num');
   const set = searchParams?.get('set');
+  const card_id = searchParams?.get('card_id');
+  const liga_id = searchParams?.get('liga_id');
 
-  const displayId = nome || `${sigla}-${num}`;
+  const displayId = card_id || liga_id || nome || `${sigla}-${num}`;
 
   const [card, setCard] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!nome && !sigla && !num) { setError('Nenhum parâmetro de busca'); setLoading(false); return; }
+    if (!nome && !sigla && !num && !card_id && !liga_id) { setError('Nenhum parâmetro de busca'); setLoading(false); return; }
 
     (async () => {
       try {
@@ -95,7 +98,8 @@ interface CardData {
           sigla,
           num,
           set,
-          liga_id: undefined,
+          card_id,
+          liga_id,
         });
         setCard(cardData);
       } catch (e: any) {
@@ -104,7 +108,7 @@ interface CardData {
         setLoading(false);
       }
     })();
-  }, [nome, sigla, num, set]);
+  }, [nome, sigla, num, set, card_id, liga_id]);
 
   if (loading) {
     return (
@@ -250,7 +254,7 @@ interface CardData {
                 )}
                 {/* Histórico de preços (hits diários + snapshots) */}
                 <PriceHistory
-                  ligaId={card.modelo.liga_id || undefined}
+                  ligaId={card.modelo.card_id || card.modelo.liga_id || undefined}
                   nome={card.modelo.nEN ? card.modelo.nEN.split('(')[0].trim() : undefined}
                   sigla={card.modelo.sigla || undefined}
                   moeda={card.modelo.moeda}
