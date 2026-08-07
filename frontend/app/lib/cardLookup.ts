@@ -201,20 +201,29 @@ export async function lookupCard(params: {
 
   // Registro escorado (modelo) — mesmo critério da API: nome exato (EN via nEN
   // — o nome PT não casa com o catálogo), priorizando sigla igual + registro
-  // mais rico (setNome/sNumber/nEN); normNome ignora hífen/espaço
+  // mais rico (setNome/sNumber/nEN); normNome ignora hífen/espaço.
+  // Quando a página veio por card_id, o modelo é o REGISTRO DAQUELE card_id
+  // (o mesmo Pokémon pode ter 2 numerações na Liga — ex: PGOJP Exeggutor-V
+  // como 005 e 072 — o link da Liga deve usar a do registro clicado).
   const scoredCards = await loadScoredLatest();
+  let scored = null;
+  if (params.card_id) {
+    scored = scoredCards.find((s: any) => s.card_id === params.card_id) || null;
+  }
   const nomeCard = normNome(card.n || '');
   const nomeScored = (s: any) =>
     normNome(String(s.nEN || s.nome || '').split('(')[0]);
-  const scored = scoredCards
-    .filter((s: any) => nomeScored(s) === nomeCard)
-    .sort((a: any, b: any) => {
-      const sigA = a.sigla?.toLowerCase() === sigla ? 1 : 0;
-      const sigB = b.sigla?.toLowerCase() === sigla ? 1 : 0;
-      const richA = (a.setNome ? 1 : 0) + (a.sNumber ? 1 : 0) + (a.nEN ? 1 : 0);
-      const richB = (b.setNome ? 1 : 0) + (b.sNumber ? 1 : 0) + (b.nEN ? 1 : 0);
-      return (sigB - sigA) * 10 + (richB - richA);
-    })[0] || null;
+  if (!scored) {
+    scored = scoredCards
+      .filter((s: any) => nomeScored(s) === nomeCard)
+      .sort((a: any, b: any) => {
+        const sigA = a.sigla?.toLowerCase() === sigla ? 1 : 0;
+        const sigB = b.sigla?.toLowerCase() === sigla ? 1 : 0;
+        const richA = (a.setNome ? 1 : 0) + (a.sNumber ? 1 : 0) + (a.nEN ? 1 : 0);
+        const richB = (b.setNome ? 1 : 0) + (b.sNumber ? 1 : 0) + (b.nEN ? 1 : 0);
+        return (sigB - sigA) * 10 + (richB - richA);
+      })[0] || null;
+  }
 
   const ligaOk = scored?.is_jp
     ? true
