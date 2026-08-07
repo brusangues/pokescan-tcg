@@ -1,0 +1,83 @@
+{
+ "data": "2026-08-06",
+ "fonte": "Liga Pokémon (produtos selados PT-BR)",
+ "caixas": {
+  "sv1": {
+   "menor": 1500.0,
+   "medio": 1557.8,
+   "maior": 1599.99,
+   "tipo": "caixa",
+   "pcode": 127022
+  },
+  "sv10": {
+   "menor": 839.9,
+   "medio": 1032.79,
+   "maior": 1482.0,
+   "tipo": "caixa",
+   "pcode": 133458
+  },
+  "sv2": {
+   "menor": 995.0,
+   "medio": 1384.45,
+   "maior": 1899.0,
+   "tipo": "caixa",
+   "pcode": 127844
+  },
+  "sv3": {
+   "menor": 749.99,
+   "medio": 1035.28,
+   "maior": 1250.0,
+   "tipo": "caixa",
+   "pcode": 128222
+  },
+  "sv4": {
+   "menor": 1599.95,
+   "medio": 2733.32,
+   "maior": 5000.0,
+   "tipo": "caixa",
+   "pcode": 128754
+  },
+  "sv5": {
+   "menor": 749.9,
+   "medio": 992.43,
+   "maior": 1500.0,
+   "tipo": "caixa",
+   "pcode": 129819
+  },
+  "sv6": {
+   "menor": 738.0,
+   "medio": 747.82,
+   "maior": 799.9,
+   "tipo": "caixa",
+   "pcode": 130258
+  },
+  "sv6pt5": {
+   "menor": 34.9,
+   "medio": 34.9,
+   "maior": 34.9,
+   "tipo": "avulso",
+   "pcode": 130426
+  },
+  "sv7": {
+   "menor": 849.92,
+   "medio": 982.79,
+   "maior": 999.99,
+   "tipo": "caixa",
+   "pcode": 130984
+  },
+  "sv8": {
+   "menor": 790.0,
+   "medio": 890.44,
+   "maior": 899.99,
+   "tipo": "caixa",
+   "pcode": 131658
+  },
+  "sv9": {
+   "menor": 439.0,
+   "medio": 501.31,
+   "maior": 800.0,
+   "tipo": "caixa",
+   "pcode": 133129
+  }
+ }
+}

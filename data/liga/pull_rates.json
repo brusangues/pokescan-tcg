@@ -1,0 +1,17 @@
+{
+  "_comentario": "Taxas de pull por coleção (denominador '1 em X' por booster) — fonte: CSV Cronograma Pokémon TCG Completo (Ago/2026). Chaves = set_id do cache ptcg. Faltam sv11* (Megaevolução/Black Bolt) — ainda não no cache.",
+  "sv1":      { "dr": 7,  "fa": 15, "ar": 13, "sir": 32,  "hr": 54,  "amostra": 8000 },
+  "sv2":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 32,  "hr": 54,  "amostra": 8000 },
+  "sv3":      { "dr": 7,  "fa": 15, "ar": 13, "sir": 32,  "hr": 52,  "amostra": 8000 },
+  "sv3pt5":   { "dr": 8,  "fa": 16, "ar": 12, "sir": 32,  "hr": 51,  "amostra": 1500 },
+  "sv4":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 47,  "hr": 82,  "amostra": 8000 },
+  "sv4pt5":   { "dr": 6,  "fa": 15, "ar": 14, "sir": 58,  "hr": 62,  "amostra": 1500 },
+  "sv5":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 86,  "hr": 139, "amostra": 8000 },
+  "sv6":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 86,  "hr": 146, "amostra": 8000 },
+  "sv6pt5":   { "dr": 6,  "fa": 15, "ar": 13, "sir": 67,  "hr": 144, "amostra": 1500 },
+  "sv7":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 90,  "hr": 137, "amostra": 8000 },
+  "sv8":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 87,  "hr": 188, "amostra": 8000 },
+  "sv8pt5":   { "dr": 6,  "fa": 15, "ar": 12, "sir": 45,  "hr": 180, "amostra": 2500 },
+  "sv9":      { "dr": 5,  "fa": 15, "ar": 12, "sir": 86,  "hr": 137, "amostra": 8000 },
+  "sv10":     { "dr": 5,  "fa": 16, "ar": 12, "sir": 94,  "hr": 149, "amostra": 8000 }
+}

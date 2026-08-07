@@ -1,0 +1,14 @@
+{
+  "_comentario": "pcodes da Liga Pokémon para produtos selados PT-BR (coletados Ago/2026). tipo=caixa (36 boosters) | avulso (1 booster). Sets .5 (151, Destinos, Fábulas, Prismáticas) não têm caixa de booster tradicional — usar avulso quando existir.",
+  "sv1":  {"pcode": 127022, "tipo": "caixa"},
+  "sv2":  {"pcode": 127844, "tipo": "caixa"},
+  "sv3":  {"pcode": 128222, "tipo": "caixa"},
+  "sv4":  {"pcode": 128754, "tipo": "caixa"},
+  "sv5":  {"pcode": 129819, "tipo": "caixa"},
+  "sv6":  {"pcode": 130258, "tipo": "caixa"},
+  "sv7":  {"pcode": 130984, "tipo": "caixa"},
+  "sv8":  {"pcode": 131658, "tipo": "caixa"},
+  "sv9":  {"pcode": 133129, "tipo": "caixa"},
+  "sv10": {"pcode": 133458, "tipo": "caixa"},
+  "sv6pt5": {"pcode": 130426, "tipo": "avulso"}
+}
