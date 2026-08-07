@@ -17,6 +17,7 @@ interface BucketInfo {
 interface SetEv {
   set: string;
   nome: string;
+  ano?: string | null;
   ev: number;
   cobertura: number;
   breakdown: Record<string, BucketInfo>;
@@ -31,7 +32,14 @@ const BUCKET_LABEL: Record<string, string> = {
   ar: 'Illustration Rare',
   sir: 'Special Illustration Rare',
   hr: 'Hyper Rare (ouro)',
-  filler: 'Comuns/Raras',
+  ace: 'ACE SPEC',
+  shiny_ur: 'Shiny Ultra Rare',
+  shiny: 'Shiny Rare',
+  matk: 'Mega Attack Rare',
+  rare: 'Rare',
+  uncommon: 'Uncommon',
+  common: 'Common',
+  filler: 'Outras',
 };
 
 const RARITY_COLOR: Record<string, string> = {
@@ -40,6 +48,13 @@ const RARITY_COLOR: Record<string, string> = {
   ar: 'text-rose-600',
   sir: 'text-purple-600',
   hr: 'text-yellow-600',
+  ace: 'text-cyan-600',
+  shiny_ur: 'text-fuchsia-600',
+  shiny: 'text-pink-600',
+  matk: 'text-orange-600',
+  rare: 'text-slate-500',
+  uncommon: 'text-slate-400',
+  common: 'text-slate-400',
   filler: 'text-slate-400',
 };
 
@@ -54,6 +69,7 @@ export default function ColecoesPage() {
   const [error, setError] = useState<string | null>(null);
   const [precoBooster, setPrecoBooster] = useState(15);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [anoFiltro, setAnoFiltro] = useState<string>('todos');
 
   useEffect(() => {
     fetch(`${getBasePath()}/data/ev_booster.json`)
@@ -74,9 +90,17 @@ export default function ColecoesPage() {
   const rows = useMemo(() => {
     if (!data) return [];
     return data
+      .filter((r) => anoFiltro === 'todos' || r.ano === anoFiltro)
       .map((r) => ({ ...r, upsideSlider: r.ev - precoBooster }))
       .sort((a, b) => b.upsideSlider - a.upsideSlider);
-  }, [data, precoBooster]);
+  }, [data, precoBooster, anoFiltro]);
+
+  const anos = useMemo(() => {
+    if (!data) return [];
+    const s = new Set<string>();
+    data.forEach((r) => r.ano && s.add(r.ano));
+    return Array.from(s).sort();
+  }, [data]);
 
   if (loading) {
     return (
@@ -97,8 +121,8 @@ export default function ColecoesPage() {
         <p className="text-sm text-slate-500 mb-4">
           Valor esperado (R$) de um booster de cada coleção, calculado com os preços atuais da Liga
           (Σ probabilidade de pull × preço médio das cartas da raridade). Pull rates dos estudos
-          internacionais (TCGPlayer/ThePriceDex) ajustados para o booster PT-BR de 6 cartas
-          (÷2 — o booster EN tem 11 cartas).
+          internacionais (TCGPlayer/ThePriceDex) ajustados pela razão de cartas por booster:
+          PT-BR 6 vs EN 11 (×6/11).
         </p>
 
         {/* Slider do preço do booster */}
@@ -133,6 +157,34 @@ export default function ColecoesPage() {
             Erro ao carregar: {error}
           </div>
         )}
+
+        {/* Filtro por ano de lançamento */}
+        <div className="flex items-center gap-2 mb-4 flex-wrap">
+          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Ano:</span>
+          <button
+            onClick={() => setAnoFiltro('todos')}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+              anoFiltro === 'todos'
+                ? 'bg-indigo-600 text-white border-indigo-600'
+                : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'
+            }`}
+          >
+            Todos
+          </button>
+          {anos.map((a) => (
+            <button
+              key={a}
+              onClick={() => setAnoFiltro(a)}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                anoFiltro === a
+                  ? 'bg-indigo-600 text-white border-indigo-600'
+                  : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'
+              }`}
+            >
+              {a}
+            </button>
+          ))}
+        </div>
 
         {/* Tabela */}
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
@@ -184,7 +236,10 @@ export default function ColecoesPage() {
                     >
                       <td className="px-4 py-3">
                         <div className="font-medium text-slate-800">{r.nome}</div>
-                        <div className="text-xs text-slate-400 uppercase">{r.set}</div>
+                        <div className="text-xs text-slate-400 uppercase">
+                          {r.set}
+                          {r.ano ? <span className="ml-2 normal-case text-slate-400">• {r.ano}</span> : null}
+                        </div>
                       </td>
                       <td className="px-3 py-3 text-right tabular-nums font-semibold text-slate-800">
                         R$ {fmt(r.ev)}

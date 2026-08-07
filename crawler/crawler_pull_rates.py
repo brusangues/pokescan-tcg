@@ -39,6 +39,13 @@ SETS = [
     ('sv8pt5', 'prismatic-evolutions'),
     ('sv9', 'journey-together'),
     ('sv10', 'destined-rivals'),
+    # série Mega Evolution (me* = ids da TCGAPI)
+    ('me1', 'mega-evolution'),
+    ('me2', 'phantasmal-flames'),
+    ('me2pt5', 'ascended-heroes'),
+    ('me3', 'perfect-order'),
+    ('me4', 'chaos-rising'),
+    ('me5', 'pitch-black'),
 ]
 
 NUM = re.compile(r'([\d,.]+)')
@@ -124,6 +131,9 @@ def main():
         nome = m.group(1).strip() if m else slug
         m = re.search(r'Set Code:\s*</[^>]+>\s*([A-Z0-9]+)', html) or re.search(r'Set Code: ([A-Z0-9]+)', html)
         code = m.group(1) if m else ''
+        m = re.search(r'Released:\s*</[^>]+>\s*([\d/]+)', html) or re.search(r'Released:\s*([\d/]+)', html)
+        released = m.group(1) if m else None
+        ano = released.split('/')[0] if released else None
         # EV do booster: h5 em sequência — [set_value, set_value, booster_ev, box_ev, packs, cards]
         h5s = re.findall(r'<h5[^>]*>([^<]*)</h5>', html)
         valores = [parse_num(x.replace('$', '').replace(' ', '')) for x in h5s if re.match(r'^[\d,.$ ]+$', x.strip())]
@@ -135,6 +145,8 @@ def main():
             'nome': nome,
             'code': code,
             'slug': slug,
+            'released': released,
+            'ano': ano,
             'ev_booster_usd': ev_booster,
             'ev_box_usd': ev_box,
             'packs_box': packs_box,

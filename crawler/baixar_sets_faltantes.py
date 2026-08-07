@@ -20,9 +20,13 @@ CONHECIDOS = [
     ('sv7', 612),      # SCR  (Stellar Crown)
     ('sv8pt5', 649),   # PRE  (Prismatic Evolutions)
     ('sv10', 706),     # DRI  (Destined Rivals)
+    ('me2', 735),      # M2   (Phantasmal Flames / Fogo Fantasmagórico)
+    ('me3', 764),      # M3   (Perfect Order)
+    ('me4', 771),      # M4   (Chaos Rising / Caos Ascendente)
+    ('me5', 777),      # M5   (Pitch Black / Escuridão Absoluta)
 ]
-# faixas a varrer: OBF entre PAL(391) e MEW(411); PAF entre PAR(439) e SV4A(453)
-VARRER = list(range(392, 410)) + list(range(440, 452))
+# faixas a varrer: me1 antes do M2(735); me2pt5 entre M2(735) e M3(764)
+VARRER = list(range(710, 734)) + list(range(736, 763))
 
 
 def baixa_set(driver, eid):
@@ -59,10 +63,11 @@ def main():
         if res:
             sigla, n = res
             print(f'    {sigla}: {n} cartas')
-            if sigla.upper() in ('OBF', 'SV3A') and sid == '?':
-                print(f'    ★ OBSIDIAN FLAMES = edid {eid}')
-            if sigla.upper() in ('PAF', 'SV1V') and sid == '?':
-                print(f'    ★ PALDEAN FATES = edid {eid}')
+            su = sigla.upper()
+            if su in ('M1', 'MEG', 'ME1') and sid == '?':
+                print(f'    ★ MEGA EVOLUTION (me1) = edid {eid}')
+            if su in ('M25', 'ME2.5', 'ASC', 'ME2PT5') and sid == '?':
+                print(f'    ★ ASCENDED HEROES (me2pt5) = edid {eid}')
         else:
             print('    (vazio)')
     set_ids |= set(alvos)

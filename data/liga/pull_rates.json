@@ -13,5 +13,8 @@
   "sv8":      { "dr": 6,  "fa": 15, "ar": 13, "sir": 87,  "hr": 188, "amostra": 8000 },
   "sv8pt5":   { "dr": 6,  "fa": 15, "ar": 12, "sir": 45,  "hr": 180, "amostra": 2500 },
   "sv9":      { "dr": 5,  "fa": 15, "ar": 12, "sir": 86,  "hr": 137, "amostra": 8000 },
-  "sv10":     { "dr": 5,  "fa": 16, "ar": 12, "sir": 94,  "hr": 149, "amostra": 8000 }
+  "sv10":     { "dr": 5,  "fa": 16, "ar": 12, "sir": 94,  "hr": 149, "amostra": 8000 },
+  "me1":      { "dr": 5,  "fa": 12, "ar": 9,  "sir": 101, "hr": 1260, "amostra": 5000 },
+  "me2":      { "dr": 5,  "fa": 12, "ar": 9,  "sir": 80,  "hr": 1260, "amostra": 5000 },
+  "me2pt5":   { "dr": 5,  "fa": 12, "ar": 9,  "sir": 101, "hr": 1260, "amostra": 5000 }
 }

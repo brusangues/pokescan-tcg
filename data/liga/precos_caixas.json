@@ -1,7 +1,42 @@
 {
- "data": "2026-08-06",
+ "data": "2026-08-07",
  "fonte": "Liga Pokémon (produtos selados PT-BR)",
  "caixas": {
+  "me1": {
+   "menor": 345.0,
+   "medio": 436.89,
+   "maior": 580.0,
+   "tipo": "caixa",
+   "pcode": 133949
+  },
+  "me2": {
+   "menor": 369.9,
+   "medio": 446.97,
+   "maior": 999.99,
+   "tipo": "caixa",
+   "pcode": 134371
+  },
+  "me3": {
+   "menor": 299.0,
+   "medio": 415.25,
+   "maior": 1199.9,
+   "tipo": "caixa",
+   "pcode": 135522
+  },
+  "me4": {
+   "menor": 284.4,
+   "medio": 402.35,
+   "maior": 504.99,
+   "tipo": "caixa",
+   "pcode": 135973
+  },
+  "me5": {
+   "menor": 304.47,
+   "medio": 398.92,
+   "maior": 505.0,
+   "tipo": "caixa",
+   "pcode": 136634
+  },
   "sv1": {
    "menor": 1500.0,
    "medio": 1557.8,

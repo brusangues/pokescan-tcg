@@ -29,6 +29,7 @@ REPO = Path(__file__).resolve().parent.parent
 # rarity do cache ptcg → bucket interno
 BUCKET_POR_RARITY = {
     'Hyper Rare': 'hr',
+    'Mega Hyper Rare': 'hr',
     'Special Illustration Rare': 'sir',
     'Ultra Rare': 'fa',
     'Illustration Rare': 'ar',
@@ -36,6 +37,8 @@ BUCKET_POR_RARITY = {
     'ACE SPEC Rare': 'ace',
     'Shiny Ultra Rare': 'shiny_ur',
     'Shiny Rare': 'shiny',
+    'Mega Attack Rare': 'matk',
+    'MEGA_ATTACK_RARE': 'matk',
     'Rare': 'rare',
     'Uncommon': 'uncommon',
     'Common': 'common',
@@ -43,7 +46,7 @@ BUCKET_POR_RARITY = {
 BUCKET_LABEL = {
     'hr': 'Hyper Rare', 'sir': 'SIR', 'fa': 'Ultra Rare (FA)', 'ar': 'Illustration Rare',
     'dr': 'Double Rare', 'ace': 'ACE SPEC', 'shiny_ur': 'Shiny Ultra Rare', 'shiny': 'Shiny Rare',
-    'rare': 'Rare', 'uncommon': 'Uncommon', 'common': 'Common', 'filler': 'Outras',
+    'matk': 'Mega Attack Rare', 'rare': 'Rare', 'uncommon': 'Uncommon', 'common': 'Common', 'filler': 'Outras',
 }
 # nome da rarity no ThePriceDex → bucket
 EN_POR_BUCKET = {
@@ -55,6 +58,7 @@ EN_POR_BUCKET = {
     'ace': ['ACE SPEC Rare'],
     'shiny_ur': ['Shiny Ultra Rare'],
     'shiny': ['Shiny Rare'],
+    'matk': ['Mega Attack Rare'],
     'rare': ['Rare'],
     'uncommon': ['Uncommon'],
     'common': ['Common'],
@@ -183,12 +187,16 @@ def pull_rates_para_buckets(fonte: str, fator: float, set_id: str) -> tuple[dict
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--fonte', choices=['en', 'br'], default='en')
-    ap.add_argument('--fator', type=float, default=0.5,
-                    help='Ajuste para booster PT-BR (6 cartas vs 11 no EN). Default 0.5 (metade).')
+    ap.add_argument('--fator', type=float, default=6 / 11,
+                    help='Ajuste para booster PT-BR (6 cartas vs 11 no EN). Default 6/11.')
     ap.add_argument('--top', type=int, default=20)
     args = ap.parse_args()
 
     cache = json.loads((REPO / 'data' / 'ptcg_cards_cache.json').read_text(encoding='utf-8'))
+    pull_en = {}
+    f_en = REPO / 'data' / 'liga' / 'pull_rates_en.json'
+    if f_en.exists():
+        pull_en = json.loads(f_en.read_text(encoding='utf-8'))
     por_sigla_scored = load_precos_por_sigla()
     por_sigla_setjson = load_precos_setjson()
     # funde as duas fontes por sigla (setjson sobrepõe o scored no mesmo (nome, num))
@@ -222,6 +230,13 @@ def main():
         rates, _ = pull_rates_para_buckets(args.fonte, args.fator, set_id)
         if not rates:
             continue
+        # ano de lançamento (ThePriceDex; fallback releaseDate do cache)
+        ano = None
+        if set_id in pull_en:
+            ano = pull_en[set_id].get('ano')
+        if ano is None and info['cards']:
+            rd = (info['cards'][0].get('set') or {}).get('releaseDate') or ''
+            ano = rd.split('/')[0] if rd else None
         # sigla da Liga com maior overlap → preços SEM colisão entre sets
         sigla = melhor_sigla(set_id, info['cards'], por_sigla)
         precos = por_sigla.get(sigla) if sigla else None
@@ -260,6 +275,7 @@ def main():
         resultados.append({
             'set': set_id,
             'nome': info['nome'],
+            'ano': ano,
             'ev': round(total, 2),
             'cobertura': round(com_preco / len(info['cards']) * 100) if info['cards'] else 0,
             'fonte': args.fonte,
@@ -287,7 +303,8 @@ def main():
         return r['upside'] if r['upside'] is not None else -9999
     resultados.sort(key=chave, reverse=True)
 
-    print(f'\n=== EV do booster por coleção (R$, {args.fonte} ÷{1/args.fator:.0f} — {len(resultados)} sets) ===')
+    fator_txt = '6/11' if abs(args.fator - 6 / 11) < 1e-9 else f'{args.fator}'
+    print(f'\n=== EV do booster por coleção (R$, {args.fonte} ×{fator_txt} — {len(resultados)} sets) ===')
     print(f'{"Set":<9} {"Coleção":<24} {"EV R$":>7} {"Cob.":>5}  breakdown (contrib por raridade)')
     for r in resultados[:args.top]:
         parts = [f"{BUCKET_LABEL.get(b, b)} {v['contrib']:.2f}" for b, v in r['breakdown'].items()]

@@ -10,5 +10,10 @@
   "sv8":  {"pcode": 131658, "tipo": "caixa"},
   "sv9":  {"pcode": 133129, "tipo": "caixa"},
   "sv10": {"pcode": 133458, "tipo": "caixa"},
-  "sv6pt5": {"pcode": 130426, "tipo": "avulso"}
+  "sv6pt5": {"pcode": 130426, "tipo": "avulso"},
+  "me1":  {"pcode": 133949, "tipo": "caixa"},
+  "me2":  {"pcode": 134371, "tipo": "caixa"},
+  "me3":  {"pcode": 135522, "tipo": "caixa"},
+  "me4":  {"pcode": 135973, "tipo": "caixa"},
+  "me5":  {"pcode": 136634, "tipo": "caixa"}
 }
