@@ -1,0 +1,1827 @@
+{
+ "sv1": {
+  "nome": "Scarlet &amp; Violet",
+  "code": "SVI",
+  "slug": "scarlet-violet",
+  "ev_booster_usd": 4.18,
+  "ev_box_usd": 150.36,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 31.7,
+    "por_caixa": 1.1,
+    "especifica": 317.5
+   },
+   "Ultra Rare": {
+    "1em": 15.2,
+    "por_caixa": 2.4,
+    "especifica": 304.4
+   },
+   "Illustration Rare": {
+    "1em": 13.0,
+    "por_caixa": 2.8,
+    "especifica": 312.9
+   },
+   "Double Rare": {
+    "1em": 7.3,
+    "por_caixa": 5.0,
+    "especifica": 87.2
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 28.7,
+    "especifica": 26.4
+   },
+   "Reverse Rare": {
+    "1em": 4.7,
+    "por_caixa": 7.6,
+    "especifica": 99.3
+   },
+   "Reverse Uncommon": {
+    "1em": 1.7,
+    "por_caixa": 21.8,
+    "especifica": 99.3
+   },
+   "Reverse Common": {
+    "1em": 0.9,
+    "por_caixa": 38.1,
+    "especifica": 99.3
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 10,
+    "priced": "10",
+    "avg_usd": 19.21,
+    "ev_usd": 0.61
+   },
+   "Ultra Rare": {
+    "total": 20,
+    "priced": "20",
+    "avg_usd": 3.47,
+    "ev_usd": 0.23
+   },
+   "Illustration Rare": {
+    "total": 24,
+    "priced": "24",
+    "avg_usd": 19.5,
+    "ev_usd": 1.5
+   },
+   "Double Rare": {
+    "total": 12,
+    "priced": "12",
+    "avg_usd": 0.79,
+    "ev_usd": 0.11
+   },
+   "Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 0.2,
+    "ev_usd": 0.16
+   },
+   "Uncommon": {
+    "total": 60,
+    "priced": "60",
+    "avg_usd": 0.14,
+    "ev_usd": 0.42
+   },
+   "Common": {
+    "total": 105,
+    "priced": "105",
+    "avg_usd": 0.15,
+    "ev_usd": 0.58
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 0.26,
+    "ev_usd": 0.05
+   },
+   "Reverse Uncommon": {
+    "total": 60,
+    "priced": "60",
+    "avg_usd": 0.28,
+    "ev_usd": 0.17
+   },
+   "Reverse Common": {
+    "total": 105,
+    "priced": "105",
+    "avg_usd": 0.23,
+    "ev_usd": 0.25
+   }
+  }
+ },
+ "sv2": {
+  "nome": "Paldea Evolved",
+  "code": "PAL",
+  "slug": "paldea-evolved",
+  "ev_booster_usd": 5.82,
+  "ev_box_usd": 209.42,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 31.5,
+    "por_caixa": 1.1,
+    "especifica": 473.2
+   },
+   "Ultra Rare": {
+    "1em": 15.1,
+    "por_caixa": 2.4,
+    "especifica": 391.6
+   },
+   "Illustration Rare": {
+    "1em": 13.0,
+    "por_caixa": 2.8,
+    "especifica": 467.5
+   },
+   "Double Rare": {
+    "1em": 7.3,
+    "por_caixa": 4.9,
+    "especifica": 123.9
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 28.7,
+    "especifica": 31.4
+   },
+   "Reverse Rare": {
+    "1em": 3.8,
+    "por_caixa": 9.6,
+    "especifica": 93.9
+   },
+   "Reverse Uncommon": {
+    "1em": 1.3,
+    "por_caixa": 26.8,
+    "especifica": 93.9
+   },
+   "Reverse Common": {
+    "1em": 1.2,
+    "por_caixa": 31.0,
+    "especifica": 93.9
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 15,
+    "priced": "15",
+    "avg_usd": 26.71,
+    "ev_usd": 0.85
+   },
+   "Ultra Rare": {
+    "total": 26,
+    "priced": "26",
+    "avg_usd": 4.02,
+    "ev_usd": 0.27
+   },
+   "Illustration Rare": {
+    "total": 36,
+    "priced": "36",
+    "avg_usd": 38.76,
+    "ev_usd": 2.98
+   },
+   "Double Rare": {
+    "total": 17,
+    "priced": "17",
+    "avg_usd": 0.98,
+    "ev_usd": 0.13
+   },
+   "Rare": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 0.19,
+    "ev_usd": 0.15
+   },
+   "Uncommon": {
+    "total": 70,
+    "priced": "70",
+    "avg_usd": 0.13,
+    "ev_usd": 0.38
+   },
+   "Common": {
+    "total": 81,
+    "priced": "81",
+    "avg_usd": 0.13,
+    "ev_usd": 0.52
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 0.29,
+    "ev_usd": 0.08
+   },
+   "Reverse Uncommon": {
+    "total": 70,
+    "priced": "70",
+    "avg_usd": 0.22,
+    "ev_usd": 0.16
+   },
+   "Reverse Common": {
+    "total": 81,
+    "priced": "81",
+    "avg_usd": 0.21,
+    "ev_usd": 0.18
+   }
+  }
+ },
+ "sv3": {
+  "nome": "Obsidian Flames",
+  "code": "OBF",
+  "slug": "obsidian-flames",
+  "ev_booster_usd": 4.37,
+  "ev_box_usd": 157.4,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 31.9,
+    "por_caixa": 1.1,
+    "especifica": 191.7
+   },
+   "Ultra Rare": {
+    "1em": 15.1,
+    "por_caixa": 2.4,
+    "especifica": 181.0
+   },
+   "Illustration Rare": {
+    "1em": 13.2,
+    "por_caixa": 2.7,
+    "especifica": 157.9
+   },
+   "Double Rare": {
+    "1em": 7.3,
+    "por_caixa": 4.9,
+    "especifica": 154.3
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 28.7,
+    "especifica": 12.5
+   },
+   "Reverse Rare": {
+    "1em": 9.4,
+    "por_caixa": 3.8,
+    "especifica": 93.9
+   },
+   "Reverse Uncommon": {
+    "1em": 1.3,
+    "por_caixa": 28.4,
+    "especifica": 93.9
+   },
+   "Reverse Common": {
+    "1em": 1.0,
+    "por_caixa": 35.3,
+    "especifica": 93.9
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 6,
+    "priced": "6",
+    "avg_usd": 25.15,
+    "ev_usd": 0.79
+   },
+   "Ultra Rare": {
+    "total": 12,
+    "priced": "12",
+    "avg_usd": 3.41,
+    "ev_usd": 0.23
+   },
+   "Illustration Rare": {
+    "total": 12,
+    "priced": "12",
+    "avg_usd": 16.07,
+    "ev_usd": 1.22
+   },
+   "Double Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 1.16,
+    "ev_usd": 0.16
+   },
+   "Rare": {
+    "total": 10,
+    "priced": "10",
+    "avg_usd": 0.17,
+    "ev_usd": 0.13
+   },
+   "Uncommon": {
+    "total": 74,
+    "priced": "74",
+    "avg_usd": 0.16,
+    "ev_usd": 0.47
+   },
+   "Common": {
+    "total": 92,
+    "priced": "92",
+    "avg_usd": 0.15,
+    "ev_usd": 0.6
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 10,
+    "priced": "10",
+    "avg_usd": 0.24,
+    "ev_usd": 0.03
+   },
+   "Reverse Uncommon": {
+    "total": 74,
+    "priced": "74",
+    "avg_usd": 0.34,
+    "ev_usd": 0.26
+   },
+   "Reverse Common": {
+    "total": 92,
+    "priced": "92",
+    "avg_usd": 0.23,
+    "ev_usd": 0.22
+   }
+  }
+ },
+ "sv3pt5": {
+  "nome": "151",
+  "code": "MEW",
+  "slug": "151",
+  "ev_booster_usd": 13.08,
+  "ev_box_usd": 11.0,
+  "packs_box": null,
+  "cards_pack": null,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 32.2,
+    "por_caixa": null,
+    "especifica": 225.1
+   },
+   "Ultra Rare": {
+    "1em": 15.5,
+    "por_caixa": null,
+    "especifica": 248.4
+   },
+   "Illustration Rare": {
+    "1em": 11.8,
+    "por_caixa": null,
+    "especifica": 188.2
+   },
+   "Double Rare": {
+    "1em": 7.5,
+    "por_caixa": null,
+    "especifica": 90.4
+   },
+   "Rare": {
+    "1em": 1.2,
+    "por_caixa": null,
+    "especifica": 31.1
+   },
+   "Energy": {
+    "1em": 1.3,
+    "por_caixa": null,
+    "especifica": 10.6
+   },
+   "Energy (Holo)": {
+    "1em": 4.0,
+    "por_caixa": null,
+    "especifica": 32.2
+   },
+   "Reverse Rare": {
+    "1em": 3.3,
+    "por_caixa": null,
+    "especifica": 82.1
+   },
+   "Reverse Uncommon": {
+    "1em": 1.3,
+    "por_caixa": null,
+    "especifica": 82.1
+   },
+   "Reverse Common": {
+    "1em": 1.2,
+    "por_caixa": null,
+    "especifica": 82.1
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 7,
+    "priced": "7",
+    "avg_usd": 119.86,
+    "ev_usd": 3.73
+   },
+   "Ultra Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 12.72,
+    "ev_usd": 0.82
+   },
+   "Illustration Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 49.51,
+    "ev_usd": 4.21
+   },
+   "Double Rare": {
+    "total": 12,
+    "priced": "12",
+    "avg_usd": 2.53,
+    "ev_usd": 0.34
+   },
+   "Rare": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 1.34,
+    "ev_usd": 1.08
+   },
+   "Uncommon": {
+    "total": 62,
+    "priced": "62",
+    "avg_usd": 0.17,
+    "ev_usd": 0.51
+   },
+   "Common": {
+    "total": 66,
+    "priced": "66",
+    "avg_usd": 0.15,
+    "ev_usd": 0.6
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Energy (Holo)": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 1.72,
+    "ev_usd": 0.52
+   },
+   "Reverse Uncommon": {
+    "total": 62,
+    "priced": "62",
+    "avg_usd": 0.78,
+    "ev_usd": 0.59
+   },
+   "Reverse Common": {
+    "total": 66,
+    "priced": "66",
+    "avg_usd": 0.59,
+    "ev_usd": 0.48
+   }
+  }
+ },
+ "sv4": {
+  "nome": "Paradox Rift",
+  "code": "PAR",
+  "slug": "paradox-rift",
+  "ev_booster_usd": 3.96,
+  "ev_box_usd": 142.47,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 47.4,
+    "por_caixa": 0.8,
+    "especifica": 710.9
+   },
+   "Ultra Rare": {
+    "1em": 15.1,
+    "por_caixa": 2.4,
+    "especifica": 421.7
+   },
+   "Illustration Rare": {
+    "1em": 13.0,
+    "por_caixa": 2.8,
+    "especifica": 441.6
+   },
+   "Double Rare": {
+    "1em": 6.4,
+    "por_caixa": 5.6,
+    "especifica": 128.5
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 28.0,
+    "especifica": 34.7
+   },
+   "Reverse Rare": {
+    "1em": 3.2,
+    "por_caixa": 11.3,
+    "especifica": 85.7
+   },
+   "Reverse Uncommon": {
+    "1em": 1.6,
+    "por_caixa": 22.7,
+    "especifica": 85.7
+   },
+   "Reverse Common": {
+    "1em": 1.1,
+    "por_caixa": 34.0,
+    "especifica": 85.7
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 15,
+    "priced": "15",
+    "avg_usd": 20.85,
+    "ev_usd": 0.44
+   },
+   "Ultra Rare": {
+    "total": 28,
+    "priced": "28",
+    "avg_usd": 3.09,
+    "ev_usd": 0.21
+   },
+   "Illustration Rare": {
+    "total": 34,
+    "priced": "34",
+    "avg_usd": 21.99,
+    "ev_usd": 1.69
+   },
+   "Double Rare": {
+    "total": 20,
+    "priced": "20",
+    "avg_usd": 0.89,
+    "ev_usd": 0.14
+   },
+   "Rare": {
+    "total": 27,
+    "priced": "27",
+    "avg_usd": 0.2,
+    "ev_usd": 0.16
+   },
+   "Uncommon": {
+    "total": 54,
+    "priced": "54",
+    "avg_usd": 0.13,
+    "ev_usd": 0.39
+   },
+   "Common": {
+    "total": 81,
+    "priced": "81",
+    "avg_usd": 0.12,
+    "ev_usd": 0.46
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 27,
+    "priced": "27",
+    "avg_usd": 0.24,
+    "ev_usd": 0.08
+   },
+   "Reverse Uncommon": {
+    "total": 54,
+    "priced": "54",
+    "avg_usd": 0.24,
+    "ev_usd": 0.15
+   },
+   "Reverse Common": {
+    "total": 81,
+    "priced": "81",
+    "avg_usd": 0.19,
+    "ev_usd": 0.18
+   }
+  }
+ },
+ "sv4pt5": {
+  "nome": "Paldean Fates",
+  "code": "PAF",
+  "slug": "paldean-fates",
+  "ev_booster_usd": 7.79,
+  "ev_box_usd": 11.0,
+  "packs_box": null,
+  "cards_pack": null,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 58.1,
+    "por_caixa": null,
+    "especifica": 465.1
+   },
+   "Ultra Rare": {
+    "1em": 15.1,
+    "por_caixa": null,
+    "especifica": 75.6
+   },
+   "Illustration Rare": {
+    "1em": 13.9,
+    "por_caixa": null,
+    "especifica": 41.6
+   },
+   "Shiny Ultra Rare": {
+    "1em": 13.0,
+    "por_caixa": null,
+    "especifica": 155.4
+   },
+   "Shiny Rare": {
+    "1em": 3.9,
+    "por_caixa": null,
+    "especifica": 471.7
+   },
+   "Double Rare": {
+    "1em": 6.3,
+    "por_caixa": null,
+    "especifica": 62.9
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": null,
+    "especifica": 20.6
+   },
+   "Reverse Rare": {
+    "1em": 3.2,
+    "por_caixa": null,
+    "especifica": 51.8
+   },
+   "Reverse Uncommon": {
+    "1em": 2.1,
+    "por_caixa": null,
+    "especifica": 51.8
+   },
+   "Reverse Common": {
+    "1em": 1.3,
+    "por_caixa": null,
+    "especifica": 51.8
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 8,
+    "priced": "8",
+    "avg_usd": 197.25,
+    "ev_usd": 3.39
+   },
+   "Ultra Rare": {
+    "total": 5,
+    "priced": "5",
+    "avg_usd": 0.72,
+    "ev_usd": 0.05
+   },
+   "Illustration Rare": {
+    "total": 3,
+    "priced": "3",
+    "avg_usd": 2.72,
+    "ev_usd": 0.2
+   },
+   "Shiny Ultra Rare": {
+    "total": 12,
+    "priced": "12",
+    "avg_usd": 5.11,
+    "ev_usd": 0.39
+   },
+   "Shiny Rare": {
+    "total": 120,
+    "priced": "119",
+    "avg_usd": 8.85,
+    "ev_usd": 2.25
+   },
+   "Double Rare": {
+    "total": 10,
+    "priced": "10",
+    "avg_usd": 1.04,
+    "ev_usd": 0.17
+   },
+   "Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.16,
+    "ev_usd": 0.13
+   },
+   "Uncommon": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 0.12,
+    "ev_usd": 0.36
+   },
+   "Common": {
+    "total": 40,
+    "priced": "40",
+    "avg_usd": 0.08,
+    "ev_usd": 0.32
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.21,
+    "ev_usd": 0.07
+   },
+   "Reverse Uncommon": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 0.3,
+    "ev_usd": 0.14
+   },
+   "Reverse Common": {
+    "total": 40,
+    "priced": "40",
+    "avg_usd": 0.18,
+    "ev_usd": 0.14
+   }
+  }
+ },
+ "sv5": {
+  "nome": "Temporal Forces",
+  "code": "TEF",
+  "slug": "temporal-forces",
+  "ev_booster_usd": 5.66,
+  "ev_box_usd": 203.68,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 85.5,
+    "por_caixa": 0.4,
+    "especifica": 854.7
+   },
+   "Ultra Rare": {
+    "1em": 15.0,
+    "por_caixa": 2.4,
+    "especifica": 269.9
+   },
+   "Illustration Rare": {
+    "1em": 13.0,
+    "por_caixa": 2.8,
+    "especifica": 285.0
+   },
+   "ACE SPEC Rare": {
+    "1em": 20.0,
+    "por_caixa": 1.8,
+    "especifica": 140.0
+   },
+   "Double Rare": {
+    "1em": 5.9,
+    "por_caixa": 6.1,
+    "especifica": 89.1
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 27.5,
+    "especifica": 18.3
+   },
+   "Reverse Rare": {
+    "1em": 5.4,
+    "por_caixa": 6.7,
+    "especifica": 75.5
+   },
+   "Reverse Uncommon": {
+    "1em": 1.4,
+    "por_caixa": 26.2,
+    "especifica": 75.5
+   },
+   "Reverse Common": {
+    "1em": 1.1,
+    "por_caixa": 33.8,
+    "especifica": 75.5
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 10,
+    "priced": "10",
+    "avg_usd": 43.43,
+    "ev_usd": 0.51
+   },
+   "Ultra Rare": {
+    "total": 18,
+    "priced": "18",
+    "avg_usd": 6.36,
+    "ev_usd": 0.42
+   },
+   "Illustration Rare": {
+    "total": 22,
+    "priced": "22",
+    "avg_usd": 26.27,
+    "ev_usd": 2.03
+   },
+   "ACE SPEC Rare": {
+    "total": 7,
+    "priced": "7",
+    "avg_usd": 5.81,
+    "ev_usd": 0.29
+   },
+   "Double Rare": {
+    "total": 15,
+    "priced": "15",
+    "avg_usd": 1.02,
+    "ev_usd": 0.17
+   },
+   "Rare": {
+    "total": 14,
+    "priced": "14",
+    "avg_usd": 0.53,
+    "ev_usd": 0.4
+   },
+   "Uncommon": {
+    "total": 55,
+    "priced": "55",
+    "avg_usd": 0.16,
+    "ev_usd": 0.48
+   },
+   "Common": {
+    "total": 71,
+    "priced": "71",
+    "avg_usd": 0.18,
+    "ev_usd": 0.73
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 14,
+    "priced": "14",
+    "avg_usd": 0.34,
+    "ev_usd": 0.06
+   },
+   "Reverse Uncommon": {
+    "total": 55,
+    "priced": "55",
+    "avg_usd": 0.29,
+    "ev_usd": 0.21
+   },
+   "Reverse Common": {
+    "total": 71,
+    "priced": "71",
+    "avg_usd": 0.29,
+    "ev_usd": 0.28
+   }
+  }
+ },
+ "sv6": {
+  "nome": "Twilight Masquerade",
+  "code": "TWM",
+  "slug": "twilight-masquerade",
+  "ev_booster_usd": 4.65,
+  "ev_box_usd": 167.27,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 85.5,
+    "por_caixa": 0.4,
+    "especifica": 940.2
+   },
+   "Ultra Rare": {
+    "1em": 15.1,
+    "por_caixa": 2.4,
+    "especifica": 317.7
+   },
+   "Illustration Rare": {
+    "1em": 12.9,
+    "por_caixa": 2.8,
+    "especifica": 271.7
+   },
+   "ACE SPEC Rare": {
+    "1em": 19.8,
+    "por_caixa": 1.8,
+    "especifica": 118.6
+   },
+   "Double Rare": {
+    "1em": 5.9,
+    "por_caixa": 6.1,
+    "especifica": 82.7
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 27.5,
+    "especifica": 20.9
+   },
+   "Reverse Rare": {
+    "1em": 5.0,
+    "por_caixa": 7.3,
+    "especifica": 79.3
+   },
+   "Reverse Uncommon": {
+    "1em": 1.4,
+    "por_caixa": 25.0,
+    "especifica": 79.3
+   },
+   "Reverse Common": {
+    "1em": 1.0,
+    "por_caixa": 34.5,
+    "especifica": 79.3
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 11,
+    "priced": "11",
+    "avg_usd": 75.63,
+    "ev_usd": 0.88
+   },
+   "Ultra Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 4.28,
+    "ev_usd": 0.28
+   },
+   "Illustration Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 16.78,
+    "ev_usd": 1.3
+   },
+   "ACE SPEC Rare": {
+    "total": 6,
+    "priced": "6",
+    "avg_usd": 4.02,
+    "ev_usd": 0.2
+   },
+   "Double Rare": {
+    "total": 14,
+    "priced": "14",
+    "avg_usd": 1.13,
+    "ev_usd": 0.19
+   },
+   "Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.22,
+    "ev_usd": 0.17
+   },
+   "Uncommon": {
+    "total": 55,
+    "priced": "55",
+    "avg_usd": 0.14,
+    "ev_usd": 0.42
+   },
+   "Common": {
+    "total": 76,
+    "priced": "76",
+    "avg_usd": 0.15,
+    "ev_usd": 0.6
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.32,
+    "ev_usd": 0.07
+   },
+   "Reverse Uncommon": {
+    "total": 55,
+    "priced": "55",
+    "avg_usd": 0.34,
+    "ev_usd": 0.24
+   },
+   "Reverse Common": {
+    "total": 76,
+    "priced": "76",
+    "avg_usd": 0.25,
+    "ev_usd": 0.24
+   }
+  }
+ },
+ "sv6pt5": {
+  "nome": "Shrouded Fable",
+  "code": "SFA",
+  "slug": "shrouded-fable",
+  "ev_booster_usd": 5.61,
+  "ev_box_usd": 11.0,
+  "packs_box": null,
+  "cards_pack": null,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 87.2,
+    "por_caixa": null,
+    "especifica": 436.2
+   },
+   "Ultra Rare": {
+    "1em": 14.3,
+    "por_caixa": null,
+    "especifica": 143.0
+   },
+   "Illustration Rare": {
+    "1em": 13.0,
+    "por_caixa": null,
+    "especifica": 194.7
+   },
+   "ACE SPEC Rare": {
+    "1em": 20.0,
+    "por_caixa": null,
+    "especifica": 60.0
+   },
+   "Double Rare": {
+    "1em": 6.0,
+    "por_caixa": null,
+    "especifica": 36.0
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": null,
+    "especifica": 9.2
+   },
+   "Reverse Rare": {
+    "1em": 4.2,
+    "por_caixa": null,
+    "especifica": 29.7
+   },
+   "Reverse Uncommon": {
+    "1em": 1.5,
+    "por_caixa": null,
+    "especifica": 29.7
+   },
+   "Reverse Common": {
+    "1em": 1.1,
+    "por_caixa": null,
+    "especifica": 29.7
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 5,
+    "priced": "5",
+    "avg_usd": 30.23,
+    "ev_usd": 0.35
+   },
+   "Ultra Rare": {
+    "total": 10,
+    "priced": "10",
+    "avg_usd": 5.63,
+    "ev_usd": 0.39
+   },
+   "Illustration Rare": {
+    "total": 15,
+    "priced": "15",
+    "avg_usd": 33.69,
+    "ev_usd": 2.6
+   },
+   "ACE SPEC Rare": {
+    "total": 3,
+    "priced": "3",
+    "avg_usd": 0.74,
+    "ev_usd": 0.04
+   },
+   "Double Rare": {
+    "total": 6,
+    "priced": "6",
+    "avg_usd": 2.01,
+    "ev_usd": 0.33
+   },
+   "Rare": {
+    "total": 7,
+    "priced": "7",
+    "avg_usd": 0.18,
+    "ev_usd": 0.13
+   },
+   "Uncommon": {
+    "total": 20,
+    "priced": "20",
+    "avg_usd": 0.17,
+    "ev_usd": 0.5
+   },
+   "Common": {
+    "total": 28,
+    "priced": "28",
+    "avg_usd": 0.11,
+    "ev_usd": 0.43
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 7,
+    "priced": "7",
+    "avg_usd": 0.22,
+    "ev_usd": 0.05
+   },
+   "Reverse Uncommon": {
+    "total": 20,
+    "priced": "20",
+    "avg_usd": 0.47,
+    "ev_usd": 0.32
+   },
+   "Reverse Common": {
+    "total": 28,
+    "priced": "28",
+    "avg_usd": 0.23,
+    "ev_usd": 0.22
+   }
+  }
+ },
+ "sv7": {
+  "nome": "Stellar Crown",
+  "code": "SCR",
+  "slug": "stellar-crown",
+  "ev_booster_usd": 4.45,
+  "ev_box_usd": 160.17,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 90.1,
+    "por_caixa": 0.4,
+    "especifica": 540.5
+   },
+   "Ultra Rare": {
+    "1em": 14.8,
+    "por_caixa": 2.4,
+    "especifica": 163.0
+   },
+   "Illustration Rare": {
+    "1em": 12.8,
+    "por_caixa": 2.8,
+    "especifica": 166.9
+   },
+   "ACE SPEC Rare": {
+    "1em": 20.2,
+    "por_caixa": 1.8,
+    "especifica": 60.7
+   },
+   "Double Rare": {
+    "1em": 5.9,
+    "por_caixa": 6.1,
+    "especifica": 82.8
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 27.5,
+    "especifica": 19.6
+   },
+   "Reverse Rare": {
+    "1em": 4.5,
+    "por_caixa": 8.0,
+    "especifica": 67.4
+   },
+   "Reverse Uncommon": {
+    "1em": 1.7,
+    "por_caixa": 20.8,
+    "especifica": 67.4
+   },
+   "Reverse Common": {
+    "1em": 0.9,
+    "por_caixa": 37.9,
+    "especifica": 67.4
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 6,
+    "priced": "6",
+    "avg_usd": 32.57,
+    "ev_usd": 0.36
+   },
+   "Ultra Rare": {
+    "total": 11,
+    "priced": "11",
+    "avg_usd": 3.27,
+    "ev_usd": 0.22
+   },
+   "Illustration Rare": {
+    "total": 13,
+    "priced": "13",
+    "avg_usd": 25.1,
+    "ev_usd": 1.96
+   },
+   "ACE SPEC Rare": {
+    "total": 3,
+    "priced": "3",
+    "avg_usd": 0.45,
+    "ev_usd": 0.02
+   },
+   "Double Rare": {
+    "total": 14,
+    "priced": "14",
+    "avg_usd": 1.09,
+    "ev_usd": 0.18
+   },
+   "Rare": {
+    "total": 15,
+    "priced": "15",
+    "avg_usd": 0.17,
+    "ev_usd": 0.13
+   },
+   "Uncommon": {
+    "total": 39,
+    "priced": "39",
+    "avg_usd": 0.1,
+    "ev_usd": 0.31
+   },
+   "Common": {
+    "total": 71,
+    "priced": "71",
+    "avg_usd": 0.16,
+    "ev_usd": 0.63
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 15,
+    "priced": "15",
+    "avg_usd": 0.23,
+    "ev_usd": 0.05
+   },
+   "Reverse Uncommon": {
+    "total": 39,
+    "priced": "39",
+    "avg_usd": 0.28,
+    "ev_usd": 0.16
+   },
+   "Reverse Common": {
+    "total": 71,
+    "priced": "71",
+    "avg_usd": 0.33,
+    "ev_usd": 0.35
+   }
+  }
+ },
+ "sv8": {
+  "nome": "Surging Sparks",
+  "code": "SSP",
+  "slug": "surging-sparks",
+  "ev_booster_usd": 3.44,
+  "ev_box_usd": 123.73,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 87.0,
+    "por_caixa": 0.4,
+    "especifica": 956.5
+   },
+   "Ultra Rare": {
+    "1em": 14.8,
+    "por_caixa": 2.4,
+    "especifica": 311.6
+   },
+   "Illustration Rare": {
+    "1em": 13.0,
+    "por_caixa": 2.8,
+    "especifica": 299.9
+   },
+   "ACE SPEC Rare": {
+    "1em": 19.9,
+    "por_caixa": 1.8,
+    "especifica": 159.0
+   },
+   "Double Rare": {
+    "1em": 5.9,
+    "por_caixa": 6.1,
+    "especifica": 106.3
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": 27.5,
+    "especifica": 21.0
+   },
+   "Reverse Rare": {
+    "1em": 5.6,
+    "por_caixa": 6.5,
+    "especifica": 88.9
+   },
+   "Reverse Uncommon": {
+    "1em": 1.5,
+    "por_caixa": 24.7,
+    "especifica": 88.9
+   },
+   "Reverse Common": {
+    "1em": 1.0,
+    "por_caixa": 35.6,
+    "especifica": 88.9
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 11,
+    "priced": "11",
+    "avg_usd": 72.08,
+    "ev_usd": 0.83
+   },
+   "Ultra Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 3.41,
+    "ev_usd": 0.23
+   },
+   "Illustration Rare": {
+    "total": 23,
+    "priced": "23",
+    "avg_usd": 9.16,
+    "ev_usd": 0.7
+   },
+   "ACE SPEC Rare": {
+    "total": 8,
+    "priced": "8",
+    "avg_usd": 1.12,
+    "ev_usd": 0.06
+   },
+   "Double Rare": {
+    "total": 18,
+    "priced": "18",
+    "avg_usd": 1.29,
+    "ev_usd": 0.22
+   },
+   "Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.16,
+    "ev_usd": 0.13
+   },
+   "Uncommon": {
+    "total": 61,
+    "priced": "61",
+    "avg_usd": 0.11,
+    "ev_usd": 0.32
+   },
+   "Common": {
+    "total": 88,
+    "priced": "88",
+    "avg_usd": 0.09,
+    "ev_usd": 0.37
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.29,
+    "ev_usd": 0.05
+   },
+   "Reverse Uncommon": {
+    "total": 61,
+    "priced": "61",
+    "avg_usd": 0.29,
+    "ev_usd": 0.2
+   },
+   "Reverse Common": {
+    "total": 88,
+    "priced": "88",
+    "avg_usd": 0.21,
+    "ev_usd": 0.21
+   }
+  }
+ },
+ "sv8pt5": {
+  "nome": "Prismatic Evolutions",
+  "code": "PRE",
+  "slug": "prismatic-evolutions",
+  "ev_booster_usd": 5.9,
+  "ev_box_usd": 11.0,
+  "packs_box": null,
+  "cards_pack": null,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 45.0,
+    "por_caixa": null,
+    "especifica": 1441.4
+   },
+   "Ultra Rare": {
+    "1em": 13.4,
+    "por_caixa": null,
+    "especifica": 160.9
+   },
+   "ACE SPEC Rare": {
+    "1em": 21.4,
+    "por_caixa": null,
+    "especifica": 128.2
+   },
+   "Double Rare": {
+    "1em": 6.1,
+    "por_caixa": null,
+    "especifica": 151.4
+   },
+   "Rare": {
+    "1em": 1.3,
+    "por_caixa": null,
+    "especifica": 27.6
+   },
+   "Reverse Rare": {
+    "1em": 3.1,
+    "por_caixa": null,
+    "especifica": 64.7
+   },
+   "Reverse Uncommon": {
+    "1em": 2.0,
+    "por_caixa": null,
+    "especifica": 64.7
+   },
+   "Reverse Common": {
+    "1em": 1.4,
+    "por_caixa": null,
+    "especifica": 64.7
+   },
+   "Poké Ball Rare": {
+    "1em": 14.4,
+    "por_caixa": null,
+    "especifica": 302.1
+   },
+   "Poké Ball Uncommon": {
+    "1em": 9.2,
+    "por_caixa": null,
+    "especifica": 302.1
+   },
+   "Poké Ball Common": {
+    "1em": 6.6,
+    "por_caixa": null,
+    "especifica": 302.1
+   },
+   "Master Ball Rare": {
+    "1em": 64.8,
+    "por_caixa": null,
+    "especifica": 1361.8
+   },
+   "Master Ball Uncommon": {
+    "1em": 104.8,
+    "por_caixa": null,
+    "especifica": 1361.8
+   },
+   "Master Ball Common": {
+    "1em": 41.3,
+    "por_caixa": null,
+    "especifica": 1361.8
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 32,
+    "priced": "32",
+    "avg_usd": 154.6,
+    "ev_usd": 3.43
+   },
+   "Ultra Rare": {
+    "total": 12,
+    "priced": "12",
+    "avg_usd": 0.65,
+    "ev_usd": 0.05
+   },
+   "ACE SPEC Rare": {
+    "total": 6,
+    "priced": "6",
+    "avg_usd": 0.48,
+    "ev_usd": 0.02
+   },
+   "Double Rare": {
+    "total": 25,
+    "priced": "25",
+    "avg_usd": 2.25,
+    "ev_usd": 0.37
+   },
+   "Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 0.24,
+    "ev_usd": 0.18
+   },
+   "Uncommon": {
+    "total": 33,
+    "priced": "33",
+    "avg_usd": 0.12,
+    "ev_usd": 0.36
+   },
+   "Common": {
+    "total": 46,
+    "priced": "46",
+    "avg_usd": 0.1,
+    "ev_usd": 0.41
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 0.3,
+    "ev_usd": 0.1
+   },
+   "Reverse Uncommon": {
+    "total": 33,
+    "priced": "33",
+    "avg_usd": 0.2,
+    "ev_usd": 0.1
+   },
+   "Reverse Common": {
+    "total": 46,
+    "priced": "46",
+    "avg_usd": 0.17,
+    "ev_usd": 0.12
+   },
+   "Poké Ball Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 1.05,
+    "ev_usd": 0.07
+   },
+   "Poké Ball Uncommon": {
+    "total": 33,
+    "priced": "33",
+    "avg_usd": 0.43,
+    "ev_usd": 0.05
+   },
+   "Poké Ball Common": {
+    "total": 46,
+    "priced": "46",
+    "avg_usd": 0.42,
+    "ev_usd": 0.06
+   },
+   "Master Ball Rare": {
+    "total": 21,
+    "priced": "21",
+    "avg_usd": 20.56,
+    "ev_usd": 0.32
+   },
+   "Master Ball Uncommon": {
+    "total": 13,
+    "priced": "13",
+    "avg_usd": 4.94,
+    "ev_usd": 0.05
+   },
+   "Master Ball Common": {
+    "total": 33,
+    "priced": "33",
+    "avg_usd": 4.08,
+    "ev_usd": 0.1
+   }
+  }
+ },
+ "sv9": {
+  "nome": "Journey Together",
+  "code": "JTG",
+  "slug": "journey-together",
+  "ev_booster_usd": 3.32,
+  "ev_box_usd": 119.4,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 86.2,
+    "por_caixa": 0.4,
+    "especifica": 517.2
+   },
+   "Ultra Rare": {
+    "1em": 15.3,
+    "por_caixa": 2.4,
+    "especifica": 168.2
+   },
+   "Illustration Rare": {
+    "1em": 11.8,
+    "por_caixa": 3.1,
+    "especifica": 129.4
+   },
+   "Double Rare": {
+    "1em": 4.9,
+    "por_caixa": 7.3,
+    "especifica": 78.9
+   },
+   "Rare": {
+    "1em": 1.4,
+    "por_caixa": 26.3,
+    "especifica": 21.9
+   },
+   "Reverse Rare": {
+    "1em": 4.7,
+    "por_caixa": 7.6,
+    "especifica": 75.4
+   },
+   "Reverse Uncommon": {
+    "1em": 1.8,
+    "por_caixa": 20.0,
+    "especifica": 75.4
+   },
+   "Reverse Common": {
+    "1em": 0.9,
+    "por_caixa": 40.6,
+    "especifica": 75.4
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 6,
+    "priced": "6",
+    "avg_usd": 52.15,
+    "ev_usd": 0.6
+   },
+   "Ultra Rare": {
+    "total": 11,
+    "priced": "11",
+    "avg_usd": 2.24,
+    "ev_usd": 0.15
+   },
+   "Illustration Rare": {
+    "total": 11,
+    "priced": "11",
+    "avg_usd": 8.6,
+    "ev_usd": 0.73
+   },
+   "Double Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.88,
+    "ev_usd": 0.18
+   },
+   "Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.23,
+    "ev_usd": 0.17
+   },
+   "Uncommon": {
+    "total": 42,
+    "priced": "42",
+    "avg_usd": 0.09,
+    "ev_usd": 0.26
+   },
+   "Common": {
+    "total": 85,
+    "priced": "85",
+    "avg_usd": 0.13,
+    "ev_usd": 0.53
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 16,
+    "priced": "16",
+    "avg_usd": 0.5,
+    "ev_usd": 0.11
+   },
+   "Reverse Uncommon": {
+    "total": 42,
+    "priced": "42",
+    "avg_usd": 0.35,
+    "ev_usd": 0.19
+   },
+   "Reverse Common": {
+    "total": 85,
+    "priced": "85",
+    "avg_usd": 0.28,
+    "ev_usd": 0.32
+   }
+  }
+ },
+ "sv10": {
+  "nome": "Destined Rivals",
+  "code": "DRI",
+  "slug": "destined-rivals",
+  "ev_booster_usd": 4.64,
+  "ev_box_usd": 167.07,
+  "packs_box": 36,
+  "cards_pack": 11,
+  "pull_rates": {
+   "Special Illustration Rare": {
+    "1em": 94.3,
+    "por_caixa": 0.4,
+    "especifica": 1037.7
+   },
+   "Ultra Rare": {
+    "1em": 15.6,
+    "por_caixa": 2.3,
+    "especifica": 344.3
+   },
+   "Illustration Rare": {
+    "1em": 12.1,
+    "por_caixa": 3.0,
+    "especifica": 277.4
+   },
+   "Double Rare": {
+    "1em": 5.0,
+    "por_caixa": 7.1,
+    "especifica": 85.7
+   },
+   "Rare": {
+    "1em": 1.4,
+    "por_caixa": 26.6,
+    "especifica": 24.4
+   },
+   "Reverse Rare": {
+    "1em": 4.8,
+    "por_caixa": 7.5,
+    "especifica": 86.9
+   },
+   "Reverse Uncommon": {
+    "1em": 1.4,
+    "por_caixa": 25.7,
+    "especifica": 86.9
+   },
+   "Reverse Common": {
+    "1em": 1.0,
+    "por_caixa": 35.2,
+    "especifica": 86.9
+   }
+  },
+  "ev_breakdown": {
+   "Special Illustration Rare": {
+    "total": 11,
+    "priced": "11",
+    "avg_usd": 124.46,
+    "ev_usd": 1.32
+   },
+   "Ultra Rare": {
+    "total": 22,
+    "priced": "22",
+    "avg_usd": 4.04,
+    "ev_usd": 0.26
+   },
+   "Illustration Rare": {
+    "total": 23,
+    "priced": "23",
+    "avg_usd": 12.78,
+    "ev_usd": 1.06
+   },
+   "Double Rare": {
+    "total": 17,
+    "priced": "17",
+    "avg_usd": 0.73,
+    "ev_usd": 0.14
+   },
+   "Rare": {
+    "total": 18,
+    "priced": "18",
+    "avg_usd": 0.25,
+    "ev_usd": 0.18
+   },
+   "Uncommon": {
+    "total": 62,
+    "priced": "62",
+    "avg_usd": 0.14,
+    "ev_usd": 0.43
+   },
+   "Common": {
+    "total": 85,
+    "priced": "85",
+    "avg_usd": 0.12,
+    "ev_usd": 0.49
+   },
+   "Energy": {
+    "total": 8,
+    "priced": "—",
+    "avg_usd": null,
+    "ev_usd": null
+   },
+   "Reverse Rare": {
+    "total": 18,
+    "priced": "18",
+    "avg_usd": 0.37,
+    "ev_usd": 0.08
+   },
+   "Reverse Uncommon": {
+    "total": 62,
+    "priced": "62",
+    "avg_usd": 0.35,
+    "ev_usd": 0.25
+   },
+   "Reverse Common": {
+    "total": 85,
+    "priced": "85",
+    "avg_usd": 0.26,
+    "ev_usd": 0.25
+   }
+  }
+ }
+}

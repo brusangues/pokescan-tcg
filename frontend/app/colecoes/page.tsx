@@ -96,7 +96,9 @@ export default function ColecoesPage() {
         <h1 className="text-2xl font-bold text-slate-800 mb-1">Coleções — EV do booster</h1>
         <p className="text-sm text-slate-500 mb-4">
           Valor esperado (R$) de um booster de cada coleção, calculado com os preços atuais da Liga
-          (Σ probabilidade de pull × preço médio das cartas da raridade). Fonte das taxas: cronograma oficial de pull rates.
+          (Σ probabilidade de pull × preço médio das cartas da raridade). Pull rates dos estudos
+          internacionais (TCGPlayer/ThePriceDex) ajustados para o booster PT-BR de 6 cartas
+          (÷2 — o booster EN tem 11 cartas).
         </p>
 
         {/* Slider do preço do booster */}
