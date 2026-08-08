@@ -12,6 +12,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - **Ideia**: nova API `/api/search?embedding=...` que recebe o embedding da foto e retorna top-k por similaridade coseno contra a base completa; scanner passa a buscar na base inteira
 - **Ganho**: de 5 para 20k cartas identificáveis
 - Tags: frontend, embeddings, scanner
+- **Status**: ✅ **SUPERADO pela Fase 1 do scanner 100% browser** (Ago/2026) — DINOv2-small uint8 + índice PCA128 fp16 de 20.426 cartas no browser (`dv_model_uint8.onnx`, `index_pca128_fp16.bin`); sem API (export estático). Ver seção Scanner na skill
 
 ### [P0] 2. ⚠️ Typo "Inlacionada" faz as inflacionadas SUMIREM do frontend (auditoria 05/08)
 - `script/score_apos_crawl.py` grava a categoria `💀 Inlacionada` (sem "f", 3 ocorrências: linhas ~393, ~415, ~435) mas TODOS os filtros do frontend buscam `💀 Inflacionada` (com "f"): `/api/hits`, `/api/snapshots`, `/api/dashboard`
@@ -53,7 +54,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - Refresh do cache ptcg roda semanalmente (adiciona sets novos como me5), mas os modelos USD/BRL só são re-treinados manualmente (`script/retrain_models.py`)
 - **Ideia**: adicionar `retrain_models.py` ao cron semanal (depois do refresh, antes do snapshot) — ou rodar mensalmente
 - Tags: backend, modelagem, crons
-- **Status**: ✅ corrigido em 8167f16 (dicionário explícito TRAINER_GENDER)
+- **Status**: ⏳ pendente (o ✅ abaixo era cópia do P1.7)
 
 ### [P1] 7. `infer_trainer_gender` retorna gênero errado para vários treinadores
 - `pokemon_price_monitor.py`: 'Hop', 'Bede', 'Nanu' aparecem nas listas masculina E feminina → a feminina ganha → retornam `female` (são masculinos)
@@ -103,7 +104,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - `data/liga/cache_enrich/cache_enrich_YYYYMMDD.json` versionado no git (lixo transitório do crawler que acumula diariamente)
 - `fetch_result.json` na raiz (2 cartas, obsoleto) vs `frontend/public/fetch_result.json` (29 cartas, atual) — duplicata stale versionada
 - `pokéscan-tcg.zip` ainda rastreado no git (marcado D no working tree, commit pendente)
-- **Fix**: script de limpeza (prune órfãos + git rm dos lixos) rodando no cron ou manual
+- **Status**: ✅ `script/limpar_orfao.py` (Ago/2026) — 83 embeddings + 83 imagens órfãs removidos (base32 20.509→20.426, igual ao índice do scanner); `fetch_result.json` raiz e `cache_enrich_20260803.json` removidos do git; `pokéscan-tcg.zip` já não estava tracked
 
 ### [P2] 17. Links para a Liga abrirem em nova aba + preço USD na seção do modelo
 - **Pedido do usuário (07/08)**: todos os links externos para a Liga Pokémon devem abrir em **nova aba** (`target="_blank" rel="noopener noreferrer"`) — verificado: já é o caso nos 2 lugares (ScoredCardRow, CardDetailContent); manter o padrão em links novos
@@ -164,6 +165,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - Se o P0.1 (busca na base completa) for implementado, os embeddings do browser NÃO comparam com os do servidor
 - **Fix**: usar modelo DINOv2 no browser (Xenova/dinov2-base) ou fazer a extração no servidor
 - Tags: frontend, scanner, embeddings
+- **Status**: ✅ **SUPERADO** — o scanner browser usa DINOv2-small uint8 (onnxruntime-web) com índice PCA128 fp16; incompatibilidade resolvida por construção (mesmo modelo treina e roda no browser)
 
 ### [P3] 25. Typos cosméticos em prints (auditoria 05/08)
 - `score_apos_crawl.py` linha ~435: "INF vancadas" (sem espaços), linha ~436: `{"Cape":30s}` em vez de `{"Carta":30s}`, linha ~393: "Inlacionada" (ligado ao P0.2)
@@ -183,6 +185,8 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 
 | Item | Commit |
 |---|---|
+| P2.14+P0.1+P3.24: limpeza de órfãos (83+83) + scanner browser superou P0.1/P3.24 | `—` (ver BACKLOG) |
+| P2.17: links Liga nova aba + preço USD na seção do modelo | `18acbf8` |
 | P1.7+P1.8+P2.15+P2.16: gênero treinadores, BRL snapshot, mapping, JP | `8167f16` |
 | Página /features (debug: predições + todas as features) | `b56162a` |
 | P0.2-P0.5: inflacionadas visíveis + build TS + cache mtime + paths | `44a2f3e` |
