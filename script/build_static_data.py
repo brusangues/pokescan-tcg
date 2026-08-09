@@ -236,6 +236,52 @@ def dashboard_payload() -> dict:
     sets = sorted([{'sigla': s, 'count': n} for s, n in set_counts.items()],
                   key=lambda x: -x['count'])[:10]
 
+    # ── P2.13: métricas novas ──────────────────────────────────────────────
+    # 1. Evolução temporal de oportunidades (hits diários; 1 ponto POR DIA = último do dia)
+    serie_por_dia = {}
+    for f in reversed(scored_files('scored_hits')):
+        try:
+            cards = parse_scored_csv(f)
+        except Exception:
+            continue
+        if not cards:
+            continue
+        data_iso = f'{f.name[12:16]}-{f.name[16:18]}-{f.name[18:20]}'
+        serie_por_dia[data_iso] = {
+            'data': data_iso,
+            'sub': len([c for c in cards if c['oportunidade'] == '🔥 Subvalorizada']),
+            'infla': len([c for c in cards if c['oportunidade'] == '💀 Inflacionada']),
+            'leve': len([c for c in cards if c['oportunidade'] == '👍 Leve Desconto']),
+            'total': len(cards),
+        }
+    serie = sorted(serie_por_dia.values(), key=lambda x: x['data'])
+
+    # 2. Top sets por upside MÉDIO (mín. 3 cartas no agregado)
+    set_upside = {}
+    for c in all_cards:
+        if c['sigla']:
+            set_upside.setdefault(c['sigla'], []).append(c['upside'])
+    sets_upside = sorted(
+        [{'sigla': s, 'n': len(v), 'media': round(sum(v) / len(v), 1)}
+         for s, v in set_upside.items() if len(v) >= 3],
+        key=lambda x: -x['media'])[:10]
+
+    # 3. Distribuição de iCO (vendedores por carta)
+    ico_buckets = {'0': 0, '1': 0, '2-3': 0, '4-10': 0, '11+': 0}
+    for c in all_cards:
+        ico = c['iCO'] or 0
+        if ico == 0:
+            ico_buckets['0'] += 1
+        elif ico == 1:
+            ico_buckets['1'] += 1
+        elif ico <= 3:
+            ico_buckets['2-3'] += 1
+        elif ico <= 10:
+            ico_buckets['4-10'] += 1
+        else:
+            ico_buckets['11+'] += 1
+    distribuicao_ico = [{'range': k, 'count': v} for k, v in ico_buckets.items()]
+
     return {
         'hits': {
             'meta': meta(hits_files, hits_data),
@@ -256,6 +302,9 @@ def dashboard_payload() -> dict:
         },
         'distribuicao': distribuicao,
         'sets': sets,
+        'serieOportunidades': serie,
+        'setsUpside': sets_upside,
+        'distribuicaoIco': distribuicao_ico,
     }
 
 

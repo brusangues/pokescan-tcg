@@ -20,6 +20,43 @@ interface ScoredCard {
   moeda: string;
 }
 
+/** Gráfico de linhas SVG puro (sem lib) — subvalorizadas/inflacionadas/leves por dia. */
+function OportunidadesChart({ serie }: { serie: any[] }) {
+  const W = 720, H = 240, P = 28;
+  const max = Math.max(...serie.flatMap((s: any) => [s.sub, s.infla, s.leve]), 1);
+  const x = (i: number) => P + (i / Math.max(serie.length - 1, 1)) * (W - P * 2);
+  const y = (v: number) => H - P - (v / max) * (H - P * 2);
+  const path = (campo: string) =>
+    serie.map((s: any, i: number) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(s[campo]).toFixed(1)}`).join(' ');
+  const curto = (d: string) => `${d.slice(8, 10)}/${d.slice(5, 7)}`;
+  return (
+    <div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto">
+        {/* grid */}
+        {[0, 0.25, 0.5, 0.75, 1].map((f) => (
+          <line key={f} x1={P} x2={W - P} y1={y(max * f)} y2={y(max * f)} stroke="#f1f5f9" strokeWidth={1} />
+        ))}
+        {/* linhas */}
+        <path d={path('sub')} fill="none" stroke="#16a34a" strokeWidth={2.5} strokeLinejoin="round" />
+        <path d={path('leve')} fill="none" stroke="#f59e0b" strokeWidth={2} strokeLinejoin="round" />
+        <path d={path('infla')} fill="none" stroke="#dc2626" strokeWidth={2.5} strokeLinejoin="round" />
+        {/* eixo X */}
+        {serie.map((s: any, i: number) => (
+          <text key={s.data} x={x(i)} y={H - 8} fontSize={9} fill="#94a3b8" textAnchor="middle">
+            {curto(s.data)}
+          </text>
+        ))}
+        <text x={P} y={14} fontSize={10} fill="#94a3b8">{max} cartas</text>
+      </svg>
+      <div className="flex gap-4 mt-2 text-xs text-gray-500">
+        <span className="inline-flex items-center gap-1"><span className="w-3 h-0.5 bg-green-600 inline-block" /> Subvalorizadas</span>
+        <span className="inline-flex items-center gap-1"><span className="w-3 h-0.5 bg-amber-500 inline-block" /> Leve desconto</span>
+        <span className="inline-flex items-center gap-1"><span className="w-3 h-0.5 bg-red-600 inline-block" /> Inflacionadas</span>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -72,6 +109,9 @@ export default function DashboardPage() {
   if (!data) return null;
 
   const { hits, snapshot, distribuicao, sets } = data;
+  const serieOportunidades: any[] = data.serieOportunidades || [];
+  const setsUpside: any[] = data.setsUpside || [];
+  const distribuicaoIco: any[] = data.distribuicaoIco || [];
   const maxDist = Math.max(...distribuicao.map((d: any) => d.count), 1);
 
   // Mini card de métrica
@@ -266,6 +306,91 @@ export default function DashboardPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── Seção 5: Evolução temporal de oportunidades (P2.13) ── */}
+        {serieOportunidades.length > 1 && (
+          <section>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-gray-500" />
+              Evolução de Oportunidades (hits por dia)
+            </h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+              <OportunidadesChart serie={serieOportunidades} />
+            </div>
+          </section>
+        )}
+
+        {/* ── Seção 6: Top sets por upside médio (P2.13) ── */}
+        {setsUpside.length > 0 && (
+          <section>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-gray-500" />
+              Top Sets por Upside Médio (hits + snapshot)
+            </h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+              {(() => {
+                const maxMedia = Math.max(...setsUpside.map((s: any) => s.media), 1);
+                return (
+                  <div className="space-y-2">
+                    {setsUpside.map((s: any, i: number) => {
+                      const positivo = s.media >= 0;
+                      return (
+                        <div key={s.sigla} className="flex items-center gap-3">
+                          <span className="text-xs text-gray-400 w-5 text-right shrink-0">{i + 1}</span>
+                          <span className="text-sm font-mono font-semibold text-gray-800 w-16 shrink-0">{s.sigla}</span>
+                          <div className="flex-1 h-5 bg-gray-100 rounded-md overflow-hidden">
+                            <div
+                              className={`h-full rounded-md transition-all duration-500 ${positivo ? 'bg-green-500' : 'bg-red-500'}`}
+                              style={{ width: `${Math.max(Math.abs(s.media) / maxMedia * 100, 2)}%` }}
+                            />
+                          </div>
+                          <span className={`text-xs font-semibold w-20 text-right shrink-0 ${positivo ? 'text-green-600' : 'text-red-600'}`}>
+                            {s.media > 0 ? '+' : ''}{s.media.toFixed(1)}%
+                          </span>
+                          <span className="text-xs text-gray-400 w-12 text-right shrink-0">{s.n} cartas</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </div>
+          </section>
+        )}
+
+        {/* ── Seção 7: Distribuição de iCO (P2.13) ── */}
+        {distribuicaoIco.length > 0 && (
+          <section>
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-gray-500" />
+              Distribuição de Vendedores (iCO)
+            </h2>
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+              {(() => {
+                const maxIco = Math.max(...distribuicaoIco.map((d: any) => d.count), 1);
+                return (
+                  <div className="space-y-2">
+                    {distribuicaoIco.map((d: any) => (
+                      <div key={d.range} className="flex items-center gap-3">
+                        <span className="text-xs font-mono text-gray-500 w-10 text-right shrink-0">{d.range}</span>
+                        <span className="text-xs text-gray-400 w-20 shrink-0">
+                          {d.range === '0' ? 'sem vendedores' : d.range === '1' ? '1 vendedor' : 'vendedores'}
+                        </span>
+                        <div className="flex-1 h-6 bg-gray-100 rounded-md overflow-hidden">
+                          <div
+                            className="h-full rounded-md bg-indigo-500 transition-all duration-500"
+                            style={{ width: `${Math.max(d.count / maxIco * 100, 2)}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-medium text-gray-600 w-8 shrink-0">{d.count}</span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
           </section>
         )}
