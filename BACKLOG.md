@@ -98,6 +98,7 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 ### [P2] 13. Dashboard com mais métricas
 - `/dashboard` tem métricas agregadas; **Ideia**: adicionar evolução temporal de oportunidades (subvalorizadas por dia), top sets por upside médio, distribuição de iCO
 - Tags: frontend, dashboard
+- **Status**: ✅ `23ca399` — série temporal de oportunidades (1 ponto/dia), top 10 sets por upside médio (mín. 3 cartas) e distribuição de iCO em buckets; gráfico SVG de linhas + barras, campos com fallback
 
 ### [P2] 14. Limpar dados órfãos e duplicatas (auditoria 05/08)
 - **83 embeddings + 83 imagens órfãs** no cache (cartas que saíram do ptcg_cards_cache — ex. ids renomeados); 53 cartas do cache sem imagem/embedding (IDs especiais sem URL)
@@ -178,6 +179,13 @@ Centraliza melhorias, bugs e ideias pendentes. Prioridade: P0 (crítico) → P1 
 - **O que falta no jsfeat**: não tem `approxPolyDP`/`warpPerspective` nativos — precisaria implementar (Douglas-Peucker ~40 linhas; transform de perspectiva via math manual ou rasterização) — e validar razão de aspecto igual
 - **Plano**: só se o download virar problema real (GitHub Pages/dados móveis); manter OpenCV.js como implementação canônica da Fase 1
 - Tags: scanner, clipping, frontend, P3
+
+### [P3] 27. Explicabilidade do modelo via SHAP values (pedido do usuário 07/08)
+- **Ideia**: explicar as predições de preço (USD/BRL) mostrando a contribuição de cada feature por carta (SHAP) — identificar por que o modelo considera uma carta subvalorizada/inflacionada (ex: raridade, set, iCO, embeddings puxando para cima/baixo)
+- **Como**: `shap.TreeExplainer` no CatBoost (`.get_feature_importance(type='ShapValues')` é nativo) → salvar top-N features por carta no `/features` ou bloco "Previsão do Modelo" do `/card`
+- **Ganho**: confiança do usuário nas recomendações; diagnóstica viés (ex: se o modelo só olha raridade)
+- **Custo**: SHAP por carta é barato no CatBoost; o volume é o dump (features × cartas) — pode ser só top-5 por carta
+- Tags: modelagem, explicabilidade, frontend
 
 ---
 
