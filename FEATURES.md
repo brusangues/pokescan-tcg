@@ -59,6 +59,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Dashboard ampliado** — evolução de oportunidades por dia (SVG), top 10 sets por upside médio, distribuição de iCO — P2.13 | `23ca399` |
 | Nome do set no /snapshot — P2.9 | `6ca38e0` |
 | Histórico de preços por carta (gráfico SVG real vs predito) — P2.11 | `6ca38e0` |
+| **Explicabilidade (P3.27)** — importance por grupo (Cardmarket 68%/USD, iCO no BRL) + SHAP values por carta na página /features (top-4 features em R$/$ com barras) — P3.27 | `2d78238` + `6690db8` |
 
 ---
 
