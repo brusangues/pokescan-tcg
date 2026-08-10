@@ -522,6 +522,33 @@ def changelog_payload() -> dict:
     }
 
 
+def features_payload() -> dict:
+    """/features estático: rows do predicoes_latest.csv (P3.27 — agora sem API)."""
+    f = REPO / 'data' / 'features' / 'predicoes_latest.csv'
+    if not f.exists():
+        return {'rows': [], 'cols': [], 'geradoEm': None}
+    with open(f, encoding='utf-8', newline='') as fh:
+        rows = list(csv.DictReader(fh))
+    cols = list(rows[0].keys()) if rows else []
+    mtime = datetime.fromtimestamp(f.stat().st_mtime).astimezone().isoformat()
+    return {'rows': rows, 'cols': cols, 'geradoEm': mtime}
+
+
+def features_shap_payload() -> dict:
+    """/features SHAP por carta — só as cartas do predicoes_latest.csv (o JSON
+    completo tem 20.479 cartas / 14 MB; aqui ~1.2k)."""
+    f = REPO / 'data' / 'features' / 'shap_cartas.json'
+    if not f.exists():
+        return {}
+    full = json.loads(f.read_text(encoding='utf-8'))
+    pred = REPO / 'data' / 'features' / 'predicoes_latest.csv'
+    if not pred.exists():
+        return {}
+    with open(pred, encoding='utf-8', newline='') as fh:
+        ids = {r['id'] for r in csv.DictReader(fh) if r.get('id')}
+    return {cid: full[cid] for cid in ids if cid in full}
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     payloads = {
@@ -533,6 +560,8 @@ def main():
         'historico.json': historico_payload,
         'set_map.json': set_map_inv,
         'changelog.json': changelog_payload,
+        'features.json': features_payload,
+        'features_shap.json': features_shap_payload,
     }
     total = 0
     for name, fn in payloads.items():
