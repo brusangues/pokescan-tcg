@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalLink, ImageOff } from 'lucide-react';
+import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalLink, ImageOff, X, Type } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 import ScannerEngine, { ScanResult } from '@/app/lib/scannerEngine';
 import { detectCardQuad, warpCard } from '@/app/lib/cardClip';
 import { getBasePath } from '@/app/lib/basePath';
+import { loadCards } from '@/app/lib/cardLookup';
 import Image from 'next/image';
 
 /** Carrega um dataURL em um elemento <img> (para processar no OpenCV). */
@@ -18,6 +19,68 @@ function loadImage(dataUrl: string): Promise<HTMLImageElement> {
   });
 }
 
+/** Resultado de carta (imagem ou texto) — mesmo layout da busca por imagem. */
+function CardResult({ card, score, rank }: { card: any; score?: number; rank?: number }) {
+  return (
+    <div
+      className={`flex gap-4 bg-white rounded-xl border p-4 ${
+        rank === 1 ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-gray-100 opacity-90'
+      }`}
+    >
+      <div className="relative w-20 h-28 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+        {card.img ? (
+          <Image src={card.img} alt={card.n || card.nome} fill className="object-contain" unoptimized />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-300">
+            <ImageOff className="w-6 h-6" />
+          </div>
+        )}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2">
+          <h4 className="font-bold text-gray-900 truncate">{card.n || card.nome}</h4>
+          {score != null && (
+            <span className={`text-xs font-mono px-2 py-0.5 rounded-full shrink-0 ${
+              rank === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600'
+            }`}>
+              {rank === 1 ? '✓ Melhor' : `#${rank}`} · {(score * 100).toFixed(1)}%
+            </span>
+          )}
+        </div>
+        <p className="text-sm text-gray-500 truncate">
+          {card.sn || card.set_name} · {card.num || card.sNumber}
+        </p>
+        <div className="flex items-center justify-between mt-2 text-sm">
+          <span className="text-xs text-gray-400">{card.r || '—'}</span>
+          {card.p != null && (
+            <span className="font-medium text-emerald-600">${card.p.toFixed(2)}</span>
+          )}
+        </div>
+        {/* <a> com href prefixado manualmente — next/link duplica basePath em hrefs com query */}
+        <a
+          href={`${getBasePath()}/card?set=${encodeURIComponent(card.s || card.set_id)}&num=${encodeURIComponent(card.num || card.sNumber)}&nome=${encodeURIComponent(card.n || card.nome)}`}
+          className="inline-flex items-center gap-1 mt-2 text-xs text-indigo-600 hover:underline"
+        >
+          <ExternalLink className="w-3 h-3" /> Ver detalhes e escoragem
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/** Rank de busca por texto: 0 exato, 1 prefixo/número, 2 contém nome, 3 coleção/id, 4 raridade, -1 sem match. */
+function rankCard(c: any, ql: string): number {
+  const n = (c.n || '').toLowerCase();
+  if (n === ql) return 0;
+  if (n.startsWith(ql)) return 1;
+  if ((c.num || '') === ql) return 1;
+  if (n.includes(ql)) return 2;
+  if ((c.sn || '').toLowerCase().includes(ql)) return 3;
+  if ((c.id || '').toLowerCase().includes(ql)) return 3;
+  if ((c.r || '').toLowerCase().includes(ql)) return 4;
+  return -1;
+}
+
 export default function Scanner() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'scanning' | 'error'>('idle');
   const [progress, setProgress] = useState(0);
@@ -28,7 +91,18 @@ export default function Scanner() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cardCount, setCardCount] = useState(0);
   const [clipped, setClipped] = useState<boolean | null>(null);
+
+  // Busca por texto (independe do scanner/modelo)
+  const [textQuery, setTextQuery] = useState('');
+  const [textResults, setTextResults] = useState<any[] | null>(null);
+  const [textTotal, setTextTotal] = useState(0);
+  const [textLoading, setTextLoading] = useState(false);
+
+  // Auto crop (OpenCV)
+  const [autoCrop, setAutoCrop] = useState(true);
+
   const loadRef = useRef<Promise<void> | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Cleanup preview URL
   useEffect(() => {
@@ -36,6 +110,39 @@ export default function Scanner() {
       if (preview) URL.revokeObjectURL(preview);
     };
   }, [preview]);
+
+  // Busca por texto com debounce — procura em nome, número, coleção, id e raridade
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    const q = textQuery.trim();
+    if (q.length < 2) {
+      setTextResults(null);
+      setTextTotal(0);
+      return;
+    }
+    setTextLoading(true);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const cards = await loadCards();
+        const ql = q.toLowerCase();
+        const hits: { c: any; rank: number }[] = [];
+        for (const c of cards.values()) {
+          const rk = rankCard(c, ql);
+          if (rk >= 0) hits.push({ c, rank: rk });
+        }
+        hits.sort((a, b) => a.rank - b.rank);
+        setTextTotal(hits.length);
+        setTextResults(hits.slice(0, 10).map(h => h.c));
+      } catch (e) {
+        console.error('Busca por texto falhou:', e);
+        setTextResults([]);
+        setTextTotal(0);
+      } finally {
+        setTextLoading(false);
+      }
+    }, 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [textQuery]);
 
   const startLoad = useCallback(async () => {
     if (loadRef.current) return;
@@ -76,22 +183,24 @@ export default function Scanner() {
       try {
         const engine = ScannerEngine.instance;
 
-        // 1. Clipping: detecta a carta e corrige a perspectiva
+        // 1. Clipping (OpenCV) — só se auto crop estiver ligado
         let matchImg = dataUrl;
-        try {
-          const imgEl = await loadImage(dataUrl);
-          const quad = await detectCardQuad(imgEl);
-          if (quad) {
-            const canvas = await warpCard(imgEl, quad);
-            matchImg = canvas.toDataURL('image/jpeg', 0.92);
-            setClippedPreview(matchImg);
-            setClipped(true);
-          } else {
+        if (autoCrop) {
+          try {
+            const imgEl = await loadImage(dataUrl);
+            const quad = await detectCardQuad(imgEl);
+            if (quad) {
+              const canvas = await warpCard(imgEl, quad);
+              matchImg = canvas.toDataURL('image/jpeg', 0.92);
+              setClippedPreview(matchImg);
+              setClipped(true);
+            } else {
+              setClipped(false);
+            }
+          } catch (clipErr) {
+            console.warn('Clipping falhou, usando imagem original:', clipErr);
             setClipped(false);
           }
-        } catch (clipErr) {
-          console.warn('Clipping falhou, usando imagem original:', clipErr);
-          setClipped(false);
         }
 
         // 2. Match no índice
@@ -109,7 +218,7 @@ export default function Scanner() {
       setPhase('ready');
     };
     reader.readAsDataURL(file);
-  }, []);
+  }, [autoCrop]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -117,6 +226,10 @@ export default function Scanner() {
     multiple: false,
     disabled: phase !== 'ready',
   });
+
+  // Resultados ativos: busca por texto tem prioridade visual
+  const mostrandoTexto = textResults !== null;
+  const mostrandoResultados = mostrandoTexto ? textResults! : results;
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
@@ -195,6 +308,66 @@ export default function Scanner() {
             </button>
           </div>
         )}
+
+        {/* Auto crop (OpenCV) */}
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+            Pré-processamento da imagem
+          </div>
+          <div className="flex gap-4">
+            <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                checked={autoCrop}
+                onChange={() => setAutoCrop(true)}
+                className="accent-indigo-600"
+              />
+              <span className="text-gray-700">Auto crop (OpenCV)</span>
+              <span className="text-xs text-gray-400">detecta bordas e corrige perspectiva</span>
+            </label>
+            <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                checked={!autoCrop}
+                onChange={() => setAutoCrop(false)}
+                className="accent-indigo-600"
+              />
+              <span className="text-gray-700">Imagem original</span>
+              <span className="text-xs text-gray-400">sem transformações</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Barra de busca por texto — funciona sem carregar o scanner */}
+      <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1">
+            <Type className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              value={textQuery}
+              onChange={e => setTextQuery(e.target.value)}
+              placeholder="Buscar carta por nome, número, coleção, raridade ou id..."
+              className="w-full pl-9 pr-9 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {textQuery && (
+              <button
+                onClick={() => setTextQuery('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                title="Limpar busca"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+          {textLoading && <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />}
+        </div>
+        {textTotal > 0 && (
+          <div className="text-xs text-gray-500 mt-2">
+            {textTotal.toLocaleString('pt-BR')} carta{textTotal !== 1 ? 's' : ''} encontrada{textTotal !== 1 ? 's' : ''}
+            {textTotal > 10 && ' — mostrando as 10 primeiras'}
+          </div>
+        )}
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
@@ -232,7 +405,7 @@ export default function Scanner() {
                         <ImageOff className="w-8 h-8" />
                       </div>
                       <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-gray-400 bg-white/80 py-0.5">
-                        Sem clipping
+                        {autoCrop ? 'Sem clipping' : 'Auto crop desligado'}
                       </span>
                     </>
                   )}
@@ -263,55 +436,36 @@ export default function Scanner() {
           </p>
         </div>
 
-        {/* Results Area */}
+        {/* Results Area — busca por texto tem prioridade; senão, resultados do scanner */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Resultado</h3>
-          {results && results.length > 0 ? (
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {mostrandoTexto ? 'Resultado da busca' : 'Resultado'}
+            </h3>
+            {mostrandoTexto && textResults && textResults.length > 0 && (
+              <button
+                onClick={() => setTextQuery('')}
+                className="text-xs text-indigo-600 hover:underline inline-flex items-center gap-1"
+              >
+                <X className="w-3 h-3" /> voltar ao scanner
+              </button>
+            )}
+          </div>
+
+          {mostrandoResultados && mostrandoResultados.length > 0 ? (
             <div className="space-y-3">
-              {results.map((r) => (
-                <div
-                  key={r.card.id}
-                  className={`flex gap-4 bg-white rounded-xl border p-4 ${
-                    r.rank === 1 ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-gray-100 opacity-90'
-                  }`}
-                >
-                  <div className="relative w-20 h-28 bg-gray-100 rounded-lg overflow-hidden shrink-0">
-                    {r.card.img ? (
-                      <Image src={r.card.img} alt={r.card.n} fill className="object-contain" unoptimized />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-300">
-                        <ImageOff className="w-6 h-6" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <h4 className="font-bold text-gray-900 truncate">{r.card.n}</h4>
-                      <span className={`text-xs font-mono px-2 py-0.5 rounded-full shrink-0 ${
-                        r.rank === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {r.rank === 1 ? '✓ Melhor' : `#${r.rank}`} · {(r.score * 100).toFixed(1)}%
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-500 truncate">
-                      {r.card.sn} · {r.card.num}
-                    </p>
-                    <div className="flex items-center justify-between mt-2 text-sm">
-                      <span className="text-xs text-gray-400">{r.card.r || '—'}</span>
-                      {r.card.p != null && (
-                        <span className="font-medium text-emerald-600">${r.card.p.toFixed(2)}</span>
-                      )}
-                    </div>
-                    {/* <a> com href prefixado manualmente — next/link duplica basePath em hrefs com query */}
-                    <a
-                      href={`${getBasePath()}/card?set=${encodeURIComponent(r.card.s)}&num=${encodeURIComponent(r.card.num)}&nome=${encodeURIComponent(r.card.n)}`}
-                      className="inline-flex items-center gap-1 mt-2 text-xs text-indigo-600 hover:underline"
-                    >
-                      <ExternalLink className="w-3 h-3" /> Ver detalhes e escoragem
-                    </a>
-                  </div>
-                </div>
-              ))}
+              {mostrandoTexto
+                ? (textResults as any[]).map((c, i) => (
+                    <CardResult key={c.id} card={c} rank={i + 1} />
+                  ))
+                : (results as ScanResult[]).map((r) => (
+                    <CardResult key={r.card.id} card={r.card} score={r.score} rank={r.rank} />
+                  ))}
+            </div>
+          ) : mostrandoTexto && textQuery.trim().length >= 2 ? (
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
+              <Search className="w-12 h-12 mb-3 opacity-20" />
+              <p>Nenhuma carta encontrada para "{textQuery.trim()}"</p>
             </div>
           ) : preview ? (
             <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
