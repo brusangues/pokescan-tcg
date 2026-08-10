@@ -11,6 +11,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 |---|---|
 | **Scanner browser completo** — DINOv2-small uint8 (onnxruntime-web) + índice PCA128 fp16 de 20.426 cartas (recall@1 97.4%), sem servidor — superou P0.1 e P3.24 | Ago/2026 |
 | **Clipping OpenCV.js (Fase 1)** — Canny multi-passada + contorno + warpPerspective; boxPoints manual (quebrado no OpenCV.js 5.0); calibrado 8/8 com fotos reais | `cfde707` + `e460486` |
+| **Busca por texto no /scanner** (nome, número, coleção, raridade, id — top 10, debounce, sem precisar carregar o modelo) + **radio auto crop** (OpenCV ligado/desligado no pipeline) | `715edc0` |
 | Fallback offline do scanner + badge de carta JP | `4f53558` |
 
 ## Site (export estático — GitHub Pages)
