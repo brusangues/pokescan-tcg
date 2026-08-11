@@ -24,6 +24,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | P0.2-P0.5: inflacionadas visíveis + build TS + cache por mtime + paths robustos | `44a2f3e` |
 | Bug do link da Liga no /card (Mew ex MEW vs Celebrations) + mapping completo | `07b5679` |
 | **Site responsivo (mobile)** — menu hambúrguer, tabelas com scroll, colunas compactas, sem overflow em 375/320px (9 páginas validadas) + `lang="pt-BR"` | `ff50441` |
+| **Fixes do relatório de QA (11/08)** — html.unescape em nomes PT (BUG 1 alta), painel do /colecoes inline (BUG 2), aviso de janela antiga no 1º clique (Obs 3), números da landing reais (Obs 4) | `3c9dacf` |
 
 ## Modelo & Dados
 
