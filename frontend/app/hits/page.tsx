@@ -141,7 +141,14 @@ export default function HitsPage() {
               {dias.map((dia: Dia) => (
                 <div key={dia.data} className="relative">
                   <button
-                    onClick={() => setExpandedDay(expandedDay === dia.data ? null : dia.data)}
+                    onClick={() => {
+                      const abrindo = expandedDay !== dia.data;
+                      setExpandedDay(abrindo ? dia.data : null);
+                      // Feedback no 1º clique: dia antigo não tem dados no build estático
+                      if (abrindo && selectedFile && !dia.arquivos.includes(selectedFile)) {
+                        setAviso('Execuções antigas não estão no build estático — mostrando a mais recente.');
+                      }
+                    }}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${
                       selectedFile && dia.arquivos.includes(selectedFile)
                         ? 'bg-indigo-600 text-white border-indigo-600'

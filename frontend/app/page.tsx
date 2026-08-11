@@ -22,7 +22,7 @@ const FEATURES = [
   {
     href: '/snapshot',
     title: 'Snapshot Semanal',
-    description: 'Escoragem completa dos 174 sets: 7.000+ cartas com preço justo, subvalorizadas e inflacionadas.',
+    description: 'Escoragem completa dos 170+ sets: 15.000+ cartas com preço justo, subvalorizadas e inflacionadas.',
     icon: BarChart3,
     color: 'bg-purple-600',
     badge: 'Semanal · Seg 06:00',
@@ -67,8 +67,8 @@ export default function LandingPage() {
               <p className="text-xs text-indigo-300 mt-1">cartas na base</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-white">174</p>
-              <p className="text-xs text-indigo-300 mt-1">sets monitorados</p>
+              <p className="text-3xl font-bold text-white">170+</p>
+              <p className="text-xs text-indigo-300 mt-1">sets na base</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-white">07:00</p>

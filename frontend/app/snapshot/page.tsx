@@ -174,7 +174,14 @@ export default function SnapshotPage() {
                 return (
                   <div key={sem.label} className="relative">
                     <button
-                      onClick={() => setExpandedWeek(expandedWeek === sem.label ? null : sem.label)}
+                      onClick={() => {
+                        const abrindo = expandedWeek !== sem.label;
+                        setExpandedWeek(abrindo ? sem.label : null);
+                        // Feedback no 1º clique: semana antiga não tem dados no build estático
+                        if (abrindo && selectedFile && !sem.arquivos.some(a => a.arquivo === selectedFile)) {
+                          setAviso('Execuções antigas não estão no build estático — mostrando a mais recente.');
+                        }
+                      }}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${
                         isActive ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
                       }`}

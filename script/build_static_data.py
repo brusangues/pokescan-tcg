@@ -10,6 +10,7 @@ mesmos shapes, para os componentes só trocarem a URL do fetch.
 Uso: python script/build_static_data.py [--out DIR]
 """
 import csv
+import html
 import json
 import math
 import subprocess
@@ -63,6 +64,11 @@ OUT = Path(sys.argv[sys.argv.index('--out') + 1]) if '--out' in sys.argv else RE
 
 def parse_scored_csv(path: Path) -> list:
     """Réplica EXATA de parseScoredCSV (app/lib/scored.ts)."""
+    def _unesc(v):
+        """Decodifica entidades HTML dos CSVs da Liga (ex: '&Aacute;gua' → 'Água')."""
+        if v is None:
+            return ''
+        return html.unescape(str(v))
     out = []
     with open(path, encoding='utf-8', newline='') as fh:
         reader = csv.DictReader(fh)
@@ -78,9 +84,9 @@ def parse_scored_csv(path: Path) -> list:
             if not all(math.isfinite(x) for x in (real, pred, upside)):
                 continue
             out.append({
-                'nome': r.get('nPT') or r.get('name') or r.get('nome') or r.get('nEN') or 'Unknown',
+                'nome': _unesc(r.get('nPT') or r.get('name') or r.get('nome') or r.get('nEN') or 'Unknown'),
                 'sigla': r.get('sSigla') or r.get('set_id') or '',
-                'setNome': r.get('ed_sNome') or r.get('ed_sNomePortugues') or r.get('set_name') or '',
+                'setNome': _unesc(r.get('ed_sNome') or r.get('ed_sNomePortugues') or r.get('set_name') or ''),
                 'real': real,
                 'pred': pred,
                 'upside': upside,
@@ -89,7 +95,7 @@ def parse_scored_csv(path: Path) -> list:
                 'moeda': r.get('moeda') or 'R$',
                 'liga_id': r.get('liga_id') or '',
                 'card_id': _card_id(r),
-                'nEN': r.get('nEN') or '',
+                'nEN': _unesc(r.get('nEN') or ''),
                 'sNumber': r.get('sNumber') or '',
                 'num': r.get('num') or '',
                 'fonte': r.get('fonte') or '',

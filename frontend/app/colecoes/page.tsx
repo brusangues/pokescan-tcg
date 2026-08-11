@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { Fragment, useState, useEffect, useMemo } from 'react';
 import { TrendingUp, TrendingDown, Minus, Info, Loader, AlertTriangle } from 'lucide-react';
 
 import NavBar from '@/app/components/NavBar';
@@ -229,8 +229,8 @@ export default function ColecoesPage() {
                       </span>
                     );
                   return (
+                    <Fragment key={r.set}>
                     <tr
-                      key={r.set}
                       className="border-t border-slate-100 hover:bg-slate-50 cursor-pointer"
                       onClick={() => setExpanded(expanded === r.set ? null : r.set)}
                     >
@@ -265,41 +265,39 @@ export default function ColecoesPage() {
                         {expanded === r.set ? '▴' : '▾'}
                       </td>
                     </tr>
+                    {/* Linha expandida INLINE (logo abaixo da linha clicada) */}
+                    {expanded === r.set && (
+                      <tr className="bg-slate-50/60">
+                        <td colSpan={6} className="px-4 py-4 border-t border-slate-100">
+                          <p className="text-xs text-slate-500 mb-2 flex items-center gap-1">
+                            <Info size={13} /> Contribuição esperada de cada raridade (probabilidade × preço médio):
+                          </p>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {Object.entries(r.breakdown).map(([b, v]) => (
+                              <div key={b} className="bg-white rounded-lg border border-slate-200 px-3 py-2">
+                                <div className={`text-xs font-medium ${RARITY_COLOR[b] || 'text-slate-600'}`}>
+                                  {BUCKET_LABEL[b] || b}
+                                </div>
+                                <div className="text-sm font-semibold text-slate-800 tabular-nums">
+                                  R$ {fmt((v as BucketInfo).contrib)}
+                                </div>
+                                <div className="text-[11px] text-slate-400">
+                                  {(v as BucketInfo)['1em']
+                                    ? `1 em ${(v as BucketInfo)['1em']} · média R$ ${fmt((v as BucketInfo).media)}`
+                                    : `prob. ${((v as BucketInfo).prob ?? 0 * 100).toFixed(1)}% · média R$ ${fmt((v as BucketInfo).media)}`}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                    </Fragment>
                   );
                 })}
               </tbody>
             </table>
           </div>
-
-          {/* Linha expandida com breakdown */}
-          {expanded && (
-            <div className="border-t border-slate-100 bg-slate-50/60 px-4 py-4">
-              <p className="text-xs text-slate-500 mb-2 flex items-center gap-1">
-                <Info size={13} /> Contribuição esperada de cada raridade (probabilidade × preço médio):
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {(() => {
-                  const r = rows.find((x) => x.set === expanded);
-                  if (!r) return null;
-                  return Object.entries(r.breakdown).map(([b, v]) => (
-                    <div key={b} className="bg-white rounded-lg border border-slate-200 px-3 py-2">
-                      <div className={`text-xs font-medium ${RARITY_COLOR[b] || 'text-slate-600'}`}>
-                        {BUCKET_LABEL[b] || b}
-                      </div>
-                      <div className="text-sm font-semibold text-slate-800 tabular-nums">
-                        R$ {fmt((v as BucketInfo).contrib)}
-                      </div>
-                      <div className="text-[11px] text-slate-400">
-                        {(v as BucketInfo)['1em']
-                          ? `1 em ${(v as BucketInfo)['1em']} · média R$ ${fmt((v as BucketInfo).media)}`
-                          : `prob. ${((v as BucketInfo).prob ?? 0 * 100).toFixed(1)}% · média R$ ${fmt((v as BucketInfo).media)}`}
-                      </div>
-                    </div>
-                  ));
-                })()}
-              </div>
-            </div>
-          )}
         </div>
 
         <p className="text-xs text-slate-400 mt-4">
