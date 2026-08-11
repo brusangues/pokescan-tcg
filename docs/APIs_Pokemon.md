@@ -71,6 +71,12 @@ Legenda: ✅ usamos no pokescan-tcg · 💰 paga · 🆓 gratuita
 - **Por que importa**: é exatamente o que falta na modelagem — **série temporal diária de preços USD** (o modelo hoje só vê avg1/7/30 e o snapshot atual).
 - **Como usar**: baixar diariamente (cron) ou backfillar o período 2024-02 → hoje; join por productId TCGPlayer (que também vem no pokemontcg.io? não — o join seria via grupo/numeração ou via TCGCSV products).
 
+#### ✅ Validação feita (11/08/2026 — `experiments/validate_tcgcsv.py`, NÃO integrado ao produtivo)
+- **Formato**: arquivo diário `prices-2026-08-01.ppmd.7z` = 3.98 MB comprimido / 80 MB extraído; JSON por grupo da categoria 3 (Pokémon): 217 grupos, **31.153 productIds com preço** (low/mid/high/market/directLow por subtipo Normal/Holofoil/Reverse).
+- **Join com o catálogo**: via **nome do grupo TCGPlayer** ("SWSH01: Sword & Shield Base Set" → set id) + **extendedData Number** (formato `"053/202"` → `53`): **12.776/12.812 singles casaram (99.7%)** — 96/217 grupos mapeados no catálogo (o resto são selados/sets fora do cache).
+- **Sanity check**: marketPrice do archive (01/08) vs tcgplayer do cache (mesma fonte) — Δ de −R$0.11 a +R$0.03 (diferença de data dos snapshots) ✓.
+- **Custo do backfill**: ~4 MB/dia comprimido → 2024-02 até hoje ≈ **3.5 GB** de download (~900 arquivos).
+
 ### PriceCharting — pricecharting.com 💰
 - **O que é**: preços de colecionáveis (games/cards) com **gráfico de histórico** por produto; inclui cartas Pokémon **raw e graded** (PSA/BGS/CGC…).
 - **API**: `/api/product` retorna preços por condição (loose/cib/new; para cards: gradadas). O **histórico** fica no site (plano premium mostra "historic prices"); via API oficial é pago; há scrapers prontos (Apify) que extraem o `chart_data` mensal.

@@ -379,6 +379,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 experiments/models/*.onnx
+# Validação TCGCSV (archive diário ~4MB + extração ~80MB — não versionar)
+experiments/tcgcsv/
 
 
 # Notas internas do agente (não público)
