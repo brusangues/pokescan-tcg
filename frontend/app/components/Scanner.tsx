@@ -314,26 +314,26 @@ export default function Scanner() {
           <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
             Pré-processamento da imagem
           </div>
-          <div className="flex gap-4">
-            <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+            <label className="inline-flex items-center gap-2 text-sm cursor-pointer min-w-0">
               <input
                 type="radio"
                 checked={autoCrop}
                 onChange={() => setAutoCrop(true)}
-                className="accent-indigo-600"
+                className="accent-indigo-600 shrink-0"
               />
               <span className="text-gray-700">Auto crop (OpenCV)</span>
-              <span className="text-xs text-gray-400">detecta bordas e corrige perspectiva</span>
+              <span className="hidden lg:inline text-xs text-gray-400">detecta bordas e corrige perspectiva</span>
             </label>
-            <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
+            <label className="inline-flex items-center gap-2 text-sm cursor-pointer min-w-0">
               <input
                 type="radio"
                 checked={!autoCrop}
                 onChange={() => setAutoCrop(false)}
-                className="accent-indigo-600"
+                className="accent-indigo-600 shrink-0"
               />
               <span className="text-gray-700">Imagem original</span>
-              <span className="text-xs text-gray-400">sem transformações</span>
+              <span className="hidden lg:inline text-xs text-gray-400">sem transformações</span>
             </label>
           </div>
         </div>

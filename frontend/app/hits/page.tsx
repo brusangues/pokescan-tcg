@@ -190,30 +190,30 @@ export default function HitsPage() {
         )}
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-xl border border-gray-200">
-            <p className="text-xs text-gray-500 uppercase tracking-wide">Total escorado</p>
-            <p className="text-2xl font-bold text-gray-900">{data.total}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
+            <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide">Total escorado</p>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900">{data.total}</p>
           </div>
-          <div className="bg-green-50 p-4 rounded-xl border border-green-200">
-            <p className="text-xs text-green-700 uppercase tracking-wide">🔥 Subvalorizadas</p>
-            <p className="text-2xl font-bold text-green-900">{data.subvalorizadas.length}</p>
+          <div className="bg-green-50 p-3 sm:p-4 rounded-xl border border-green-200">
+            <p className="text-[10px] sm:text-xs text-green-700 uppercase tracking-wide">🔥 Subvalorizadas</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-900">{data.subvalorizadas.length}</p>
           </div>
-          <div className="bg-red-50 p-4 rounded-xl border border-red-200">
-            <p className="text-xs text-red-700 uppercase tracking-wide">💀 Inflacionadas</p>
-            <p className="text-2xl font-bold text-red-900">
+          <div className="bg-red-50 p-3 sm:p-4 rounded-xl border border-red-200">
+            <p className="text-[10px] sm:text-xs text-red-700 uppercase tracking-wide">💀 Inflacionadas</p>
+            <p className="text-xl sm:text-2xl font-bold text-red-900">
               {data.todas.filter((c: ScoredCard) => c.oportunidade === '💀 Inflacionada').length}
             </p>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
           {['oportunidades', 'inflacionadas', 'todas'].map(t => (
             <button
               key={t}
               onClick={() => setTab(t as any)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                 tab === t ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >

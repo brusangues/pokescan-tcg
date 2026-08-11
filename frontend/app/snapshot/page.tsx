@@ -230,12 +230,12 @@ export default function SnapshotPage() {
         </section>
 
         {/* Tabs */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
           {['oportunidades', 'inflacionadas', 'todas'].map(t => (
             <button
               key={t}
               onClick={() => setTab(t as any)}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
                 tab === t ? 'bg-purple-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >

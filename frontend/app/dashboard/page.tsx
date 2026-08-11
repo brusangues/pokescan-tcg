@@ -131,13 +131,13 @@ export default function DashboardPage() {
   // Row de carta (usada nas top lists)
   const CardRow = ({ card }: { card: ScoredCard }) => (
     <div className="flex items-center gap-2 py-2 text-xs border-b border-gray-50 last:border-0">
-      <span className="flex-1 font-medium text-gray-800 truncate">{card.nome}</span>
-      <span className="w-12 text-right font-mono text-gray-400">{card.sigla}</span>
-      <span className="w-14 text-right text-gray-600">{card.moeda}{card.real.toFixed(0)}</span>
-      <span className={`w-12 text-right font-semibold ${card.upside > 0 ? 'text-green-600' : 'text-red-600'}`}>
+      <span className="flex-1 min-w-0 font-medium text-gray-800 truncate">{card.nome}</span>
+      <span className="w-12 shrink-0 text-right font-mono text-gray-400">{card.sigla}</span>
+      <span className="w-14 shrink-0 text-right text-gray-600">{card.moeda}{card.real.toFixed(0)}</span>
+      <span className={`w-12 shrink-0 text-right font-semibold ${card.upside > 0 ? 'text-green-600' : 'text-red-600'}`}>
         {card.upside > 0 ? '+' : ''}{card.upside.toFixed(0)}%
       </span>
-      <span className="w-8 text-right text-blue-500">{card.iCO > 0 ? card.iCO : '—'}</span>
+      <span className="w-8 shrink-0 text-right text-blue-500">{card.iCO > 0 ? card.iCO : '—'}</span>
     </div>
   );
 
@@ -243,19 +243,19 @@ export default function DashboardPage() {
         </section>
 
         {/* ── Seção 3: Top Oportunidades (Hits) ── */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <section>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <section className="min-w-0">
             <h2 className="text-sm font-semibold text-green-700 uppercase tracking-wide mb-3 flex items-center gap-2">
-              <ArrowUpCircle className="w-4 h-4" />
+              <ArrowUpCircle className="w-4 h-4 shrink-0" />
               🔥 Top 10 — Comprar (Hits)
             </h2>
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
               <div className="flex items-center text-[10px] uppercase font-semibold text-gray-400 gap-2 pb-2 border-b border-gray-100 mb-1">
-                <span className="flex-1">Nome</span>
-                <span className="w-12 text-right">Set</span>
-                <span className="w-14 text-right">Real</span>
-                <span className="w-12 text-right">Upside</span>
-                <span className="w-8 text-right">iCO</span>
+                <span className="flex-1 min-w-0">Nome</span>
+                <span className="w-12 shrink-0 text-right">Set</span>
+                <span className="w-14 shrink-0 text-right">Real</span>
+                <span className="w-12 shrink-0 text-right">Upside</span>
+                <span className="w-8 shrink-0 text-right">iCO</span>
               </div>
               {hits.topOportunidades.map((c: ScoredCard, i: number) => (
                 <CardRow key={`top-${i}`} card={c} />
@@ -266,18 +266,18 @@ export default function DashboardPage() {
             </div>
           </section>
 
-          <section>
+          <section className="min-w-0">
             <h2 className="text-sm font-semibold text-red-700 uppercase tracking-wide mb-3 flex items-center gap-2">
-              <ArrowDownCircle className="w-4 h-4" />
+              <ArrowDownCircle className="w-4 h-4 shrink-0" />
               💀 Top Inflacionadas — Evitar (Hits)
             </h2>
             <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
               <div className="flex items-center text-[10px] uppercase font-semibold text-gray-400 gap-2 pb-2 border-b border-gray-100 mb-1">
-                <span className="flex-1">Nome</span>
-                <span className="w-12 text-right">Set</span>
-                <span className="w-14 text-right">Real</span>
-                <span className="w-12 text-right">Upside</span>
-                <span className="w-8 text-right">iCO</span>
+                <span className="flex-1 min-w-0">Nome</span>
+                <span className="w-12 shrink-0 text-right">Set</span>
+                <span className="w-14 shrink-0 text-right">Real</span>
+                <span className="w-12 shrink-0 text-right">Upside</span>
+                <span className="w-8 shrink-0 text-right">iCO</span>
               </div>
               {hits.topInflacionadas.map((c: ScoredCard, i: number) => (
                 <CardRow key={`i-${i}`} card={c} />
