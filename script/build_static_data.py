@@ -549,6 +549,88 @@ def features_shap_payload() -> dict:
     return {cid: full[cid] for cid in ids if cid in full}
 
 
+def card_idiomas_payload() -> dict:
+    """'Mesma carta entre idiomas' — índice por nome EN normalizado (P3 feature 07/08).
+
+    - 'liga': registros escorados (produtos da Liga Pokémon) com o mesmo nEN —
+      o idioma do PRODUTO vem do edicoes_liga.json (null → 'pt' = Português);
+      o 'en'/'jp' do card_id é o idioma do SET DE ORIGEM, não do produto.
+    - 'en': cartas do catálogo TCGAPI (inglês) com o mesmo nome.
+
+    Só gera chaves que existem na Liga (o front consulta por cartas escoradas;
+    um card EN sem modelo não mostra a seção). 'en' limitado a 1 carta por set
+    (o mesmo nome existe em N sets) e 8 sets no total.
+    """
+    scored = scored_latest_payload()
+    try:
+        ed = json.loads(EDICOES.read_text(encoding='utf-8'))
+    except Exception:
+        ed = {}
+    por_nome: dict[str, dict] = {}
+
+    def _chave(base: str) -> str:
+        return ''.join(ch for ch in base.lower() if ch.isalnum())
+
+    for reg in scored:
+        base = str(reg.get('nEN') or '').split('(')[0].strip() or str(reg.get('nome') or '')
+        chave = _chave(base)
+        if not chave or not reg.get('card_id'):
+            continue
+        eid = str(reg['card_id']).split('-')[0]
+        info = ed.get(eid) or {}
+        lang = info.get('lang') or 'pt'
+        e = por_nome.setdefault(chave, {'liga': [], 'en': []})
+        if not any(x['cid'] == reg['card_id'] for x in e['liga']):
+            e['liga'].append({
+                'cid': reg['card_id'],
+                'sigla': reg.get('sigla') or '',
+                'nome': reg.get('nome') or '',
+                'lang': lang,
+                'num': str(reg.get('num') or reg.get('sNumber') or ''),
+                'sNumber': str(reg.get('sNumber') or ''),
+            })
+
+    # Catálogo EN (TCGAPI) — mesmo nome → contraparte em inglês
+    try:
+        raw = json.loads(PTCG_CACHE.read_text(encoding='utf-8'))
+    except Exception:
+        raw = []
+    for c in raw:
+        nome = str(c.get('name') or '')
+        chave = _chave(nome)
+        e = por_nome.get(chave)
+        if e is None:  # só as chaves que existem na Liga
+            continue
+        s = c.get('set')
+        sid = s.get('id') if isinstance(s, dict) else s
+        tp = c.get('tcgplayer') or {}
+        p = None
+        for k in ('holofoil', 'reverseHolofoil', 'normal'):
+            mk = ((tp.get('prices') or {}).get(k) or {}).get('market')
+            if mk:
+                p = round(float(mk), 2)
+                break
+        e['en'].append({
+            'id': c.get('id'), 's': sid, 'num': str(c.get('number') or ''),
+            'nome': nome,
+            'sn': s.get('name') if isinstance(s, dict) else '',
+            'p': p,
+        })
+
+    out = {}
+    for chave, e in por_nome.items():
+        en_por_set: dict[str, list] = {}
+        for card in e['en']:
+            en_por_set.setdefault(card['s'], []).append(card)
+        en_final = []
+        for s, cards in en_por_set.items():
+            en_final.extend(cards[:3])  # até 3 por set (ex: principal + promo)
+            if len(en_final) >= 8:
+                break
+        out[chave] = {'liga': e['liga'], 'en': en_final[:8]}
+    return out
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     payloads = {
@@ -562,6 +644,7 @@ def main():
         'changelog.json': changelog_payload,
         'features.json': features_payload,
         'features_shap.json': features_shap_payload,
+        'card_idiomas.json': card_idiomas_payload,
     }
     total = 0
     for name, fn in payloads.items():

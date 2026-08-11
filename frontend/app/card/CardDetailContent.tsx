@@ -5,11 +5,14 @@ import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   Loader, AlertCircle, TrendingUp, TrendingDown, ArrowLeft,
-  DollarSign, Palette, Hash, Shield, Layers,
+  DollarSign, Palette, Hash, Shield, Layers, Languages,
 } from 'lucide-react';
 import PriceHistory from '@/app/components/PriceHistory';
-import { lookupCard } from '@/app/lib/cardLookup';
+import { lookupCard, normNome } from '@/app/lib/cardLookup';
 import { getBasePath } from '@/app/lib/basePath';
+
+/** Cache de módulo do índice de idiomas (uma busca por sessão). */
+let _idiomasCache: Record<string, any> | null = null;
 
 interface CardData {
   id: string;
@@ -73,6 +76,110 @@ interface CardData {
   error?: string;
   }
 
+/** Seção 'Mesma carta em outros idiomas' — agrupa por idioma (PT/EN/JP). */
+function IdiomasSection({ dados, atual }: {
+  dados: { liga: any[]; en: any[] };
+  atual: { card_id?: string; setId?: string; num?: string };
+}) {
+  const LANGS: Record<string, { label: string; flag: string }> = {
+    pt: { label: 'Português', flag: '🇧🇷' },
+    en: { label: 'Inglês', flag: '🇬🇧' },
+    jp: { label: 'Japonês', flag: '🇯🇵' },
+  };
+  const LIMITE = 5;
+
+  const grupos = (['pt', 'en', 'jp'] as const)
+    .map(lang => ({
+      lang,
+      liga: (dados.liga || []).filter(x => x.lang === lang),
+    }))
+    .filter(g => g.liga.length > 0);
+
+  const enItens = (dados.en || []) as any[];
+
+  if (grupos.length === 0 && enItens.length === 0) return null;
+
+  return (
+    <div className="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
+      <h3 className="text-xs font-semibold text-gray-500 uppercase mb-3 flex items-center gap-1.5">
+        <Languages className="w-3.5 h-3.5" />
+        Mesma carta em outros idiomas
+      </h3>
+
+      <div className="space-y-3">
+        {/* Liga Pokémon (PT/EN/JP vendidos pela Liga) */}
+        {grupos.map(g => {
+          const meta = LANGS[g.lang];
+          const visiveis = g.liga.slice(0, LIMITE);
+          const resto = g.liga.length - visiveis.length;
+          return (
+            <div key={g.lang}>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1.5">
+                {meta.flag} {meta.label}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {visiveis.map(x => {
+                  const atualLiga = x.cid === atual.card_id;
+                  const href = `${getBasePath()}/card?card_id=${encodeURIComponent(x.cid)}`;
+                  return (
+                    <a
+                      key={x.cid}
+                      href={atualLiga ? undefined : href}
+                      aria-disabled={atualLiga}
+                      className={`text-[11px] px-2 py-1 rounded-lg border font-mono transition-colors ${
+                        atualLiga
+                          ? 'bg-indigo-50 border-indigo-200 text-indigo-700 cursor-default'
+                          : 'bg-white border-gray-200 text-gray-700 hover:border-indigo-300 hover:text-indigo-600'
+                      }`}
+                    >
+                      {x.sigla} #{x.sNumber || x.num}
+                    </a>
+                  );
+                })}
+                {resto > 0 && (
+                  <span className="text-[11px] text-gray-400 px-1 py-1">+{resto}</span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Catálogo TCGAPI (inglês) */}
+        {enItens.length > 0 && (
+          <div>
+            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1.5">
+              🇬🇧 Inglês (TCGAPI)
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {enItens.slice(0, LIMITE).map(x => {
+                const atualEn = x.s === atual.setId && String(x.num) === String(atual.num);
+                const href = `${getBasePath()}/card?set=${encodeURIComponent(x.s)}&num=${encodeURIComponent(x.num)}&nome=${encodeURIComponent(x.nome)}`;
+                return (
+                  <a
+                    key={x.id}
+                    href={atualEn ? undefined : href}
+                    aria-disabled={atualEn}
+                    className={`text-[11px] px-2 py-1 rounded-lg border font-mono transition-colors ${
+                      atualEn
+                        ? 'bg-indigo-50 border-indigo-200 text-indigo-700 cursor-default'
+                        : 'bg-white border-gray-200 text-gray-700 hover:border-indigo-300 hover:text-indigo-600'
+                    }`}
+                  >
+                    {x.s} #{x.num}
+                  </a>
+                );
+              })}
+              {enItens.length > LIMITE && (
+                <span className="text-[11px] text-gray-400 px-1 py-1">+{enItens.length - LIMITE}</span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
   export default function CardDetailContent() {
   const searchParams = useSearchParams();
   const nome = searchParams?.get('nome');
@@ -87,6 +194,22 @@ interface CardData {
   const [card, setCard] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [idiomas, setIdiomas] = useState<Record<string, any> | null>(null);
+
+  // Índice 'mesma carta em outros idiomas' (lazy, cacheado por sessão)
+  useEffect(() => {
+    (async () => {
+      try {
+        if (!_idiomasCache) {
+          const res = await fetch(`${getBasePath()}/data/card_idiomas.json`);
+          _idiomasCache = await res.json();
+        }
+        setIdiomas(_idiomasCache);
+      } catch (e) {
+        console.warn('card_idiomas.json indisponível:', e);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     if (!nome && !sigla && !num && !card_id && !liga_id) { setError('Nenhum parâmetro de busca'); setLoading(false); return; }
@@ -188,6 +311,19 @@ interface CardData {
                 </p>
               </a>
             )}
+
+            {/* Mesma carta em outros idiomas (JP/PT/EN) */}
+            {(() => {
+              const chave = normNome(String(card.modelo?.nEN || card.name || '').split('(')[0]);
+              const dados = (idiomas && chave && idiomas[chave]) || null;
+              if (!dados) return null;
+              return (
+                <IdiomasSection
+                  dados={dados}
+                  atual={{ card_id: card.modelo?.card_id, setId: card.set?.id, num: card.number }}
+                />
+              );
+            })()}
           </div>
 
           {/* Detalhes */}
