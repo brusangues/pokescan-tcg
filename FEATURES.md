@@ -45,6 +45,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 |---|---|
 | **card_id canônico `{idE}-{lang}-{sN}`** em todo o pipeline (índice `edicoes_liga.json` por overlap; corrige sv3→OBF, sv4→PAR, me1→MEG; set_map com sigla E edid; lookup com fallbacks) | `c9e7acf` |
 | Linguagem JP por sufixo da sigla (PGOJP/EPJP/SVPJp) + nomes normalizados no lookup + modelo por card_id exato | `18acbf8` + `05e9512` |
+| **Mesma carta em outros idiomas** — seção no /card com as versões JP/PT/EN (índice por nome EN normalizado: produtos da Liga + catálogo TCGAPI; chip do card atual marcado) | `801f6c4` |
 
 ## Coleções & EV do booster
 
