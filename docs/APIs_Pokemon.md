@@ -77,6 +77,16 @@ Legenda: ✅ usamos no pokescan-tcg · 💰 paga · 🆓 gratuita
 - **Sanity check**: marketPrice do archive (01/08) vs tcgplayer do cache (mesma fonte) — Δ de −R$0.11 a +R$0.03 (diferença de data dos snapshots) ✓.
 - **Custo do backfill**: ~4 MB/dia comprimido → 2024-02 até hoje ≈ **3.5 GB** de download (~900 arquivos).
 
+#### 📊 Granularidade, janela e línguas (verificado em 11/08/2026)
+- **Granularidade: DIÁRIA** — 1 snapshot por dia; o TCGCSV atualiza tudo ~**20:00 UTC** (FAQ oficial); o arquivo do dia D fica disponível à noite do dia D (o de hoje só amanhã). Não há granularidade menor (hora/semana) no archive.
+- **Janela máxima**: **08/02/2024 → ontem** (~2,5 anos ≈ 900 dias). Amostragem de 12 dias espalhados (2024-02-07 dá 404 = início real; 2026-08-11 dá 404 = ainda não gerado): **sem furos**.
+- **Línguas/moedas**:
+  - **🇺🇸 USD (EN)** — categoria 3: 217 grupos, 31.153 productIds ✅ (validação acima)
+  - **🇯🇵 JPY (cartas japonesas)** — categoria **85 "Pokemon Japan"**: 454 grupos (ex: "SV2a: Pokemon Card 151", "M6: Storm Emeralda" — as séries Mega japonesas), **25.471 productIds** — mesmo formato do archive diário, join idêntico (group name + Number "001/165")
+  - **🇪🇺 EUR (Cardmarket)** — sem histórico: só snapshot atual (avg1/7/30) via pokemontcg.io/TCGdex
+  - **🇧🇷 BRL (PT-BR)** — sem histórico público: a Liga não publica; o TCGPlayer não tem categoria BR
+  - Pagas com histórico EUR: PokéWallet (`/cards/{id}/price-history` — mudanças 7/14/30/60/120d, histórico curto ~2025+) e cardmarketapi.com
+
 ### PriceCharting — pricecharting.com 💰
 - **O que é**: preços de colecionáveis (games/cards) com **gráfico de histórico** por produto; inclui cartas Pokémon **raw e graded** (PSA/BGS/CGC…).
 - **API**: `/api/product` retorna preços por condição (loose/cib/new; para cards: gradadas). O **histórico** fica no site (plano premium mostra "historic prices"); via API oficial é pago; há scrapers prontos (Apify) que extraem o `chart_data` mensal.
