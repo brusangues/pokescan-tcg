@@ -75,25 +75,25 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
       </div>
 
       {/* Real */}
-      <div className="text-right shrink-0 w-16 sm:w-20">
+      <div className="text-right shrink-0 w-20">
         <p className="text-sm font-bold text-gray-800">{card.moeda}{real.toFixed(2)}</p>
       </div>
 
       {/* Pred */}
-      <div className="text-right shrink-0 w-20 hidden sm:block">
+      <div className="text-right shrink-0 w-20">
         <p className="text-sm text-gray-600">{card.moeda}{pred.toFixed(2)}</p>
       </div>
 
       {/* Upside */}
-      <div className="text-right shrink-0 w-16 sm:w-20">
-        <span className={`inline-flex items-center gap-0.5 sm:gap-1 text-[10px] sm:text-xs font-bold px-1.5 sm:px-2 py-1 rounded-full ${isUp ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
+      <div className="text-right shrink-0 w-20">
+        <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${isUp ? 'text-green-700 bg-green-100' : 'text-red-700 bg-red-100'}`}>
           {isUp ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
           {isUp ? '+' : ''}{upside.toFixed(0)}%
         </span>
       </div>
 
       {/* iCO */}
-      <div className="text-right shrink-0 w-8 sm:w-10">
+      <div className="text-right shrink-0 w-10">
         {ico > 0 ? (
           <span className="text-[11px] font-medium text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{ico}</span>
         ) : (
@@ -101,12 +101,9 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
         )}
       </div>
 
-      {/* Status — mobile: só o emoji; desktop: texto completo */}
-      <div className="shrink-0 w-7 sm:w-24 text-right">
-        <span className="sm:hidden text-sm" title={card.oportunidade}>
-          {card.oportunidade.includes('🔥') ? '🔥' : card.oportunidade.includes('💀') ? '💀' : '➖'}
-        </span>
-        <span className={`hidden sm:inline-block text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${isSub ? 'text-green-700 bg-green-100' : isInfla ? 'text-red-700 bg-red-100' : 'text-gray-500 bg-gray-100'}`}>
+      {/* Status */}
+      <div className="shrink-0 w-24 text-right">
+        <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${isSub ? 'text-green-700 bg-green-100' : isInfla ? 'text-red-700 bg-red-100' : 'text-gray-500 bg-gray-100'}`}>
           {card.oportunidade.replace('🔥 ', '').replace('💀 ', '')}
         </span>
       </div>
