@@ -83,10 +83,10 @@ baixa (~40–53% vs ~97% recall@1 com cartas grandes na calibração 8/8).
 
 ## Recomendação
 
-**Fase 1 (implementar agora):** abordagem **A** — `detectCardQuads()` + dedup +
+**Fase 1 (implementada — `15821f6`):** abordagem **A** — `detectCardQuads()` + dedup +
 match individual → lista de N resultados na UI, com aviso de "carta pequena" e
 marcação de "não identificada" quando a confiança < ~55%. Cobre o exemplo do
-usuário (3–4 cartas enfileiradas) e qualquer foto com cartas lado a lado.
+usuário (5 detecções na foto, avisos corretos, validado no site real).
 
 **Fase 2 (se necessário):** abordagem **B** (threshold por fundo como passada
 extra) + **D** (confirmar/corrigir sugestões com crops manuais).
