@@ -64,19 +64,26 @@ function toWorkingCanvas(cv: any, img: HTMLCanvasElement | HTMLImageElement) {
 }
 
 /**
- * Detecta o quadrilátero da carta na imagem.
- * Estratégia multi-passada (blur/Canny progressivos) — robusta a fundos
- * lisos/ruidosos e cartas escuras. Valida por área mínima, não tocar a
- * borda e razão de aspecto da carta TCG (63×88 ≈ 0.716).
+ * Detecta TODOS os quadriláteros de carta na imagem (multi-carta).
+ * Mesma estratégia do detectCardQuad (multi-passada Canny + approxPolyDP +
+ * minAreaRect fallback), mas coleta todos os candidatos, deduplica por centro
+ * (as passadas acham o mesmo quad repetido) e ordena por área.
+ * Retorna no máximo `max` quads (padrão 10).
  */
-export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement): Promise<Quad | null> {
+export async function detectCardQuads(
+  img: HTMLCanvasElement | HTMLImageElement,
+  max = 10,
+): Promise<Quad[]> {
   const cv = await loadOpenCV();
   const { canvas, scale } = toWorkingCanvas(cv, img);
   const src = cv.imread(canvas);
 
-  const minArea = src.rows * src.cols * 0.05;
+  // multi-carta: aceita cartas menores (fotos com várias cartas)
+  const minArea = src.rows * src.cols * 0.02;
   const passes: [number, number, number][] = [
-    [5, 50, 150], [5, 80, 200], [7, 50, 150], [9, 50, 150], [9, 80, 200],
+    [5, 30, 100], [5, 50, 150], [5, 80, 200],
+    [7, 50, 150], [7, 80, 200],
+    [9, 50, 150], [9, 80, 200], [9, 100, 220],
   ];
   const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(3, 3));
   const gray = new cv.Mat();
@@ -84,7 +91,7 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
   let contours = new cv.MatVector();
   const hierarchy = new cv.Mat();
 
-  let best: Quad | null = null;
+  const quads: Quad[] = [];
 
   for (const [ksize, low, high] of passes) {
     cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
@@ -106,8 +113,6 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
       const peri = cv.arcLength(cnt, true);
       let approx = new cv.Mat();
       let quadPts: { x: number; y: number }[] | null = null;
-      // múltiplos epsilons: bordas curvas (lente/perspectiva) e diferenças
-      // WASM float32 vs CPU precisam de eps maior no browser
       for (const eps of [0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.10]) {
         cv.approxPolyDP(cnt, approx, eps * peri, true);
         if (approx.rows === 4) {
@@ -126,14 +131,13 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
           }
         }
       }
-      // fallback: caixa rotacionada mínima (robusto a ângulos e bordas curvas)
+      // fallback: caixa rotacionada mínima
       if (!quadPts) {
         try {
-          const rect = cv.minAreaRect(cnt);
-          // cv.boxPoints NÃO funciona no OpenCV.js 5.0 — calcula os 4 cantos na mão
-          const cx = rect.center.x, cy = rect.center.y;
-          const w = rect.size.width, h = rect.size.height;
-          const theta = (rect.angle * Math.PI) / 180;
+          const r = cv.minAreaRect(cnt);
+          const cx = r.center.x, cy = r.center.y;
+          const w = r.size.width, h = r.size.height;
+          const theta = (r.angle * Math.PI) / 180;
           const cos = Math.cos(theta), sin = Math.sin(theta);
           const pts = [];
           for (const [ox, oy] of [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]) {
@@ -148,17 +152,12 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
             quadPts = o;
           }
         } catch (e) {
-          console.warn('minAreaRect fallback falhou', e);
+          // ignora fallback falho
         }
       }
       approx.delete();
       if (quadPts) {
-        best = { points: quadPts, area: area / (scale * scale) };
-        cnt.delete();
-        contours.delete();
-        src.delete(); gray.delete(); edges.delete();
-        kernel.delete(); hierarchy.delete();
-        return best;
+        quads.push({ points: quadPts, area: area / (scale * scale) });
       }
       cnt.delete();
     }
@@ -168,7 +167,38 @@ export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement):
 
   src.delete(); gray.delete(); edges.delete();
   kernel.delete(); contours.delete(); hierarchy.delete();
-  return best;
+
+  // dedup por centro (mesmo quad achado em várias passadas)
+  const diag = Math.hypot(img.width || (img as HTMLImageElement).naturalWidth,
+    img.height || (img as HTMLImageElement).naturalHeight);
+  const dedup: Quad[] = [];
+  for (const q of quads) {
+    const cx = (q.points[0].x + q.points[1].x + q.points[2].x + q.points[3].x) / 4;
+    const cy = (q.points[0].y + q.points[1].y + q.points[2].y + q.points[3].y) / 4;
+    const idx = dedup.findIndex((d) => {
+      const dx = (d.points[0].x + d.points[1].x + d.points[2].x + d.points[3].x) / 4;
+      const dy = (d.points[0].y + d.points[1].y + d.points[2].y + d.points[3].y) / 4;
+      return Math.hypot(dx - cx, dy - cy) < 0.15 * diag;
+    });
+    if (idx === -1) {
+      dedup.push(q);
+    } else if (q.area > dedup[idx].area) {
+      dedup[idx] = q;
+    }
+  }
+
+  return dedup.sort((a, b) => b.area - a.area).slice(0, max);
+}
+
+/**
+ * Detecta o quadrilátero da carta na imagem (a MAIOR, para o fluxo de 1 carta).
+ * Estratégia multi-passada (blur/Canny progressivos) — robusta a fundos
+ * lisos/ruidosos e cartas escuras. Valida por área mínima, não tocar a
+ * borda e razão de aspecto da carta TCG (63×88 ≈ 0.716).
+ */
+export async function detectCardQuad(img: HTMLCanvasElement | HTMLImageElement): Promise<Quad | null> {
+  const quads = await detectCardQuads(img, 1);
+  return quads[0] ?? null;
 }
 
 /** Ordena 4 pontos: TL, TR, BR, BL (soma/diferença — robusto p/ rotação). */

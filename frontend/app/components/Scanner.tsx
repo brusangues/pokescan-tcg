@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalLink, ImageOff, X, Type } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 import ScannerEngine, { ScanResult } from '@/app/lib/scannerEngine';
-import { detectCardQuad, warpCard } from '@/app/lib/cardClip';
+import { detectCardQuads, warpCard } from '@/app/lib/cardClip';
 import { getBasePath } from '@/app/lib/basePath';
 import { loadCards } from '@/app/lib/cardLookup';
 import Image from 'next/image';
@@ -81,6 +81,80 @@ function rankCard(c: any, ql: string): number {
   return -1;
 }
 
+// Limiar de confiança: abaixo disso a carta é marcada como 'não identificada'
+const THRESH = 0.55;
+// Cartas abaixo desta largura (px) na foto perdem qualidade no match
+const LARGURA_MINIMA = 300;
+
+/** Card de uma detecção multi-carta: preview do warp + top-1 + alternativas. */
+function DeteccaoCard({ d, idx }: {
+  d: { preview: string; larguraPx: number; matches: ScanResult[] };
+  idx: number;
+}) {
+  const melhor = d.matches[0];
+  const identificada = melhor && melhor.score >= THRESH;
+  const pequena = d.larguraPx > 0 && d.larguraPx < LARGURA_MINIMA;
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 p-3">
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          Carta {idx + 1}
+          {d.larguraPx > 0 && (
+            <span className="text-[10px] font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
+              {d.larguraPx}px
+            </span>
+          )}
+        </h4>
+        {pequena && (
+          <span className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full" title="Cartas pequenas perdem detalhe no match — aproxime a câmera">
+            ⚠ carta pequena
+          </span>
+        )}
+      </div>
+      <div className="flex gap-3">
+        <div className="relative w-14 h-20 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+          <Image src={d.preview} alt={`Carta ${idx + 1}`} fill className="object-contain" unoptimized />
+        </div>
+        <div className="min-w-0 flex-1 space-y-1">
+          {identificada ? (
+            <>
+              <div className="text-xs font-bold text-green-700">
+                ✓ {melhor.card.n}
+                <span className="ml-2 text-[10px] font-mono text-gray-400">
+                  {(melhor.score * 100).toFixed(1)}%
+                </span>
+              </div>
+              <div className="text-[10px] text-gray-500 font-mono truncate">
+                {melhor.card.sn} · {melhor.card.num}
+              </div>
+              <div className="flex flex-wrap gap-1 pt-0.5">
+                {d.matches.slice(1, 3).map((r) => (
+                  <span key={r.card.id} className="text-[10px] text-gray-400">
+                    #{r.rank} {r.card.n} ({(r.score * 100).toFixed(0)}%)
+                  </span>
+                ))}
+              </div>
+              <a
+                href={`${getBasePath()}/card?set=${encodeURIComponent(melhor.card.s)}&num=${encodeURIComponent(melhor.card.num)}&nome=${encodeURIComponent(melhor.card.n)}`}
+                className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline"
+              >
+                <ExternalLink className="w-2.5 h-2.5" /> Ver detalhes e escoragem
+              </a>
+            </>
+          ) : (
+            <div className="text-xs text-amber-700">
+              ⚠ Não identificada (melhor match {(melhor ? melhor.score * 100 : 0).toFixed(1)}% &lt; 55%)
+              <div className="text-[10px] text-gray-400 mt-0.5">
+                Aproxime a câmera ou escaneie esta carta separadamente.
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Scanner() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'scanning' | 'error'>('idle');
   const [progress, setProgress] = useState(0);
@@ -91,6 +165,13 @@ export default function Scanner() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [cardCount, setCardCount] = useState(0);
   const [clipped, setClipped] = useState<boolean | null>(null);
+
+  // Multi-carta (Fase 1): uma detecção por quadrilátero encontrado
+  const [deteccoes, setDeteccoes] = useState<{
+    preview: string;
+    larguraPx: number;
+    matches: ScanResult[];
+  }[] | null>(null);
 
   // Busca por texto (independe do scanner/modelo)
   const [textQuery, setTextQuery] = useState('');
@@ -176,6 +257,7 @@ export default function Scanner() {
       setPreview(dataUrl);
       setClippedPreview(null);
       setResults(null);
+      setDeteccoes(null);
       setErrorMsg(null);
       setClipped(null);
       setPhase('scanning');
@@ -183,29 +265,52 @@ export default function Scanner() {
       try {
         const engine = ScannerEngine.instance;
 
-        // 1. Clipping (OpenCV) — só se auto crop estiver ligado
-        let matchImg = dataUrl;
+        // 1. Clipping (OpenCV) — detecta N cartas se o auto crop estiver ligado
+        let quads: { points: { x: number; y: number }[]; area: number }[] = [];
         if (autoCrop) {
           try {
             const imgEl = await loadImage(dataUrl);
-            const quad = await detectCardQuad(imgEl);
-            if (quad) {
-              const canvas = await warpCard(imgEl, quad);
-              matchImg = canvas.toDataURL('image/jpeg', 0.92);
-              setClippedPreview(matchImg);
-              setClipped(true);
-            } else {
-              setClipped(false);
-            }
+            quads = await detectCardQuads(imgEl, 10);
+            setClipped(quads.length > 0);
           } catch (clipErr) {
             console.warn('Clipping falhou, usando imagem original:', clipErr);
             setClipped(false);
           }
         }
 
-        // 2. Match no índice
-        const top = await engine.search(matchImg, 5);
-        setResults(top);
+        // 2. Para cada carta detectada: warp + match. Sem detecção → imagem crua.
+        const regioes: { preview: string; larguraPx: number; origem: string }[] = [];
+        if (quads.length > 0) {
+          const imgEl = await loadImage(dataUrl);
+          for (const quad of quads) {
+            const canvas = await warpCard(imgEl, quad);
+            regioes.push({
+              preview: canvas.toDataURL('image/jpeg', 0.92),
+              // largura da carta na foto (px) — aviso se pequena
+              larguraPx: Math.max(
+                Math.hypot(quad.points[1].x - quad.points[0].x, quad.points[1].y - quad.points[0].y),
+                Math.hypot(quad.points[2].x - quad.points[1].x, quad.points[2].y - quad.points[1].y),
+              ),
+              origem: 'clip',
+            });
+          }
+        } else {
+          regioes.push({ preview: dataUrl, larguraPx: 0, origem: 'crua' });
+        }
+
+        // 3. Match de cada região (sequencial — evita pico de memória)
+        const deteccoes = [];
+        for (let i = 0; i < regioes.length; i++) {
+          const reg = regioes[i];
+          const top = await engine.search(reg.preview, 5);
+          deteccoes.push({ preview: reg.preview, larguraPx: reg.larguraPx, matches: top });
+        }
+        setDeteccoes(deteccoes);
+        // compat: fluxo de 1 carta usa o primeiro resultado
+        if (deteccoes.length === 1) {
+          setResults(deteccoes[0].matches);
+          setClippedPreview(regioes[0].origem === 'clip' ? regioes[0].preview : null);
+        }
       } catch (err) {
         console.error(err);
         setErrorMsg('Falha ao analisar a imagem.');
@@ -452,15 +557,24 @@ export default function Scanner() {
             )}
           </div>
 
-          {mostrandoResultados && mostrandoResultados.length > 0 ? (
+          {mostrandoTexto ? (
             <div className="space-y-3">
-              {mostrandoTexto
-                ? (textResults as any[]).map((c, i) => (
-                    <CardResult key={c.id} card={c} rank={i + 1} />
-                  ))
-                : (results as ScanResult[]).map((r) => (
-                    <CardResult key={r.card.id} card={r.card} score={r.score} rank={r.rank} />
-                  ))}
+              {(textResults as any[]).map((c, i) => (
+                <CardResult key={c.id} card={c} rank={i + 1} />
+              ))}
+            </div>
+          ) : deteccoes && deteccoes.length > 0 ? (
+            /* Multi-carta: um card por detecção */
+            <div className="space-y-3">
+              {deteccoes.map((d, i) => (
+                <DeteccaoCard key={i} d={d} idx={i} />
+              ))}
+            </div>
+          ) : mostrandoResultados && mostrandoResultados.length > 0 ? (
+            <div className="space-y-3">
+              {(results as ScanResult[]).map((r) => (
+                <CardResult key={r.card.id} card={r.card} score={r.score} rank={r.rank} />
+              ))}
             </div>
           ) : mostrandoTexto && textQuery.trim().length >= 2 ? (
             <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
