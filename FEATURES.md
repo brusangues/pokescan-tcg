@@ -23,6 +23,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | Página /changelog (commits + ablações) | `f214b7f` |
 | P0.2-P0.5: inflacionadas visíveis + build TS + cache por mtime + paths robustos | `44a2f3e` |
 | Bug do link da Liga no /card (Mew ex MEW vs Celebrations) + mapping completo | `07b5679` |
+| **Site responsivo (mobile)** — menu hambúrguer, tabelas com scroll, colunas compactas, sem overflow em 375/320px (9 páginas validadas) + `lang="pt-BR"` | `ff50441` |
 
 ## Modelo & Dados
 
