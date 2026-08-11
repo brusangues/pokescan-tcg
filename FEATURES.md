@@ -46,6 +46,8 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **card_id canônico `{idE}-{lang}-{sN}`** em todo o pipeline (índice `edicoes_liga.json` por overlap; corrige sv3→OBF, sv4→PAR, me1→MEG; set_map com sigla E edid; lookup com fallbacks) | `c9e7acf` |
 | Linguagem JP por sufixo da sigla (PGOJP/EPJP/SVPJp) + nomes normalizados no lookup + modelo por card_id exato | `18acbf8` + `05e9512` |
 | **Mesma carta em outros idiomas** — seção no /card com as versões JP/PT/EN (índice por nome EN normalizado: produtos da Liga + catálogo TCGAPI; chip do card atual marcado) | `801f6c4` |
+| **Retrain automático no cron semanal** (P1.6) — `retrain_models.py` depois da escoragem + rebuild/deploy do site em seguida (`liga-snapshot.sh`) | cron 07:30 (fora do repo) |
+| Limpeza: deps não usadas removidas (P3.22) + `crawl_tcgdex.py` removido (P3.23) + typos de prints já corrigidos (P3.25) | `f9f23af` |
 
 ## Coleções & EV do booster
 

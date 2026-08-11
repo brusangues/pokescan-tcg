@@ -6,15 +6,6 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ---
 
-## 🟡 P1 — Alto
-
-### [P1] 6. Nenhum cron re-treina os modelos
-- Refresh do cache ptcg roda semanalmente (adiciona sets novos como me5), mas os modelos USD/BRL só são re-treinados manualmente (`script/retrain_models.py`)
-- **Ideia**: adicionar `retrain_models.py` ao cron semanal (depois do refresh, antes do snapshot) — ou rodar mensalmente
-- Tags: backend, modelagem, crons
-
----
-
 ## 💡 P2 — Melhorias de produto
 
 ### [P2] 10. Alertas de oportunidade (Telegram)
@@ -46,21 +37,6 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 ### [P3] 21. App mobile / PWA
 - Front é responsivo e acessível via rede local; **Ideia**: transformar em PWA (manifest + service worker) para instalar no celular
 - Tags: frontend, produto
-
-### [P3] 22. Deps não usadas no frontend (auditoria 05/08)
-- `@google/genai`, `motion`, `class-variance-authority`, `@hookform/resolvers` estão no package.json mas **não são importados** em lugar nenhum do app
-- **Fix**: `npm uninstall` (reduz bundle/instalação)
-- Tags: frontend, limpeza
-
-### [P3] 23. `crawler/crawl_tcgdex.py` quebrado (auditoria 05/08)
-- `await` fora de função na linha 6 → SyntaxError — script nunca roda
-- Já substituído pelo fluxo crawler_liga (legado morto); **Fix**: remover ou corrigir
-- Tags: backend, limpeza
-
-### [P3] 25. Typos cosméticos em prints (auditoria 05/08)
-- `score_apos_crawl.py` linha ~435: "INF vancadas" (sem espaços), linha ~436: `{"Cape":30s}` em vez de `{"Carta":30s}`, linha ~393: "Inlacionada" (ligado ao P0.2)
-- `layout.tsx`: `lang="en"` em app pt-BR
-- Tags: cosmético
 
 ### [P3] 26. Alternativa jsfeat para o clipping (sem OpenCV.js)
 - **Contexto**: Fase 1 do clipping implementada com OpenCV.js (`@techstark/opencv-js`, `/scanner/opencv.js` ~13 MB WASM embutido) em `app/lib/cardClip.ts` — Canny multi-passada + contorno + warpPerspective
