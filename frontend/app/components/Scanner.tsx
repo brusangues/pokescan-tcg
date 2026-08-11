@@ -86,16 +86,17 @@ const THRESH = 0.55;
 // Cartas abaixo desta largura (px) na foto perdem qualidade no match
 const LARGURA_MINIMA = 300;
 
-/** Card de uma detecção multi-carta: preview do warp + top-1 + alternativas. */
+/** Card de uma detecção multi-carta: thumbnail clicável + top-1 + similares expansíveis. */
 function DeteccaoCard({ d, idx }: {
   d: { preview: string; larguraPx: number; matches: ScanResult[] };
   idx: number;
 }) {
+  const [aberta, setAberta] = useState(false);
   const melhor = d.matches[0];
   const identificada = melhor && melhor.score >= THRESH;
   const pequena = d.larguraPx > 0 && d.larguraPx < LARGURA_MINIMA;
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-3">
+    <div className={`bg-white rounded-xl border p-3 transition-colors ${aberta ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-gray-200'}`}>
       <div className="flex items-center justify-between gap-2 mb-2">
         <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
           Carta {idx + 1}
@@ -112,9 +113,19 @@ function DeteccaoCard({ d, idx }: {
         )}
       </div>
       <div className="flex gap-3">
-        <div className="relative w-14 h-20 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+        {/* Thumbnail da carta croppada — clicável: abre os similares */}
+        <button
+          onClick={() => setAberta(!aberta)}
+          title={aberta ? 'Fechar similares' : 'Ver cartas similares'}
+          className={`relative w-20 h-28 bg-gray-100 rounded-lg overflow-hidden shrink-0 border-2 transition-colors ${
+            aberta ? 'border-indigo-400' : 'border-transparent hover:border-indigo-300'
+          }`}
+        >
           <Image src={d.preview} alt={`Carta ${idx + 1}`} fill className="object-contain" unoptimized />
-        </div>
+          <span className="absolute bottom-0 inset-x-0 text-[9px] text-center text-indigo-700 bg-indigo-50/90 py-0.5">
+            {aberta ? '− fechar' : '▸ similares'}
+          </span>
+        </button>
         <div className="min-w-0 flex-1 space-y-1">
           {identificada ? (
             <>
@@ -134,12 +145,12 @@ function DeteccaoCard({ d, idx }: {
                   </span>
                 ))}
               </div>
-              <a
-                href={`${getBasePath()}/card?set=${encodeURIComponent(melhor.card.s)}&num=${encodeURIComponent(melhor.card.num)}&nome=${encodeURIComponent(melhor.card.n)}`}
+              <button
+                onClick={() => setAberta(!aberta)}
                 className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline"
               >
-                <ExternalLink className="w-2.5 h-2.5" /> Ver detalhes e escoragem
-              </a>
+                {aberta ? '− Ocultar similares' : `▸ Ver ${d.matches.length} cartas similares`}
+              </button>
             </>
           ) : (
             <div className="text-xs text-amber-700">
@@ -147,10 +158,28 @@ function DeteccaoCard({ d, idx }: {
               <div className="text-[10px] text-gray-400 mt-0.5">
                 Aproxime a câmera ou escaneie esta carta separadamente.
               </div>
+              <button
+                onClick={() => setAberta(!aberta)}
+                className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline mt-1"
+              >
+                {aberta ? '− Ocultar' : '▸ Ver candidatos mesmo assim'}
+              </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Lista de cartas similares (top-5 do match desta região) */}
+      {aberta && (
+        <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+            Cartas similares à carta {idx + 1}
+          </p>
+          {d.matches.map((r) => (
+            <CardResult key={r.card.id} card={r.card} score={r.score} rank={r.rank} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
