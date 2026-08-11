@@ -209,6 +209,7 @@ export default function FeaturesPage() {
                     <th className="px-3 py-2 text-right">Label $</th>
                     <th className="px-3 py-2 text-right">Pred $</th>
                     <th className="px-3 py-2 text-left min-w-[340px]">SHAP (por que o preço é esse?)</th>
+                    <th className="px-3 py-2 text-left min-w-[420px]">Features completas ({featureCols.length})</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -265,6 +266,19 @@ export default function FeaturesPage() {
                           ) : (
                             <span className="text-gray-300 text-[10px]">sem SHAP</span>
                           )}
+                        </td>
+                        {/* Lista completa de features (à direita do SHAP) */}
+                        <td className="px-3 py-2 align-top">
+                          <div className="max-h-72 overflow-y-auto pr-1">
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
+                              {featureCols.map(c => (
+                                <div key={c} className="flex justify-between gap-2 text-[10px]">
+                                  <span className="text-gray-400 truncate" title={c}>{c}</span>
+                                  <span className="font-mono text-gray-700 shrink-0">{fmt(r[c])}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     );
