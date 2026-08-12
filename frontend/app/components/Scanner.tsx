@@ -287,6 +287,11 @@ export default function Scanner() {
       setClippedPreview(null);
       setResults(null);
       setDeteccoes(null);
+      // BUG 3 (QA rodada 3): limpa a busca por texto — senão o resultado do
+      // scan fica invisível atrás de 'Resultado da busca'
+      setTextQuery('');
+      setTextResults(null);
+      setTextTotal(0);
       setErrorMsg(null);
       setClipped(null);
       setPhase('scanning');
