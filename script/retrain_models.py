@@ -31,7 +31,7 @@ def load_base_from_cache():
     cards = json.loads((DATA_DIR / 'ptcg_cards_cache.json').read_text(encoding='utf-8'))
     df = pd.DataFrame([pm.parse_card(c) for c in cards])
     df['_raw'] = cards
-    df = pm.enrich_pricing(df)
+    df = pm._enrich(df)
     df = pm.add_supply_features(df)
     df['id'] = df['id'].astype(str)
     print(f'  Base: {len(df)} cartas, {df["target_price"].notna().sum()} com preço USD')

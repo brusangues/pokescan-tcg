@@ -61,7 +61,7 @@ def load_base_features():
 
     df_base = pd.DataFrame([pm.parse_card(c) for c in cards])
     df_base['_raw'] = cards
-    df_base = pm.enrich_pricing(df_base)
+    df_base = pm._enrich(df_base)
     df_base = pm.add_supply_features(df_base)  # E1: rarity_pool_size + pull_cost
     df_base['id'] = df_base['id'].astype(str)
     return df_base
@@ -121,9 +121,15 @@ def predict_base(df_base):
             X[c] = X[c].fillna('Unknown').astype(str)
     df_base['pred_usd'] = np.expm1(model.predict(X))
 
-    # BRL: usa USD como feature extra (igual ao treino)
+    # BRL: usa USD + features temporais TCGCSV como extras (igual ao treino)
     df_base['target_price_usd'] = df_base['target_price'].fillna(df_base['target_price'].median())
-    X_brl = pm.prepare_features(df_base, extra_features=['target_price_usd'])
+    extra_features = ['target_price_usd']
+    try:
+        from script.tcgcsv_pricing import FEATS_TEMPORAIS
+        extra_features += [c for c in FEATS_TEMPORAIS if c in df_base.columns]
+    except Exception:
+        pass
+    X_brl = pm.prepare_features(df_base, extra_features=extra_features)
     for c in pm.CAT_FEATURES:
         if c in X_brl.columns:
             X_brl[c] = X_brl[c].fillna('Unknown').astype(str)

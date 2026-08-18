@@ -411,6 +411,18 @@ def enrich_pricing(df):
     return df
 
 
+def _enrich(df):
+    """Enrich padrão do treino/score — TCGCSV como fonte primária de preço
+    USD (validado no A/B: B ganha de A em R²/MAE), com fallback para o
+    tcgplayer do pokemontcg.io quando os dados TCGCSV não existirem."""
+    try:
+        from script.tcgcsv_pricing import enrich_pricing as enrich_tcgcsv
+        return enrich_tcgcsv(df)
+    except Exception as e:
+        print(f'⚠️  TCGCSV pricing indisponível, usando pokemontcg.io: {e}', flush=True)
+        return enrich_pricing(df)
+
+
 # ── 4. Features ─────────────────────────────────────────────────────
 
 CAT_FEATURES = ['rarity_tcg', 'primary_type', 'set_series', 'price_type', 'supertype', 'illustrator', 'trainer_gender']
@@ -653,7 +665,7 @@ def train_model(max_sets=20, cards=None):
         cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
     df['_raw'] = cards  # payload bruto com pricing embutido (pokemontcg.io)
-    df = enrich_pricing(df)
+    df = _enrich(df)    # TCGCSV como fonte primária de preço (fallback cache)
     df = add_supply_features(df)  # E1: rarity_pool_size + pull_cost (antes do filtro)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     df['log_target'] = np.log1p(df['target_price'])
@@ -770,7 +782,7 @@ def train_model_brl(max_sets=50, cards=None):
         cards = fetch_all_cards(max_sets=max_sets)
     df = pd.DataFrame([parse_card(c) for c in cards])
     df['_raw'] = cards
-    df = enrich_pricing(df)
+    df = _enrich(df)  # TCGCSV como fonte primária de preço (fallback cache)
     df = add_supply_features(df)  # E1: rarity_pool_size + pull_cost (antes do filtro)
     df = df[df['target_price'].notna() & (df['target_price'] > 0)].copy()
     
@@ -784,6 +796,15 @@ def train_model_brl(max_sets=50, cards=None):
         return None
     
     df['log_target_brl'] = np.log1p(df['target_price_brl'])
+
+    # Features temporais TCGCSV (ret_1w/4w/8w, momentum...) — validado: reduzem o
+    # erro nas safras novas (2026: 33,8% → 18,9%) onde não há série BRL própria
+    extra_features = ['target_price_usd']
+    try:
+        from script.tcgcsv_pricing import FEATS_TEMPORAIS
+        extra_features += [c for c in FEATS_TEMPORAIS if c in df.columns]
+    except Exception:
+        pass
     
     # USD price como feature de entrada para o modelo BRL
     df['target_price_usd'] = df['target_price'].fillna(df['target_price'].median())
@@ -794,9 +815,9 @@ def train_model_brl(max_sets=50, cards=None):
     train_df = df_sorted.iloc[:split]
     test_df = df_sorted.iloc[split:]
     
-    X_train = prepare_features(train_df, extra_features=['target_price_usd'])
+    X_train = prepare_features(train_df, extra_features=extra_features)
     y_train = train_df['log_target_brl']
-    X_test = prepare_features(test_df, extra_features=['target_price_usd'])
+    X_test = prepare_features(test_df, extra_features=extra_features)
     y_test = test_df['log_target_brl']
     
     cat_idx = [i for i, c in enumerate(X_train.columns) if c in CAT_FEATURES]
