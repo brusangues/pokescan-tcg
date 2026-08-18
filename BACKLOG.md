@@ -8,13 +8,9 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-### [P1] 28. Histórico diário de preços (TCGCSV Archive) — experimento validado, integração pendente
-- **Validação completa** (11/08, `experiments/validate_tcgcsv.py` + `docs/APIs_Pokemon.md`): arquivo diário ~4MB, janela 08/02/2024 → ontem sem furos, EN (cat. 3) + JP (cat. 85); join com cache 99,7% dos singles com preço
-- **Feito (12/08, experimentos)**: histórico semanal 26 semanas (17/02→11/08, 1,13M linhas) + mapeamento catálogo↔TCGCSV 91,7% dos cards (`mapear_sets_tcgcsv.py`) + dataset temporal (`features_temporais.py`) + **treino com corte temporal validado**:
-  - USD (prever semana seguinte): MAPE 17,4% → **5,1%** (baseline só estáticas vs +histórico)
-  - BRL (prever preço da Liga): MAPE 37,8% → **33,7%**; safra 2026: 33,8% → **18,9%** — tendência USD compensa a falta de série BR
-  - Cron **liga-snapshot-diario** (06:30) criado: acumula série BRL diária (a Liga não publica histórico)
-- **A fazer**: integrar no produtivo — substituir tcgplayer (pokemontcg.io) pelo TCGCSV no `enrich_pricing` (sanity Δ + A/B no retrain); features temporais no modelo de produção; imagens continuam do pokemontcg.io; cardmarket EUR continua (não é TCGPlayer)
+### [P1] 29. Evolução contínua do modelo temporal (TCGCSV)
+- **Feito (18/08, produtivo)**: preços TCGCSV integrados como fonte primária (P1.28 solucionado — ver FEATURES.md)
+- **Ideia**: treinar versão do modelo com dataset temporal full (features da semana anterior) para prever preço da semana seguinte — validado em experimento (MAPE 5,1% vs 17,4% baseline) mas não integrado ao produto (o modelo de produção prevê o nível, onde as temporais não agregam — o cardmarket captura)
 - Tags: dados, TCGCSV, modelagem, experimento
 
 ---

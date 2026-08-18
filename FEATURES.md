@@ -41,6 +41,9 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Mapping corrigido** (11 duplicatas → 1, 18 fantasmas removidos, me5→M5) — P2.15 | `8167f16` |
 | **JP mapping** corrigido (0 alvos fantasmas; chaves UPPER) — P2.16 | `8167f16` |
 | Limpeza de dados órfãos (83 embeddings + 83 imagens; lixo fora do git) — P2.14 | `d1a0065` (`script/limpar_orfao.py`) |
+| **Preços TCGCSV como fonte primária (P1.28)** — target/price_type do TCGCSV (última semana, fallback cache; 17.919/20.479 cartas), mapeamento catálogo↔TCGCSV 91,7%, validado no A/B (R² 0.206→0.240, MAE $7.02→$6.73 no alvo real); cardmarket EUR e imagens continuam do pokemontcg.io | `4347fda` |
+| **Features temporais TCGCSV no modelo BRL** — ret/4w/8w, momentum, spread por subtype (12 feats) via `script/tcgcsv_lib.py` + `script/tcgcsv_pricing.py`; safra 2026: erro 33,8% → **18,9%** (não há série BR própria ainda) | `4347fda` |
+| **Histórico semanal TCGCSV no cron** — puxa a semana mais recente antes do retrain (`puxar_historico_semanal.py --semanas 1`); cron **liga-snapshot-diario** (06:30) acumula série BRL diária (5 snapshots úteis já) | `4347fda` |
 
 ## Identidade de carta (chave canônica)
 
@@ -73,5 +76,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 
 ## Em aberto no backlog
 
-Ver [`BACKLOG.md`](BACKLOG.md): P1.6 (retrain nos crons), P2.10 (alertas
-Telegram), P3.17-23, P3.25-27 (incl. explicabilidade via SHAP — P3.27).
+Ver [`BACKLOG.md`](BACKLOG.md): P1.29 (modelo de previsão temporal USD),
+P2.10 (alertas Telegram), P2.29 (calibrar threshold multi-carta),
+P3.17-23, P3.25-27 (incl. explicabilidade via SHAP — P3.27), P3.30
+(multi-carta Fase 2).
