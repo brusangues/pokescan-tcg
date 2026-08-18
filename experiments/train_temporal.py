@@ -104,15 +104,17 @@ def main():
         # por safra
         if 'release_year' in test.columns:
             test_f = test.copy()
-            test_f['pred'] = pred
+            test_f['pred'] = np.exp(pred)
             test_f['real'] = y_p
             for ano in sorted(test_f['release_year'].dropna().unique()):
                 s = test_f[test_f['release_year'].astype(int) == ano]
                 if len(s) < 50:
                     continue
-                e = np.mean(np.abs(np.exp(s['pred']) - s['real']) / s['real']) * 100
+                # erro relativo mediano (robusto a preços mínimos)
+                rel = np.abs(s['pred'] - s['real']) / s['real']
+                e = np.median(rel) * 100
                 marca = ' ◀ safra nova' if ano >= args.safra_min else ''
-                print(f'    safra {ano}: n={len(s):>5} | MAPE={e:.1f}%{marca}')
+                print(f'    safra {ano}: n={len(s):>5} | erro mediano={e:.1f}%{marca}')
         # importância das temporais
         if nome == 'temporal':
             imp = pd.Series(m.get_feature_importance(), index=cols).sort_values(ascending=False)
