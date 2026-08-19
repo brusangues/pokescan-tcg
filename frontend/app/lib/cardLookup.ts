@@ -248,6 +248,8 @@ export async function lookupCard(params: {
     images: detalhe?.images || { small: card.img, large: card.img?.replace('small', 'large') },
     tcgplayer: detalhe?.tcgplayer,
     cardmarket: detalhe?.cardmarket,
+    previsao_semana: detalhe?.previsao_semana,
+    tendencia_pct: detalhe?.tendencia_pct,
     flavorText: detalhe?.flavorText,
     attacks: detalhe?.attacks,
     abilities: detalhe?.abilities,

@@ -49,6 +49,8 @@ interface CardData {
       avg30?: number;
     };
   };
+  previsao_semana?: number;
+  tendencia_pct?: number;
   flavorText?: string;
   attacks?: { name: string; cost?: string[]; damage?: string; text?: string }[];
   abilities?: { name: string; text: string }[];
@@ -477,6 +479,35 @@ function IdiomasSection({ dados, atual }: {
                         <span className="font-medium text-gray-900">€{card.cardmarket.prices.lowPrice.toFixed(2)}</span>
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {/* Previsão da próxima semana (P1.29) */}
+              {card.previsao_semana != null && card.tendencia_pct != null && (
+                <div className="mt-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-600">Previsão — próxima semana</h3>
+                      <p className="text-xs text-gray-400 mt-0.5">
+                        Estimativa do modelo com base no histórico de preços (TCGCSV)
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-gray-900">${card.previsao_semana.toFixed(2)}</span>
+                      <div>
+                        <span
+                          className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                            card.tendencia_pct >= 0
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : 'bg-red-100 text-red-700'
+                          }`}
+                        >
+                          {card.tendencia_pct >= 0 ? '▲' : '▼'}{' '}
+                          {Math.abs(card.tendencia_pct).toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}

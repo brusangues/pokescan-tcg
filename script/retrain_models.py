@@ -58,9 +58,25 @@ def main():
         print('='*60)
         pm.train_model_brl(cards=cards)
 
+    # P1.29 — modelo de previsão temporal (preço USD da próxima semana)
+    print('\n' + '='*60)
+    print('📈 TREINANDO MODELO TEMPORAL (P1.29)')
+    print('='*60)
+    import subprocess
+    try:
+        r = subprocess.run(
+            [sys.executable, str(BASE_DIR / 'script' / 'train_temporal_prod.py')],
+            capture_output=True, text=True, timeout=1500)
+        print(r.stdout[-1800:] if r.stdout else '')
+        if r.returncode != 0:
+            print('⚠️  Temporal falhou (segue sem o modelo):', r.stderr[-600:])
+    except Exception as e:
+        print(f'⚠️  Temporal indisponível (segue sem o modelo): {e}')
+
     print('\n✅ Retreino completo. Modelos atualizados:')
     print(f'  {pm.MODEL_PATH}')
     print(f'  {pm.BRL_MODEL_PATH}')
+    print(f'  {DATA_DIR / "catboost_model_temporal.cbm"} (temporal, P1.29)')
 
 
 if __name__ == '__main__':

@@ -19,6 +19,9 @@ from datetime import datetime
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+from prever_temporal import prever_todas
 SCORED = REPO / 'data' / 'scored'
 PTCG_CACHE = REPO / 'data' / 'ptcg_cards_cache.json'
 SET_MAPPING = REPO / 'data' / 'liga' / 'liga_set_sigla_ptcg.json'
@@ -27,6 +30,7 @@ EDICOES = REPO / 'data' / 'liga' / 'edicoes_liga.json'
 
 
 _EDICOES_LANG: dict | None = None
+_PREVISAO_TEMP: dict = {}
 
 
 def _lang_por_edicao() -> dict:
@@ -341,6 +345,11 @@ def _enxuga_card(c: dict) -> dict:
             'prices': {k: p.get(k) for k in ('averageSellPrice', 'lowPrice', 'trendPrice', 'avg30')
                        if p.get(k) is not None},
         }
+    # Previsão temporal (P1.29): preço USD da próxima semana p/ cartas c/ histórico TCGCSV
+    pv = _PREVISAO_TEMP.get(c.get('id'))
+    if pv:
+        card['previsao_semana'] = pv['prev']
+        card['tendencia_pct'] = pv['tendencia_pct']
     return card
 
 
@@ -660,6 +669,11 @@ def main():
         size = path.stat().st_size
         total += size
         print(f'{name:24s} {size/1e6:7.2f} MB  ({len(data):,} itens)')
+
+    # Previsão temporal (P1.29) — uma vez p/ o carddetail
+    global _PREVISAO_TEMP
+    _PREVISAO_TEMP = prever_todas()
+    print(f'previsao temporal: {len(_PREVISAO_TEMP):,} cartas')
 
     # Detalhe em chunks por letra do nome
     detalhe_dir = OUT / 'carddetail'
