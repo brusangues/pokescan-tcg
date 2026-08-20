@@ -70,6 +70,87 @@ function toWorkingCanvas(cv: any, img: HTMLCanvasElement | HTMLImageElement) {
  * (as passadas acham o mesmo quad repetido) e ordena por área.
  * Retorna no máximo `max` quads (padrão 10).
  */
+/** Coleta quads válidos a partir de uma máscara binária (passada Canny ou fundo). */
+function _coletarQuads(
+  cv: any, mask: any, minArea: number, scale: number,
+  quads: Quad[], kernel: any, cols: number, rows: number,
+) {
+  let contours = new cv.MatVector();
+  const hierarchy = new cv.Mat();
+  cv.findContours(mask, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+  for (let i = 0; i < contours.size(); i++) {
+    const cnt = contours.get(i);
+    const area = cv.contourArea(cnt);
+    if (area < minArea) { cnt.delete(); continue; }
+    const rect = cv.boundingRect(cnt);
+    const touchesBorder =
+      rect.x <= 2 || rect.y <= 2 ||
+      rect.x + rect.width >= cols - 2 ||
+      rect.y + rect.height >= rows - 2;
+    if (touchesBorder) { cnt.delete(); continue; }
+    const peri = cv.arcLength(cnt, true);
+    let approx = new cv.Mat();
+    let quadPts: { x: number; y: number }[] | null = null;
+    for (const eps of [0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.10]) {
+      cv.approxPolyDP(cnt, approx, eps * peri, true);
+      if (approx.rows === 4) {
+        const pts = [];
+        for (let p = 0; p < 4; p++) {
+          pts.push({
+            x: Math.round(approx.data32S[p * 2] / scale),
+            y: Math.round(approx.data32S[p * 2 + 1] / scale),
+          });
+        }
+        const o = orderPoints(pts);
+        const ratio = aspectRatio(o);
+        if (ratio >= 0.45 && ratio <= 0.95) {
+          quadPts = o;
+          break;
+        }
+      }
+    }
+    // fallback: caixa rotacionada mínima
+    if (!quadPts) {
+      try {
+        const r = cv.minAreaRect(cnt);
+        const cx = r.center.x, cy = r.center.y;
+        const w = r.size.width, h = r.size.height;
+        const theta = (r.angle * Math.PI) / 180;
+        const cos = Math.cos(theta), sin = Math.sin(theta);
+        const pts = [];
+        for (const [ox, oy] of [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]) {
+          pts.push({
+            x: Math.round((cx + ox * cos - oy * sin) / scale),
+            y: Math.round((cy + ox * sin + oy * cos) / scale),
+          });
+        }
+        const o = orderPoints(pts);
+        const ratio = aspectRatio(o);
+        if (ratio >= 0.45 && ratio <= 0.95) {
+          quadPts = o;
+        }
+      } catch (e) {
+        // ignora fallback falho
+      }
+    }
+    approx.delete();
+    if (quadPts) {
+      quads.push({ points: quadPts, area: area / (scale * scale) });
+    }
+    cnt.delete();
+  }
+  contours.delete(); hierarchy.delete();
+}
+
+/**
+ * Detecta TODOS os quadriláteros de carta na imagem (multi-carta) — Fase 2.
+ * Estratégia: multi-passada Canny (Fase 1) **+ passada de segmentação por
+ * fundo (Fase 2-B)** — quando o fundo é uniforme (mesa escura, como nas fotos
+ * do usuário), o threshold de brilho acha cartas pequenas como blobs que o
+ * Canny às vezes perde. Os candidatos das duas fontes são unidos e deduplicados
+ * por centro; o Canny continua a fonte principal e a passada B apenas SOMA
+ * candidatos válidos (filtro de razão de aspecto + área), sem regressão.
+ */
 export async function detectCardQuads(
   img: HTMLCanvasElement | HTMLImageElement,
   max = 10,
@@ -88,87 +169,41 @@ export async function detectCardQuads(
   const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(3, 3));
   const gray = new cv.Mat();
   const edges = new cv.Mat();
-  let contours = new cv.MatVector();
-  const hierarchy = new cv.Mat();
 
   const quads: Quad[] = [];
 
+  // ── Fase 1: multi-passada Canny ──
   for (const [ksize, low, high] of passes) {
     cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
     cv.GaussianBlur(gray, gray, new cv.Size(ksize, ksize), 0);
     cv.Canny(gray, edges, low, high);
     cv.dilate(edges, edges, kernel, new cv.Point(-1, -1), 2);
-    cv.findContours(edges, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
+    _coletarQuads(cv, edges, minArea, scale, quads, kernel, src.cols, src.rows);
+  }
 
-    for (let i = 0; i < contours.size(); i++) {
-      const cnt = contours.get(i);
-      const area = cv.contourArea(cnt);
-      if (area < minArea) { cnt.delete(); continue; }
-      const rect = cv.boundingRect(cnt);
-      const touchesBorder =
-        rect.x <= 2 || rect.y <= 2 ||
-        rect.x + rect.width >= src.cols - 2 ||
-        rect.y + rect.height >= src.rows - 2;
-      if (touchesBorder) { cnt.delete(); continue; }
-      const peri = cv.arcLength(cnt, true);
-      let approx = new cv.Mat();
-      let quadPts: { x: number; y: number }[] | null = null;
-      for (const eps of [0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.10]) {
-        cv.approxPolyDP(cnt, approx, eps * peri, true);
-        if (approx.rows === 4) {
-          const pts = [];
-          for (let p = 0; p < 4; p++) {
-            pts.push({
-              x: Math.round(approx.data32S[p * 2] / scale),
-              y: Math.round(approx.data32S[p * 2 + 1] / scale),
-            });
-          }
-          const o = orderPoints(pts);
-          const ratio = aspectRatio(o);
-          if (ratio >= 0.45 && ratio <= 0.95) {
-            quadPts = o;
-            break;
-          }
-        }
-      }
-      // fallback: caixa rotacionada mínima
-      if (!quadPts) {
-        try {
-          const r = cv.minAreaRect(cnt);
-          const cx = r.center.x, cy = r.center.y;
-          const w = r.size.width, h = r.size.height;
-          const theta = (r.angle * Math.PI) / 180;
-          const cos = Math.cos(theta), sin = Math.sin(theta);
-          const pts = [];
-          for (const [ox, oy] of [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2]]) {
-            pts.push({
-              x: Math.round((cx + ox * cos - oy * sin) / scale),
-              y: Math.round((cy + ox * sin + oy * cos) / scale),
-            });
-          }
-          const o = orderPoints(pts);
-          const ratio = aspectRatio(o);
-          if (ratio >= 0.45 && ratio <= 0.95) {
-            quadPts = o;
-          }
-        } catch (e) {
-          // ignora fallback falho
-        }
-      }
-      approx.delete();
-      if (quadPts) {
-        quads.push({ points: quadPts, area: area / (scale * scale) });
-      }
-      cnt.delete();
-    }
-    contours.delete();
-    contours = new cv.MatVector();
+  // ── Fase 2-B: segmentação por fundo (blobs de brilho distinto do fundo) ──
+  //  Acha cartas que o Canny perde quando o fundo é uniforme (mesa escura).
+  try {
+    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+    const mean = cv.mean(gray)[0];
+    const mask = new cv.Mat();
+    // Otsu: 2 classes (fundo vs cartas). Se o fundo predominantemente é ESCURO
+    // (mesa), mantém os claros (cartas); se é CLARO, mantém os escuros.
+    const thrType = mean < 128 ? cv.THRESH_BINARY : cv.THRESH_BINARY_INV;
+    cv.threshold(gray, mask, 0, 255, thrType | cv.THRESH_OTSU);
+    // fecha pequenas lacunas e limpa ruído
+    cv.morphologyEx(mask, mask, cv.MORPH_CLOSE, kernel, new cv.Point(-1, -1), 2);
+    cv.dilate(mask, mask, kernel, new cv.Point(-1, -1), 1);
+    _coletarQuads(cv, mask, minArea, scale, quads, kernel, src.cols, src.rows);
+    mask.delete();
+  } catch (e) {
+    // passada B nunca deve derrubar a detecção — se falhar, segue só Canny
   }
 
   src.delete(); gray.delete(); edges.delete();
-  kernel.delete(); contours.delete(); hierarchy.delete();
+  kernel.delete();
 
-  // dedup por centro (mesmo quad achado em várias passadas)
+  // dedup por centro (mesmo quad achado em várias passadas/fontes)
   const diag = Math.hypot(img.width || (img as HTMLImageElement).naturalWidth,
     img.height || (img as HTMLImageElement).naturalHeight);
   const dedup: Quad[] = [];

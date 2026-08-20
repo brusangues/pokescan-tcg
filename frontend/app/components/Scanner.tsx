@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalLink, ImageOff, X, Type } from 'lucide-react';
+import { Camera, Loader2, Search, CheckCircle2, AlertCircle, Download, ExternalLink, ImageOff, X, Type, Scissors, Plus } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 import ScannerEngine, { ScanResult } from '@/app/lib/scannerEngine';
 import { detectCardQuads, warpCard } from '@/app/lib/cardClip';
@@ -89,9 +89,10 @@ const THRESH = 0.50;
 const LARGURA_MINIMA = 300;
 
 /** Card de uma detecção multi-carta: thumbnail clicável + top-1 + similares expansíveis. */
-function DeteccaoCard({ d, idx }: {
-  d: { preview: string; larguraPx: number; matches: ScanResult[] };
+function DeteccaoCard({ d, idx, onRemove }: {
+  d: { preview: string; larguraPx: number; matches: ScanResult[]; origem?: string };
   idx: number;
+  onRemove?: () => void;
 }) {
   const [aberta, setAberta] = useState(false);
   const melhor = d.matches[0];
@@ -102,17 +103,31 @@ function DeteccaoCard({ d, idx }: {
       <div className="flex items-center justify-between gap-2 mb-2">
         <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
           Carta {idx + 1}
+          {d.origem === 'manual' && (
+            <span className="text-[10px] font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">✂ manual</span>
+          )}
           {d.larguraPx > 0 && (
             <span className="text-[10px] font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
               {d.larguraPx}px
             </span>
           )}
         </h4>
-        {pequena && (
-          <span className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full" title="Cartas pequenas perdem detalhe no match — aproxime a câmera">
-            ⚠ carta pequena
-          </span>
-        )}
+        <div className="flex items-center gap-1">
+          {pequena && (
+            <span className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full" title="Cartas pequenas perdem detalhe no match — aproxime a câmera">
+              ⚠ carta pequena
+            </span>
+          )}
+          {onRemove && (
+            <button
+              onClick={onRemove}
+              className="text-gray-300 hover:text-red-500 hover:bg-red-50 rounded p-0.5 transition-colors"
+              title="Remover esta detecção (falso positivo)"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
       <div className="flex gap-3">
         {/* Thumbnail da carta croppada — clicável: abre os similares */}
@@ -186,6 +201,124 @@ function DeteccaoCard({ d, idx }: {
   );
 }
 
+/** Fase 2-D: crop MANUAL — o usuário desenha um retângulo sobre a foto para
+ * escanear uma carta que a detecção automática perdeu (sobreposição, fundo
+ * claro, carta pequena). Renderiza a foto num canvas, captura o drag e
+ * devolve a região em pixels da imagem ORIGINAL via onCrop. */
+function ManualCrop({ dataUrl, onCrop, onCancel }: {
+  dataUrl: string;
+  onCrop: (rect: { x: number; y: number; w: number; h: number }) => void;
+  onCancel: () => void;
+}) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const scaleRef = useRef(1); // px exibido -> px originais
+  const [rect, setRect] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
+  const startRef = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const img = new window.Image();
+    img.onload = () => {
+      imgRef.current = img;
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const maxW = 300;
+      const w = Math.min(maxW, img.naturalWidth);
+      const h = Math.round((w / img.naturalWidth) * img.naturalHeight);
+      const dpr = 2;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      scaleRef.current = img.naturalWidth / w;
+      redraw(null);
+    };
+    img.src = dataUrl;
+  }, [dataUrl]);
+
+  const redraw = (sel: { x0: number; y0: number; x1: number; y1: number } | null) => {
+    const canvas = canvasRef.current, img = imgRef.current;
+    if (!canvas || !img) return;
+    const ctx = canvas.getContext('2d')!;
+    const dpr = 2, cw = parseFloat(canvas.style.width), ch = parseFloat(canvas.style.height);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.drawImage(img, 0, 0, cw, ch);
+    if (sel) {
+      const rx = Math.min(sel.x0, sel.x1), ry = Math.min(sel.y0, sel.y1);
+      const rw = Math.abs(sel.x1 - sel.x0), rh = Math.abs(sel.y1 - sel.y0);
+      ctx.strokeStyle = '#4f46e5';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(rx, ry, rw, rh);
+      ctx.fillStyle = 'rgba(79,70,229,0.15)';
+      ctx.fillRect(rx, ry, rw, rh);
+    }
+  };
+
+  const pos = (e: React.MouseEvent) => {
+    const r = canvasRef.current!.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+
+  const mouseDown = (e: React.MouseEvent) => {
+    startRef.current = pos(e);
+    setRect(null);
+  };
+  const mouseMove = (e: React.MouseEvent) => {
+    const s = startRef.current;
+    if (!s) return;
+    const p = pos(e);
+    redraw({ x0: s.x, y0: s.y, x1: p.x, y1: p.y });
+  };
+  const mouseUp = (e: React.MouseEvent) => {
+    const s = startRef.current;
+    if (!s) return;
+    const p = pos(e);
+    startRef.current = null;
+    const rx = Math.min(s.x, p.x), ry = Math.min(s.y, p.y);
+    const rw = Math.abs(p.x - s.x), rh = Math.abs(p.y - s.y);
+    if (rw > 8 && rh > 8) {
+      setRect({ x: Math.round(rx * scaleRef.current), y: Math.round(ry * scaleRef.current),
+                w: Math.round(rw * scaleRef.current), h: Math.round(rh * scaleRef.current) });
+    }
+    redraw(null);
+  };
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold text-indigo-700 flex items-center gap-1">
+          <Scissors className="w-3.5 h-3.5" /> Recortar carta manualmente
+        </p>
+        <button onClick={onCancel} className="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center gap-1">
+          <X className="w-3 h-3" /> cancelar
+        </button>
+      </div>
+      <div className="inline-block rounded-xl border border-indigo-300 overflow-hidden bg-white shadow-sm">
+        <canvas
+          ref={canvasRef}
+          onMouseDown={mouseDown}
+          onMouseMove={mouseMove}
+          onMouseUp={mouseUp}
+          onMouseLeave={() => { startRef.current = null; redraw(null); }}
+          className="block cursor-crosshair select-none"
+        />
+      </div>
+      <p className="text-[11px] text-gray-400">
+        Arraste sobre a carta que a detecção automática não encontrou e toque em escanear.
+      </p>
+      <button
+        disabled={!rect}
+        onClick={() => rect && onCrop(rect)}
+        className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+      >
+        <Plus className="w-3.5 h-3.5" /> Escanear seleção
+      </button>
+    </div>
+  );
+}
+
 export default function Scanner() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'scanning' | 'error'>('idle');
   const [progress, setProgress] = useState(0);
@@ -212,6 +345,9 @@ export default function Scanner() {
 
   // Auto crop (OpenCV)
   const [autoCrop, setAutoCrop] = useState(true);
+
+  // Fase 2-D: modo de crop manual (desenhar retângulo p/ adicionar carta)
+  const [modoCrop, setModoCrop] = useState(false);
 
   const loadRef = useRef<Promise<void> | null>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -360,6 +496,46 @@ export default function Scanner() {
     };
     reader.readAsDataURL(file);
   }, [autoCrop]);
+
+  // Fase 2-D: escaneia um recorte manual (carta que a detecção automática perdeu)
+  const handleCrop = useCallback(async (rect: { x: number; y: number; w: number; h: number }) => {
+    if (!preview || rect.w < 10 || rect.h < 10) return;
+    try {
+      const engine = ScannerEngine.instance;
+      const imgEl = await loadImage(preview);
+      const c = document.createElement('canvas');
+      c.width = rect.w;
+      c.height = rect.h;
+      const ctx = c.getContext('2d')!;
+      ctx.drawImage(imgEl, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+      let previewCanvas: HTMLCanvasElement = c;
+      if (autoCrop) {
+        try {
+          // retângulo axis-aligned → 4 pontos (perspectiva = apenas escala/crop)
+          const quad = {
+            points: [
+              { x: rect.x, y: rect.y }, { x: rect.x + rect.w, y: rect.y },
+              { x: rect.x + rect.w, y: rect.y + rect.h }, { x: rect.x, y: rect.y + rect.h },
+            ],
+            area: rect.w * rect.h,
+          };
+          previewCanvas = await warpCard(imgEl, quad as any);
+        } catch (e) { /* usa o recorte cru */ }
+      }
+      const previewUrl = previewCanvas.toDataURL('image/jpeg', 0.92);
+      const top = await engine.search(previewUrl, 5);
+      setDeteccoes(prev => [...(prev || []), { preview: previewUrl, larguraPx: rect.w, matches: top, origem: 'manual' }]);
+      setModoCrop(false);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('Falha ao escanear a seleção.');
+    }
+  }, [autoCrop, preview]);
+
+  // Fase 2-D: remove uma detecção (corrigir falso positivo)
+  const removerDetecao = useCallback((idx: number) => {
+    setDeteccoes(prev => (prev || []).filter((_, i) => i !== idx));
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -600,10 +776,25 @@ export default function Scanner() {
               ))}
             </div>
           ) : deteccoes && deteccoes.length > 0 ? (
-            /* Multi-carta: um card por detecção */
+            /* Multi-carta: um card por detecção + crop manual (Fase 2-D) */
             <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-400">
+                  {deteccoes.length} carta{deteccoes.length !== 1 ? 's' : ''} detectada{deteccoes.length !== 1 ? 's' : ''}
+                </span>
+                <button
+                  onClick={() => setModoCrop(m => !m)}
+                  className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:underline"
+                >
+                  <Scissors className="w-3.5 h-3.5" />
+                  {modoCrop ? 'fechar recorte' : '✂ recortar carta manualmente'}
+                </button>
+              </div>
+              {modoCrop && preview && (
+                <ManualCrop dataUrl={preview} onCrop={handleCrop} onCancel={() => setModoCrop(false)} />
+              )}
               {deteccoes.map((d, i) => (
-                <DeteccaoCard key={i} d={d} idx={i} />
+                <DeteccaoCard key={i} d={d} idx={i} onRemove={() => removerDetecao(i)} />
               ))}
             </div>
           ) : mostrandoResultados && mostrandoResultados.length > 0 ? (
@@ -618,9 +809,21 @@ export default function Scanner() {
               <p>Nenhuma carta encontrada para "{textQuery.trim()}"</p>
             </div>
           ) : preview ? (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
-              <Search className="w-12 h-12 mb-3 opacity-20" />
-              <p>Nenhum resultado encontrado</p>
+            <div className="space-y-3">
+              {modoCrop ? (
+                <ManualCrop dataUrl={preview} onCrop={handleCrop} onCancel={() => setModoCrop(false)} />
+              ) : (
+                <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
+                  <Search className="w-12 h-12 mb-3 opacity-20" />
+                  <p className="mb-2">Nenhuma carta detectada automaticamente.</p>
+                  <button
+                    onClick={() => setModoCrop(true)}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                  >
+                    <Scissors className="w-3.5 h-3.5" /> Recortar cartas manualmente
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
