@@ -8,9 +8,9 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-### [P1] 29. Evolução contínua do modelo temporal (TCGCSV)
-- **Feito (18/08, produtivo)**: preços TCGCSV integrados como fonte primária (P1.28 solucionado — ver FEATURES.md)
-- **Ideia**: treinar versão do modelo com dataset temporal full (features da semana anterior) para prever preço da semana seguinte — validado em experimento (MAPE 5,1% vs 17,4% baseline) mas não integrado ao produto (o modelo de produção prevê o nível, onde as temporais não agregam — o cardmarket captura)
+### [P1] 30. Evolução do modelo temporal para prever o preço da próxima semana
+- **Feito (19/08)**: P1.29 solucionado — previsão da próxima semana no card detail (ver FEATURES.md)
+- **Ideia**: estender para RANKING de tendência (cartas que devem subir mais) e alerta; integrar a previsão ao scanner/similaridade
 - Tags: dados, TCGCSV, modelagem, experimento
 
 ---

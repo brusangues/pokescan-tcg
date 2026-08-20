@@ -44,6 +44,9 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Preços TCGCSV como fonte primária (P1.28)** — target/price_type do TCGCSV (última semana, fallback cache; 17.919/20.479 cartas), mapeamento catálogo↔TCGCSV 91,7%, validado no A/B (R² 0.206→0.240, MAE $7.02→$6.73 no alvo real); cardmarket EUR e imagens continuam do pokemontcg.io | `4347fda` |
 | **Features temporais TCGCSV no modelo BRL** — ret/4w/8w, momentum, spread por subtype (12 feats) via `script/tcgcsv_lib.py` + `script/tcgcsv_pricing.py`; safra 2026: erro 33,8% → **18,9%** (não há série BR própria ainda) | `4347fda` |
 | **Histórico semanal TCGCSV no cron** — puxa a semana mais recente antes do retrain (`puxar_historico_semanal.py --semanas 1`); cron **liga-snapshot-diario** (06:30) acumula série BRL diária (5 snapshots úteis já) | `4347fda` |
+| **Previsão temporal no card detail (P1.29)** — modelo CatBoost prediz o preço USD da próxima semana (MAPE 5,0% no holdout; estáticas + 12 temporais TCGCSV); exibido como "Previsão — próxima semana" com badge ▲/▼ de tendência; treinado no retrain automático | `6ec7538` |
+| **Auditoria de dados: moedas separadas** — ranking subvalorizadas/inflacionadas do snapshot deixou de misturar US$ e R$ (cartas só-USD vão a listas próprias com aviso no /snapshot) | `31892d4` |
+| **Auditoria de dados: set-mapping corrigido** — idE 405(SV3)→sv3, 771(M4)→me4, 398(Pt1)→pl1, 658(MIFO)→ex12 (por correspondência de nomes/números) | `31892d4` |
 
 ## Identidade de carta (chave canônica)
 
