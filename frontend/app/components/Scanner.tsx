@@ -82,7 +82,9 @@ function rankCard(c: any, ql: string): number {
 }
 
 // Limiar de confiança: abaixo disso a carta é marcada como 'não identificada'
-const THRESH = 0.55;
+// Calibrado com a base rotulada (qa): TP concordantes ≥56.7 / NA ≈45-55.
+// USER 19/08: baixado de 0.55 -> 0.50 p/ capturar mais (aceito risco de FP).
+const THRESH = 0.50;
 // Cartas abaixo desta largura (px) na foto perdem qualidade no match
 const LARGURA_MINIMA = 300;
 
