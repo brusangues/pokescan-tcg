@@ -133,8 +133,14 @@ def hits_payload() -> dict:
                      'arquivos': sorted(dia_map[data], reverse=True)})
 
     cards = sorted(parse_scored_csv(latest), key=lambda c: -c['upside'])
-    sub = [c for c in cards if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5]
-    infla = sorted([c for c in cards if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
+    # Classe 3.3: limiar de oportunidade POR MOEDA (espelha o score_apos_crawl:
+    # BRL real>=5, USD real>=2) — antes aplicava real>=5 a tudo e escondia USD $2-5.
+    brl = [c for c in cards if c['moeda'] in ('R$',)]
+    usd = [c for c in cards if c['moeda'] in ('$', 'US$')]
+    sub = [c for c in brl if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5]
+    sub_usd = [c for c in usd if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 2]
+    infla = sorted([c for c in brl if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
+    infla_usd = sorted([c for c in usd if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
     return {
         'arquivo': latest.name,
         'ultimaAtualizacao': mtime,
@@ -142,6 +148,8 @@ def hits_payload() -> dict:
         'dias': dias,
         'subvalorizadas': sub,
         'inflacionadas': infla[:20],
+        'subvalorizadas_usd': sub_usd,
+        'inflacionadas_usd': infla_usd[:20],
         'todas': cards,
     }
 
@@ -189,7 +197,7 @@ def snapshots_payload() -> dict:
     sub = sorted([c for c in brl if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5],
                  key=lambda c: -c['upside'])
     infla = sorted([c for c in brl if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
-    sub_usd = sorted([c for c in usd if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5],
+    sub_usd = sorted([c for c in usd if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 2],
                      key=lambda c: -c['upside'])
     infla_usd = sorted([c for c in usd if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
     justo = len([c for c in cards if c['oportunidade'] == '⚖️ Preço Justo'])
