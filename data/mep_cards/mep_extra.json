@@ -1,0 +1,25 @@
+{
+  "_fonte": "Pokémon.com/br — Coleção Ilustração Parceiro Inicial (Pokémon Estampas Ilustradas). Cartas promocionais Ilustração Rara em pt-BR, set MEP.",
+  "_imagens": "https://www.pokemon.com/static-assets/content-assets/cms2-pt-br/img/cards/full/MEP/MEP_PT-BR_<num>.png — baixadas em data/mep_cards/MEP_PT-BR_<num>.png",
+  "_set": { "id": "mep", "name": "Coleção Ilustração Parceiro Inicial" },
+  "_cartas": [
+    { "id": "mep-37", "name": "Bulbasaur",   "num": "37", "set": "Série 1 (Kanto)" },
+    { "id": "mep-38", "name": "Charmander",  "num": "38", "set": "Série 1 (Kanto)" },
+    { "id": "mep-39", "name": "Squirtle",    "num": "39", "set": "Série 1 (Kanto)" },
+    { "id": "mep-40", "name": "Turtwig",     "num": "40", "set": "Série 1 (Sinnoh)" },
+    { "id": "mep-41", "name": "Chimchar",    "num": "41", "set": "Série 1 (Sinnoh)" },
+    { "id": "mep-42", "name": "Piplup",      "num": "42", "set": "Série 1 (Sinnoh)" },
+    { "id": "mep-43", "name": "Rowlet",      "num": "43", "set": "Série 1 (Alola)" },
+    { "id": "mep-44", "name": "Litten",      "num": "44", "set": "Série 1 (Alola)" },
+    { "id": "mep-45", "name": "Popplio",     "num": "45", "set": "Série 1 (Alola)" },
+    { "id": "mep-46", "name": "Chikorita",   "num": "46", "set": "Série 2 (Johto)" },
+    { "id": "mep-47", "name": "Cyndaquil",   "num": "47", "set": "Série 2 (Johto)" },
+    { "id": "mep-48", "name": "Totodile",    "num": "48", "set": "Série 2 (Johto)" },
+    { "id": "mep-49", "name": "Snivy",       "num": "49", "set": "Série 2 (Unova)" },
+    { "id": "mep-50", "name": "Tepig",       "num": "50", "set": "Série 2 (Unova)" },
+    { "id": "mep-51", "name": "Oshawott",    "num": "51", "set": "Série 2 (Unova)" },
+    { "id": "mep-52", "name": "Grookey",     "num": "52", "set": "Série 2 (Galar)" },
+    { "id": "mep-53", "name": "Scorbunny",   "num": "53", "set": "Série 2 (Galar)" },
+    { "id": "mep-54", "name": "Sobble",      "num": "54", "set": "Série 2 (Galar)" }
+  ]
+}

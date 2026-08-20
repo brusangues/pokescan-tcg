@@ -4,20 +4,18 @@ Gera o índice de busca do scanner no espaço do DINOv2-small q4f16 ONNX
 
 AUGMENTAÇÃO (3x): além da imagem oficial de cada carta, adiciona ao índice
 embedding de VARIANTES determinísticas (rotação leve + perspectiva leve),
-geradas SOMENTE a partir da imagem oficial salva (data/img_cache/{id}.png) —
-NUNCA de fotos da base (sem risco de rótulo errado). O objetivo é que uma foto
-real de uma carta (leve ângulo/inclinação) case melhor com uma das variantes →
-cosseno maior, top-1 correto mais robusto.
+geradas SOMENTE a partir da imagem oficial salva — NUNCA de fotos da base.
+Várias linhas/carta, mesmo card_id; busca = MÁXIMO por carta (row_cards).
+
+CARTAS EXTRAS (MEP pt-BR): anexa as cartas da "Coleção Ilustração Parceiro
+Inicial" (data/mep_cards/mep_extra.json) ao final do índice, isoladas do
+catálogo de preços. Cache INCREMENTAL: se embeddings_raw/aug já existem,
+extrai só as cartas novas anexadas (as existentes não são reprocessadas).
 
 Saídas em data/scanner/:
-- embeddings_raw.npy      (N x 768)             — ORIGINAIS (p/ PCA fit)
-- embeddings_aug_raw.npy  (N*(K) x 768)         — todas as variantes (cache)
-- index_pca128_fp32.bin   (N*K x 128)           — índice aumentado normalizado
-- index_pca128_fp16.bin   (N*K x 128, fp16)     — p/ o browser
-- row_cards.npy           (N*K uint16)          — card de cada linha (dedup)
-- pca128_stats.npy, pca_bundle.bin, ids.json, cards.json
-
-K = 1 (base) + len(VARIANTS) cópias por carta. PCA fitado só nos ORIGINAIS.
+- embeddings_raw.npy (N x 768), embeddings_aug_raw.npy (N*K x 768) [cache]
+- index_pca128_fp32.bin (N*K x 128), index_pca128_fp16.bin (idem fp16)
+- row_cards.npy/.bin, pca128_stats.npy, pca_bundle.bin, ids.json, cards.json
 """
 import sys, json, time
 from pathlib import Path
@@ -28,6 +26,7 @@ import onnxruntime as ort
 
 BASE = Path(__file__).resolve().parent.parent
 IMG_CACHE = BASE / 'data' / 'img_cache'
+MEP_DIR = BASE / 'data' / 'mep_cards'
 OUT = BASE / 'data' / 'scanner'
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -35,11 +34,10 @@ MODEL = str(BASE / 'experiments' / 'models' / 'dv_model_uint8.onnx')
 BATCH = 32
 N_COMP = 128
 
-# ── Augmentation: variantes DETERMINÍSTICAS da imagem oficial (imita foto real) ──
 VARIANTS = ['rot_2', 'persp2']   # + base = 3 cópias por carta
+STRIDE_AUG = len(VARIANTS) + 1   # 3
 
 def var_img(img, name):
-    """img: PIL RGB da carta cheia (imagem oficial). Devolve a variante."""
     W, H = img.size
     if name == 'rot_2':
         return img.rotate(2, fillcolor=(20, 20, 20))
@@ -57,10 +55,6 @@ def center_crop(img, size):
     l, t = (w - size)//2, (h - size)//2
     return img.crop((l, t, l+size, t+size))
 
-def variants_of(img):
-    """PIL imagens: [base, var1, var2, ...] da carta."""
-    return [img] + [var_img(img, v) for v in VARIANTS]
-
 def preprocess(img):
     w, h = img.size
     s = 256 / min(w, h)
@@ -75,66 +69,103 @@ sess = ort.InferenceSession(MODEL, providers=['CPUExecutionProvider'])
 
 def embed_batch(imgs):
     xs = np.concatenate([preprocess(im) for im in imgs])
-    hs = sess.run(None, {'pixel_values': xs})[0]  # B,257,384
+    hs = sess.run(None, {'pixel_values': xs})[0]
     cls = hs[:, 0]; mean = hs[:, 1:].mean(axis=1)
-    return np.concatenate([cls, mean], axis=1).astype(np.float32)  # B,768
+    return np.concatenate([cls, mean], axis=1).astype(np.float32)
 
-# 1. Lista cartas com imagem
+# ── 0. Cartas: catálogo EN + extras MEP (anexadas ao FIM — cache incremental) ──
 cards = json.loads((BASE / 'data' / 'ptcg_cards_cache.json').read_text(encoding='utf-8'))
 com_img = [c for c in cards if (IMG_CACHE / f'{c["id"]}.png').exists()]
-print(f'Cartas com imagem: {len(com_img)} | K={1+len(VARIANTS)} (base + {VARIANTS})')
 
-# 2. Embeddings ORIGINAIS (p/ PCA fit) — pula se já extraiu
+mep = json.loads((MEP_DIR / 'mep_extra.json').read_text(encoding='utf-8'))
+mep_num = {mc['num']: mc['id'] for mc in mep['_cartas']}
+for mc in mep['_cartas']:
+    num = mc['num']
+    local = MEP_DIR / f'MEP_PT-BR_{num}.png'
+    img_url = f"https://www.pokemon.com/static-assets/content-assets/cms2-pt-br/img/cards/full/MEP/MEP_PT-BR_{num}.png"
+    com_img.append({'id': mc['id'], 'name': mc['name'], 'number': num,
+                    'rarity': 'Promocional', 'supertype': 'Pokémon',
+                    'subtypes': ['Promotional'], 'set': mep['_set'],
+                    'tcgplayer': None,
+                    'images': {'small': img_url},
+                    '_local_img': str(local)})
+print(f'Cartas totais: {len(com_img)} ({len(cards)} catálogo + {len(mep["_cartas"])} MEP)')
+
+def open_img(card):
+    if '_local_img' in card:
+        return Image.open(card['_local_img']).convert('RGB')
+    return Image.open(IMG_CACHE / f'{card["id"]}.png').convert('RGB')
+
+# ── 1. Embeddings ORIGINAIS (cache incremental) ──
 RAW_PATH = OUT / 'embeddings_raw.npy'
+raw = None
 if RAW_PATH.exists():
     raw = np.load(RAW_PATH)
-    print(f'embeddings_raw.npy já existe — carregado: {raw.shape}')
-else:
+    if raw.shape[0] > len(com_img):   # catálogo encolheu? descarta
+        raw = None
+if raw is None:
     t0 = time.time(); rows = []
     for i in range(0, len(com_img), BATCH):
-        chunk = com_img[i:i+BATCH]
-        vs = [Image.open(IMG_CACHE/f'{c["id"]}.png').convert('RGB') for c in chunk]
-        rows.append(embed_batch(vs))
-        if (i // BATCH) % 20 == 0: print(f'  orig {i+len(chunk)}/{len(com_img)} ({time.time()-t0:.0f}s)', flush=True)
-    raw = np.concatenate(rows)
+        rows.append(embed_batch([open_img(c) for c in com_img[i:i+BATCH]]))
+        if (i//BATCH) % 20 == 0: print(f'  orig {i+min(BATCH,len(com_img))}/{len(com_img)} ({time.time()-t0:.0f}s)', flush=True)
+    raw = np.concatenate(rows); np.save(RAW_PATH, raw)
+    print(f'Extração original (novo): {raw.shape}')
+elif raw.shape[0] < len(com_img):
+    t0 = time.time()
+    novos = com_img[raw.shape[0]:]
+    rows = [embed_batch([open_img(c) for c in novos[i:i+BATCH]]) for i in range(0, len(novos), BATCH)]
+    raw = np.concatenate([raw] + rows)
     np.save(RAW_PATH, raw)
-    print(f'Extração original: {raw.shape} em {time.time()-t0:.0f}s')
+    print(f'Originais INCREMENTAIS: +{len(novos)} -> {raw.shape} em {time.time()-t0:.0f}s')
+else:
+    print(f'embeddings_raw.npy já atual: {raw.shape}')
 
-# 3. PCA (128 comps, fit SOMENTE nos originais — espaço estável)
+# ── 2. PCA fit (conjunto completo) ──
 from sklearn.decomposition import PCA
 pca = PCA(n_components=N_COMP, whiten=True)
 _ = pca.fit_transform(raw)
 print(f'PCA fit ok — variância: {pca.explained_variance_ratio_.sum():.4f}')
 
-# 4. Embeddings das VARIANTES (cache p/ retomar) + montagem do índice aumentado
+# ── 3. Embeddings das VARIANTES (cache incremental) ──
 AUG_PATH = OUT / 'embeddings_aug_raw.npy'
-N_AUG = len(com_img) * len(VARIANTS)
-if AUG_PATH.exists():
-    aug_raw = np.load(AUG_PATH)
-    print(f'embeddings_aug_raw.npy já existe — carregado: {aug_raw.shape}')
-else:
-    t0 = time.time(); rows = []
-    for i in range(0, len(com_img), BATCH):
-        chunk = com_img[i:i+BATCH]
+def build_aug_slice(cs):
+    rows = []
+    for i in range(0, len(cs), BATCH):
         vs = []
-        for c in chunk:
-            base = Image.open(IMG_CACHE/f'{c["id"]}.png').convert('RGB')
-            vs += [Image.open(IMG_CACHE/f'{c["id"]}.png').convert('RGB'), *variants_of(base)[1:]]
+        for c in cs[i:i+BATCH]:
+            base = open_img(c)
+            vs += [base, *[var_img(base, v) for v in VARIANTS]]
         rows.append(embed_batch(vs))
-        if (i // BATCH) % 10 == 0: print(f'  aug  {i*(len(VARIANTS))}/{N_AUG} ({time.time()-t0:.0f}s)', flush=True)
-    aug_raw = np.concatenate(rows)
-    np.save(AUG_PATH, aug_raw)
-    print(f'Extração variantes: {aug_raw.shape} em {time.time()-t0:.0f}s')
+    return np.concatenate(rows)
 
-# 5. Index aumentado: projeta originais + variantes, L2-normaliza
-# aug_raw tem (1+len(VARIANTS)) linhas por carta: [base, rot, persp] — stride fixo
-STRIDE_AUG = len(VARIANTS) + 1   # 3
+aug = None
+if AUG_PATH.exists():
+    aug = np.load(AUG_PATH)
+if aug is None or aug.shape[0] != (len(com_img) * STRIDE_AUG):
+    t0 = time.time()
+    target = len(com_img) * STRIDE_AUG
+    if aug is not None and aug.shape[0] < target:
+        # anexa variantes das cartas novas
+        n_old_cards = aug.shape[0] // STRIDE_AUG
+        novos = com_img[n_old_cards:]
+        chunk = build_aug_slice(novos)
+        aug = np.concatenate([aug, chunk])
+        print(f'Variantes INCREMENTAIS: +{novos.__len__()} cartas -> {aug.shape} em {time.time()-t0:.0f}s')
+    else:
+        t0 = time.time()
+        aug = build_aug_slice(com_img)
+        print(f'Extras variantes (novo): {aug.shape} em {time.time()-t0:.0f}s')
+    np.save(AUG_PATH, aug)
+else:
+    print(f'embeddings_aug_raw.npy já atual: {aug.shape}')
+
+# ── 4. Montagem do índice aumentado (base + variantes, agrupado por carta) ──
 all_raw = []
 for i in range(len(com_img)):
-    all_raw.append(raw[i])                       # base (embedding oficial)
-    for v in range(1, STRIDE_AUG):               # variantes (rot, persp)
-        all_raw.append(aug_raw[i*STRIDE_AUG + v])
-full = np.stack(all_raw).astype(np.float32)   # N*K x 768, agrupado por carta
+    all_raw.append(raw[i])
+    for v in range(1, STRIDE_AUG):
+        all_raw.append(aug[i*STRIDE_AUG + v])
+full = np.stack(all_raw).astype(np.float32)
 reduced = pca.transform(full).astype(np.float32)
 print(f'Índice aumentado: {reduced.shape} ({(full.shape[0]/len(com_img)):.1f}x por carta)')
 
@@ -143,16 +174,14 @@ reduced_n = (reduced / norms).astype(np.float32)
 reduced_n.tofile(OUT / 'index_pca128_fp32.bin')
 reduced_n.astype(np.float16).tofile(OUT / 'index_pca128_fp16.bin')
 
-# 6. row_cards: card (índice em com_img) de cada linha — para dedup no browser
-K = 1 + len(VARIANTS)
+K = STRIDE_AUG
 row_cards = np.repeat(np.arange(len(com_img), dtype=np.uint16), K)
 np.save(OUT / 'row_cards.npy', row_cards)
-row_cards.tofile(OUT / 'row_cards.bin')   # uint16 p/ o browser
+row_cards.tofile(OUT / 'row_cards.bin')
 
 comps_scaled = (pca.components_ / np.sqrt(pca.explained_variance_)[:, None]).astype(np.float32)
 np.save(OUT / 'pca128_stats.npy', {
-    'mean': pca.mean_.astype(np.float32),
-    'components': pca.components_.astype(np.float32),
+    'mean': pca.mean_.astype(np.float32), 'components': pca.components_.astype(np.float32),
     'components_whitened': comps_scaled,
     'explained_variance_ratio': pca.explained_variance_ratio_.astype(np.float32),
 })
@@ -176,6 +205,7 @@ with open(OUT / 'cards.json', 'w', encoding='utf-8') as f:
 
 print('\n✅ Índice aumentado gerado:')
 for p in ['embeddings_raw.npy', 'embeddings_aug_raw.npy', 'index_pca128_fp16.bin',
-          'pca_bundle.bin', 'row_cards.npy', 'ids.json', 'cards.json']:
+          'pca_bundle.bin', 'row_cards.bin', 'cards.json']:
     fp = OUT / p
     print(f'  {p:26s} {fp.stat().st_size/1e6:8.1f} MB')
+print(f'  cartas: {len(ids)} (catálogo {len(com_img)-len(mep["_cartas"])} + MEP {len(mep["_cartas"])})')
