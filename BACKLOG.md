@@ -26,9 +26,9 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - Crons já escoram e formatam top 10; **Ideia**: alerta dedicado quando uma carta cruza thresholds (ex. upside > +50% e iCO >= 3) — hoje é só na listagem
 - Tags: crons, notificações
 
-### [P2] 29. Calibrar threshold do scanner multi-carta (55%)
-- **Contexto**: Fase 1 do multi-carta usa `THRESH = 0.55` (carta marcada "não identificada" abaixo disso) — valor inicial do levantamento, cartas grandes dão ~97% e pequenas ~40-53%
-- **A fazer**: usuário envia fotos com descrições da carta real → medir o score do top-1 correto vs o limiar → ajustar `THRESH` (e talvez `LARGURA_MINIMA` de 300px) com base nos dados
+### [P2] 29. Threshold do scanner multi-carta — CALIBRADO (decisão do usuário)
+- **Feito (19/08)**: base rotulada da QA (9 fotos; `qa/base_rotulada.json`) cruzada c/ resultado real do scanner → **THRESH 0.55 → 0.50** (usuário optou por capturar mais, aceitando FP). Detalhe da análise em FEATURES.md e no commit `1bc83aa`.
+- **Nota**: alguns conflitos na base (foto_02: detecção perde 2 cartas — limitação de **detecção**, não de limiar; foto_07: rótulos inválidos) apontam p/ a Fase 2 (P3.30) como próximo passo de robustez.
 - Tags: scanner, calibração, multi-carta
 
 ---
