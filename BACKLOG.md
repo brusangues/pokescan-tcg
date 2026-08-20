@@ -13,10 +13,10 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Resta**: os subsets japoneses da era SWSH têm correspondência EN APENAS PARCIAL (cov 30-70%) e numeração ≠ EN — mapeá-los a 1 set daria nome/número errado; hoje resolvem por fallback de NOME (mais correto). Reavaliar caso a projeto decida suportar os sets JP nativos.
 - Tags: dados, mapeamento, set, JP
 
-### [P1] 30. Evolução do modelo temporal para prever o preço da próxima semana
-- **Feito (19/08)**: P1.29 solucionado — previsão da próxima semana no card detail (ver FEATURES.md)
-- **Ideia**: estender para RANKING de tendência (cartas que devem subir mais) e alerta; integrar a previsão ao scanner/similaridade
-- Tags: dados, TCGCSV, modelagem, experimento
+### [P1] 30. Alerta de tendência + integração da previsão ao scanner
+- **Feito (19/08)**: ranking de tendência da próxima semana implementado (página /tendencias — ver FEATURES.md); P1.30 principal resolvido.
+- **Resta (extensão)**: disparar alerta quando carta entra no top de subida prevista (relacionado ao P2.10); integrar a previsão ao scanner/similaridade (mostrar tendência no resultado de scan evitando cartas em queda).
+- Tags: dados, TCGCSV, modelagem, produto
 
 ---
 
