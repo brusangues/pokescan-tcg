@@ -57,7 +57,8 @@ class ScannerEngine {
   }
 
   private extractor: any = null;
-  private index: Float32Array | null = null;   // N x 128 (convertido de fp16)
+  private index: Float32Array | null = null;   // N_rows x 128 (fp16->fp32)
+  private rowCards: Uint16Array | null = null; // card (0..nCards-1) de cada linha — dedup das variantes
   private pcaMean: Float32Array | null = null; // 768
   private pcaComps: Float32Array | null = null; // 128 x 768 (whitened)
   private cards: ScannerCard[] = [];
@@ -98,10 +99,17 @@ class ScannerEngine {
       onProgress(52 + pct * 0.4, 'Baixando índice...');
     });
     const idxU16 = new Uint16Array(idxBuf);
-    const nCards = idxU16.length / N_COMP;
+    const nRows = idxU16.length / N_COMP;
     const idxF32 = new Float32Array(idxU16.length);
     for (let i = 0; i < idxU16.length; i++) idxF32[i] = halfToFloat(idxU16[i]);
     this.index = idxF32;
+
+    // row_cards: card (0..nCards-1) de cada linha — o índice é aumentado
+    // (K variantes/carta), então várias linhas pertencem ao mesmo card;
+    // na busca computa-se o MÁXIMO de similaridade por card.
+    onProgress(60, 'Carregando índices...');
+    const rcBuf = await (await fetch(`${BASE}row_cards.bin`)).arrayBuffer();
+    this.rowCards = new Uint16Array(rcBuf);
 
     // 3. PCA bundle: [mean(768) | comps_whitened(128x768)] fp32
     onProgress(94, 'Carregando PCA...');
@@ -172,25 +180,29 @@ class ScannerEngine {
     return p;
   }
 
-  /** Busca top-K por similaridade de cosseno. */
+  /** Busca top-K por similaridade de cosseno. Índice aumentado: várias linhas
+   * por carta → ache se o MÁXIMO de similaridade por card. */
   async search(imgUrl: string, topK = 5): Promise<ScanResult[]> {
     if (!this.loaded) throw new Error('Scanner não carregado');
     const q = this.project(await this.embed(imgUrl));
     const idx = this.index!;
-    const n = this.cards.length;
-    const scores = new Float32Array(n);
-    for (let i = 0; i < n; i++) {
+    const rc = this.rowCards!;
+    const nCards = this.cards.length;
+    // melhor score por card (max sobre as variantes de cada carta)
+    const best = new Float32Array(nCards).fill(-Infinity);
+    const nRows = rc.length;
+    for (let i = 0; i < nRows; i++) {
       let s = 0;
       const off = i * N_COMP;
       for (let j = 0; j < N_COMP; j++) s += idx[off + j] * q[j];
-      scores[i] = s;
+      const c = rc[i];
+      if (s > best[c]) best[c] = s;
     }
-    // top-K (selection parcial simples — n=20k é rápido)
-    const order = Array.from({ length: n }, (_, i) => i);
-    order.sort((a, b) => scores[b] - scores[a]);
+    const order = Array.from({ length: nCards }, (_, i) => i);
+    order.sort((a, b) => best[b] - best[a]);
     return order.slice(0, topK).map((i, rank) => ({
       card: this.cards[i],
-      score: scores[i],
+      score: best[i],
       rank: rank + 1,
     }));
   }
