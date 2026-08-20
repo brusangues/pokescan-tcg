@@ -64,7 +64,5 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Plano**: só se o download virar problema real (GitHub Pages/dados móveis); manter OpenCV.js como implementação canônica da Fase 1
 - Tags: scanner, clipping, frontend, P3
 
-### [P3] 30. Scanner multi-carta — Fase 2 (robustez + confirmação manual)
-- **Contexto**: Fase 1 entregue (`15821f6`, `94b52a4`) — detecta até 10 quadriláteros, dedup por centro, match individual; limitações conhecidas: fundo não-uniforme, cartas sobrepostas, falsos positivos de detecção
-- **A fazer**: (a) passada de segmentação por fundo (threshold de cor/brilho) antes do Canny — robusto para fundo escuro uniforme; (b) confirmação/correção manual das sugestões (crops desenháveis); YOLO descartado (overkill) — ver `docs/SCANNER_MULTICARTA.md`
-- Tags: scanner, multi-carta, opencv, frontend
+### [P3] 30. Scanner multi-carta — Fase 2 concluída (B + D) → FEATURES
+- **Feito (19/08, `9181aa9`)**: B (segmentação por fundo) + D (crop manual / remover detecção). YOLO descartado (overkill). Validado sem regressão. Ver FEATURES.md.
