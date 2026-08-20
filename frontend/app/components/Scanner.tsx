@@ -82,9 +82,13 @@ function rankCard(c: any, ql: string): number {
 }
 
 // Limiar de confiança: abaixo disso a carta é marcada como 'não identificada'
-// Calibrado com a base rotulada (qa): TP concordantes ≥56.7 / NA ≈45-55.
-// USER 19/08: baixado de 0.55 -> 0.50 p/ capturar mais (aceito risco de FP).
-const THRESH = 0.50;
+// O score é um COSSENO real (índice e query L2-normalizados — norma 1.0), não
+// satura em 0.5: cartas em foto real (iluminação/ângulo/baixa resolução) têm
+// cosseno natural ~0.35-0.6; cartas grandes/nítidas chegam a 0.7-0.8.
+// USER 19/08: 0.55 -> 0.50 (capturar mais) -> 0.35 (top-1 correto de cartas
+// pequenas fica 36-50%; aceito risco de FALSO POSITIVO — score baixo é menos
+// confiável).
+const THRESH = 0.35;
 // Cartas abaixo desta largura (px) na foto perdem qualidade no match
 const LARGURA_MINIMA = 300;
 
@@ -171,7 +175,7 @@ function DeteccaoCard({ d, idx, onRemove }: {
             </>
           ) : (
             <div className="text-xs text-amber-700">
-              ⚠ Não identificada (melhor match {(melhor ? melhor.score * 100 : 0).toFixed(1)}% &lt; 55%)
+              ⚠ Não identificada (melhor match {(melhor ? melhor.score * 100 : 0).toFixed(1)}% — abaixo do limiar)
               <div className="text-[10px] text-gray-400 mt-0.5">
                 Aproxime a câmera ou escaneie esta carta separadamente.
               </div>
