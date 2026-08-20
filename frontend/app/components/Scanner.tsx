@@ -85,10 +85,9 @@ function rankCard(c: any, ql: string): number {
 // O score é um COSSENO real (índice e query L2-normalizados — norma 1.0), não
 // satura em 0.5: cartas em foto real (iluminação/ângulo/baixa resolução) têm
 // cosseno natural ~0.35-0.6; cartas grandes/nítidas chegam a 0.7-0.8.
-// USER 19/08: 0.55 -> 0.50 (capturar mais) -> 0.35 (top-1 correto de cartas
-// pequenas fica 36-50%; aceito risco de FALSO POSITIVO — score baixo é menos
-// confiável).
-const THRESH = 0.35;
+// USER 19/08: 0.55 -> 0.50 (capturar mais) -> 0.35 (top-1 de cartas pequenas
+// fica 36-50%) -> 0.40 (0.35 capturou demais / muita confiança baixa).
+const THRESH = 0.40;
 // Cartas abaixo desta largura (px) na foto perdem qualidade no match
 const LARGURA_MINIMA = 300;
 
