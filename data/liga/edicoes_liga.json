@@ -326,7 +326,7 @@
   "lang": "en",
   "n": 13,
   "n_overlap": 4,
-  "set": "bw8",
+  "set": "pl1",
   "sigla": "GHDPt"
  },
  "304": {
@@ -543,7 +543,7 @@
   "lang": "en",
   "n": 92,
   "n_overlap": 4,
-  "set": "sm4",
+  "set": "swsh5",
   "sigla": "s5R"
  },
  "336": {
@@ -627,7 +627,7 @@
   "lang": "en",
   "n": 140,
   "n_overlap": 12,
-  "set": "xy1",
+  "set": "xy4",
   "sigla": "CP4"
  },
  "359": {
@@ -719,7 +719,7 @@
   "lang": "en",
   "n": 65,
   "n_overlap": 3,
-  "set": "sm8",
+  "set": "bw7",
   "sigla": "BW6b"
  },
  "387": {
@@ -1220,7 +1220,7 @@
   "lang": "en",
   "n": 127,
   "n_overlap": 3,
-  "set": "swsh35",
+  "set": "swsh1",
   "sigla": "SD"
  },
  "538": {
@@ -1446,7 +1446,7 @@
   "lang": "en",
   "n": 27,
   "n_overlap": 8,
-  "set": "smp",
+  "set": "swsh45sv",
   "sigla": "GM25"
  },
  "644": {
@@ -1536,7 +1536,7 @@
   "lang": "en",
   "n": 106,
   "n_overlap": 5,
-  "set": "xy7",
+  "set": "ex10",
   "sigla": "GSSO"
  },
  "663": {
@@ -1636,14 +1636,14 @@
   "lang": "en",
   "n": 184,
   "n_overlap": 7,
-  "set": "sm3",
+  "set": "swsh7",
   "sigla": "CS4AC"
  },
  "712": {
   "lang": "en",
   "n": 177,
   "n_overlap": 6,
-  "set": "bw6",
+  "set": "swsh8",
   "sigla": "CS4BC"
  },
  "713": {
@@ -1867,7 +1867,7 @@
   "lang": "en",
   "n": 169,
   "n_overlap": 3,
-  "set": "dp6",
+  "set": "swsh12pt5",
   "sigla": "CS6AC"
  },
  "747": {

@@ -45,8 +45,8 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Features temporais TCGCSV no modelo BRL** — ret/4w/8w, momentum, spread por subtype (12 feats) via `script/tcgcsv_lib.py` + `script/tcgcsv_pricing.py`; safra 2026: erro 33,8% → **18,9%** (não há série BR própria ainda) | `4347fda` |
 | **Histórico semanal TCGCSV no cron** — puxa a semana mais recente antes do retrain (`puxar_historico_semanal.py --semanas 1`); cron **liga-snapshot-diario** (06:30) acumula série BRL diária (5 snapshots úteis já) | `4347fda` |
 | **Previsão temporal no card detail (P1.29)** — modelo CatBoost prediz o preço USD da próxima semana (MAPE 5,0% no holdout; estáticas + 12 temporais TCGCSV); exibido como "Previsão — próxima semana" com badge ▲/▼ de tendência; treinado no retrain automático | `6ec7538` |
+| **Auditoria de dados: set-mapping completo (P1.31)** — 14 sets 1:1 re-mapeados ao set EN correto por nomes distintivos (`experiments/revisar_setmap.py`): 405 SV3→sv3, 771 M4→me4, 398 Pt1→pl1, 658 MIFO→ex12, 335 s5R→swsh5, 386 BW6b→bw7, 662 GSSO→ex10, 643 GM25→swsh45sv, 711 CS4AC→swsh7, 712 CS4BC→swsh8, 746 CS6AC→swsh12pt5, 357 CP4→xy4, 303 GHDPt→pl1, 537 SD→swsh1. Subsets japoneses (s5a/s6*) ficam por fallback de nome (mapear daria numeração errada) | `31892d4` |
 | **Auditoria de dados: moedas separadas** — ranking subvalorizadas/inflacionadas do snapshot deixou de misturar US$ e R$ (cartas só-USD vão a listas próprias com aviso no /snapshot) | `31892d4` |
-| **Auditoria de dados: set-mapping corrigido** — idE 405(SV3)→sv3, 771(M4)→me4, 398(Pt1)→pl1, 658(MIFO)→ex12 (por correspondência de nomes/números) | `31892d4` |
 
 ## Identidade de carta (chave canônica)
 

@@ -8,11 +8,10 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-### [P1] 31. Re-mapear set_map de edições sem correspondência de numeração
-- **Contexto (auditoria 19/08)**: ~2.172 card_ids (14% do snapshot) resolvem para a carta ERRADA do catálogo — as edições latinas/PT e quase todas as JP têm numeração própria ≠ EN, então o mapeamento por número (n_overlap) falha e o set_map aponta para sets EN errados.
-- **Corrigido (alta confiança, por nome):** idE 405 SV3→sv3 · 771 M4→me4 · 398 Pt1→pl1 · 658 MIFO→ex12
-- **A fazer**: decidir/revisar os ~25 sets restantes (328 s8, 335 s5R, 346 s3a, 386 BW6b, 357 CP4, 390 BW9, 424 CHPR, 449 sm9b, 487 SM2K, 537 SD, 662 GSSO, 711 CS4AC, 712 CS4BC, 746 CS6AC, 777 M5, 369 RG-JP, 481 XY3, 484 XY4…) com validação por NOME + conhecimento de set; unificar as fontes de sigla conflitantes (liga_set_sigla.json vs _ptcg.json, set_mapping.json órfão).
-- Tags: dados, mapeamento, set, P1
+### [P1] 31. Subsets japoneses (s5a/s6a/s6K/s6H/s7R/s7D/s10P/s10D/s12a/s8b) — resolvidos por fallback
+- **Feito (19/08)**: 14 sets 1:1 re-mapeados p/ o set EN correto (ver FEATURES.md) — o P1.31 principal está resolvido.
+- **Resta**: os subsets japoneses da era SWSH têm correspondência EN APENAS PARCIAL (cov 30-70%) e numeração ≠ EN — mapeá-los a 1 set daria nome/número errado; hoje resolvem por fallback de NOME (mais correto). Reavaliar caso a projeto decida suportar os sets JP nativos.
+- Tags: dados, mapeamento, set, JP
 
 ### [P1] 30. Evolução do modelo temporal para prever o preço da próxima semana
 - **Feito (19/08)**: P1.29 solucionado — previsão da próxima semana no card detail (ver FEATURES.md)
