@@ -237,6 +237,19 @@ export default function SnapshotPage() {
         </section>
 
         {/* Tabs */}
+        {(data.subvalorizadas_usd?.length || data.inflacionadas_usd?.length) > 0 && (
+          <div className="bg-sky-50 border border-sky-200 text-sky-800 text-xs rounded-lg px-3 py-2 flex items-center justify-between">
+            <span>
+              ⚠️ {data.subvalorizadas_usd?.length || 0} subvalorizada(s) e{' '}
+              {data.inflacionadas_usd?.length || 0} inflacionada(s) listadas em <b>US$</b>{' '}
+              (sem preço BR na Liga) — veja a aba “Todas”.
+            </span>
+            <button onClick={() => setTab('todas')} className="ml-2 font-bold hover:text-sky-900 shrink-0">
+              Ver todas →
+            </button>
+          </div>
+        )}
+
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-4 px-4 sm:mx-0 sm:px-0">
           {['oportunidades', 'inflacionadas', 'todas'].map(t => (
             <button

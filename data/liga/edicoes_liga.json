@@ -794,7 +794,7 @@
   "lang": "en",
   "n": 96,
   "n_overlap": 5,
-  "set": "sm9",
+  "set": "pl1",
   "sigla": "Pt1"
  },
  "399": {
@@ -831,7 +831,7 @@
   "lang": "en",
   "n": 141,
   "n_overlap": 3,
-  "set": "xy6",
+  "set": "sv3",
   "sigla": "SV3"
  },
  "406": {
@@ -1504,7 +1504,7 @@
   "lang": "en",
   "n": 86,
   "n_overlap": 4,
-  "set": "sm7",
+  "set": "ex12",
   "sigla": "MIFO"
  },
  "659": {
@@ -2041,7 +2041,7 @@
   "lang": "en",
   "n": 120,
   "n_overlap": 3,
-  "set": "xy10",
+  "set": "me4",
   "sigla": "M4"
  },
  "772": {

@@ -182,9 +182,16 @@ def snapshots_payload() -> dict:
             semanas.append({'label': week_label, 'arquivos': [a]})
 
     cards = parse_scored_csv(latest)
-    sub = sorted([c for c in cards if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5],
+    # Separa por moeda: o ranking de oportunidade da Liga é BRL; cartas só-USD
+    # (sem preço BR na Liga) ficam em listas próprias p/ não misturar moedas.
+    brl = [c for c in cards if c['moeda'] in ('R$',)]
+    usd = [c for c in cards if c['moeda'] in ('$', 'US$')]
+    sub = sorted([c for c in brl if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5],
                  key=lambda c: -c['upside'])
-    infla = sorted([c for c in cards if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
+    infla = sorted([c for c in brl if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
+    sub_usd = sorted([c for c in usd if c['oportunidade'] == '🔥 Subvalorizada' and c['real'] >= 5],
+                     key=lambda c: -c['upside'])
+    infla_usd = sorted([c for c in usd if c['oportunidade'] == '💀 Inflacionada'], key=lambda c: c['upside'])
     justo = len([c for c in cards if c['oportunidade'] == '⚖️ Preço Justo'])
 
     set_counts = {}
@@ -202,6 +209,8 @@ def snapshots_payload() -> dict:
         'semanas': semanas,
         'subvalorizadas': sub,
         'inflacionadas': infla[:20],
+        'subvalorizadas_usd': sub_usd,
+        'inflacionadas_usd': infla_usd[:20],
         'justo': justo,
         'todas': cards,
         'sets': sets,
