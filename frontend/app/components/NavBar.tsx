@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/hits', label: 'Hits', icon: Zap },
   { href: '/snapshot', label: 'Snapshot', icon: BarChart3 },
+  { href: '/tendencias', label: 'Tendências', icon: History },
   { href: '/colecoes', label: 'Coleções', icon: Package },
   { href: '/scanner', label: 'Scanner', icon: Camera },
   { href: '/changelog', label: 'Changelog', icon: History },

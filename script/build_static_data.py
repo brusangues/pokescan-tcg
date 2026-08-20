@@ -21,7 +21,7 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parent.parent
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
-from prever_temporal import prever_todas
+from prever_temporal import prever_todas, ranking_tendencias
 SCORED = REPO / 'data' / 'scored'
 PTCG_CACHE = REPO / 'data' / 'ptcg_cards_cache.json'
 SET_MAPPING = REPO / 'data' / 'liga' / 'liga_set_sigla_ptcg.json'
@@ -663,6 +663,19 @@ def card_idiomas_payload() -> dict:
     return out
 
 
+def tendencias_payload() -> dict:
+    """P1.30 — ranking de tendência (USD): cartas que o modelo prevê subir/cair
+    na próxima semana. Inclui gerado_em p/ o front indicar a data da previsão."""
+    from datetime import datetime as _dt
+    r = ranking_tendencias(top=25)
+    return {
+        'gerado_em': _dt.now().astimezone().isoformat(),
+        'total': r['total'],
+        'subidas': r['subidas'],
+        'quedas': r['quedas'],
+    }
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     payloads = {
@@ -677,6 +690,7 @@ def main():
         'features.json': features_payload,
         'features_shap.json': features_shap_payload,
         'card_idiomas.json': card_idiomas_payload,
+        'tendencias.json': tendencias_payload,
     }
     total = 0
     for name, fn in payloads.items():

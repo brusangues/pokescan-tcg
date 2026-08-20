@@ -78,11 +78,60 @@ def prever_todas() -> dict:
         for cid, p, a in zip(sub.index, prev, atual):
             if a and a > 0 and p > 0:
                 out[cid] = {'prev': round(float(p), 2),
-                            'tendencia_pct': round((float(p) / float(a) - 1) * 100, 1)}
+                            'tendencia_pct': round((float(p) / float(a) - 1) * 100, 1),
+                            'atual': round(float(a), 2)}
         return out
     except Exception as e:
         print(f'⚠️  Previsão temporal indisponível: {e}', flush=True)
         return {}
+
+
+def ranking_tendencias(top: int = 25, preco_min: float = 2.0, preco_max: float = 150.0,
+                       tend_min: float = 3.0) -> dict:
+    """P1.30 — ranking de tendência: cartas com maior subida/queda prevista
+    p/ a próxima semana (preço USD — coerente com a previsão; nunca mistura
+    moedas). Faixa de preço padrão [$2, $150]: exclui preços-lixo (<$2) e os
+    extremos de alto valor (Gold Stars $1000+, onde a tendência é ruído por
+    poucas transações e o item é pouco acionável). Junta a previsão com o
+    catálogo (nome, set, imagem, raridade) — chave canônica = card_id do
+    catálogo (id do pokemontcg.io).
+
+    Retorna {'subidas': [...], 'quedas': [...], 'total': n}.
+   """
+    prev = prever_todas()
+    if not prev:
+        return {'subidas': [], 'quedas': [], 'total': 0}
+    cache = json.loads((DATA / 'ptcg_cards_cache.json').read_text(encoding='utf-8'))
+    por_id = {c['id']: c for c in cache}
+    linhas = []
+    for cid, v in prev.items():
+        c = por_id.get(cid)
+        if not c:
+            continue
+        atual = v.get('atual') or 0
+        if atual < preco_min or atual > preco_max:
+            continue
+        tend = v['tendencia_pct']
+        if abs(tend) < tend_min:
+            continue
+        s = c.get('set') or {}
+        linhas.append({
+            'card_id': cid,
+            'nome': c.get('name'),
+            'set': s.get('id', ''),
+            'setNome': s.get('name', ''),
+            'num': c.get('number'),
+            'rarity': c.get('rarity'),
+            'img': (c.get('images') or {}).get('small', ''),
+            'atual': atual,
+            'prev': v['prev'],
+            'tendencia_pct': tend,
+        })
+    sub = sorted([l for l in linhas if l['tendencia_pct'] > 0],
+                 key=lambda x: -x['tendencia_pct'])[:top]
+    queda = sorted([l for l in linhas if l['tendencia_pct'] < 0],
+                   key=lambda x: x['tendencia_pct'])[:top]
+    return {'subidas': sub, 'quedas': queda, 'total': len(linhas)}
 
 
 if __name__ == '__main__':
