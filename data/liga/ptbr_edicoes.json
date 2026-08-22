@@ -1,0 +1,16 @@
+{
+  "_nota": "Coleções pt-BR exclusivas da LIGA POKEMON (fonte primária pt-BR). Nomes (nPT) e números (sN) vêm de data/liga/set_{idE}.json. Adicione edições da Liga aqui para incluí-las no índice do scanner. Imagens: a máscara é resolvida em data/mep_cards/ (pasta de imagens locais) com {num} = número sem zeros; o build pula cartas sem imagem.",
+  "imagens_dir": "data/mep_cards",
+  "edicoes": {
+    "733": {
+      "sigla": "MEP",
+      "nome": "Coleção Ilustração Parceiro Inicial",
+      "imagem_mask": "MEP_PT-BR_{num}.png"
+    },
+    "732": {
+      "sigla": "MEPR",
+      "nome": "Coleção Ilustração Parceiro Inicial (Série esp.)",
+      "imagem_mask": "MEPR_PT-BR_{num}.png"
+    }
+  }
+}

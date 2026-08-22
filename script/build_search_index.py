@@ -73,23 +73,46 @@ def embed_batch(imgs):
     cls = hs[:, 0]; mean = hs[:, 1:].mean(axis=1)
     return np.concatenate([cls, mean], axis=1).astype(np.float32)
 
-# ── 0. Cartas: catálogo EN + extras MEP (anexadas ao FIM — cache incremental) ──
+# ── 0. Cartas: catálogo EN + coleções pt-BR da LIGA (fonte primária pt-BR) ──
 cards = json.loads((BASE / 'data' / 'ptcg_cards_cache.json').read_text(encoding='utf-8'))
 com_img = [c for c in cards if (IMG_CACHE / f'{c["id"]}.png').exists()]
 
-mep = json.loads((MEP_DIR / 'mep_extra.json').read_text(encoding='utf-8'))
-mep_num = {mc['num']: mc['id'] for mc in mep['_cartas']}
-for mc in mep['_cartas']:
-    num = mc['num']
-    local = MEP_DIR / f'MEP_PT-BR_{num}.png'
-    img_url = f"https://www.pokemon.com/static-assets/content-assets/cms2-pt-br/img/cards/full/MEP/MEP_PT-BR_{num}.png"
-    com_img.append({'id': mc['id'], 'name': mc['name'], 'number': num,
-                    'rarity': 'Promocional', 'supertype': 'Pokémon',
-                    'subtypes': ['Promotional'], 'set': mep['_set'],
-                    'tcgplayer': None,
-                    'images': {'small': img_url},
-                    '_local_img': str(local)})
-print(f'Cartas totais: {len(com_img)} ({len(cards)} catálogo + {len(mep["_cartas"])} MEP)')
+# Coleções pt-BR exclusivas: nomes (nPT) e números (sN) vêm da LIGA via
+# data/liga/set_{idE}.json (config data/liga/ptbr_edicoes.json). Imagem local em
+# data/mep_cards/{mask}; cartas sem imagem são puladas (pendentes de download).
+PTBR_CFG = BASE / 'data' / 'liga' / 'ptbr_edicoes.json'
+n_ptbr = 0
+if PTBR_CFG.exists():
+    cfg = json.loads(PTBR_CFG.read_text(encoding='utf-8'))
+    img_dir = BASE / cfg.get('imagens_dir', 'data/mep_cards')
+    for idE, meta in cfg.get('edicoes', {}).items():
+        set_path = BASE / 'data' / 'liga' / f'set_{idE}.json'
+        if not set_path.exists():
+            print(f'  ⚠ pt-BR edição {idE} ({meta.get("sigla")}): set_{idE}.json não existe')
+            continue
+        for carta in json.loads(set_path.read_text(encoding='utf-8')):
+            sN = carta.get('sN')
+            if not (isinstance(sN, str) and sN.isdigit()):
+                continue  # pula variantes Staff/promo (ex: "001b")
+            num = str(int(sN))
+            mask = meta.get('imagem_mask')
+            local = img_dir / mask.format(num=num) if mask else None
+            if local is None or not local.exists():
+                continue  # sem imagem local = não dá p/ embedding (pending download)
+            com_img.append({
+                'id': f'{idE}-{num}',
+                'name': (carta.get('nPT') or '').strip() or carta.get('nEN', '').split('(')[0].strip(),
+                'number': num,
+                'rarity': 'Promocional', 'supertype': 'Pokémon',
+                'subtypes': ['Promotional'],
+                'set': {'id': (meta.get('sigla') or '').lower(), 'name': meta.get('nome', meta.get('sigla', ''))},
+                'tcgplayer': None,
+                'images': {'small': (f"https://www.pokemon.com/static-assets/content-assets/cms2-pt-br/img/cards/full/MEP/MEP_PT-BR_{num}.png"
+                                     if 'MEP_PT-BR' in (mask or '') else carta.get('sP', ''))},
+                '_local_img': str(local),
+            })
+            n_ptbr += 1
+print(f'Cartas totais: {len(com_img)} (catálogo {len(com_img)-n_ptbr} + pt-BR da Liga {n_ptbr})')
 
 def open_img(card):
     if '_local_img' in card:
@@ -208,4 +231,4 @@ for p in ['embeddings_raw.npy', 'embeddings_aug_raw.npy', 'index_pca128_fp16.bin
           'pca_bundle.bin', 'row_cards.bin', 'cards.json']:
     fp = OUT / p
     print(f'  {p:26s} {fp.stat().st_size/1e6:8.1f} MB')
-print(f'  cartas: {len(ids)} (catálogo {len(com_img)-len(mep["_cartas"])} + MEP {len(mep["_cartas"])})')
+print(f'  cartas: {len(ids)} (catálogo {len(com_img)-n_ptbr} + pt-BR da Liga {n_ptbr})')
