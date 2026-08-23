@@ -373,7 +373,7 @@ def _enxuga_card(c: dict) -> dict:
 def cards_basico() -> list:
     """Catálogo enxuto p/ lookup (mesmo shape do cards.json do scanner)."""
     raw = json.loads(PTCG_CACHE.read_text(encoding='utf-8'))
-    return [{
+    out = [{
         'id': c['id'],
         'n': c.get('name') or '',
         's': c.get('set', {}).get('id') or '',
@@ -384,6 +384,30 @@ def cards_basico() -> list:
              or (c.get('tcgplayer', {}).get('prices', {}) or {}).get('normal', {}).get('market'),
         'img': c.get('images', {}).get('small') or c.get('images', {}).get('large'),
     } for c in raw]
+    # Fase 2.3 (Liga-first): inclui as coleções pt-BR da LIGA (ex. MEP/MEPR) no lookup do site
+    try:
+        cfg = json.loads((REPO / 'data' / 'liga' / 'ptbr_edicoes.json').read_text(encoding='utf-8')).get('edicoes', {})
+        siglas_ptbr = {v.get('sigla', '').upper() for v in cfg.values()}
+        nomes_ptbr = {v.get('sigla', '').upper(): v.get('nome', '') for v in cfg.values()}
+        catalogo = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))
+        for c in catalogo:
+            if c.get('sigla') not in siglas_ptbr:
+                continue  # só coleções pt-BR verdadeiras (decisão da curadoria)
+            sp = c.get('img_liga') or ''
+            img = ('https://repositorio.sbrauble.com' + sp.replace('//', '/', 1)) if sp.startswith('//') else sp
+            out.append({
+                'id': c['id'],
+                'n': c.get('nPT') or c.get('nEN', '').split('(')[0].strip(),
+                's': c.get('sigla', '').lower(),
+                'sn': nomes_ptbr.get(c.get('sigla', ''), c.get('sigla', '')),
+                'num': c.get('num') or '',
+                'r': '',
+                'p': c.get('preco_brl_p1a') or c.get('preco_menor'),
+                'img': img,
+            })
+    except Exception as e:
+        print('⚠ cards_basico (pt-BR Liga) skip:', e)
+    return out
 
 
 def cards_detalhe_chunks() -> dict:

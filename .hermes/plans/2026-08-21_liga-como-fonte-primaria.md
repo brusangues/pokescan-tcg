@@ -22,6 +22,8 @@
 
 **Fase 2.2 — Catálogo consolidado Liga-first: FEITO.** `script/build_catalogo_liga.py` gera `data/catalogo_liga.json` (31.281 cartas da LIGA; chave `{idE}-{num}`) com LEFT JOIN EN via `set_mapping`+número (imagem/nome/preço USD) → **13.774 mapeadas EN (44%)**, **17.507 liga_only (56%)** (pt-BR/JP, preço BRL). Sendo o artefato que o site/scanner/modelos passam a consumir.
 
+**Fase 2.3 — Site consome o catálogo Liga (lookup pt-BR): FEITO.** `cards_basico` em `build_static_data.py` lê o `catalogo_liga.json` e anexa as coleções pt-BR verdadeiras (MEP/MEPR) ao `cards.json` do site com preço BRL + imagem (repositorio.sbrauble.com). `cards.json`: 20.478 EN + **299 pt-BR**.
+
 **Em andamento / pendente:**
 - Inversão total (Liga dirigindo catálogo/modelos) segue as Fases 1–4.
 
