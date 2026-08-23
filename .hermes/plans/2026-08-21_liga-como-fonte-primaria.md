@@ -20,6 +20,8 @@
 
 **Frente "coleções pt-BR" CONCLUÍDA** (MEP + MEPR, 263 cartas no scanner via Liga).
 
+**Fase 2.2 — Catálogo consolidado Liga-first: FEITO.** `script/build_catalogo_liga.py` gera `data/catalogo_liga.json` (31.281 cartas da LIGA; chave `{idE}-{num}`) com LEFT JOIN EN via `set_mapping`+número (imagem/nome/preço USD) → **13.774 mapeadas EN (44%)**, **17.507 liga_only (56%)** (pt-BR/JP, preço BRL). Sendo o artefato que o site/scanner/modelos passam a consumir.
+
 **Em andamento / pendente:**
 - Inversão total (Liga dirigindo catálogo/modelos) segue as Fases 1–4.
 
