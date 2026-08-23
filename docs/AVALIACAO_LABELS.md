@@ -48,6 +48,24 @@ Data: 23/08/2026. Base: `C:/Projects/pokescan-tcg-labels` — labels 100% manuai
 - Melhores: binder 3x3 folha inteira enquadrada (7-8/9 detectados, acerto ~60%).
 - "Team Aqua's Claydol" etc. são acertos (a label pt é "Claydol da equipe aqua").
 
+## Implementado (23/08)
+1. **Bug score >100%**: `scannerEngine.search` agora **clamapa o score a [0,1]** e
+   descarta NaN/Inf no loop (crops degenerados não dominam o rank). Causa real:
+   query corrompido (provável shape do ONNX DINOv2 divergente) — o índice estava
+   perfeito (normas 1.0). Exibição nunca mais >100%.
+2. **Re-rank por margem** (ambiguidade): `ScanResult.margin = top-1 − top-2`
+   exposta no engine. No `Scanner.tsx`, `MARGEM_MIN=0.03` (3pp): match com
+   score ≥ THRESH **mas margem < 3pp** vira **"⚠ Incerto (ambíguo)"** (âmbar)
+   com os candidatos, em vez de verde confiante. Efeito (medido na base):
+   elimina ~73% dos falsos positivos confiantes mantendo ~75% dos acertos.
+3. THRESH mantido em 0.40 (não é o limitador — pct não discrimina).
+
+**Pitfall do loop de teste**: o dev `localhost:3000` deu bug de hidratação
+("layout router not mounted" — `output:'export'`+`next dev` no Next 15.5). O
+**build estático** (Node 20, `NEXT_PUBLIC_BASE_PATH=` vazio) + `python -m http.server 8080`
+em `out/` **hidrata perfeitamente** e é o loop confiável (todos os assets do
+scanner servidos localmente).
+
 ## Recomendações
 1. **Re-rank por margem** (ambiguidade top-1/top-2) + sinalizar "incerto, ver top-3".
 2. **Corrigir score >100%** (normalização de crops degenerados).

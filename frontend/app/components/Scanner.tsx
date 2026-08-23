@@ -88,6 +88,10 @@ function rankCard(c: any, ql: string): number {
 // USER 19/08: 0.55 -> 0.50 (capturar mais) -> 0.35 (top-1 de cartas pequenas
 // fica 36-50%) -> 0.40 (0.35 capturou demais / muita confiança baixa).
 const THRESH = 0.40;
+// Ambiguidade: se a margem top-1 vs top-2 for menor que isto (avaliação contra a
+// base rotulada manual: acertos mediana 8.9pp, falsos positivos 1.7pp), o top-1 pode
+// ser False Positive confiante — sinalizar como incerto (mostra top-3).
+const MARGEM_MIN = 0.03;
 // Cartas abaixo desta largura (px) na foto perdem qualidade no match
 const LARGURA_MINIMA = 300;
 
@@ -99,7 +103,10 @@ function DeteccaoCard({ d, idx, onRemove }: {
 }) {
   const [aberta, setAberta] = useState(false);
   const melhor = d.matches[0];
-  const identificada = melhor && melhor.score >= THRESH;
+  // Rebaixa por margem: se top-1 é ambíguo (margem < MARGEM_MIN), não vale como
+  // match "confiante" (verde) — vira "incerto" (âmbar) mesmo com score >= THRESH.
+  const identificada = !!(melhor && melhor.score >= THRESH && !(melhor.margin != null && melhor.margin < MARGEM_MIN));
+  const incerta = !!(melhor && melhor.score >= THRESH && melhor.margin != null && melhor.margin < MARGEM_MIN);
   const pequena = d.larguraPx > 0 && d.larguraPx < LARGURA_MINIMA;
   return (
     <div className={`bg-white rounded-xl border p-3 transition-colors ${aberta ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-gray-200'}`}>
@@ -170,6 +177,24 @@ function DeteccaoCard({ d, idx, onRemove }: {
                 className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline"
               >
                 {aberta ? '− Ocultar similares' : `▸ Ver ${d.matches.length} cartas similares`}
+              </button>
+            </>
+          ) : incerta ? (
+            <>
+              <div className="text-xs font-bold text-amber-600">
+                ⚠ Incerto (ambíguo) — {melhor.card.n}
+                <span className="ml-2 text-[10px] font-mono text-gray-400">
+                  {(melhor.score * 100).toFixed(1)}% · margem {(melhor.margin! * 100).toFixed(1)}pp
+                </span>
+              </div>
+              <div className="text-[10px] text-gray-600 mt-0.5">
+                Mais de um candidato plausível ({(melhor.margin! * 100).toFixed(1)}pp). Pode não ser esta carta — confira os similares ou recorte manual.
+              </div>
+              <button
+                onClick={() => setAberta(!aberta)}
+                className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline mt-1"
+              >
+                {aberta ? '− Ocultar' : `▸ Ver ${d.matches.length} candidatos`}
               </button>
             </>
           ) : (

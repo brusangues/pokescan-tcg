@@ -4,10 +4,10 @@ para testar se AMBIGUIDADE (margem pequena) discrimina acerto de erro.
 Body: "Carta N ... ✓ Nome pct% [Set] #2 Nome (pct)% #3 Nome (pct)%"
 Saída: experiments/margem_labels.json  {arquivo: [{nome, pct, margem2, margem3, nao_id}]}
 """
-import asyncio, json, os, re, unicodedata
+import asyncio, json, os, re, sys, unicodedata
 from playwright.async_api import async_playwright
 
-BASE='https://brusangues.github.io/pokescan-tcg'
+BASE=sys.argv[1] if len(sys.argv)>1 else 'https://brusangues.github.io/pokescan-tcg'
 REPO_LABELS=r'C:\Projects\pokescan-tcg-labels'
 BASE_JSON=r'C:\Projects\pokescan-tcg\experiments\base_labels.json'
 SALIDA=r'C:\Projects\pokescan-tcg\experiments\margem_labels.json'

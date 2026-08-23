@@ -20,6 +20,8 @@ export interface ScanResult {
   card: ScannerCard;
   score: number;
   rank: number;
+  /** Margem top-1 vs top-2 (ambiguidade). Só no rank 1. */
+  margin?: number;
 }
 
 const MODEL_ID = 'dinov2-small';
@@ -189,21 +191,30 @@ class ScannerEngine {
     const rc = this.rowCards!;
     const nCards = this.cards.length;
     // melhor score por card (max sobre as variantes de cada carta)
+    // CLAMP a [0,1] e descarta NaN/Inf: crops degenerados podem dar produto
+    // interno >1 (query corrompido) — clamp impede que um score anômalo domine o rank.
+    const clamp1 = (x: number) => (Number.isFinite(x) ? Math.max(0, Math.min(1, x)) : 0);
     const best = new Float32Array(nCards).fill(-Infinity);
     const nRows = rc.length;
     for (let i = 0; i < nRows; i++) {
       let s = 0;
       const off = i * N_COMP;
       for (let j = 0; j < N_COMP; j++) s += idx[off + j] * q[j];
+      if (!Number.isFinite(s)) continue;
       const c = rc[i];
-      if (s > best[c]) best[c] = s;
+      const sC = clamp1(s);
+      if (sC > best[c]) best[c] = sC;
     }
     const order = Array.from({ length: nCards }, (_, i) => i);
     order.sort((a, b) => best[b] - best[a]);
-    return order.slice(0, topK).map((i, rank) => ({
+    const top = order.slice(0, topK);
+    const s0 = clamp1(best[top[0]]);
+    const s1 = top.length > 1 ? clamp1(best[top[1]]) : 0;
+    return top.map((i, rank) => ({
       card: this.cards[i],
-      score: best[i],
+      score: clamp1(best[i]),
       rank: rank + 1,
+      margin: rank === 0 ? s0 - s1 : undefined,
     }));
   }
 }
