@@ -1,0 +1,198 @@
+eid,sigla,lang,n,inf,categoria,exemplo_nome
+244,VS,None,151,0,jp_subset,Falkner's Pidgeot
+246,SMP2,None,25,0,jp_subset,Bulbasaur
+249,MC18F,None,40,0,jp_subset,Pansage
+250,VMS1,None,37,0,jp_subset,Bulbasaur
+261,S9A,jp,93,0,jp_subset,Oddish
+262,SLL,None,22,0,jp_subset,Scyther
+263,SLD,None,21,0,jp_subset,Crobat-V
+302,11TH,None,9,0,jp_subset,Icy Sky's Shaymin
+304,DHDPt,None,13,0,jp_subset,Torkoal
+305,PHDPt,None,13,0,jp_subset,Lapras
+306,TLVSP,None,18,0,jp_subset,Oakley's Ariados
+307,10THM,None,11,0,jp_subset,Striking Back Mewtwo
+308,MOMP,None,18,0,jp_subset,Bulbasaur
+309,MCSM,None,19,0,jp_subset,Phantom's Beedrill
+310,MCAL,None,20,0,jp_subset,Ash's Grovyle
+311,MCSSD,None,19,0,jp_subset,Sky-Splitting Deoxys Normal Forme
+312,MCVP,None,19,0,jp_subset,Forina's Nuzleaf
+313,NCGD,None,25,0,jp_subset,Zubat do Brock
+314,QSG-R,None,32,0,jp_subset,Squirtle
+315,QSG-G,None,32,0,jp_subset,Bulbasaur
+316,s12a,None,262,0,jp_subset,Paras
+317,TMCG,None,27,0,jp_subset,Oddish da &Eacute;rica
+318,KCGSD,None,24,0,jp_subset,Pikachu do Cap. Surge
+320,BDVHS,None,41,0,jp_subset,Venusaur
+321,SDVHS,None,41,0,jp_subset,Blastoise
+322,IPCHD,None,40,0,jp_subset,Chikorita
+323,IPTHD,None,40,0,jp_subset,Pikachu
+326,s8a,None,38,0,jp_subset,Pikachu
+327,MOTF,None,48,0,jp_subset,Ekans
+330,s7D,None,90,0,jp_subset,Suicune-V
+333,s6H,None,95,0,jp_subset,Snover
+334,s5a,None,96,0,jp_subset,Weedle
+336,s5I,None,91,0,jp_subset,Cacnea
+337,s4a,None,330,0,jp_subset,Rowlet
+340,sv1S,jp,108,0,jp_subset,Cacnea
+341,sv1V,jp,108,0,jp_subset,Pineco
+344,SVPJp,jp,291,291,jp_subset,Pikachu
+345,s4,None,121,0,jp_subset,Seedot
+347,s3,None,119,0,jp_subset,Paras
+359,NBTHD,None,1,0,jp_subset,Victini
+361,PCGPP,None,156,0,jp_subset,Blastoise
+363,s1w,None,75,0,jp_subset,Roselia
+364,sp4,None,8,0,jp_subset,Flareon-VMAX
+365,sp3,None,6,0,jp_subset,Calyrex Cavaleiro Glacial-V (Jumbo)
+366,sp2,None,8,0,jp_subset,Dhelmise-VMAX
+367,sv1a,jp,103,0,jp_subset,Tropius
+368,JU-JP,jp,48,0,jp_subset,Nidoran F&ecirc;mea
+370,LS-JP,jp,96,0,jp_subset,Zubat do Brock
+371,CFTD,None,99,0,jp_subset,Weedle do Koga
+372,CTR,None,57,0,jp_subset,Caterpie
+373,ALE,None,57,0,jp_subset,Zubat
+387,BW7,None,79,0,jp_subset,Turtwig
+388,BW8,None,58,0,jp_subset,Exeggcute
+389,BW8b,None,58,0,jp_subset,Weedle
+392,EPJPN,jp,96,0,jp_subset,Bulbasaur
+394,CP5,None,38,0,jp_subset,Celebi
+395,PPP,None,7,0,jp_subset,Turtwig
+396,sV2a,jp,210,0,jp_subset,Bulbasaur
+397,DPt-P,None,51,0,jp_subset,Carnivine
+399,MCRP,None,30,0,jp_subset,Chikorita M
+400,PKHDP,None,15,0,jp_subset,Cherubi
+401,PPHDP,None,15,0,jp_subset,Roselia
+402,TUHDP,None,14,0,jp_subset,Turtwig
+404,Pt2,None,90,0,jp_subset,Weedle
+407,WCS23,None,32,0,jp_subset,Pikachu ex
+409,CPM2,None,2,0,jp_subset,Charizard
+416,sm11a,None,80,0,jp_subset,Venusaur e Snivy-GX
+417,PTOS,None,150,0,jp_subset,Bulbasaur
+418,CVSS,None,23,0,jp_subset,Charizard-V
+419,GVSS,None,21,0,jp_subset,Absol
+420,CVSS2,None,23,0,jp_subset,Charizard-V
+422,WOTCP,None,7,0,jp_subset,Pikachu
+423,svF,None,38,0,jp_subset,Charizard Radiante
+426,SM12,None,117,0,jp_subset,Sunkern
+440,SMPJ,None,437,0,jp_subset,Snorlax-GX
+441,XYPJ,None,470,0,jp_subset,Pikachu
+442,CLF,None,34,0,jp_subset,Bulbasaur
+443,CLL,None,34,0,jp_subset,Charmander
+444,CLK,None,34,0,jp_subset,Squirtle
+445,YCGD,None,27,0,jp_subset,Abra da Sabrina
+446,CBS,None,82,0,jp_subset,Zubat
+447,sm10b,None,69,0,jp_subset,Rowlet e Alolan-Exeggutor-GX
+448,sm10a,None,69,0,jp_subset,Karrablast
+451,sGI,None,24,0,jp_subset,Lapras
+452,sm9a,None,70,0,jp_subset,Venonat
+453,sv4a,jp,360,0,jp_subset,Oddish
+454,SM8B,None,250,0,jp_subset,Bulbasaur
+455,SM8A,None,65,0,jp_subset,Litten
+456,SM7B,None,63,0,jp_subset,Tangela
+457,SM7A,None,73,0,jp_subset,Pinsir
+458,WAK,None,72,0,jp_subset,Tangela
+459,SM7,None,112,0,jp_subset,Treecko
+478,SM4S,None,62,0,jp_subset,Cacnea
+479,XYA,None,21,0,jp_subset,Charizard-EX
+480,SM3,None,82,0,jp_subset,Bulbasaur
+482,SM3N,None,64,0,jp_subset,Caterpie
+483,SM3H,None,64,0,jp_subset,Oddish
+485,SM2,None,70,0,jp_subset,Bellsprout
+486,XYB,None,20,0,jp_subset,Skarmory
+488,SM2L,None,62,0,jp_subset,Phantump
+530,HACGD,None,23,0,jp_subset,Psyduck da Misty
+532,SMH,None,131,0,jp_subset,Pinsir
+533,SMI,None,38,0,jp_subset,Flareon-GX
+534,BEP,None,128,0,jp_subset,Koffing
+535,ODFE,None,68,0,jp_subset,Snorlax
+536,sv5a,jp,96,0,jp_subset,Tangela
+539,SV6,None,133,0,jp_subset,Sunkern
+550,CLB,None,34,0,jp_subset,Squirtle
+551,CLC,None,34,0,jp_subset,Charmander
+552,CLV,None,34,0,jp_subset,Bulbasaur
+553,TTNM,None,92,0,jp_subset,Nidoran Macho
+554,WFTS,None,90,0,jp_subset,Oddish
+555,SPEA,None,91,0,jp_subset,Zubat
+556,MYMO,None,91,0,jp_subset,Weedle
+558,ELEA,None,15,0,jp_subset,Roselia
+559,EMET,None,14,0,jp_subset,Misdreavus
+560,SK,None,30,0,jp_subset,Cherubi
+634,PTS,None,12,0,jp_subset,Combee
+635,PTM,None,12,0,jp_subset,Burmy Casca de Areia
+636,PTR,None,12,0,jp_subset,Turtwig
+637,PT4,None,90,0,jp_subset,Beedrill G
+638,L3,None,81,0,jp_subset,Bellsprout
+640,PPPS5,None,86,0,jp_subset,Energia de Grama
+641,SVM,None,175,0,jp_subset,Oddish
+642,FPP,None,25,0,jp_subset,
+644,SV8a,jp,237,0,jp_subset,Budew
+653,ROTH,None,54,0,jp_subset,Grimer
+655,L2TD,None,19,0,jp_subset,Hitmonlee
+656,GTG,None,26,0,jp_subset,Charmander do Blaine
+657,ADV,None,55,0,jp_subset,Koffing
+659,SMM,None,31,0,jp_subset,Espeon e Deoxys-GX
+660,TBSD,None,10,0,jp_subset,Tropius
+661,MBSD,None,9,0,jp_subset,Vulpix
+663,TYSD,None,16,0,jp_subset,Cyndaquil
+668,MICR,None,75,0,jp_subset,Bulbasaur
+669,UNSE,None,83,0,jp_subset,Zubat
+670,MKBQ,None,15,0,jp_subset,Bulbasaur
+672,MKSD,None,12,0,jp_subset,Blaziken
+674,MMBS,None,49,0,jp_subset,Treecko
+675,EB11,None,8,0,jp_subset,Energia de Grama (2011 Unnumbered)
+676,EB13,None,9,0,jp_subset,Energia de Grama (2013 Unnumbered)
+678,SVOM,None,20,0,jp_subset,Purrloin da Marine
+710,CS2B,None,143,0,jp_subset,Darmanitan de Galar
+713,NPF1,None,9,0,jp_subset,Chikorita
+714,NPF2,None,9,0,jp_subset,Charizard
+715,NPF3,None,9,0,jp_subset,Celebi
+716,CBB2C,None,140,0,jp_subset,
+717,VCBSD,None,52,0,jp_subset,Bulbasaur
+718,PPMYC,None,4,0,jp_subset,Tenacidade do Colress
+723,EB06,None,6,0,jp_subset,Energia de Grama (2006 Unnumbered)
+724,EB07,None,8,0,jp_subset,Energia de Grama (2007 Unnumbered)
+725,PCSD,None,19,0,jp_subset,Burmy Casca de Areia
+726,151C,None,192,0,jp_subset,Bulbasaur
+727,EB10,None,8,0,jp_subset,Energia de Grama (2010 Unnumbered)
+728,M1L,None,92,0,jp_subset,Bulbasaur
+729,M1S,None,92,0,jp_subset,Tangela
+731,MAJP,jp,51,0,jp_subset,Shaymin
+732,MEPR,None,155,0,jp_subset,Chikorita
+733,MEP,None,144,144,colecao_own,Meganium
+735,m2,None,116,0,jp_subset,Oddish
+736,DP3SD,None,18,0,jp_subset,Burmy Casca de Planta
+737,MEE,None,8,0,jp_subset,Energia de Grama (Mega Evolution)
+739,HC25,None,8,0,jp_subset,Pikachu
+741,CBB3C,None,136,0,jp_subset,
+742,MC,None,766,0,jp_subset,Oddish da &Eacute;rica
+743,CSV5C,None,164,0,jp_subset,Oddish
+744,CSV4C,None,165,0,jp_subset,Scyther
+745,CSV3C,None,165,0,jp_subset,Hoppip
+747,CS6BC,None,172,0,jp_subset,Seel
+748,CS6.5,None,96,0,jp_subset,Exeggutor de Alola-V
+749,CS5BC,None,178,0,jp_subset,Bulbasaur
+750,CS5AC,None,176,0,jp_subset,Charmander
+751,CS5.1,None,23,0,jp_subset,Sobble
+752,CSV1C,None,167,0,jp_subset,Pineco
+753,CS3BC,None,179,0,jp_subset,Cherubi
+755,mp1,None,23,0,jp_subset,Durant
+756,mbd,None,22,0,jp_subset,Snubbull
+757,mbg,None,22,0,jp_subset,Gastly
+758,M2aPB,jp,105,0,jp_subset,Pinsir do Ethan
+759,M2aES,jp,118,0,jp_subset,Pinsir do Ethan
+760,M2aTR,None,13,0,jp_subset,Tarountula da Equipe Rocket
+761,ASCES,None,140,0,jp_subset,Oddish da &Eacute;rica
+762,ASCPB,None,130,0,jp_subset,Oddish da &Eacute;rica
+763,ASCTR,None,10,0,jp_subset,Tarountula da Equipe Rocket
+764,M3,None,117,0,jp_subset,Spinarak
+765,SVJP,jp,19,0,jp_subset,Palkia Forma Origem-V
+766,SVJL,None,21,0,jp_subset,Charmander
+767,PCFC,None,10,0,jp_subset,
+768,SVN,None,45,0,jp_subset,Mew ex
+770,PPPS8,None,90,0,jp_subset,Energia de Grama
+772,SI-JP,jp,18,0,jp_subset,Ivysaur
+774,CSM2b,None,193,0,jp_subset,Celebi e Venusaur-GX
+775,CSM2c,None,192,0,jp_subset,Reshiram e Charizard-GX
+776,CSM2a,None,194,0,jp_subset,Karrablast
+778,s6aK,None,101,0,jp_subset,Pinsir
+779,cs3.5,None,90,0,jp_subset,Weedle
+82,VM,None,9,0,jp_subset,Victory Medal - Spring 2006-2007
