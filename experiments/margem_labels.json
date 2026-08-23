@@ -1,0 +1,1686 @@
+{
+ "20260218_094410.jpg": {
+  "cartas": [
+   {
+    "nome": "M Gardevoir-EX",
+    "pct": 60.2,
+    "m2": 55.0,
+    "margem2": 5.2
+   },
+   {
+    "nome": "Rigid Band",
+    "pct": 42.3,
+    "m2": 41.0,
+    "margem2": 1.3
+   },
+   {
+    "nome": "Fire Energy",
+    "pct": 88.9,
+    "m2": 88.0,
+    "margem2": 0.9
+   },
+   {
+    "nome": "Skorupi",
+    "pct": 61.2,
+    "m2": 55.0,
+    "margem2": 6.2
+   },
+   {
+    "nome": "Charmander",
+    "pct": 60.4,
+    "m2": 58.0,
+    "margem2": 2.4
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Dewgong",
+    "num": "022/094",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Dewgong 022/094"
+   },
+   {
+    "nome": "Charmander",
+    "num": "011/094",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Charmander 011/094"
+   },
+   {
+    "nome": "Wigglytuff",
+    "num": "077/094",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Wigglytuff 077/094"
+   },
+   {
+    "nome": "Pawmot",
+    "num": "034/094",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Pawmot 034/094"
+   },
+   {
+    "nome": "Vileplume",
+    "num": "003/094",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Vileplume 003/094"
+   },
+   {
+    "nome": "Energia fogo básica",
+    "num": "002",
+    "set": "MEEpt",
+    "ano": null,
+    "lang": "pt",
+    "raw": "Energia fogo básica MEEpt 002"
+   }
+  ]
+ },
+ "20260218_094527.jpg": {
+  "cartas": [
+   {
+    "nome": "M Gengar-EX",
+    "pct": 50.9,
+    "m2": 49.0,
+    "margem2": 1.9
+   },
+   {
+    "nome": "Golem",
+    "pct": 44.9,
+    "m2": 43.0,
+    "margem2": 1.9
+   },
+   {
+    "nome": "Kirlia",
+    "pct": 64.7,
+    "m2": 63.0,
+    "margem2": 1.7
+   },
+   {
+    "nome": "Mega Signal",
+    "pct": 71.6,
+    "m2": 71.0,
+    "margem2": 0.6
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Nacli",
+    "num": "082/132",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Nacli 082/132"
+   },
+   {
+    "nome": "Kirlia",
+    "num": "059/132",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Kirlia 059/132"
+   },
+   {
+    "nome": "Drizzile",
+    "num": "040/132",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Drizzile 040/132"
+   },
+   {
+    "nome": "Megassinal",
+    "num": "121/132",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Megassinal 121/132"
+   },
+   {
+    "nome": "Megassinal",
+    "num": "121/132",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Megassinal 121/132"
+   },
+   {
+    "nome": "Naclstack",
+    "num": "083/132",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Naclstack 083/132"
+   }
+  ]
+ },
+ "20260329_104229.jpg": {
+  "cartas": [
+   {
+    "nome": "Mr. Mime",
+    "pct": 44.9,
+    "m2": 44.0,
+    "margem2": 0.9
+   },
+   {
+    "nome": "Hypno",
+    "pct": 67.3,
+    "m2": 45.0,
+    "margem2": 22.3
+   },
+   {
+    "nome": "Cottonee",
+    "pct": 59.4,
+    "m2": 59.0,
+    "margem2": 0.4
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Cubone",
+    "num": "104/165",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Cubone 104/165"
+   },
+   {
+    "nome": "Hypno",
+    "num": "097/165",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Hypno 097/165"
+   },
+   {
+    "nome": "Caterpie",
+    "num": "010/165",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Caterpie 010/165"
+   },
+   {
+    "nome": "Magnemite",
+    "num": "081/165",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Magnemite 081/165"
+   },
+   {
+    "nome": "Vulpix",
+    "num": "037/165",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Vulpix 037/165"
+   }
+  ]
+ },
+ "20260822_115216.jpg": {
+  "cartas": [
+   {
+    "nome": "Jumpluff",
+    "pct": 53.6,
+    "m2": 53.0,
+    "margem2": 0.6
+   },
+   {
+    "nome": "Leafeon",
+    "pct": 69.6,
+    "m2": 68.0,
+    "margem2": 1.6
+   },
+   {
+    "nome": "Bewear",
+    "pct": 51.8,
+    "m2": 49.0,
+    "margem2": 2.8
+   },
+   {
+    "nome": "Meloetta",
+    "pct": 55.0,
+    "m2": 52.0,
+    "margem2": 3.0
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Sylveon EX",
+    "num": "RC32/RC32",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Sylveon EX RC32/RC32 2016"
+   },
+   {
+    "nome": "Sylveon GX",
+    "num": "92/145",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Sylveon GX 92/145 2017"
+   },
+   {
+    "nome": "Sylveon GX",
+    "num": "140/145",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Sylveon GX 140/145 2017"
+   },
+   {
+    "nome": "Espeon GX",
+    "num": "140/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Espeon GX 140/149 2017"
+   },
+   {
+    "nome": "Sylveon ex",
+    "num": "041/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Sylveon ex 041/131 2025"
+   },
+   {
+    "nome": "Leafeon",
+    "num": "005/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Leafeon 005/131 2025"
+   },
+   {
+    "nome": "Vaporeon",
+    "num": "022/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Vaporeon 022/131 2025"
+   },
+   {
+    "nome": "Glaceon",
+    "num": "025/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Glaceon 025/131 2025"
+   }
+  ]
+ },
+ "20260822_115424.jpg": {
+  "cartas": [
+   {
+    "nome": "Vaporeon",
+    "pct": 65.3,
+    "m2": 64.0,
+    "margem2": 1.3
+   },
+   {
+    "nome": "Glaceon",
+    "pct": 69.0,
+    "m2": 64.0,
+    "margem2": 5.0
+   },
+   {
+    "nome": "Mew ex",
+    "pct": 46.0,
+    "m2": 43.0,
+    "margem2": 3.0
+   },
+   {
+    "nome": "Mega Scrafty ex",
+    "pct": 52.3,
+    "m2": 52.0,
+    "margem2": 0.3
+   },
+   {
+    "nome": "Sylveon ex",
+    "pct": 63.3,
+    "m2": 59.0,
+    "margem2": 4.3
+   },
+   {
+    "nome": "Leafeon",
+    "pct": 59.9,
+    "m2": 60.0,
+    "margem2": -0.1
+   },
+   {
+    "nome": "Sylveon-GX",
+    "pct": 56.9,
+    "m2": 48.0,
+    "margem2": 8.9
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Sylveon EX",
+    "num": "RC32/RC32",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Sylveon EX RC32/RC32 2016"
+   },
+   {
+    "nome": "Sylveon GX",
+    "num": "92/145",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Sylveon GX 92/145 2017"
+   },
+   {
+    "nome": "Sylveon GX",
+    "num": "140/145",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Sylveon GX 140/145 2017"
+   },
+   {
+    "nome": "Espeon GX",
+    "num": "140/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Espeon GX 140/149 2017"
+   },
+   {
+    "nome": "Sylveon ex",
+    "num": "041/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Sylveon ex 041/131 2025"
+   },
+   {
+    "nome": "Leafeon",
+    "num": "005/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Leafeon 005/131 2025"
+   },
+   {
+    "nome": "Vaporeon",
+    "num": "022/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Vaporeon 022/131 2025"
+   },
+   {
+    "nome": "Glaceon",
+    "num": "025/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Glaceon 025/131 2025"
+   }
+  ]
+ },
+ "20260822_115504.jpg": {
+  "cartas": [
+   {
+    "nome": "Blaziken-EX",
+    "pct": 51.3,
+    "m2": 47.0,
+    "margem2": 4.3
+   },
+   {
+    "nome": "Necrozma-GX",
+    "pct": 78.5,
+    "m2": 67.0,
+    "margem2": 11.5
+   },
+   {
+    "nome": "Stunky",
+    "pct": 46.5,
+    "m2": 46.0,
+    "margem2": 0.5
+   },
+   {
+    "nome": "Mewtwo-GX",
+    "pct": 60.0,
+    "m2": 50.0,
+    "margem2": 10.0
+   },
+   {
+    "nome": "Lillie",
+    "pct": 47.0,
+    "m2": 46.0,
+    "margem2": 1.0
+   },
+   {
+    "nome": "Lapras-GX",
+    "pct": 52.2,
+    "m2": 45.0,
+    "margem2": 7.2
+   },
+   {
+    "nome": "Lunala-GX",
+    "pct": 63.3,
+    "m2": 45.0,
+    "margem2": 18.3
+   },
+   {
+    "nome": "Primarina-GX",
+    "pct": 62.4,
+    "m2": 46.0,
+    "margem2": 16.4
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Primarina GX",
+    "num": "42/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Primarina GX 42/149 2017"
+   },
+   {
+    "nome": "Lapras GX",
+    "num": "35/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Lapras GX 35/149 2017"
+   },
+   {
+    "nome": "Lapras GX",
+    "num": "151/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Lapras GX 151/149 2017"
+   },
+   {
+    "nome": "Lunala GX",
+    "num": null,
+    "set": "SM17",
+    "ano": null,
+    "lang": "pt",
+    "raw": "Lunala GX SM17"
+   },
+   {
+    "nome": "Lílian",
+    "num": "147/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Lílian 147/149 2017"
+   },
+   {
+    "nome": "Mewtwo GX",
+    "num": "39/73",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Mewtwo GX 39/73"
+   },
+   {
+    "nome": "Charizard GX",
+    "num": "20/147",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Charizard GX 20/147 2017"
+   },
+   {
+    "nome": "Necrozma GX",
+    "num": "63/147",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Necrozma GX 63/147 2017"
+   }
+  ]
+ },
+ "20260822_115601.jpg": {
+  "cartas": [
+   {
+    "nome": "Lillie",
+    "pct": 52.2,
+    "m2": 51.0,
+    "margem2": 1.2
+   },
+   {
+    "nome": "Vaporeon",
+    "pct": 61.0,
+    "m2": 61.0,
+    "margem2": 0.0
+   },
+   {
+    "nome": "Espeon-GX",
+    "pct": 49.9,
+    "m2": 49.0,
+    "margem2": 0.9
+   },
+   {
+    "nome": "Infernape",
+    "pct": 47.8,
+    "m2": 45.0,
+    "margem2": 2.8
+   },
+   {
+    "nome": "Plusle",
+    "pct": 55.4,
+    "m2": 55.0,
+    "margem2": 0.4
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Sylveon EX",
+    "num": "RC32/RC32",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Sylveon EX RC32/RC32 2016"
+   },
+   {
+    "nome": "Sylveon GX",
+    "num": "92/145",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Sylveon GX 92/145 2017"
+   },
+   {
+    "nome": "Sylveon GX",
+    "num": "140/145",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Sylveon GX 140/145 2017"
+   },
+   {
+    "nome": "Espeon GX",
+    "num": "140/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Espeon GX 140/149 2017"
+   },
+   {
+    "nome": "Sylveon ex",
+    "num": "041/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Sylveon ex 041/131 2025"
+   },
+   {
+    "nome": "Leafeon",
+    "num": "005/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Leafeon 005/131 2025"
+   },
+   {
+    "nome": "Vaporeon",
+    "num": "022/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Vaporeon 022/131 2025"
+   },
+   {
+    "nome": "Glaceon",
+    "num": "025/131",
+    "set": null,
+    "ano": "2025",
+    "lang": "pt",
+    "raw": "Glaceon 025/131 2025"
+   }
+  ]
+ },
+ "20260822_115615.jpg": {
+  "cartas": [
+   {
+    "nome": "Charizard-GX",
+    "pct": 49.0,
+    "m2": 40.0,
+    "margem2": 9.0
+   },
+   {
+    "nome": "Necrozma-GX",
+    "pct": 80.1,
+    "m2": 73.0,
+    "margem2": 7.1
+   },
+   {
+    "nome": "Vanilluxe",
+    "pct": 50.7,
+    "m2": 49.0,
+    "margem2": 1.7
+   },
+   {
+    "nome": "Psyduck",
+    "pct": 49.8,
+    "m2": 50.0,
+    "margem2": -0.2
+   },
+   {
+    "nome": "Mewtwo-GX",
+    "pct": 63.3,
+    "m2": 51.0,
+    "margem2": 12.3
+   },
+   {
+    "nome": "Lunala-GX",
+    "pct": 56.2,
+    "m2": 54.0,
+    "margem2": 2.2
+   },
+   {
+    "nome": "Lillie",
+    "pct": 74.8,
+    "m2": 48.0,
+    "margem2": 26.8
+   },
+   {
+    "nome": "Lapras-GX",
+    "pct": 58.9,
+    "m2": 42.0,
+    "margem2": 16.9
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Primarina GX",
+    "num": "42/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Primarina GX 42/149 2017"
+   },
+   {
+    "nome": "Lapras GX",
+    "num": "35/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Lapras GX 35/149 2017"
+   },
+   {
+    "nome": "Lapras GX",
+    "num": "151/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Lapras GX 151/149 2017"
+   },
+   {
+    "nome": "Lunala GX",
+    "num": null,
+    "set": "SM17",
+    "ano": null,
+    "lang": "pt",
+    "raw": "Lunala GX SM17"
+   },
+   {
+    "nome": "Lílian",
+    "num": "147/149",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Lílian 147/149 2017"
+   },
+   {
+    "nome": "Mewtwo GX",
+    "num": "39/73",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Mewtwo GX 39/73"
+   },
+   {
+    "nome": "Charizard GX",
+    "num": "20/147",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Charizard GX 20/147 2017"
+   },
+   {
+    "nome": "Necrozma GX",
+    "num": "63/147",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Necrozma GX 63/147 2017"
+   }
+  ]
+ },
+ "20260822_115637.jpg": {
+  "cartas": [
+   {
+    "nome": "Cyclizar ex",
+    "pct": 51.8,
+    "m2": 44.0,
+    "margem2": 7.8
+   },
+   {
+    "nome": "Houndoom-EX",
+    "pct": 51.0,
+    "m2": 49.0,
+    "margem2": 2.0
+   },
+   {
+    "nome": "Alakazam-EX",
+    "pct": 56.5,
+    "m2": 37.0,
+    "margem2": 19.5
+   },
+   {
+    "nome": "Gardevoir-GX",
+    "pct": 72.1,
+    "m2": 43.0,
+    "margem2": 29.1
+   },
+   {
+    "nome": "Dragonite-EX",
+    "pct": 58.4,
+    "m2": 42.0,
+    "margem2": 16.4
+   },
+   {
+    "nome": "Snorlax",
+    "pct": 81.1,
+    "m2": 75.0,
+    "margem2": 6.1
+   },
+   {
+    "nome": "Golisopod-GX",
+    "pct": 65.7,
+    "m2": 40.0,
+    "margem2": 25.7
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Dragonite EX",
+    "num": "72/108",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Dragonite EX 72/108 2016"
+   },
+   {
+    "nome": "Aegislash EX",
+    "num": "65/119",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Aegislash EX 65/119 2016"
+   },
+   {
+    "nome": "Pidgeot EX",
+    "num": "64/108",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Pidgeot EX 64/108 2016"
+   },
+   {
+    "nome": "Alakazam EX",
+    "num": "125/124",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Alakazam EX 125/124 2016"
+   },
+   {
+    "nome": "Snorlax",
+    "num": null,
+    "set": "XY179",
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Snorlax XY179 2016"
+   },
+   {
+    "nome": "Gardevoir GX",
+    "num": "038/051",
+    "set": null,
+    "ano": "2017",
+    "lang": "kr",
+    "raw": "Gardevoir GX 038/051 2017 (kr)"
+   },
+   {
+    "nome": "Lycanroc GX",
+    "num": "027/050",
+    "set": null,
+    "ano": "2017",
+    "lang": "kr",
+    "raw": "Lycanroc GX 027/050 2017 (kr)"
+   },
+   {
+    "nome": "Golisopod GX",
+    "num": "17/147",
+    "set": null,
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Golisopod GX 17/147 2017"
+   },
+   {
+    "nome": "Houndoom EX",
+    "num": "009/059",
+    "set": null,
+    "ano": "2015",
+    "lang": "kr",
+    "raw": "Houndoom EX 009/059 2015 (kr)"
+   }
+  ]
+ },
+ "20260822_115652.jpg": {
+  "cartas": [
+   {
+    "nome": "Pichu Bros.",
+    "pct": 65.2,
+    "m2": 52.0,
+    "margem2": 13.2
+   },
+   {
+    "nome": "Trapinch",
+    "pct": 42.0,
+    "m2": 42.0,
+    "margem2": 0.0
+   },
+   {
+    "nome": "Pikachu",
+    "pct": 61.7,
+    "m2": 52.0,
+    "margem2": 9.7
+   },
+   {
+    "nome": "Pikachu",
+    "pct": 75.2,
+    "m2": 45.0,
+    "margem2": 30.2
+   },
+   {
+    "nome": "Riolu",
+    "pct": 49.0,
+    "m2": 48.0,
+    "margem2": 1.0
+   },
+   {
+    "nome": "Raichu V",
+    "pct": 58.7,
+    "m2": 56.0,
+    "margem2": 2.7
+   },
+   {
+    "nome": "Ash's Pikachu",
+    "pct": 69.8,
+    "m2": 68.0,
+    "margem2": 1.8
+   },
+   {
+    "nome": "Pikachu",
+    "pct": 72.7,
+    "m2": 42.0,
+    "margem2": 30.7
+   },
+   {
+    "nome": "Pikachu",
+    "pct": 47.5,
+    "m2": 47.0,
+    "margem2": 0.5
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Pikachu",
+    "num": "16/17",
+    "set": null,
+    "ano": "2005",
+    "lang": "en",
+    "raw": "Pikachu 16/17 2005 (en)"
+   },
+   {
+    "nome": "Pikachu",
+    "num": "13/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Pikachu 13/17 2006"
+   },
+   {
+    "nome": "Pikachu do Ash",
+    "num": null,
+    "set": "SM108",
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Pikachu do Ash SM108 2017"
+   },
+   {
+    "nome": "Pikachu",
+    "num": "9/17",
+    "set": null,
+    "ano": "2007",
+    "lang": "en",
+    "raw": "Pikachu 9/17 2007 (en)"
+   },
+   {
+    "nome": "Pikachu",
+    "num": "13/17",
+    "set": null,
+    "ano": "2002",
+    "lang": "en",
+    "raw": "Pikachu 13/17 2002 (en)"
+   },
+   {
+    "nome": "Pikachu",
+    "num": "049/195",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Pikachu 049/195 2022"
+   },
+   {
+    "nome": "Pichu Bros.",
+    "num": "16/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Pichu Bros. 16/17 2006"
+   },
+   {
+    "nome": "Pikachu",
+    "num": null,
+    "set": "SM76",
+    "ano": "2017",
+    "lang": "pt",
+    "raw": "Pikachu SM76 2017"
+   },
+   {
+    "nome": "Detetive Pikachu",
+    "num": null,
+    "set": "SM194",
+    "ano": "2019",
+    "lang": "pt",
+    "raw": "Detetive Pikachu SM194 2019"
+   }
+  ]
+ },
+ "20260822_115707.jpg": {
+  "cartas": [
+   {
+    "nome": "Shaymin",
+    "pct": 74.1,
+    "m2": 48.0,
+    "margem2": 26.1
+   },
+   {
+    "nome": "Keldeo",
+    "pct": 56.1,
+    "m2": 44.0,
+    "margem2": 12.1
+   },
+   {
+    "nome": "Meloetta",
+    "pct": 66.4,
+    "m2": 45.0,
+    "margem2": 21.4
+   },
+   {
+    "nome": "Pikachu",
+    "pct": 55.5,
+    "m2": 53.0,
+    "margem2": 2.5
+   },
+   {
+    "nome": "Dialga",
+    "pct": 67.0,
+    "m2": 39.0,
+    "margem2": 28.0
+   },
+   {
+    "nome": "Dewott",
+    "pct": 48.9,
+    "m2": 45.0,
+    "margem2": 3.9
+   },
+   {
+    "nome": "Klang",
+    "pct": 69.4,
+    "m2": 67.0,
+    "margem2": 2.4
+   },
+   {
+    "nome": "Whimsicott",
+    "pct": 53.2,
+    "m2": 53.0,
+    "margem2": 0.2
+   },
+   {
+    "nome": "Falinks",
+    "pct": 50.2,
+    "m2": 49.0,
+    "margem2": 1.2
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Dewott",
+    "num": "5/12",
+    "set": null,
+    "ano": "2012",
+    "lang": "pt",
+    "raw": "Dewott 5/12 2012"
+   },
+   {
+    "nome": "Klang",
+    "num": "11/12",
+    "set": null,
+    "ano": "2012",
+    "lang": "pt",
+    "raw": "Klang 11/12 2012"
+   },
+   {
+    "nome": "Emolga",
+    "num": "6/12",
+    "set": null,
+    "ano": "2012",
+    "lang": "pt",
+    "raw": "Emolga 6/12 2012"
+   },
+   {
+    "nome": "Tepig",
+    "num": "3/12",
+    "set": null,
+    "ano": "2011",
+    "lang": "pt",
+    "raw": "Tepig 3/12 2011"
+   },
+   {
+    "nome": "Snivy",
+    "num": "1/12",
+    "set": null,
+    "ano": "2011",
+    "lang": "pt",
+    "raw": "Snivy 1/12 2011"
+   },
+   {
+    "nome": "Dialga",
+    "num": null,
+    "set": "XY77",
+    "ano": "2015",
+    "lang": "pt",
+    "raw": "Dialga XY77 2015"
+   },
+   {
+    "nome": "Shaymin",
+    "num": null,
+    "set": "XY115",
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Shaymin XY115 2016"
+   },
+   {
+    "nome": "Keldeo",
+    "num": null,
+    "set": "XY118",
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Keldeo XY118 2016"
+   },
+   {
+    "nome": "Meloetta",
+    "num": null,
+    "set": "XY120",
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Meloetta XY120 2016"
+   }
+  ]
+ },
+ "20260822_115722.jpg": {
+  "cartas": [
+   {
+    "nome": "Team Magma's Claydol",
+    "pct": 48.9,
+    "m2": 43.0,
+    "margem2": 5.9
+   },
+   {
+    "nome": "Team Aqua's Mightyena",
+    "pct": 58.3,
+    "m2": 45.0,
+    "margem2": 13.3
+   },
+   {
+    "nome": "Tyranitar",
+    "pct": 64.4,
+    "m2": 51.0,
+    "margem2": 13.4
+   },
+   {
+    "nome": "Team Aqua's Seviper",
+    "pct": 60.5,
+    "m2": 46.0,
+    "margem2": 14.5
+   },
+   {
+    "nome": "Team Aqua's Sharpedo",
+    "pct": 74.6,
+    "m2": 50.0,
+    "margem2": 24.6
+   },
+   {
+    "nome": "Typhlosion",
+    "pct": 57.8,
+    "m2": 48.0,
+    "margem2": 9.8
+   },
+   {
+    "nome": "Empoleon",
+    "pct": 60.9,
+    "m2": 52.0,
+    "margem2": 8.9
+   },
+   {
+    "nome": "Lycanroc",
+    "pct": 45.9,
+    "m2": 46.0,
+    "margem2": -0.1
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Typhlosion",
+    "num": "20/162",
+    "set": null,
+    "ano": "2015",
+    "lang": "en",
+    "raw": "Typhlosion 20/162 2015 (en)"
+   },
+   {
+    "nome": "Feraligatr",
+    "num": "17/119",
+    "set": null,
+    "ano": "2014",
+    "lang": "en",
+    "raw": "Feraligatr 17/119 2014 (en)"
+   },
+   {
+    "nome": "Meganium",
+    "num": "3/122",
+    "set": null,
+    "ano": "2016",
+    "lang": "en",
+    "raw": "Meganium 3/122 2016 (en)"
+   },
+   {
+    "nome": "Tyranitar",
+    "num": "56/124",
+    "set": null,
+    "ano": "2016",
+    "lang": "pt",
+    "raw": "Tyranitar 56/124 2016"
+   },
+   {
+    "nome": "Empoleon",
+    "num": "38/162",
+    "set": null,
+    "ano": "2015",
+    "lang": "pt",
+    "raw": "Empoleon 38/162 2015"
+   },
+   {
+    "nome": "Sharpedo da equipe aqua",
+    "num": "21/34",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Sharpedo da equipe aqua 21/34"
+   },
+   {
+    "nome": "Claydol da equipe magma",
+    "num": "11/34",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Claydol da equipe magma 11/34"
+   },
+   {
+    "nome": "Mightyena da equipe aqua",
+    "num": "18/34",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Mightyena da equipe aqua 18/34"
+   },
+   {
+    "nome": "Seviper da equipe aqua",
+    "num": "9/34",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Seviper da equipe aqua 9/34"
+   }
+  ]
+ },
+ "20260822_115739.jpg": {
+  "cartas": [
+   {
+    "nome": "Mega Scrafty ex",
+    "pct": 49.7,
+    "m2": 48.0,
+    "margem2": 1.7
+   },
+   {
+    "nome": "Low Pressure System",
+    "pct": 79.5,
+    "m2": 70.0,
+    "margem2": 9.5
+   },
+   {
+    "nome": "Cacnea",
+    "pct": 65.3,
+    "m2": 53.0,
+    "margem2": 12.3
+   },
+   {
+    "nome": "Surskit",
+    "pct": 56.3,
+    "m2": 41.0,
+    "margem2": 15.3
+   },
+   {
+    "nome": "Bulbasaur",
+    "pct": 66.2,
+    "m2": 46.0,
+    "margem2": 20.2
+   },
+   {
+    "nome": "Multi Technical Machine",
+    "pct": 162.7,
+    "m2": 56.0,
+    "margem2": 106.7
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Surskit",
+    "num": "14/17",
+    "set": null,
+    "ano": "2004",
+    "lang": "en",
+    "raw": "Surskit 14/17 2004 (en)"
+   },
+   {
+    "nome": "Swellow",
+    "num": "15/17",
+    "set": null,
+    "ano": "2004",
+    "lang": "en",
+    "raw": "Swellow 15/17 2004 (en)"
+   },
+   {
+    "nome": "Multi Technical Machine 01",
+    "num": "9/17",
+    "set": null,
+    "ano": "2005",
+    "lang": "en",
+    "raw": "Multi Technical Machine 01 9/17 2005 (en)"
+   },
+   {
+    "nome": "Cacnea",
+    "num": "13/17",
+    "set": null,
+    "ano": "2005",
+    "lang": "en",
+    "raw": "Cacnea 13/17 2005 (en)"
+   },
+   {
+    "nome": "Bulbasaur",
+    "num": "12/17",
+    "set": null,
+    "ano": "2005",
+    "lang": "en",
+    "raw": "Bulbasaur 12/17 2005 (en)"
+   },
+   {
+    "nome": "Luvdisc",
+    "num": "14/17",
+    "set": null,
+    "ano": "2005",
+    "lang": "en",
+    "raw": "Luvdisc 14/17 2005 (en)"
+   },
+   {
+    "nome": "Forretress",
+    "num": "9/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "en",
+    "raw": "Forretress 9/17 2006 (en)"
+   },
+   {
+    "nome": "Sistema de Pressão Baixa",
+    "num": "11/12",
+    "set": null,
+    "ano": null,
+    "lang": "pt",
+    "raw": "Sistema de Pressão Baixa 11/12"
+   },
+   {
+    "nome": "Ditto",
+    "num": "12/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Ditto 12/17 2006"
+   }
+  ]
+ },
+ "20260822_115753.jpg": {
+  "cartas": [
+   {
+    "nome": "Mudkip",
+    "pct": 54.5,
+    "m2": 45.0,
+    "margem2": 9.5
+   },
+   {
+    "nome": "Pikachu",
+    "pct": 50.2,
+    "m2": 47.0,
+    "margem2": 3.2
+   },
+   {
+    "nome": "Pidgey",
+    "pct": 72.0,
+    "m2": 52.0,
+    "margem2": 20.0
+   },
+   {
+    "nome": "Mudkip",
+    "pct": 51.9,
+    "m2": 49.0,
+    "margem2": 2.9
+   },
+   {
+    "nome": "Chimecho δ",
+    "pct": 58.4,
+    "m2": 51.0,
+    "margem2": 7.4
+   },
+   {
+    "nome": "Pichu Bros.",
+    "pct": 58.0,
+    "m2": 45.0,
+    "margem2": 13.0
+   },
+   {
+    "nome": "Mudkip",
+    "pct": 54.6,
+    "m2": 49.0,
+    "margem2": 5.6
+   },
+   {
+    "nome": "Pichu Bros.",
+    "pct": 66.0,
+    "m2": 45.0,
+    "margem2": 21.0
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Pichu Bros.",
+    "num": "16/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Pichu Bros. 16/17 2006"
+   },
+   {
+    "nome": "Pichu Bros.",
+    "num": "16/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Pichu Bros. 16/17 2006"
+   },
+   {
+    "nome": "Chimecho",
+    "num": "1/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Chimecho 1/17 2006"
+   },
+   {
+    "nome": "Energia Misturada",
+    "num": "10/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Energia Misturada 10/17 2006"
+   },
+   {
+    "nome": "Mudkip",
+    "num": "11/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Mudkip 11/17 2006"
+   },
+   {
+    "nome": "Mudkip",
+    "num": "11/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Mudkip 11/17 2006"
+   },
+   {
+    "nome": "Mudkip",
+    "num": "11/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Mudkip 11/17 2006"
+   },
+   {
+    "nome": "Pidgey",
+    "num": "12/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Pidgey 12/17 2006"
+   },
+   {
+    "nome": "Pikachu",
+    "num": "13/17",
+    "set": null,
+    "ano": "2006",
+    "lang": "pt",
+    "raw": "Pikachu 13/17 2006"
+   }
+  ]
+ },
+ "20260822_115812.jpg": {
+  "cartas": [
+   {
+    "nome": "Deino",
+    "pct": 65.5,
+    "m2": 54.0,
+    "margem2": 11.5
+   },
+   {
+    "nome": "Oranguru",
+    "pct": 59.3,
+    "m2": 50.0,
+    "margem2": 9.3
+   },
+   {
+    "nome": "Oricorio",
+    "pct": 57.3,
+    "m2": 52.0,
+    "margem2": 5.3
+   },
+   {
+    "nome": "Mudsdale",
+    "pct": 56.8,
+    "m2": 44.0,
+    "margem2": 12.8
+   },
+   {
+    "nome": "Oranguru",
+    "pct": 46.3,
+    "m2": 38.0,
+    "margem2": 8.3
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Oranguru",
+    "num": null,
+    "set": "SM13",
+    "ano": "2017",
+    "lang": "en",
+    "raw": "Oranguru SM13 2017 (en)"
+   },
+   {
+    "nome": "Oricorio",
+    "num": null,
+    "set": "SM19",
+    "ano": "2017",
+    "lang": "en",
+    "raw": "Oricorio SM19 2017 (en)"
+   },
+   {
+    "nome": "Mudsdale",
+    "num": null,
+    "set": "SM20",
+    "ano": "2017",
+    "lang": "en",
+    "raw": "Mudsdale SM20 2017 (en)"
+   },
+   {
+    "nome": "Oranguru",
+    "num": null,
+    "set": "SM13",
+    "ano": "2017",
+    "lang": "en",
+    "raw": "Oranguru SM13 2017 (en)"
+   },
+   {
+    "nome": "Deino",
+    "num": "97/113",
+    "set": null,
+    "ano": "2013",
+    "lang": "en",
+    "raw": "Deino 97/113 2013 (en)"
+   }
+  ]
+ },
+ "20260822_115836.jpg": {
+  "cartas": [
+   {
+    "nome": "Bewear",
+    "pct": 70.5,
+    "m2": 68.0,
+    "margem2": 2.5
+   },
+   {
+    "nome": "Lapras",
+    "pct": 62.4,
+    "m2": 58.0,
+    "margem2": 4.4
+   },
+   {
+    "nome": "Pangoro",
+    "pct": 48.2,
+    "m2": 47.0,
+    "margem2": 1.2
+   },
+   {
+    "nome": "Drampa",
+    "pct": 62.3,
+    "m2": 57.0,
+    "margem2": 5.3
+   },
+   {
+    "nome": "Chinchou",
+    "pct": 79.4,
+    "m2": 75.0,
+    "margem2": 4.4
+   },
+   {
+    "nome": "Cutiefly",
+    "pct": 70.1,
+    "m2": 69.0,
+    "margem2": 1.1
+   }
+  ],
+  "labels": [
+   {
+    "nome": "Lapras",
+    "num": "6/15",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Lapras 6/15 2022"
+   },
+   {
+    "nome": "Chinchou",
+    "num": "8/15",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Chinchou 8/15 2022"
+   },
+   {
+    "nome": "Cutiefly",
+    "num": "11/15",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Cutiefly 11/15 2022"
+   },
+   {
+    "nome": "Bewear",
+    "num": "12/15",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Bewear 12/15 2022"
+   },
+   {
+    "nome": "Pangoro",
+    "num": "13/15",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Pangoro 13/15 2022"
+   },
+   {
+    "nome": "Drampa",
+    "num": "14/15",
+    "set": null,
+    "ano": "2022",
+    "lang": "pt",
+    "raw": "Drampa 14/15 2022"
+   }
+  ]
+ }
+}
