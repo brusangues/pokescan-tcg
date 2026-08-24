@@ -59,6 +59,14 @@ Data: 23/08/2026. Base: `C:/Projects/pokescan-tcg-labels` — labels 100% manuai
    com os candidatos, em vez de verde confiante. Efeito (medido na base):
    elimina ~73% dos falsos positivos confiantes mantendo ~75% dos acertos.
 3. THRESH mantido em 0.40 (não é o limitador — pct não discrimina).
+4. **Segmentação adaptativa** (`cardClip.ts`): debug visual (overlay das crops em
+   `experiments/debug_crops/` via réplica Python fiel `debug_segmentacao.py` —
+   reproduz o browser exatamente: 71/115=62% idênticos) mostrou que `.02` de
+   minArea perde cartas de mesa pequenas, mas `.008` fixo adiciona falsos em
+   fotos de 1 carta. Solução: minArea `.02` e, **se achar ≥4 quads** (multi-carta
+   densa), um 2º passe `.008` recupera as pequenas (dedup global). Resultado
+   Python: 62% → **64%** (74/115) sem regressão nas fotos solitárias; confirmado
+   no browser (094527 detectou 4→5). Roda em `sweep_detecao.py`.
 
 **Pitfall do loop de teste**: o dev `localhost:3000` deu bug de hidratação
 ("layout router not mounted" — `output:'export'`+`next dev` no Next 15.5). O

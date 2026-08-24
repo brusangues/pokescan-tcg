@@ -151,59 +151,7 @@ function _coletarQuads(
  * por centro; o Canny continua a fonte principal e a passada B apenas SOMA
  * candidatos válidos (filtro de razão de aspecto + área), sem regressão.
  */
-export async function detectCardQuads(
-  img: HTMLCanvasElement | HTMLImageElement,
-  max = 10,
-): Promise<Quad[]> {
-  const cv = await loadOpenCV();
-  const { canvas, scale } = toWorkingCanvas(cv, img);
-  const src = cv.imread(canvas);
-
-  // multi-carta: aceita cartas menores (fotos com várias cartas)
-  const minArea = src.rows * src.cols * 0.02;
-  const passes: [number, number, number][] = [
-    [5, 30, 100], [5, 50, 150], [5, 80, 200],
-    [7, 50, 150], [7, 80, 200],
-    [9, 50, 150], [9, 80, 200], [9, 100, 220],
-  ];
-  const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(3, 3));
-  const gray = new cv.Mat();
-  const edges = new cv.Mat();
-
-  const quads: Quad[] = [];
-
-  // ── Fase 1: multi-passada Canny ──
-  for (const [ksize, low, high] of passes) {
-    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-    cv.GaussianBlur(gray, gray, new cv.Size(ksize, ksize), 0);
-    cv.Canny(gray, edges, low, high);
-    cv.dilate(edges, edges, kernel, new cv.Point(-1, -1), 2);
-    _coletarQuads(cv, edges, minArea, scale, quads, kernel, src.cols, src.rows);
-  }
-
-  // ── Fase 2-B: segmentação por fundo (blobs de brilho distinto do fundo) ──
-  //  Acha cartas que o Canny perde quando o fundo é uniforme (mesa escura).
-  try {
-    cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
-    const mean = cv.mean(gray)[0];
-    const mask = new cv.Mat();
-    // Otsu: 2 classes (fundo vs cartas). Se o fundo predominantemente é ESCURO
-    // (mesa), mantém os claros (cartas); se é CLARO, mantém os escuros.
-    const thrType = mean < 128 ? cv.THRESH_BINARY : cv.THRESH_BINARY_INV;
-    cv.threshold(gray, mask, 0, 255, thrType | cv.THRESH_OTSU);
-    // fecha pequenas lacunas e limpa ruído
-    cv.morphologyEx(mask, mask, cv.MORPH_CLOSE, kernel, new cv.Point(-1, -1), 2);
-    cv.dilate(mask, mask, kernel, new cv.Point(-1, -1), 1);
-    _coletarQuads(cv, mask, minArea, scale, quads, kernel, src.cols, src.rows);
-    mask.delete();
-  } catch (e) {
-    // passada B nunca deve derrubar a detecção — se falhar, segue só Canny
-  }
-
-  src.delete(); gray.delete(); edges.delete();
-  kernel.delete();
-
-  // dedup por centro (mesmo quad achado em várias passadas/fontes)
+function dedupQuads(cv: any, quads: Quad[], img: HTMLCanvasElement | HTMLImageElement): Quad[] {
   const diag = Math.hypot(img.width || (img as HTMLImageElement).naturalWidth,
     img.height || (img as HTMLImageElement).naturalHeight);
   const dedup: Quad[] = [];
@@ -215,14 +163,69 @@ export async function detectCardQuads(
       const dy = (d.points[0].y + d.points[1].y + d.points[2].y + d.points[3].y) / 4;
       return Math.hypot(dx - cx, dy - cy) < 0.15 * diag;
     });
-    if (idx === -1) {
-      dedup.push(q);
-    } else if (q.area > dedup[idx].area) {
-      dedup[idx] = q;
+    if (idx === -1) dedup.push(q);
+    else if (q.area > dedup[idx].area) dedup[idx] = q;
+  }
+  return dedup.sort((a, b) => b.area - a.area);
+}
+
+export async function detectCardQuads(
+  img: HTMLCanvasElement | HTMLImageElement,
+  max = 10,
+): Promise<Quad[]> {
+  const cv = await loadOpenCV();
+  const { canvas, scale } = toWorkingCanvas(cv, img);
+  const src = cv.imread(canvas);
+
+  const passes: [number, number, number][] = [
+    [5, 30, 100], [5, 50, 150], [5, 80, 200],
+    [7, 50, 150], [7, 80, 200],
+    [9, 50, 150], [9, 80, 200], [9, 100, 220],
+  ];
+  const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(3, 3));
+  const gray = new cv.Mat();
+  const edges = new cv.Mat();
+
+  // Roda o pipeline completo (Canny multi-passa + Otsu por fundo) com um dado
+  // limite de área mínima. Retorna quads CRUS (sem dedup).
+  const runPasses = (minAreaFrac: number): Quad[] => {
+    const minArea = src.rows * src.cols * minAreaFrac;
+    const qs: Quad[] = [];
+    for (const [ksize, low, high] of passes) {
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+      cv.GaussianBlur(gray, gray, new cv.Size(ksize, ksize), 0);
+      cv.Canny(gray, edges, low, high);
+      cv.dilate(edges, edges, kernel, new cv.Point(-1, -1), 2);
+      _coletarQuads(cv, edges, minArea, scale, qs, kernel, src.cols, src.rows);
     }
+    try {
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY);
+      const mean = cv.mean(gray)[0];
+      const mask = new cv.Mat();
+      const thrType = mean < 128 ? cv.THRESH_BINARY : cv.THRESH_BINARY_INV;
+      cv.threshold(gray, mask, 0, 255, thrType | cv.THRESH_OTSU);
+      cv.morphologyEx(mask, mask, cv.MORPH_CLOSE, kernel, new cv.Point(-1, -1), 2);
+      cv.dilate(mask, mask, kernel, new cv.Point(-1, -1), 1);
+      _coletarQuads(cv, mask, minArea, scale, qs, kernel, src.cols, src.rows);
+      mask.delete();
+    } catch (e) { /* Fase B nunca derruba */ }
+    return qs;
+  };
+
+  // 1. Passe padrão com minArea 2% (evita falsos em fotos de 1 carta).
+  let quads = runPasses(0.02);
+
+  // 2. ADAPTATIVO: se achou MUITAS cartas (>=4 → grade/binder/mesa densa), roda
+  //    um segundo passe com 0.8% para recuperar as cartas de mesa pequenas que o
+  //    2% perdeu. Nas fotos de poucas cartas não roda (não adiciona falso).
+  if (dedupQuads(cv, quads, img).length >= 4) {
+    quads = quads.concat(runPasses(0.008));
   }
 
-  return dedup.sort((a, b) => b.area - a.area).slice(0, max);
+  src.delete(); gray.delete(); edges.delete();
+  kernel.delete();
+
+  return dedupQuads(cv, quads, img).slice(0, max);
 }
 
 /**
