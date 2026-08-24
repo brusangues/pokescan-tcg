@@ -51,6 +51,11 @@ interface CardData {
   };
   previsao_semana?: number;
   tendencia_pct?: number;
+  // Liga-first (pt-BR): campos direto do catálogo da Liga (cartas sem registro escorado)
+  liga_nen?: string | null;
+  liga_ico?: number | null;
+  moeda?: string;
+  preco_brl?: number | null;
   flavorText?: string;
   attacks?: { name: string; cost?: string[]; damage?: string; text?: string }[];
   abilities?: { name: string; text: string }[];
@@ -313,6 +318,22 @@ function IdiomasSection({ dados, atual }: {
                 </p>
               </a>
             )}
+            {/* Liga-first (pt-BR): cartas do catálogo da LIGA sem registro escorado
+                (ex. MEP/MEPR) — link direto pelo nEN no formato da Liga */}
+            {!card.modelo && card.liga_nen && (
+              <a
+                href={`https://www.ligapokemon.com.br/?view=cards/card&card=${encodeURIComponent(card.liga_nen)}&ed=${encodeURIComponent((card.set?.id || '').toUpperCase())}&num=${encodeURIComponent(card.number || '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white rounded-2xl p-4 border border-gray-200 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all group"
+              >
+                <h3 className="text-xs font-semibold text-gray-500 uppercase mb-1">Ver na Liga Pokémon</h3>
+                <p className="text-sm font-medium text-indigo-600 group-hover:underline flex items-center gap-1">
+                  {(card.set?.id || '').toUpperCase()} #{card.number}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </p>
+              </a>
+            )}
 
             {/* Mesma carta em outros idiomas (JP/PT/EN) */}
             {(() => {
@@ -436,6 +457,17 @@ function IdiomasSection({ dados, atual }: {
             {/* Mercado detalhado */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4 border-b pb-3">Preços</h2>
+
+              {/* Liga-first (pt-BR): preço BRL direto do catálogo da Liga */}
+              {card.moeda === 'BRL' && card.preco_brl != null && (
+                <div className="mb-4">
+                  <h3 className="text-sm font-semibold text-gray-600 mb-2">Liga Pokémon (BR)</h3>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Preço mercado</span>
+                    <span className="font-medium text-gray-900">R$ {card.preco_brl.toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
 
               {/* TCGPlayer */}
               {card.tcgplayer?.prices && (

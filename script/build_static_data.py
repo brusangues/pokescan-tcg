@@ -396,7 +396,10 @@ def cards_basico() -> list:
             sp = c.get('img_liga') or ''
             img = ('https://repositorio.sbrauble.com' + sp.replace('//', '/', 1)) if sp.startswith('//') else sp
             out.append({
-                'id': c['id'],
+                # id {sigla}-{num} p/ o lookup client-side resolver set+num
+                # (estratégia 2 do cardLookup) — o scanner usa o SEU cards.json
+                # (public/scanner/) com id {idE}-{num}, são arquivos distintos
+                'id': f"{(c.get('sigla') or '').lower()}-{c.get('num')}",
                 'n': c.get('nPT') or c.get('nEN', '').split('(')[0].strip(),
                 's': c.get('sigla', '').lower(),
                 'sn': nomes_ptbr.get(c.get('sigla', ''), c.get('sigla', '')),
@@ -404,6 +407,10 @@ def cards_basico() -> list:
                 'r': '',
                 'p': c.get('preco_brl_p1a') or c.get('preco_menor'),
                 'img': img,
+                # Liga-first (Fase 2.3): campos p/ link "Ver na Liga" + infos BRL na /card
+                'liga_nen': c.get('nEN', ''),
+                'liga_ico': c.get('iCO'),
+                'moeda': 'BRL',
             })
     except Exception as e:
         print('⚠ cards_basico (pt-BR Liga) skip:', e)

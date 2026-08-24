@@ -232,9 +232,22 @@ export async function lookupCard(params: {
          !setMap[String(scored.sigla).toLowerCase()])
       : false;
 
+  // Liga-only (pt-BR): a carta exibida vem do catálogo da LIGA. Um registro
+  // escorado homônimo de OUTRO set (ex. "Rowlet" SM) não é a escoragem desta —
+  // não anexar (evita link da Liga errado + preço de outra carta na página).
+  if ((card as any).liga_nen && scored &&
+      String((scored as any).sigla || '').toLowerCase() !== String(card.s || '').toLowerCase()) {
+    scored = null;
+  }
+
   return {
     id: card.id,
     name: detalhe?.name || card.n,
+    // Liga-first (pt-BR): campos do catálogo da LIGA (link "Ver na Liga" + BRL)
+    liga_nen: (card as any).liga_nen || null,
+    liga_ico: (card as any).liga_ico ?? null,
+    moeda: (card as any).moeda || 'USD',
+    preco_brl: typeof (card as any).p === 'number' ? (card as any).p : parseFloat((card as any).p) || null,
     supertype: detalhe?.supertype,
     subtypes: detalhe?.subtypes,
     hp: detalhe?.hp,
