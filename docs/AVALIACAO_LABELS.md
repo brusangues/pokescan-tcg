@@ -48,6 +48,20 @@ Data: 23/08/2026. Base: `C:/Projects/pokescan-tcg-labels` — labels 100% manuai
 - Melhores: binder 3x3 folha inteira enquadrada (7-8/9 detectados, acerto ~60%).
 - "Team Aqua's Claydol" etc. são acertos (a label pt é "Claydol da equipe aqua").
 
+## Re-rank: estudado e NEGATIVO (24/08)
+Estudo completo em `experiments/rerank_sinais.py` (dataset `rerank_pares.json`,
+615 pares det×top5) + `treinar_rerank.py` (CatBoost LOFO com folhas agrupadas):
+- Sinais testados: cos_full, cos_centro (zoom 18%), HSV-interseção, rank, margens.
+- Combinação linear: nada supera o cos_full sozinho (74%).
+- CatBoost LOFO: **73,2% vs 74,0% baseline (−0,8pp)** — não generaliza; na foto
+  mais difícil (115722) piora 44→33%. Modelo só reaprende o baseline
+  (importância: cos_full 23,7 > margem_full 18,8 > resto).
+- Teto top-5 = 83% → há ~9pp teóricos, mas exigem sinal NOVO/independente
+  (ORB/template match nos top-3) ou mais labels — não extraível destes sinais.
+- **Decisão: manter o ranking atual (cosseno + aviso por margem já no ar);
+  não integrar re-rank aprendido.** Scripts/dataset ficam p/ retomada com
+  mais dados rotulados.
+
 ## Implementado (23/08)
 1. **Bug score >100%**: `scannerEngine.search` agora **clamapa o score a [0,1]** e
    descarta NaN/Inf no loop (crops degenerados não dominam o rank). Causa real:

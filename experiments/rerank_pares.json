@@ -1,0 +1,8087 @@
+[
+ {
+  "foto": "20260214_134324.jpg",
+  "quad": 1,
+  "labels": [
+   "miraidon"
+  ],
+  "margem_full": 0.0335,
+  "margem_centro": 0.0515,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv1-227",
+    "nome": "Miraidon ex",
+    "token": "miraidon",
+    "cos_full": 0.6447,
+    "cos_centro": 0.2913,
+    "hsv": 2.8593,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv1-253",
+    "nome": "Miraidon ex",
+    "token": "miraidon",
+    "cos_full": 0.6112,
+    "cos_centro": 0.2398,
+    "hsv": 1.0705,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sm3-132",
+    "nome": "Salazzle-GX",
+    "token": "salazzle",
+    "cos_full": 0.4564,
+    "cos_centro": 0.1599,
+    "hsv": 1.4375,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "me3-101",
+    "nome": "Salazzle ex",
+    "token": "salazzle",
+    "cos_full": 0.406,
+    "cos_centro": 0.1572,
+    "hsv": 1.2333,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "svp-92",
+    "nome": "Miraidon",
+    "token": "miraidon",
+    "cos_full": 0.4049,
+    "cos_centro": 0.2687,
+    "hsv": 1.8241,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260214_134324.jpg",
+  "quad": 2,
+  "labels": [
+   "miraidon"
+  ],
+  "margem_full": 0.0046,
+  "margem_centro": 0.0515,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-169",
+    "nome": "Fighting Energy",
+    "token": "fighting",
+    "cos_full": 0.4444,
+    "cos_centro": 0.439,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sv1-258",
+    "nome": "Basic Fighting Energy",
+    "token": "basic",
+    "cos_full": 0.4398,
+    "cos_centro": 0.3874,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sve-14",
+    "nome": "Basic Fighting Energy",
+    "token": "basic",
+    "cos_full": 0.4312,
+    "cos_centro": 0.4074,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ecard1-160",
+    "nome": "Fighting Energy",
+    "token": "fighting",
+    "cos_full": 0.4279,
+    "cos_centro": 0.2891,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sve-6",
+    "nome": "Basic Fighting Energy",
+    "token": "basic",
+    "cos_full": 0.4212,
+    "cos_centro": 0.3775,
+    "hsv": 0.0,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094410.jpg",
+  "quad": 1,
+  "labels": [
+   "dewgong",
+   "charmander",
+   "wigglytuff",
+   "pawmot",
+   "vileplume",
+   "energia"
+  ],
+  "margem_full": 0.012,
+  "margem_centro": 0.0104,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy11-112",
+    "nome": "M Gardevoir-EX",
+    "token": "m",
+    "cos_full": 0.4818,
+    "cos_centro": 0.574,
+    "hsv": 5.5921,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "733-33",
+    "nome": "Mega Lucario ex",
+    "token": "mega",
+    "cos_full": 0.4699,
+    "cos_centro": 0.5636,
+    "hsv": 4.2069,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "732-114",
+    "nome": "Tepig",
+    "token": "tepig",
+    "cos_full": 0.4499,
+    "cos_centro": 0.4426,
+    "hsv": 3.9671,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "xyp-XY200a",
+    "nome": "M Sharpedo-EX",
+    "token": "m",
+    "cos_full": 0.4488,
+    "cos_centro": 0.4065,
+    "hsv": 4.2714,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "me2pt5-271",
+    "nome": "Mega Dragonite ex",
+    "token": "mega",
+    "cos_full": 0.4364,
+    "cos_centro": 0.4437,
+    "hsv": 2.4319,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094410.jpg",
+  "quad": 2,
+  "labels": [
+   "dewgong",
+   "charmander",
+   "wigglytuff",
+   "pawmot",
+   "vileplume",
+   "energia"
+  ],
+  "margem_full": 0.0433,
+  "margem_centro": 0.041,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv3pt5-165",
+    "nome": "Rigid Band",
+    "token": "rigid",
+    "cos_full": 0.4704,
+    "cos_centro": 0.1275,
+    "hsv": 0.4753,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sv10-214",
+    "nome": "Regirock ex",
+    "token": "regirock",
+    "cos_full": 0.4271,
+    "cos_centro": 0.0865,
+    "hsv": 0.8882,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm10-89",
+    "nome": "Golem",
+    "token": "golem",
+    "cos_full": 0.422,
+    "cos_centro": 0.0583,
+    "hsv": 0.6871,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "pl4-19",
+    "nome": "Golem",
+    "token": "golem",
+    "cos_full": 0.4212,
+    "cos_centro": 0.0569,
+    "hsv": 1.2304,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex3-70",
+    "nome": "Numel",
+    "token": "numel",
+    "cos_full": 0.4177,
+    "cos_centro": 0.2837,
+    "hsv": 1.4437,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094410.jpg",
+  "quad": 3,
+  "labels": [
+   "dewgong",
+   "charmander",
+   "wigglytuff",
+   "pawmot",
+   "vileplume",
+   "energia"
+  ],
+  "margem_full": 0.0109,
+  "margem_centro": -0.0265,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "732-36",
+    "nome": "Fire Energy",
+    "token": "fire",
+    "cos_full": 0.8839,
+    "cos_centro": 0.7526,
+    "hsv": 1.4755,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "732-10",
+    "nome": "Fire Energy",
+    "token": "fire",
+    "cos_full": 0.873,
+    "cos_centro": 0.7791,
+    "hsv": 2.63,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "732-157",
+    "nome": "Energia de Fogo",
+    "token": "energia",
+    "cos_full": 0.8312,
+    "cos_centro": 0.7023,
+    "hsv": 2.4223,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "732-88",
+    "nome": "Fire Energy",
+    "token": "fire",
+    "cos_full": 0.809,
+    "cos_centro": 0.6968,
+    "hsv": 1.3327,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "732-24",
+    "nome": "Fire Energy",
+    "token": "fire",
+    "cos_full": 0.7928,
+    "cos_centro": 0.7336,
+    "hsv": 3.2505,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094410.jpg",
+  "quad": 4,
+  "labels": [
+   "dewgong",
+   "charmander",
+   "wigglytuff",
+   "pawmot",
+   "vileplume",
+   "energia"
+  ],
+  "margem_full": 0.0367,
+  "margem_centro": 0.3115,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me2-11",
+    "nome": "Charmander",
+    "token": "charmander",
+    "cos_full": 0.5664,
+    "cos_centro": 0.5933,
+    "hsv": 2.8277,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "svp-167",
+    "nome": "Flareon",
+    "token": "flareon",
+    "cos_full": 0.5297,
+    "cos_centro": 0.2818,
+    "hsv": 2.4379,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm8-93",
+    "nome": "Wobbuffet",
+    "token": "wobbuffet",
+    "cos_full": 0.5147,
+    "cos_centro": 0.4244,
+    "hsv": 0.585,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv4pt5-39",
+    "nome": "Dachsbun",
+    "token": "dachsbun",
+    "cos_full": 0.5131,
+    "cos_centro": 0.4293,
+    "hsv": 0.7852,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm8-84",
+    "nome": "Dedenne",
+    "token": "dedenne",
+    "cos_full": 0.5115,
+    "cos_centro": 0.4227,
+    "hsv": 0.2151,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094410.jpg",
+  "quad": 5,
+  "labels": [
+   "dewgong",
+   "charmander",
+   "wigglytuff",
+   "pawmot",
+   "vileplume",
+   "energia"
+  ],
+  "margem_full": 0.0177,
+  "margem_centro": -0.0476,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv6-85",
+    "nome": "Chimecho",
+    "token": "chimecho",
+    "cos_full": 0.5446,
+    "cos_centro": 0.3053,
+    "hsv": 0.8496,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sv4-4",
+    "nome": "Pansage",
+    "token": "pansage",
+    "cos_full": 0.5269,
+    "cos_centro": 0.353,
+    "hsv": 0.6321,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv6-10",
+    "nome": "Illumise",
+    "token": "illumise",
+    "cos_full": 0.5084,
+    "cos_centro": 0.3328,
+    "hsv": 0.797,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "dpp-DP25",
+    "nome": "Tropical Wind",
+    "token": "tropical",
+    "cos_full": 0.5015,
+    "cos_centro": 0.3478,
+    "hsv": 1.1659,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "dpp-DP05",
+    "nome": "Tropical Wind",
+    "token": "tropical",
+    "cos_full": 0.4886,
+    "cos_centro": 0.4551,
+    "hsv": 0.8685,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094527.jpg",
+  "quad": 1,
+  "labels": [
+   "nacli",
+   "kirlia",
+   "drizzile",
+   "megassinal",
+   "naclstack"
+  ],
+  "margem_full": 0.0375,
+  "margem_centro": 0.0231,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY166",
+    "nome": "M Gengar-EX",
+    "token": "m",
+    "cos_full": 0.4789,
+    "cos_centro": 0.3046,
+    "hsv": 6.6833,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "xyp-XY171",
+    "nome": "M Salamence-EX",
+    "token": "m",
+    "cos_full": 0.4414,
+    "cos_centro": 0.2815,
+    "hsv": 4.6099,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "me2pt5-267",
+    "nome": "Mega Diancie ex",
+    "token": "mega",
+    "cos_full": 0.4342,
+    "cos_centro": 0.3602,
+    "hsv": 3.7374,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hgss2-93",
+    "nome": "Raikou & Suicune LEGEND",
+    "token": "raikou",
+    "cos_full": 0.4283,
+    "cos_centro": 0.3878,
+    "hsv": 3.5294,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "xy11-21",
+    "nome": "Talonflame BREAK",
+    "token": "talonflame",
+    "cos_full": 0.4279,
+    "cos_centro": 0.3022,
+    "hsv": 1.7032,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094527.jpg",
+  "quad": 2,
+  "labels": [
+   "nacli",
+   "kirlia",
+   "drizzile",
+   "megassinal",
+   "naclstack"
+  ],
+  "margem_full": 0.0018,
+  "margem_centro": 0.0652,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv3pt5-165",
+    "nome": "Rigid Band",
+    "token": "rigid",
+    "cos_full": 0.4587,
+    "cos_centro": 0.0652,
+    "hsv": 0.6233,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "dp3-29",
+    "nome": "Golem",
+    "token": "golem",
+    "cos_full": 0.4569,
+    "cos_centro": 0.0,
+    "hsv": 0.9768,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "pl4-19",
+    "nome": "Golem",
+    "token": "golem",
+    "cos_full": 0.4503,
+    "cos_centro": 0.0746,
+    "hsv": 1.2902,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-16",
+    "nome": "Metal Energy",
+    "token": "metal",
+    "cos_full": 0.4227,
+    "cos_centro": 0.2985,
+    "hsv": 0.8024,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv10-214",
+    "nome": "Regirock ex",
+    "token": "regirock",
+    "cos_full": 0.4174,
+    "cos_centro": 0.1435,
+    "hsv": 1.0154,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094527.jpg",
+  "quad": 3,
+  "labels": [
+   "nacli",
+   "kirlia",
+   "drizzile",
+   "megassinal",
+   "naclstack"
+  ],
+  "margem_full": 0.04,
+  "margem_centro": 0.0235,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me1-171",
+    "nome": "Mega Signal",
+    "token": "mega",
+    "cos_full": 0.4878,
+    "cos_centro": 0.449,
+    "hsv": 2.7029,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "732-10",
+    "nome": "Fire Energy",
+    "token": "fire",
+    "cos_full": 0.4478,
+    "cos_centro": 0.4255,
+    "hsv": 2.3715,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "732-8",
+    "nome": "Megassinal",
+    "token": "megassinal",
+    "cos_full": 0.4344,
+    "cos_centro": 0.4418,
+    "hsv": 1.1001,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "me1-121",
+    "nome": "Mega Signal",
+    "token": "mega",
+    "cos_full": 0.4303,
+    "cos_centro": 0.4611,
+    "hsv": 1.4945,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-165",
+    "nome": "Megassinal",
+    "token": "megassinal",
+    "cos_full": 0.4152,
+    "cos_centro": 0.4307,
+    "hsv": 1.8323,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094527.jpg",
+  "quad": 4,
+  "labels": [
+   "nacli",
+   "kirlia",
+   "drizzile",
+   "megassinal",
+   "naclstack"
+  ],
+  "margem_full": 0.082,
+  "margem_centro": 0.1004,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm5-125a",
+    "nome": "Lillie",
+    "token": "lillie",
+    "cos_full": 0.5701,
+    "cos_centro": 0.471,
+    "hsv": 1.8816,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "pop4-11",
+    "nome": "Mudkip",
+    "token": "mudkip",
+    "cos_full": 0.4881,
+    "cos_centro": 0.3706,
+    "hsv": 2.1474,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "732-67",
+    "nome": "Kirlia",
+    "token": "kirlia",
+    "cos_full": 0.4858,
+    "cos_centro": 0.4678,
+    "hsv": 0.524,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "me2-40",
+    "nome": "Meloetta",
+    "token": "meloetta",
+    "cos_full": 0.4828,
+    "cos_centro": 0.3882,
+    "hsv": 1.2301,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh12pt5-71",
+    "nome": "Riolu",
+    "token": "riolu",
+    "cos_full": 0.4798,
+    "cos_centro": 0.4231,
+    "hsv": 0.5943,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260218_094527.jpg",
+  "quad": 5,
+  "labels": [
+   "nacli",
+   "kirlia",
+   "drizzile",
+   "megassinal",
+   "naclstack"
+  ],
+  "margem_full": 0.0408,
+  "margem_centro": -0.0059,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me1-82",
+    "nome": "Nacli",
+    "token": "nacli",
+    "cos_full": 0.456,
+    "cos_centro": 0.3935,
+    "hsv": 1.6636,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "732-114",
+    "nome": "Tepig",
+    "token": "tepig",
+    "cos_full": 0.4152,
+    "cos_centro": 0.3994,
+    "hsv": 5.0257,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "me2pt5-246",
+    "nome": "Mawile",
+    "token": "mawile",
+    "cos_full": 0.3914,
+    "cos_centro": 0.4318,
+    "hsv": 3.3396,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "733-52",
+    "nome": "Grookey",
+    "token": "grookey",
+    "cos_full": 0.3874,
+    "cos_centro": 0.3017,
+    "hsv": 2.0499,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "733-50",
+    "nome": "Tepig",
+    "token": "tepig",
+    "cos_full": 0.3859,
+    "cos_centro": 0.3661,
+    "hsv": 2.301,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260319_202701.jpg",
+  "quad": 1,
+  "labels": [
+   "mega"
+  ],
+  "margem_full": 0.0257,
+  "margem_centro": -0.116,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me2pt5-61",
+    "nome": "Mega Eelektross ex",
+    "token": "mega",
+    "cos_full": 0.5273,
+    "cos_centro": 0.2713,
+    "hsv": 2.7231,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "me2pt5-144",
+    "nome": "Mawile",
+    "token": "mawile",
+    "cos_full": 0.5016,
+    "cos_centro": 0.3873,
+    "hsv": 0.8755,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm10-209",
+    "nome": "Green's Exploration",
+    "token": "green",
+    "cos_full": 0.4711,
+    "cos_centro": 0.1485,
+    "hsv": 2.4612,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "me1-133",
+    "nome": "Bulbasaur",
+    "token": "bulbasaur",
+    "cos_full": 0.4593,
+    "cos_centro": 0.3421,
+    "hsv": 4.5259,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "xy6-59",
+    "nome": "M Latios-EX",
+    "token": "m",
+    "cos_full": 0.4543,
+    "cos_centro": 0.3016,
+    "hsv": 5.0312,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260320_134327.jpg",
+  "quad": 1,
+  "labels": [
+   "fragmento"
+  ],
+  "margem_full": 0.0714,
+  "margem_centro": 0.0488,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-117",
+    "nome": "Wondrous Patch",
+    "token": "wondrous",
+    "cos_full": 0.6832,
+    "cos_centro": 0.592,
+    "hsv": 2.5994,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "732-13",
+    "nome": "Psychic Energy",
+    "token": "psychic",
+    "cos_full": 0.6118,
+    "cos_centro": 0.5432,
+    "hsv": 0.9561,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "732-39",
+    "nome": "Psychic Energy",
+    "token": "psychic",
+    "cos_full": 0.5865,
+    "cos_centro": 0.5575,
+    "hsv": 0.1637,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-160",
+    "nome": "Energia Ps&iacute;quica",
+    "token": "energia",
+    "cos_full": 0.5724,
+    "cos_centro": 0.5382,
+    "hsv": 2.4308,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-27",
+    "nome": "Psychic Energy",
+    "token": "psychic",
+    "cos_full": 0.5606,
+    "cos_centro": 0.5188,
+    "hsv": 0.8191,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260328_222034.jpg",
+  "quad": 1,
+  "labels": [
+   "machamp"
+  ],
+  "margem_full": 0.0215,
+  "margem_centro": 0.0184,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "base6-15",
+    "nome": "Machamp",
+    "token": "machamp",
+    "cos_full": 0.651,
+    "cos_centro": 0.4959,
+    "hsv": 3.178,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "base1-8",
+    "nome": "Machamp",
+    "token": "machamp",
+    "cos_full": 0.6295,
+    "cos_centro": 0.4775,
+    "hsv": 3.5184,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "xy12-59",
+    "nome": "Machamp",
+    "token": "machamp",
+    "cos_full": 0.6052,
+    "cos_centro": 0.4651,
+    "hsv": 2.1094,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "base4-27",
+    "nome": "Mr. Mime",
+    "token": "mr",
+    "cos_full": 0.481,
+    "cos_centro": 0.3261,
+    "hsv": 1.2205,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "base1-34",
+    "nome": "Machoke",
+    "token": "machoke",
+    "cos_full": 0.4738,
+    "cos_centro": 0.2966,
+    "hsv": 2.5649,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260329_104229.jpg",
+  "quad": 1,
+  "labels": [
+   "cubone",
+   "hypno",
+   "caterpie",
+   "magnemite",
+   "vulpix"
+  ],
+  "margem_full": 0.3108,
+  "margem_centro": 0.2725,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv3pt5-81",
+    "nome": "Magnemite",
+    "token": "magnemite",
+    "cos_full": 0.7756,
+    "cos_centro": 0.456,
+    "hsv": 1.8827,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "me2pt5-202",
+    "nome": "Team Rocket's Ariana",
+    "token": "team",
+    "cos_full": 0.4648,
+    "cos_centro": 0.1835,
+    "hsv": 0.3699,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv10-171",
+    "nome": "Team Rocket's Ariana",
+    "token": "team",
+    "cos_full": 0.4553,
+    "cos_centro": 0.1596,
+    "hsv": 0.4407,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "gym2-74",
+    "nome": "Giovanni's Meowth",
+    "token": "giovanni",
+    "cos_full": 0.432,
+    "cos_centro": 0.2852,
+    "hsv": 1.1055,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "me5-11",
+    "nome": "Charcadet",
+    "token": "charcadet",
+    "cos_full": 0.407,
+    "cos_centro": 0.3256,
+    "hsv": 0.5366,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260329_104229.jpg",
+  "quad": 2,
+  "labels": [
+   "cubone",
+   "hypno",
+   "caterpie",
+   "magnemite",
+   "vulpix"
+  ],
+  "margem_full": 0.2441,
+  "margem_centro": 0.0648,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv3pt5-37",
+    "nome": "Vulpix",
+    "token": "vulpix",
+    "cos_full": 0.6427,
+    "cos_centro": 0.344,
+    "hsv": 2.5549,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "pl1-108",
+    "nome": "Life Herb",
+    "token": "life",
+    "cos_full": 0.3986,
+    "cos_centro": 0.2792,
+    "hsv": 0.9412,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "xy12-15",
+    "nome": "Ninetales",
+    "token": "ninetales",
+    "cos_full": 0.389,
+    "cos_centro": 0.1481,
+    "hsv": 1.5091,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm9-15",
+    "nome": "Vulpix",
+    "token": "vulpix",
+    "cos_full": 0.3763,
+    "cos_centro": 0.177,
+    "hsv": 1.1194,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "ex9-38",
+    "nome": "Ninetales",
+    "token": "ninetales",
+    "cos_full": 0.3729,
+    "cos_centro": 0.0579,
+    "hsv": 1.5348,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260329_104229.jpg",
+  "quad": 3,
+  "labels": [
+   "cubone",
+   "hypno",
+   "caterpie",
+   "magnemite",
+   "vulpix"
+  ],
+  "margem_full": 0.15,
+  "margem_centro": 0.0959,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv3pt5-97",
+    "nome": "Hypno",
+    "token": "hypno",
+    "cos_full": 0.6435,
+    "cos_centro": 0.4272,
+    "hsv": 0.9612,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ecard3-22",
+    "nome": "Nidoqueen",
+    "token": "nidoqueen",
+    "cos_full": 0.4936,
+    "cos_centro": 0.3313,
+    "hsv": 0.5312,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swsh11-164",
+    "nome": "Miss Fortune Sisters",
+    "token": "miss",
+    "cos_full": 0.457,
+    "cos_centro": 0.2945,
+    "hsv": 0.7728,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh11-28",
+    "nome": "Litleo",
+    "token": "litleo",
+    "cos_full": 0.4377,
+    "cos_centro": 0.3766,
+    "hsv": 0.334,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "733-28",
+    "nome": "Celebratory Fanfare",
+    "token": "celebratory",
+    "cos_full": 0.4284,
+    "cos_centro": 0.2928,
+    "hsv": 0.8823,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260329_104229.jpg",
+  "quad": 4,
+  "labels": [
+   "cubone",
+   "hypno",
+   "caterpie",
+   "magnemite",
+   "vulpix"
+  ],
+  "margem_full": 0.0062,
+  "margem_centro": -0.0901,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "bw10-29",
+    "nome": "Ducklett",
+    "token": "ducklett",
+    "cos_full": 0.5962,
+    "cos_centro": 0.3214,
+    "hsv": 0.8805,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sv3pt5-10",
+    "nome": "Caterpie",
+    "token": "caterpie",
+    "cos_full": 0.59,
+    "cos_centro": 0.4116,
+    "hsv": 0.8685,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "xy1-87",
+    "nome": "Jigglypuff",
+    "token": "jigglypuff",
+    "cos_full": 0.5798,
+    "cos_centro": 0.323,
+    "hsv": 0.5353,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "bw9-28",
+    "nome": "Vanillish",
+    "token": "vanillish",
+    "cos_full": 0.5727,
+    "cos_centro": 0.3064,
+    "hsv": 0.6706,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-140",
+    "nome": "Tynamo",
+    "token": "tynamo",
+    "cos_full": 0.5621,
+    "cos_centro": 0.3478,
+    "hsv": 0.5912,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260329_104229.jpg",
+  "quad": 5,
+  "labels": [
+   "cubone",
+   "hypno",
+   "caterpie",
+   "magnemite",
+   "vulpix"
+  ],
+  "margem_full": 0.032,
+  "margem_centro": -0.1032,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "733-47",
+    "nome": "Cyndaquil",
+    "token": "cyndaquil",
+    "cos_full": 0.4549,
+    "cos_centro": 0.3481,
+    "hsv": 1.0717,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "732-127",
+    "nome": "Quaxly",
+    "token": "quaxly",
+    "cos_full": 0.4229,
+    "cos_centro": 0.4512,
+    "hsv": 2.8327,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "733-63",
+    "nome": "Quaxly",
+    "token": "quaxly",
+    "cos_full": 0.4221,
+    "cos_centro": 0.4057,
+    "hsv": 2.9373,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-109",
+    "nome": "Mudkip",
+    "token": "mudkip",
+    "cos_full": 0.4175,
+    "cos_centro": 0.3107,
+    "hsv": 0.6291,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "rsv10pt5-119",
+    "nome": "Woobat",
+    "token": "woobat",
+    "cos_full": 0.4129,
+    "cos_centro": 0.2356,
+    "hsv": 2.1419,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260806_143517.jpg",
+  "quad": 1,
+  "labels": [
+   "mareep"
+  ],
+  "margem_full": 0.132,
+  "margem_centro": -0.0202,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me4-27",
+    "nome": "Mareep",
+    "token": "mareep",
+    "cos_full": 0.5951,
+    "cos_centro": 0.3958,
+    "hsv": 2.3432,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "733-7",
+    "nome": "Psyduck",
+    "token": "psyduck",
+    "cos_full": 0.4631,
+    "cos_centro": 0.4161,
+    "hsv": 1.1989,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "xy9-48",
+    "nome": "Blitzle",
+    "token": "blitzle",
+    "cos_full": 0.4588,
+    "cos_centro": 0.3135,
+    "hsv": 1.588,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "xy2-62",
+    "nome": "Flabébé",
+    "token": "flabebe",
+    "cos_full": 0.4407,
+    "cos_centro": 0.1795,
+    "hsv": 0.6487,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex1-67",
+    "nome": "Ralts",
+    "token": "ralts",
+    "cos_full": 0.4406,
+    "cos_centro": 0.1715,
+    "hsv": 1.2409,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144254.jpg",
+  "quad": 1,
+  "labels": [
+   "poke"
+  ],
+  "margem_full": 0.0045,
+  "margem_centro": 0.0086,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-81",
+    "nome": "Poké Pad",
+    "token": "poke",
+    "cos_full": 0.8019,
+    "cos_centro": 0.67,
+    "hsv": 1.5669,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "me2pt5-198",
+    "nome": "Poké Pad",
+    "token": "poke",
+    "cos_full": 0.7974,
+    "cos_centro": 0.6614,
+    "hsv": 1.854,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "732-52",
+    "nome": "Pok&eacute; Tablet",
+    "token": "pok",
+    "cos_full": 0.7712,
+    "cos_centro": 0.7051,
+    "hsv": 1.2475,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-85",
+    "nome": "Pok&eacute; Pad",
+    "token": "pok",
+    "cos_full": 0.7617,
+    "cos_centro": 0.6771,
+    "hsv": 0.9919,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-135",
+    "nome": "Pok&eacute; Pad",
+    "token": "pok",
+    "cos_full": 0.7125,
+    "cos_centro": 0.6781,
+    "hsv": 0.9933,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144302.jpg",
+  "quad": 1,
+  "labels": [
+   "mareep"
+  ],
+  "margem_full": 0.0912,
+  "margem_centro": -0.0434,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me4-27",
+    "nome": "Mareep",
+    "token": "mareep",
+    "cos_full": 0.5326,
+    "cos_centro": 0.3585,
+    "hsv": 1.9578,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv9-170",
+    "nome": "Hop's Wooloo",
+    "token": "hop",
+    "cos_full": 0.4414,
+    "cos_centro": 0.4019,
+    "hsv": 1.7956,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swsh3-55",
+    "nome": "Mareep",
+    "token": "mareep",
+    "cos_full": 0.4329,
+    "cos_centro": 0.4428,
+    "hsv": 0.672,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh12pt5gg-GG34",
+    "nome": "Mareep",
+    "token": "mareep",
+    "cos_full": 0.398,
+    "cos_centro": 0.3063,
+    "hsv": 2.5037,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "733-107",
+    "nome": "Pikachu ex",
+    "token": "pikachu",
+    "cos_full": 0.3618,
+    "cos_centro": 0.3284,
+    "hsv": 3.8599,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144317.jpg",
+  "quad": 1,
+  "labels": [
+   "juiz"
+  ],
+  "margem_full": 0.0185,
+  "margem_centro": 0.0028,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-76",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.8111,
+    "cos_centro": 0.5649,
+    "hsv": 1.5042,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv10-167",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.7926,
+    "cos_centro": 0.5621,
+    "hsv": 1.7791,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv10-222",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.5873,
+    "cos_centro": 0.3078,
+    "hsv": 1.4741,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh7-152",
+    "nome": "Raihan",
+    "token": "raihan",
+    "cos_full": 0.5802,
+    "cos_centro": 0.2905,
+    "hsv": 1.1146,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv1-176",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.4892,
+    "cos_centro": 0.2645,
+    "hsv": 1.7189,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144323.jpg",
+  "quad": 1,
+  "labels": [
+   "juiz"
+  ],
+  "margem_full": 0.0163,
+  "margem_centro": -0.019,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-76",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.6787,
+    "cos_centro": 0.5879,
+    "hsv": 0.8985,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv10-167",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.6623,
+    "cos_centro": 0.607,
+    "hsv": 1.051,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv1-180",
+    "nome": "Nemona",
+    "token": "nemona",
+    "cos_full": 0.6136,
+    "cos_centro": 0.3881,
+    "hsv": 0.7882,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv10-163",
+    "nome": "Emcee's Hype",
+    "token": "emcee",
+    "cos_full": 0.5429,
+    "cos_centro": 0.5051,
+    "hsv": 1.0357,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh7-152",
+    "nome": "Raihan",
+    "token": "raihan",
+    "cos_full": 0.5428,
+    "cos_centro": 0.387,
+    "hsv": 0.9029,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144329.jpg",
+  "quad": 1,
+  "labels": [
+   "juiz"
+  ],
+  "margem_full": 0.0082,
+  "margem_centro": -0.0071,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-76",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.7903,
+    "cos_centro": 0.5534,
+    "hsv": 0.6647,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv10-167",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.7821,
+    "cos_centro": 0.5605,
+    "hsv": 0.7673,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "swsh7-152",
+    "nome": "Raihan",
+    "token": "raihan",
+    "cos_full": 0.5775,
+    "cos_centro": 0.269,
+    "hsv": 0.7817,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv10-222",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.5483,
+    "cos_centro": 0.2891,
+    "hsv": 1.0243,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sv1-176",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.5134,
+    "cos_centro": 0.2338,
+    "hsv": 0.7063,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144336.jpg",
+  "quad": 1,
+  "labels": [
+   "juiz"
+  ],
+  "margem_full": 0.0196,
+  "margem_centro": 0.0098,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-76",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.7349,
+    "cos_centro": 0.6299,
+    "hsv": 0.5777,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv10-167",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.7153,
+    "cos_centro": 0.6201,
+    "hsv": 0.6589,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv10-222",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.5897,
+    "cos_centro": 0.3238,
+    "hsv": 0.8125,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh7-152",
+    "nome": "Raihan",
+    "token": "raihan",
+    "cos_full": 0.5041,
+    "cos_centro": 0.3391,
+    "hsv": 0.6354,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv1-176",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.4699,
+    "cos_centro": 0.2952,
+    "hsv": 0.6649,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260806_144342.jpg",
+  "quad": 1,
+  "labels": [
+   "juiz"
+  ],
+  "margem_full": 0.0467,
+  "margem_centro": -0.0117,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me3-76",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.718,
+    "cos_centro": 0.4528,
+    "hsv": 1.6523,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv10-167",
+    "nome": "Judge",
+    "token": "judge",
+    "cos_full": 0.6713,
+    "cos_centro": 0.4645,
+    "hsv": 1.4775,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "732-82",
+    "nome": "Gar&ccedil;onete",
+    "token": "gar",
+    "cos_full": 0.5413,
+    "cos_centro": 0.3943,
+    "hsv": 1.2659,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv1-180",
+    "nome": "Nemona",
+    "token": "nemona",
+    "cos_full": 0.536,
+    "cos_centro": 0.2371,
+    "hsv": 1.4354,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv2-180",
+    "nome": "Falkner",
+    "token": "falkner",
+    "cos_full": 0.4945,
+    "cos_centro": 0.3676,
+    "hsv": 1.4313,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_114149.jpg",
+  "quad": 1,
+  "labels": [
+   "chikorita",
+   "cyndaquil",
+   "totodile"
+  ],
+  "margem_full": 0.0136,
+  "margem_centro": 0.0155,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "732-106",
+    "nome": "Totodile",
+    "token": "totodile",
+    "cos_full": 0.6277,
+    "cos_centro": 0.5573,
+    "hsv": 1.8371,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "733-53",
+    "nome": "Scorbunny",
+    "token": "scorbunny",
+    "cos_full": 0.6141,
+    "cos_centro": 0.5418,
+    "hsv": 1.4954,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "732-123",
+    "nome": "Scorbunny",
+    "token": "scorbunny",
+    "cos_full": 0.6051,
+    "cos_centro": 0.5824,
+    "hsv": 3.5519,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-105",
+    "nome": "Cyndaquil",
+    "token": "cyndaquil",
+    "cos_full": 0.6009,
+    "cos_centro": 0.6101,
+    "hsv": 1.0726,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "732-114",
+    "nome": "Tepig",
+    "token": "tepig",
+    "cos_full": 0.5972,
+    "cos_centro": 0.6072,
+    "hsv": 3.2227,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_114149.jpg",
+  "quad": 2,
+  "labels": [
+   "chikorita",
+   "cyndaquil",
+   "totodile"
+  ],
+  "margem_full": 0.0846,
+  "margem_centro": 0.0652,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "732-104",
+    "nome": "Chikorita",
+    "token": "chikorita",
+    "cos_full": 0.8007,
+    "cos_centro": 0.7644,
+    "hsv": 0.622,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "733-46",
+    "nome": "Chikorita",
+    "token": "chikorita",
+    "cos_full": 0.7161,
+    "cos_centro": 0.6992,
+    "hsv": 1.9915,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "732-111",
+    "nome": "Chimchar",
+    "token": "chimchar",
+    "cos_full": 0.6972,
+    "cos_centro": 0.6779,
+    "hsv": 2.5807,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-105",
+    "nome": "Cyndaquil",
+    "token": "cyndaquil",
+    "cos_full": 0.6645,
+    "cos_centro": 0.6859,
+    "hsv": 0.7477,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "732-116",
+    "nome": "Chespin",
+    "token": "chespin",
+    "cos_full": 0.6608,
+    "cos_centro": 0.6272,
+    "hsv": 5.1384,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115216.jpg",
+  "quad": 1,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0698,
+  "margem_centro": 0.0347,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-41",
+    "nome": "Sylveon ex",
+    "token": "sylveon",
+    "cos_full": 0.6364,
+    "cos_centro": 0.4103,
+    "hsv": 1.7638,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv8pt5-34",
+    "nome": "Espeon ex",
+    "token": "espeon",
+    "cos_full": 0.5666,
+    "cos_centro": 0.3755,
+    "hsv": 1.2897,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv8-86",
+    "nome": "Sylveon ex",
+    "token": "sylveon",
+    "cos_full": 0.5574,
+    "cos_centro": 0.3385,
+    "hsv": 1.6888,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sv4pt5-98",
+    "nome": "Jumpluff",
+    "token": "jumpluff",
+    "cos_full": 0.5502,
+    "cos_centro": 0.4718,
+    "hsv": 0.5087,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "zsv10pt5-39",
+    "nome": "Reuniclus",
+    "token": "reuniclus",
+    "cos_full": 0.5485,
+    "cos_centro": 0.49,
+    "hsv": 0.4314,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115216.jpg",
+  "quad": 2,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.007,
+  "margem_centro": -0.1602,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "base1-31",
+    "nome": "Jynx",
+    "token": "jynx",
+    "cos_full": 0.497,
+    "cos_centro": 0.1653,
+    "hsv": 0.5919,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sm35-40",
+    "nome": "Shining Mew",
+    "token": "shining",
+    "cos_full": 0.49,
+    "cos_centro": 0.3254,
+    "hsv": 0.457,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv7-160",
+    "nome": "Dachsbun ex",
+    "token": "dachsbun",
+    "cos_full": 0.4813,
+    "cos_centro": 0.3454,
+    "hsv": 1.0782,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv6pt5-79",
+    "nome": "Bewear",
+    "token": "bewear",
+    "cos_full": 0.4749,
+    "cos_centro": 0.2257,
+    "hsv": 2.3553,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm1-140",
+    "nome": "Espeon-GX",
+    "token": "espeon",
+    "cos_full": 0.4682,
+    "cos_centro": 0.3689,
+    "hsv": 0.6947,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115216.jpg",
+  "quad": 3,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0008,
+  "margem_centro": -0.0442,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-5",
+    "nome": "Leafeon",
+    "token": "leafeon",
+    "cos_full": 0.5016,
+    "cos_centro": 0.3407,
+    "hsv": 0.3637,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv6-11",
+    "nome": "Leafeon",
+    "token": "leafeon",
+    "cos_full": 0.5008,
+    "cos_centro": 0.3849,
+    "hsv": 0.357,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "me1-64",
+    "nome": "Xerneas",
+    "token": "xerneas",
+    "cos_full": 0.3597,
+    "cos_centro": 0.3579,
+    "hsv": 0.142,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "base6-27",
+    "nome": "Kabutops",
+    "token": "kabutops",
+    "cos_full": 0.3596,
+    "cos_centro": 0.1558,
+    "hsv": 0.8068,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex13-6",
+    "nome": "Deoxys δ",
+    "token": "deoxys",
+    "cos_full": 0.3448,
+    "cos_centro": 0.2142,
+    "hsv": 0.7948,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115216.jpg",
+  "quad": 4,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0401,
+  "margem_centro": 0.0704,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "733-26",
+    "nome": "Meloetta",
+    "token": "meloetta",
+    "cos_full": 0.5524,
+    "cos_centro": 0.5008,
+    "hsv": 1.3447,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "me2pt5-231",
+    "nome": "Iono's Wattrel",
+    "token": "iono",
+    "cos_full": 0.5123,
+    "cos_centro": 0.4304,
+    "hsv": 0.9973,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv8-207",
+    "nome": "Clobbopus",
+    "token": "clobbopus",
+    "cos_full": 0.4955,
+    "cos_centro": 0.4234,
+    "hsv": 0.7168,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "me3-121",
+    "nome": "Meowth ex",
+    "token": "meowth",
+    "cos_full": 0.4845,
+    "cos_centro": 0.4626,
+    "hsv": 0.5907,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv7-166",
+    "nome": "Lacey",
+    "token": "lacey",
+    "cos_full": 0.4646,
+    "cos_centro": 0.3514,
+    "hsv": 0.8986,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115216.jpg",
+  "quad": 5,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0072,
+  "margem_centro": 0.0616,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "swshp-SWSH196",
+    "nome": "Glaceon V",
+    "token": "glaceon",
+    "cos_full": 0.4294,
+    "cos_centro": 0.3735,
+    "hsv": 1.1584,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "pl4-28",
+    "nome": "Rapidash",
+    "token": "rapidash",
+    "cos_full": 0.4222,
+    "cos_centro": 0.3119,
+    "hsv": 0.4775,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "smp-SM196",
+    "nome": "Mewtwo-GX",
+    "token": "mewtwo",
+    "cos_full": 0.4207,
+    "cos_centro": 0.3487,
+    "hsv": 1.218,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv8pt5-25",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.4191,
+    "cos_centro": 0.415,
+    "hsv": 0.9048,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "swsh12pt5gg-GG40",
+    "nome": "Glaceon VSTAR",
+    "token": "glaceon",
+    "cos_full": 0.4091,
+    "cos_centro": 0.3435,
+    "hsv": 2.2775,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115216.jpg",
+  "quad": 6,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0234,
+  "margem_centro": 0.0531,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-22",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.4342,
+    "cos_centro": 0.2202,
+    "hsv": 0.9352,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv3pt5-134",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.4108,
+    "cos_centro": 0.1671,
+    "hsv": 0.9001,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "bw5-25",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.3811,
+    "cos_centro": 0.1755,
+    "hsv": 1.1228,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sm10-4",
+    "nome": "Butterfree",
+    "token": "butterfree",
+    "cos_full": 0.3744,
+    "cos_centro": 0.2857,
+    "hsv": 0.7384,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "hgss1-112",
+    "nome": "Ho-Oh LEGEND",
+    "token": "ho",
+    "cos_full": 0.3742,
+    "cos_centro": 0.1583,
+    "hsv": 0.8286,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 1,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0571,
+  "margem_centro": 0.0044,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy11-80",
+    "nome": "Klefki",
+    "token": "klefki",
+    "cos_full": 0.6007,
+    "cos_centro": 0.4226,
+    "hsv": 0.8245,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "xy5-101",
+    "nome": "Mr. Mime",
+    "token": "mr",
+    "cos_full": 0.5436,
+    "cos_centro": 0.4182,
+    "hsv": 1.1818,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm2-140",
+    "nome": "Sylveon-GX",
+    "token": "sylveon",
+    "cos_full": 0.5399,
+    "cos_centro": 0.3629,
+    "hsv": 0.9281,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sv3-200",
+    "nome": "Palafin",
+    "token": "palafin",
+    "cos_full": 0.5395,
+    "cos_centro": 0.4729,
+    "hsv": 0.9191,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8pt5-21",
+    "nome": "Seaking",
+    "token": "seaking",
+    "cos_full": 0.5261,
+    "cos_centro": 0.327,
+    "hsv": 0.6181,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 2,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0025,
+  "margem_centro": -0.0167,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-22",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.6346,
+    "cos_centro": 0.2774,
+    "hsv": 0.8151,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv3pt5-134",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.6321,
+    "cos_centro": 0.2941,
+    "hsv": 0.8011,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv3pt5-56",
+    "nome": "Mankey",
+    "token": "mankey",
+    "cos_full": 0.4557,
+    "cos_centro": 0.2024,
+    "hsv": 0.4041,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv10-90",
+    "nome": "Mankey",
+    "token": "mankey",
+    "cos_full": 0.4496,
+    "cos_centro": 0.2181,
+    "hsv": 0.3791,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "pop9-10",
+    "nome": "Pachirisu",
+    "token": "pachirisu",
+    "cos_full": 0.4291,
+    "cos_centro": 0.2658,
+    "hsv": 1.2109,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 3,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.045,
+  "margem_centro": 0.0274,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv6-54",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.7281,
+    "cos_centro": 0.5369,
+    "hsv": 0.7674,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv8pt5-25",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.6831,
+    "cos_centro": 0.5095,
+    "hsv": 0.7465,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv1-113",
+    "nome": "Riolu",
+    "token": "riolu",
+    "cos_full": 0.4862,
+    "cos_centro": 0.2824,
+    "hsv": 0.8934,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv4-66",
+    "nome": "Zekrom",
+    "token": "zekrom",
+    "cos_full": 0.4861,
+    "cos_centro": 0.4823,
+    "hsv": 0.5755,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "dp5-20",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.4639,
+    "cos_centro": 0.4569,
+    "hsv": 1.5665,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 4,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0103,
+  "margem_centro": 0.1374,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY183",
+    "nome": "Mewtwo-EX",
+    "token": "mewtwo",
+    "cos_full": 0.5034,
+    "cos_centro": 0.4509,
+    "hsv": 3.026,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sm1-140",
+    "nome": "Espeon-GX",
+    "token": "espeon",
+    "cos_full": 0.4932,
+    "cos_centro": 0.3135,
+    "hsv": 0.9074,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sm1-152",
+    "nome": "Espeon-GX",
+    "token": "espeon",
+    "cos_full": 0.448,
+    "cos_centro": 0.424,
+    "hsv": 1.9074,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sma-SV60",
+    "nome": "Espeon-GX",
+    "token": "espeon",
+    "cos_full": 0.4444,
+    "cos_centro": 0.241,
+    "hsv": 0.3031,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sv7-160",
+    "nome": "Dachsbun ex",
+    "token": "dachsbun",
+    "cos_full": 0.4384,
+    "cos_centro": 0.4191,
+    "hsv": 1.1414,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 5,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0176,
+  "margem_centro": 0.0483,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-41",
+    "nome": "Sylveon ex",
+    "token": "sylveon",
+    "cos_full": 0.6989,
+    "cos_centro": 0.3457,
+    "hsv": 1.2779,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv8-86",
+    "nome": "Sylveon ex",
+    "token": "sylveon",
+    "cos_full": 0.6812,
+    "cos_centro": 0.2974,
+    "hsv": 1.2194,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv8pt5-34",
+    "nome": "Espeon ex",
+    "token": "espeon",
+    "cos_full": 0.6486,
+    "cos_centro": 0.2998,
+    "hsv": 0.9257,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sv8pt5-23",
+    "nome": "Vaporeon ex",
+    "token": "vaporeon",
+    "cos_full": 0.6266,
+    "cos_centro": 0.2543,
+    "hsv": 0.8185,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sv4-46",
+    "nome": "Tsareena ex",
+    "token": "tsareena",
+    "cos_full": 0.5809,
+    "cos_centro": 0.1736,
+    "hsv": 0.4098,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 6,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0181,
+  "margem_centro": -0.0309,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-5",
+    "nome": "Leafeon",
+    "token": "leafeon",
+    "cos_full": 0.6693,
+    "cos_centro": 0.3557,
+    "hsv": 0.3865,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv6-11",
+    "nome": "Leafeon",
+    "token": "leafeon",
+    "cos_full": 0.6512,
+    "cos_centro": 0.3866,
+    "hsv": 0.3816,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sm9-16",
+    "nome": "Ninetales",
+    "token": "ninetales",
+    "cos_full": 0.4476,
+    "cos_centro": 0.2379,
+    "hsv": 0.3496,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "smp-SM240",
+    "nome": "Espeon & Deoxys-GX",
+    "token": "espeon",
+    "cos_full": 0.4232,
+    "cos_centro": 0.2429,
+    "hsv": 1.1998,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sv5-131",
+    "nome": "Delcatty",
+    "token": "delcatty",
+    "cos_full": 0.416,
+    "cos_centro": 0.433,
+    "hsv": 0.3909,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115424.jpg",
+  "quad": 7,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0747,
+  "margem_centro": 0.0479,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "733-26",
+    "nome": "Meloetta",
+    "token": "meloetta",
+    "cos_full": 0.5885,
+    "cos_centro": 0.417,
+    "hsv": 1.3783,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sv8-207",
+    "nome": "Clobbopus",
+    "token": "clobbopus",
+    "cos_full": 0.5139,
+    "cos_centro": 0.3691,
+    "hsv": 0.7344,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "me3-121",
+    "nome": "Meowth ex",
+    "token": "meowth",
+    "cos_full": 0.5009,
+    "cos_centro": 0.3836,
+    "hsv": 0.5729,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv10-205",
+    "nome": "Arven's Greedent",
+    "token": "arven",
+    "cos_full": 0.4852,
+    "cos_centro": 0.4292,
+    "hsv": 1.1446,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv6-186",
+    "nome": "Tatsugiri",
+    "token": "tatsugiri",
+    "cos_full": 0.4747,
+    "cos_centro": 0.4236,
+    "hsv": 0.6179,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 1,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.101,
+  "margem_centro": 0.0535,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm3-20",
+    "nome": "Charizard-GX",
+    "token": "charizard",
+    "cos_full": 0.5818,
+    "cos_centro": 0.3854,
+    "hsv": 2.6806,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv10-192",
+    "nome": "Blaziken",
+    "token": "blaziken",
+    "cos_full": 0.4808,
+    "cos_centro": 0.332,
+    "hsv": 3.1295,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "g1-RC17",
+    "nome": "Flabébé",
+    "token": "flabebe",
+    "cos_full": 0.4793,
+    "cos_centro": 0.2404,
+    "hsv": 1.4495,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "g1-17",
+    "nome": "Blastoise-EX",
+    "token": "blastoise",
+    "cos_full": 0.4703,
+    "cos_centro": 0.2686,
+    "hsv": 1.4495,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv10-189",
+    "nome": "Rapidash",
+    "token": "rapidash",
+    "cos_full": 0.4102,
+    "cos_centro": 0.1882,
+    "hsv": 2.008,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 2,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0678,
+  "margem_centro": 0.0984,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm3-63",
+    "nome": "Necrozma-GX",
+    "token": "necrozma",
+    "cos_full": 0.7754,
+    "cos_centro": 0.685,
+    "hsv": 1.4353,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "smp-SM58",
+    "nome": "Necrozma-GX",
+    "token": "necrozma",
+    "cos_full": 0.7075,
+    "cos_centro": 0.5866,
+    "hsv": 2.559,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "swshp-SWSH045",
+    "nome": "Eternatus VMAX",
+    "token": "eternatus",
+    "cos_full": 0.5912,
+    "cos_centro": 0.4045,
+    "hsv": 1.7491,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh3-117",
+    "nome": "Eternatus VMAX",
+    "token": "eternatus",
+    "cos_full": 0.5453,
+    "cos_centro": 0.3714,
+    "hsv": 2.0573,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh12pt5-103",
+    "nome": "Duraludon V",
+    "token": "duraludon",
+    "cos_full": 0.5315,
+    "cos_centro": 0.5317,
+    "hsv": 2.4087,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 3,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0531,
+  "margem_centro": -0.1143,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-42",
+    "nome": "Primarina-GX",
+    "token": "primarina",
+    "cos_full": 0.5589,
+    "cos_centro": 0.2808,
+    "hsv": 3.5063,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "smp-SM14",
+    "nome": "Lycanroc-GX",
+    "token": "lycanroc",
+    "cos_full": 0.5058,
+    "cos_centro": 0.3951,
+    "hsv": 3.3522,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm11-71",
+    "nome": "Mewtwo & Mew-GX",
+    "token": "mewtwo",
+    "cos_full": 0.4156,
+    "cos_centro": 0.2932,
+    "hsv": 2.1434,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sm4-90",
+    "nome": "Silvally-GX",
+    "token": "silvally",
+    "cos_full": 0.3789,
+    "cos_centro": 0.1991,
+    "hsv": 2.9764,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm12-120",
+    "nome": "Pangoro",
+    "token": "pangoro",
+    "cos_full": 0.3769,
+    "cos_centro": 0.33,
+    "hsv": 1.1505,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 4,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.1211,
+  "margem_centro": -0.1367,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm35-39",
+    "nome": "Mewtwo-GX",
+    "token": "mewtwo",
+    "cos_full": 0.5858,
+    "cos_centro": 0.2666,
+    "hsv": 2.1034,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sm8-205",
+    "nome": "Alolan Ninetales-GX",
+    "token": "alolan",
+    "cos_full": 0.4646,
+    "cos_centro": 0.4033,
+    "hsv": 0.6973,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm3-93",
+    "nome": "Gardevoir-GX",
+    "token": "gardevoir",
+    "cos_full": 0.4567,
+    "cos_centro": 0.3239,
+    "hsv": 2.1237,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swshp-SWSH214",
+    "nome": "Lucario VSTAR",
+    "token": "lucario",
+    "cos_full": 0.4509,
+    "cos_centro": 0.2169,
+    "hsv": 2.071,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "bw4-51",
+    "nome": "Zekrom-EX",
+    "token": "zekrom",
+    "cos_full": 0.4502,
+    "cos_centro": 0.326,
+    "hsv": 1.8909,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 5,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.1427,
+  "margem_centro": -0.0298,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM17",
+    "nome": "Lunala-GX",
+    "token": "lunala",
+    "cos_full": 0.6219,
+    "cos_centro": 0.4249,
+    "hsv": 2.6148,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh12tg-TG17",
+    "nome": "Mawile V",
+    "token": "mawile",
+    "cos_full": 0.4792,
+    "cos_centro": 0.4547,
+    "hsv": 2.2988,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv6-129",
+    "nome": "Drakloak",
+    "token": "drakloak",
+    "cos_full": 0.4608,
+    "cos_centro": 0.3769,
+    "hsv": 0.9539,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm1-66",
+    "nome": "Lunala-GX",
+    "token": "lunala",
+    "cos_full": 0.4542,
+    "cos_centro": 0.3108,
+    "hsv": 3.7673,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "svp-147",
+    "nome": "Iron Boulder ex",
+    "token": "iron",
+    "cos_full": 0.4535,
+    "cos_centro": 0.3555,
+    "hsv": 3.1884,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 6,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0454,
+  "margem_centro": 0.31,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-147",
+    "nome": "Lillie",
+    "token": "lillie",
+    "cos_full": 0.4804,
+    "cos_centro": 0.4896,
+    "hsv": 1.3159,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "dp1-40",
+    "nome": "Weavile",
+    "token": "weavile",
+    "cos_full": 0.4351,
+    "cos_centro": 0.1796,
+    "hsv": 0.3493,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "bw4-85",
+    "nome": "Cinccino",
+    "token": "cinccino",
+    "cos_full": 0.4275,
+    "cos_centro": 0.2758,
+    "hsv": 1.0909,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hgss1-114",
+    "nome": "Lugia LEGEND",
+    "token": "lugia",
+    "cos_full": 0.4167,
+    "cos_centro": 0.1638,
+    "hsv": 0.3728,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "hgss1-98",
+    "nome": "Pokémon Communication",
+    "token": "pokemon",
+    "cos_full": 0.4156,
+    "cos_centro": 0.2022,
+    "hsv": 1.0179,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115504.jpg",
+  "quad": 7,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0018,
+  "margem_centro": 0.0018,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sve-7",
+    "nome": "Basic Darkness Energy",
+    "token": "basic",
+    "cos_full": 0.4177,
+    "cos_centro": 0.4177,
+    "hsv": 0.1879,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sm1-170",
+    "nome": "Darkness Energy",
+    "token": "darkness",
+    "cos_full": 0.4159,
+    "cos_centro": 0.4159,
+    "hsv": 0.0333,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sve-3",
+    "nome": "Basic Water Energy",
+    "token": "basic",
+    "cos_full": 0.3789,
+    "cos_centro": 0.3789,
+    "hsv": 0.1571,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm1-166",
+    "nome": "Water Energy",
+    "token": "water",
+    "cos_full": 0.3708,
+    "cos_centro": 0.3708,
+    "hsv": 0.0182,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv2-203",
+    "nome": "Magikarp",
+    "token": "magikarp",
+    "cos_full": 0.3645,
+    "cos_centro": 0.3645,
+    "hsv": 0.3065,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 1,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0127,
+  "margem_centro": 0.0165,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv6-54",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.6817,
+    "cos_centro": 0.5046,
+    "hsv": 0.7232,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv8pt5-25",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.669,
+    "cos_centro": 0.4881,
+    "hsv": 0.6956,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv4-66",
+    "nome": "Zekrom",
+    "token": "zekrom",
+    "cos_full": 0.4926,
+    "cos_centro": 0.4296,
+    "hsv": 0.5053,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "dp5-20",
+    "nome": "Glaceon",
+    "token": "glaceon",
+    "cos_full": 0.4862,
+    "cos_centro": 0.3563,
+    "hsv": 1.5418,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "swsh11-81",
+    "nome": "Spectrier",
+    "token": "spectrier",
+    "cos_full": 0.4846,
+    "cos_centro": 0.4633,
+    "hsv": 0.8541,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 2,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0368,
+  "margem_centro": 0.002,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-22",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.6423,
+    "cos_centro": 0.2598,
+    "hsv": 0.7448,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv3pt5-134",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.6055,
+    "cos_centro": 0.2578,
+    "hsv": 0.7649,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv10-90",
+    "nome": "Mankey",
+    "token": "mankey",
+    "cos_full": 0.4171,
+    "cos_centro": 0.1528,
+    "hsv": 0.3932,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hgss3-41",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.4009,
+    "cos_centro": 0.3142,
+    "hsv": 1.2862,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sm6-28",
+    "nome": "Aurorus",
+    "token": "aurorus",
+    "cos_full": 0.3997,
+    "cos_centro": 0.1688,
+    "hsv": 0.8131,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 3,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0525,
+  "margem_centro": 0.137,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-140",
+    "nome": "Espeon-GX",
+    "token": "espeon",
+    "cos_full": 0.513,
+    "cos_centro": 0.2791,
+    "hsv": 0.8224,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv3-214",
+    "nome": "Absol ex",
+    "token": "absol",
+    "cos_full": 0.4605,
+    "cos_centro": 0.142,
+    "hsv": 1.0494,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sma-SV60",
+    "nome": "Espeon-GX",
+    "token": "espeon",
+    "cos_full": 0.4566,
+    "cos_centro": 0.1395,
+    "hsv": 0.3599,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "smp-SM196",
+    "nome": "Mewtwo-GX",
+    "token": "mewtwo",
+    "cos_full": 0.4489,
+    "cos_centro": 0.2067,
+    "hsv": 0.9712,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8-192",
+    "nome": "Exeggcute",
+    "token": "exeggcute",
+    "cos_full": 0.4474,
+    "cos_centro": 0.287,
+    "hsv": 0.8287,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 4,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0937,
+  "margem_centro": -0.0955,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-41",
+    "nome": "Sylveon ex",
+    "token": "sylveon",
+    "cos_full": 0.6125,
+    "cos_centro": 0.4453,
+    "hsv": 1.4491,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv8-119",
+    "nome": "Hydreigon ex",
+    "token": "hydreigon",
+    "cos_full": 0.5187,
+    "cos_centro": 0.5407,
+    "hsv": 1.4698,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv8-86",
+    "nome": "Sylveon ex",
+    "token": "sylveon",
+    "cos_full": 0.5144,
+    "cos_centro": 0.4297,
+    "hsv": 1.4072,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sv6-87",
+    "nome": "Floette",
+    "token": "floette",
+    "cos_full": 0.4887,
+    "cos_centro": 0.5304,
+    "hsv": 0.5947,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv4pt5-204",
+    "nome": "Pelipper",
+    "token": "pelipper",
+    "cos_full": 0.488,
+    "cos_centro": 0.4384,
+    "hsv": 0.5369,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 5,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0111,
+  "margem_centro": -0.0328,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv8pt5-5",
+    "nome": "Leafeon",
+    "token": "leafeon",
+    "cos_full": 0.6109,
+    "cos_centro": 0.4018,
+    "hsv": 0.4848,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv6-11",
+    "nome": "Leafeon",
+    "token": "leafeon",
+    "cos_full": 0.5998,
+    "cos_centro": 0.4346,
+    "hsv": 0.461,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "ex15-8",
+    "nome": "Ninetales δ",
+    "token": "ninetales",
+    "cos_full": 0.3898,
+    "cos_centro": 0.0597,
+    "hsv": 0.3937,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "733-77",
+    "nome": "Goodra",
+    "token": "goodra",
+    "cos_full": 0.3869,
+    "cos_centro": 0.3145,
+    "hsv": 0.6902,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm9-16",
+    "nome": "Ninetales",
+    "token": "ninetales",
+    "cos_full": 0.3786,
+    "cos_centro": 0.2777,
+    "hsv": 0.3072,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 6,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0062,
+  "margem_centro": -0.2732,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy9-83",
+    "nome": "Togekiss-EX",
+    "token": "togekiss",
+    "cos_full": 0.4204,
+    "cos_centro": 0.1287,
+    "hsv": 1.5357,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sv6-173",
+    "nome": "Infernape",
+    "token": "infernape",
+    "cos_full": 0.4142,
+    "cos_centro": 0.4018,
+    "hsv": 1.3976,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ecard3-91",
+    "nome": "Rhyhorn",
+    "token": "rhyhorn",
+    "cos_full": 0.3955,
+    "cos_centro": 0.1973,
+    "hsv": 0.5257,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm2-140",
+    "nome": "Sylveon-GX",
+    "token": "sylveon",
+    "cos_full": 0.3872,
+    "cos_centro": 0.2096,
+    "hsv": 1.1898,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "xy12-45",
+    "nome": "Nidoking",
+    "token": "nidoking",
+    "cos_full": 0.3744,
+    "cos_centro": 0.1763,
+    "hsv": 0.7048,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115601.jpg",
+  "quad": 7,
+  "labels": [
+   "sylveon",
+   "espeon",
+   "leafeon",
+   "vaporeon",
+   "glaceon"
+  ],
+  "margem_full": 0.0117,
+  "margem_centro": 0.0117,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-166",
+    "nome": "Water Energy",
+    "token": "water",
+    "cos_full": 0.4349,
+    "cos_centro": 0.4349,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sm1-168",
+    "nome": "Psychic Energy",
+    "token": "psychic",
+    "cos_full": 0.4232,
+    "cos_centro": 0.4232,
+    "hsv": 0.0005,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm1-170",
+    "nome": "Darkness Energy",
+    "token": "darkness",
+    "cos_full": 0.4166,
+    "cos_centro": 0.4166,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sve-7",
+    "nome": "Basic Darkness Energy",
+    "token": "basic",
+    "cos_full": 0.3989,
+    "cos_centro": 0.3989,
+    "hsv": 0.0,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex14-74",
+    "nome": "Cessation Crystal",
+    "token": "cessation",
+    "cos_full": 0.3701,
+    "cos_centro": 0.3701,
+    "hsv": 0.027,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 1,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0057,
+  "margem_centro": 0.1311,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "dp2-70",
+    "nome": "Aipom",
+    "token": "aipom",
+    "cos_full": 0.4553,
+    "cos_centro": 0.3959,
+    "hsv": 2.7024,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "swsh12pt5gg-GG56",
+    "nome": "Hisuian Zoroark VSTAR",
+    "token": "hisuian",
+    "cos_full": 0.4496,
+    "cos_centro": 0.2648,
+    "hsv": 3.1901,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "smp-SM210",
+    "nome": "Moltres & Zapdos & Articuno-GX",
+    "token": "moltres",
+    "cos_full": 0.4436,
+    "cos_centro": 0.3293,
+    "hsv": 1.8646,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "smp-SM169",
+    "nome": "Eevee & Snorlax-GX",
+    "token": "eevee",
+    "cos_full": 0.4351,
+    "cos_centro": 0.3261,
+    "hsv": 2.801,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm6-136",
+    "nome": "Zygarde-GX",
+    "token": "zygarde",
+    "cos_full": 0.4325,
+    "cos_centro": 0.2505,
+    "hsv": 2.5759,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 2,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.2197,
+  "margem_centro": -0.0092,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm3-20",
+    "nome": "Charizard-GX",
+    "token": "charizard",
+    "cos_full": 0.6064,
+    "cos_centro": 0.3162,
+    "hsv": 2.8934,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh8-45",
+    "nome": "Cinderace VMAX",
+    "token": "cinderace",
+    "cos_full": 0.3867,
+    "cos_centro": 0.3254,
+    "hsv": 1.8701,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv3pt5-115",
+    "nome": "Kangaskhan ex",
+    "token": "kangaskhan",
+    "cos_full": 0.3844,
+    "cos_centro": 0.2056,
+    "hsv": 2.9835,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "g1-RC17",
+    "nome": "Flabébé",
+    "token": "flabebe",
+    "cos_full": 0.3842,
+    "cos_centro": 0.165,
+    "hsv": 1.621,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "g1-17",
+    "nome": "Blastoise-EX",
+    "token": "blastoise",
+    "cos_full": 0.3818,
+    "cos_centro": 0.1649,
+    "hsv": 1.621,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 3,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0259,
+  "margem_centro": 0.1645,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-42",
+    "nome": "Primarina-GX",
+    "token": "primarina",
+    "cos_full": 0.4961,
+    "cos_centro": 0.3439,
+    "hsv": 2.8515,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh10-53",
+    "nome": "Hisuian Typhlosion V",
+    "token": "hisuian",
+    "cos_full": 0.4702,
+    "cos_centro": 0.1794,
+    "hsv": 2.0983,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swshp-SWSH252",
+    "nome": "Infernape V",
+    "token": "infernape",
+    "cos_full": 0.4437,
+    "cos_centro": 0.0785,
+    "hsv": 1.5071,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh7-221",
+    "nome": "Aroma Lady",
+    "token": "aroma",
+    "cos_full": 0.4363,
+    "cos_centro": 0.1031,
+    "hsv": 1.7837,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex3-92",
+    "nome": "Kingdra ex",
+    "token": "kingdra",
+    "cos_full": 0.4294,
+    "cos_centro": 0.1396,
+    "hsv": 1.1995,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 4,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0016,
+  "margem_centro": -0.0138,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM58",
+    "nome": "Necrozma-GX",
+    "token": "necrozma",
+    "cos_full": 0.7091,
+    "cos_centro": 0.5988,
+    "hsv": 2.6089,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sm3-63",
+    "nome": "Necrozma-GX",
+    "token": "necrozma",
+    "cos_full": 0.7075,
+    "cos_centro": 0.6126,
+    "hsv": 1.762,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "swshp-SWSH045",
+    "nome": "Eternatus VMAX",
+    "token": "eternatus",
+    "cos_full": 0.5905,
+    "cos_centro": 0.4607,
+    "hsv": 1.8486,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh3-117",
+    "nome": "Eternatus VMAX",
+    "token": "eternatus",
+    "cos_full": 0.5631,
+    "cos_centro": 0.4388,
+    "hsv": 2.1286,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh5-149",
+    "nome": "Necrozma V",
+    "token": "necrozma",
+    "cos_full": 0.5406,
+    "cos_centro": 0.4982,
+    "hsv": 0.9673,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 5,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0516,
+  "margem_centro": 0.167,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm35-39",
+    "nome": "Mewtwo-GX",
+    "token": "mewtwo",
+    "cos_full": 0.5627,
+    "cos_centro": 0.4203,
+    "hsv": 2.3866,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swshp-SWSH223",
+    "nome": "Mewtwo V",
+    "token": "mewtwo",
+    "cos_full": 0.5111,
+    "cos_centro": 0.2533,
+    "hsv": 1.2303,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "bw4-98",
+    "nome": "Mewtwo-EX",
+    "token": "mewtwo",
+    "cos_full": 0.4888,
+    "cos_centro": 0.5202,
+    "hsv": 2.1356,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh45-39",
+    "nome": "Indeedee V",
+    "token": "indeedee",
+    "cos_full": 0.485,
+    "cos_centro": 0.3565,
+    "hsv": 1.651,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh1-91",
+    "nome": "Indeedee V",
+    "token": "indeedee",
+    "cos_full": 0.4822,
+    "cos_centro": 0.3111,
+    "hsv": 1.6145,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 6,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.1197,
+  "margem_centro": -0.0291,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM17",
+    "nome": "Lunala-GX",
+    "token": "lunala",
+    "cos_full": 0.6024,
+    "cos_centro": 0.3868,
+    "hsv": 2.6647,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "svp-147",
+    "nome": "Iron Boulder ex",
+    "token": "iron",
+    "cos_full": 0.4827,
+    "cos_centro": 0.4159,
+    "hsv": 3.3191,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm1-66",
+    "nome": "Lunala-GX",
+    "token": "lunala",
+    "cos_full": 0.4276,
+    "cos_centro": 0.327,
+    "hsv": 3.9627,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sm6-73",
+    "nome": "Zygarde-GX",
+    "token": "zygarde",
+    "cos_full": 0.4101,
+    "cos_centro": 0.3679,
+    "hsv": 3.3592,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "smp-SM103",
+    "nome": "Lunala-GX",
+    "token": "lunala",
+    "cos_full": 0.404,
+    "cos_centro": 0.3462,
+    "hsv": 2.5971,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 7,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.0393,
+  "margem_centro": 0.0467,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "swsh3-194",
+    "nome": "Salamence VMAX",
+    "token": "salamence",
+    "cos_full": 0.4923,
+    "cos_centro": 0.4246,
+    "hsv": 3.2494,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "sm11-241",
+    "nome": "Raichu & Alolan Raichu-GX",
+    "token": "raichu",
+    "cos_full": 0.453,
+    "cos_centro": 0.3779,
+    "hsv": 4.1698,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm1-151",
+    "nome": "Lapras-GX",
+    "token": "lapras",
+    "cos_full": 0.4504,
+    "cos_centro": 0.4165,
+    "hsv": 3.1662,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sm1-156",
+    "nome": "Tauros-GX",
+    "token": "tauros",
+    "cos_full": 0.4474,
+    "cos_centro": 0.3164,
+    "hsv": 4.0083,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh1-204",
+    "nome": "Morpeko VMAX",
+    "token": "morpeko",
+    "cos_full": 0.427,
+    "cos_centro": 0.4365,
+    "hsv": 3.5191,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115615.jpg",
+  "quad": 8,
+  "labels": [
+   "primarina",
+   "lapras",
+   "lunala",
+   "lilian",
+   "mewtwo",
+   "charizard",
+   "necrozma"
+  ],
+  "margem_full": 0.2164,
+  "margem_centro": 0.1446,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm1-147",
+    "nome": "Lillie",
+    "token": "lillie",
+    "cos_full": 0.7292,
+    "cos_centro": 0.5358,
+    "hsv": 1.3844,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh9-167",
+    "nome": "Barry",
+    "token": "barry",
+    "cos_full": 0.5128,
+    "cos_centro": 0.3912,
+    "hsv": 0.6497,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv9-180",
+    "nome": "Iris's Fighting Spirit",
+    "token": "iris",
+    "cos_full": 0.4612,
+    "cos_centro": 0.3811,
+    "hsv": 0.836,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh6-189",
+    "nome": "Caitlin",
+    "token": "caitlin",
+    "cos_full": 0.4435,
+    "cos_centro": 0.3939,
+    "hsv": 1.7566,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "733-26",
+    "nome": "Meloetta",
+    "token": "meloetta",
+    "cos_full": 0.428,
+    "cos_centro": 0.4164,
+    "hsv": 1.4866,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 1,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.1015,
+  "margem_centro": 0.0991,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "svp-18",
+    "nome": "Cyclizar ex",
+    "token": "cyclizar",
+    "cos_full": 0.5577,
+    "cos_centro": 0.4955,
+    "hsv": 4.3866,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "bwp-BW94",
+    "nome": "Eevee",
+    "token": "eevee",
+    "cos_full": 0.4563,
+    "cos_centro": 0.3965,
+    "hsv": 2.4135,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swsh9-67",
+    "nome": "Dedenne",
+    "token": "dedenne",
+    "cos_full": 0.4485,
+    "cos_centro": 0.304,
+    "hsv": 0.9492,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "xy11-78",
+    "nome": "Gardevoir-EX",
+    "token": "gardevoir",
+    "cos_full": 0.4389,
+    "cos_centro": 0.5454,
+    "hsv": 2.0386,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sm10-189a",
+    "nome": "Welder",
+    "token": "welder",
+    "cos_full": 0.4344,
+    "cos_centro": 0.3067,
+    "hsv": 2.2244,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 2,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.2515,
+  "margem_centro": 0.3312,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm3-17",
+    "nome": "Golisopod-GX",
+    "token": "golisopod",
+    "cos_full": 0.6375,
+    "cos_centro": 0.3625,
+    "hsv": 3.6332,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "col1-69",
+    "nome": "Relicanth",
+    "token": "relicanth",
+    "cos_full": 0.386,
+    "cos_centro": 0.0314,
+    "hsv": 1.1528,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "bwp-BW57",
+    "nome": "Haxorus",
+    "token": "haxorus",
+    "cos_full": 0.3854,
+    "cos_centro": 0.1392,
+    "hsv": 2.0248,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex9-14",
+    "nome": "Groudon",
+    "token": "groudon",
+    "cos_full": 0.3713,
+    "cos_centro": 0.1221,
+    "hsv": 3.2946,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "col1-52",
+    "nome": "Vaporeon",
+    "token": "vaporeon",
+    "cos_full": 0.3687,
+    "cos_centro": 0.0007,
+    "hsv": 1.9914,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 3,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.0932,
+  "margem_centro": 0.0087,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy8-21",
+    "nome": "Houndoom-EX",
+    "token": "houndoom",
+    "cos_full": 0.5399,
+    "cos_centro": 0.2995,
+    "hsv": 1.7525,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "732-56",
+    "nome": "Bunnelby",
+    "token": "bunnelby",
+    "cos_full": 0.4468,
+    "cos_centro": 0.2908,
+    "hsv": 2.1674,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ecard3-98",
+    "nome": "Slugma",
+    "token": "slugma",
+    "cos_full": 0.4336,
+    "cos_centro": 0.3396,
+    "hsv": 0.0545,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-155",
+    "nome": "Riolu",
+    "token": "riolu",
+    "cos_full": 0.4315,
+    "cos_centro": 0.2928,
+    "hsv": 0.7046,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-22",
+    "nome": "Riolu",
+    "token": "riolu",
+    "cos_full": 0.4315,
+    "cos_centro": 0.3142,
+    "hsv": 1.9041,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 4,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.2058,
+  "margem_centro": 0.066,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sm3-93",
+    "nome": "Gardevoir-GX",
+    "token": "gardevoir",
+    "cos_full": 0.6426,
+    "cos_centro": 0.4719,
+    "hsv": 4.3129,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv8pt5-11",
+    "nome": "Hydrapple ex",
+    "token": "hydrapple",
+    "cos_full": 0.4369,
+    "cos_centro": 0.4059,
+    "hsv": 1.9491,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv7-14",
+    "nome": "Hydrapple ex",
+    "token": "hydrapple",
+    "cos_full": 0.4249,
+    "cos_centro": 0.3638,
+    "hsv": 2.1149,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swshp-SWSH083",
+    "nome": "Alakazam V",
+    "token": "alakazam",
+    "cos_full": 0.4092,
+    "cos_centro": 0.2727,
+    "hsv": 1.8955,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "xy7-74",
+    "nome": "Forest of Giant Plants",
+    "token": "forest",
+    "cos_full": 0.4029,
+    "cos_centro": 0.4679,
+    "hsv": 1.5082,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 5,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.0031,
+  "margem_centro": -0.0425,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY179",
+    "nome": "Snorlax",
+    "token": "snorlax",
+    "cos_full": 0.7777,
+    "cos_centro": 0.5908,
+    "hsv": 2.251,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "base4-30",
+    "nome": "Snorlax",
+    "token": "snorlax",
+    "cos_full": 0.7746,
+    "cos_centro": 0.6333,
+    "hsv": 3.5542,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "base6-64",
+    "nome": "Snorlax",
+    "token": "snorlax",
+    "cos_full": 0.7617,
+    "cos_centro": 0.6135,
+    "hsv": 2.0963,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "base2-11",
+    "nome": "Snorlax",
+    "token": "snorlax",
+    "cos_full": 0.7545,
+    "cos_centro": 0.6073,
+    "hsv": 0.448,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "base2-27",
+    "nome": "Snorlax",
+    "token": "snorlax",
+    "cos_full": 0.7444,
+    "cos_centro": 0.639,
+    "hsv": 3.2586,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 6,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.1426,
+  "margem_centro": -0.0364,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy10-125",
+    "nome": "Alakazam-EX",
+    "token": "alakazam",
+    "cos_full": 0.5827,
+    "cos_centro": 0.368,
+    "hsv": 1.9725,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "svp-50",
+    "nome": "Alakazam ex",
+    "token": "alakazam",
+    "cos_full": 0.4401,
+    "cos_centro": 0.4045,
+    "hsv": 1.4322,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "swshp-SWSH083",
+    "nome": "Alakazam V",
+    "token": "alakazam",
+    "cos_full": 0.3811,
+    "cos_centro": 0.277,
+    "hsv": 1.7452,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh4-172",
+    "nome": "Alakazam V",
+    "token": "alakazam",
+    "cos_full": 0.356,
+    "cos_centro": 0.3572,
+    "hsv": 1.8668,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "zsv10pt5-131",
+    "nome": "Landorus",
+    "token": "landorus",
+    "cos_full": 0.3493,
+    "cos_centro": 0.2607,
+    "hsv": 1.4619,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115637.jpg",
+  "quad": 7,
+  "labels": [
+   "dragonite",
+   "aegislash",
+   "pidgeot",
+   "alakazam",
+   "snorlax",
+   "gardevoir",
+   "lycanroc",
+   "golisopod",
+   "houndoom"
+  ],
+  "margem_full": 0.0,
+  "margem_centro": 0.0,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy4-65",
+    "nome": "Aegislash-EX",
+    "token": "aegislash",
+    "cos_full": 0.4142,
+    "cos_centro": 0.2361,
+    "hsv": 3.3355,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "xy4-65a",
+    "nome": "Aegislash-EX",
+    "token": "aegislash",
+    "cos_full": 0.4142,
+    "cos_centro": 0.2361,
+    "hsv": 3.3355,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "bw11-30",
+    "nome": "Magikarp",
+    "token": "magikarp",
+    "cos_full": 0.4058,
+    "cos_centro": 0.3384,
+    "hsv": 1.3644,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex8-13",
+    "nome": "Ninjask",
+    "token": "ninjask",
+    "cos_full": 0.4049,
+    "cos_centro": 0.2107,
+    "hsv": 1.7693,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "bw6-99",
+    "nome": "Aipom",
+    "token": "aipom",
+    "cos_full": 0.4011,
+    "cos_centro": 0.2716,
+    "hsv": 1.8823,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 1,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.0277,
+  "margem_centro": -0.0454,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop3-16",
+    "nome": "Pichu Bros.",
+    "token": "pichu",
+    "cos_full": 0.5907,
+    "cos_centro": 0.4982,
+    "hsv": 2.0523,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "dpp-DP05",
+    "nome": "Tropical Wind",
+    "token": "tropical",
+    "cos_full": 0.563,
+    "cos_centro": 0.5436,
+    "hsv": 0.791,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex11-31",
+    "nome": "Sunny Castform",
+    "token": "sunny",
+    "cos_full": 0.5348,
+    "cos_centro": 0.461,
+    "hsv": 0.7835,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "np-27",
+    "nome": "Tropical Tidal Wave",
+    "token": "tropical",
+    "cos_full": 0.5103,
+    "cos_centro": 0.4239,
+    "hsv": 0.8088,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "pop4-9",
+    "nome": "Pokémon Fan Club",
+    "token": "pokemon",
+    "cos_full": 0.5062,
+    "cos_centro": 0.4507,
+    "hsv": 1.8614,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 2,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.0804,
+  "margem_centro": 0.0649,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM76",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.5811,
+    "cos_centro": 0.4584,
+    "hsv": 0.4518,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "smp-SM86",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.5006,
+    "cos_centro": 0.3936,
+    "hsv": 0.329,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "base1-58",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.473,
+    "cos_centro": 0.3498,
+    "hsv": 0.7522,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "ex7-53",
+    "nome": "Dratini",
+    "token": "dratini",
+    "cos_full": 0.4599,
+    "cos_centro": 0.3717,
+    "hsv": 1.1294,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh3-152",
+    "nome": "Skwovet",
+    "token": "skwovet",
+    "cos_full": 0.4552,
+    "cos_centro": 0.3162,
+    "hsv": 0.6371,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 3,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.007,
+  "margem_centro": -0.0469,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "sv1-250",
+    "nome": "Jacq",
+    "token": "jacq",
+    "cos_full": 0.4248,
+    "cos_centro": 0.3512,
+    "hsv": 0.9049,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "smp-SM200",
+    "nome": "Snubbull",
+    "token": "snubbull",
+    "cos_full": 0.4178,
+    "cos_centro": 0.3981,
+    "hsv": 0.314,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "zsv10pt5-49",
+    "nome": "Conkeldurr",
+    "token": "conkeldurr",
+    "cos_full": 0.4,
+    "cos_centro": 0.2592,
+    "hsv": 0.4015,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "pl3-6",
+    "nome": "Magmortar",
+    "token": "magmortar",
+    "cos_full": 0.3932,
+    "cos_centro": 0.3319,
+    "hsv": 0.3481,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "smp-SM74",
+    "nome": "Regirock",
+    "token": "regirock",
+    "cos_full": 0.3846,
+    "cos_centro": 0.2909,
+    "hsv": 0.3985,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 4,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.2546,
+  "margem_centro": 0.248,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop6-9",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.723,
+    "cos_centro": 0.4399,
+    "hsv": 1.6868,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv3pt5-25",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4684,
+    "cos_centro": 0.1919,
+    "hsv": 0.6125,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "pop4-13",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4335,
+    "cos_centro": 0.4036,
+    "hsv": 0.8477,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh8-245",
+    "nome": "Celebi V",
+    "token": "celebi",
+    "cos_full": 0.4315,
+    "cos_centro": 0.3411,
+    "hsv": 1.3588,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "dpp-DP16",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4203,
+    "cos_centro": 0.2554,
+    "hsv": 0.3921,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 5,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.0463,
+  "margem_centro": 0.1732,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "swsh12-49",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4367,
+    "cos_centro": 0.4568,
+    "hsv": 0.3556,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "732-22",
+    "nome": "Riolu",
+    "token": "riolu",
+    "cos_full": 0.3904,
+    "cos_centro": 0.2836,
+    "hsv": 1.016,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "hgss4-21",
+    "nome": "Elekid",
+    "token": "elekid",
+    "cos_full": 0.384,
+    "cos_centro": 0.2913,
+    "hsv": 0.9786,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sv10-68",
+    "nome": "Electabuzz",
+    "token": "electabuzz",
+    "cos_full": 0.3805,
+    "cos_centro": 0.0931,
+    "hsv": 0.7092,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh10-51",
+    "nome": "Regieleki",
+    "token": "regieleki",
+    "cos_full": 0.3794,
+    "cos_centro": 0.1507,
+    "hsv": 0.1979,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 6,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.1073,
+  "margem_centro": 0.2339,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop5-13",
+    "nome": "Pikachu δ",
+    "token": "pikachu",
+    "cos_full": 0.5935,
+    "cos_centro": 0.5129,
+    "hsv": 0.5486,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex13-15",
+    "nome": "Raichu δ",
+    "token": "raichu",
+    "cos_full": 0.4862,
+    "cos_centro": 0.279,
+    "hsv": 0.3522,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex1-29",
+    "nome": "Delcatty",
+    "token": "delcatty",
+    "cos_full": 0.4705,
+    "cos_centro": 0.1373,
+    "hsv": 0.6724,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "bw3-48",
+    "nome": "Trubbish",
+    "token": "trubbish",
+    "cos_full": 0.4701,
+    "cos_centro": 0.1687,
+    "hsv": 0.4737,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swshp-SWSH145",
+    "nome": "Pikachu V",
+    "token": "pikachu",
+    "cos_full": 0.4648,
+    "cos_centro": 0.3651,
+    "hsv": 0.0034,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 7,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.0139,
+  "margem_centro": -0.038,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM109",
+    "nome": "Ash's Pikachu",
+    "token": "ash",
+    "cos_full": 0.6708,
+    "cos_centro": 0.4314,
+    "hsv": 0.2343,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "smp-SM108",
+    "nome": "Ash's Pikachu",
+    "token": "ash",
+    "cos_full": 0.6569,
+    "cos_centro": 0.4694,
+    "hsv": 0.4121,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "smp-SM114",
+    "nome": "Ash's Pikachu",
+    "token": "ash",
+    "cos_full": 0.6245,
+    "cos_centro": 0.3958,
+    "hsv": 0.2276,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "smp-SM111",
+    "nome": "Ash's Pikachu",
+    "token": "ash",
+    "cos_full": 0.6056,
+    "cos_centro": 0.3997,
+    "hsv": 0.2631,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "smp-SM110",
+    "nome": "Ash's Pikachu",
+    "token": "ash",
+    "cos_full": 0.6025,
+    "cos_centro": 0.3245,
+    "hsv": 0.2357,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 8,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.2583,
+  "margem_centro": 0.3398,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop2-16",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.6601,
+    "cos_centro": 0.5908,
+    "hsv": 1.3826,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "basep-26",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4018,
+    "cos_centro": 0.251,
+    "hsv": 1.678,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "pop4-13",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.401,
+    "cos_centro": 0.3217,
+    "hsv": 1.2192,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "ex2-72",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.3959,
+    "cos_centro": 0.256,
+    "hsv": 2.302,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "pop8-14",
+    "nome": "Happiny",
+    "token": "happiny",
+    "cos_full": 0.3956,
+    "cos_centro": 0.3317,
+    "hsv": 1.3483,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115652.jpg",
+  "quad": 9,
+  "labels": [
+   "pikachu",
+   "pichu",
+   "detetive"
+  ],
+  "margem_full": 0.1237,
+  "margem_centro": 0.0989,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-13",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.5627,
+    "cos_centro": 0.4222,
+    "hsv": 1.0804,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex8-37",
+    "nome": "Magcargo",
+    "token": "magcargo",
+    "cos_full": 0.439,
+    "cos_centro": 0.3233,
+    "hsv": 0.7549,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex4-92",
+    "nome": "Raikou ex",
+    "token": "raikou",
+    "cos_full": 0.4237,
+    "cos_centro": 0.2897,
+    "hsv": 2.26,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "dpp-DP05",
+    "nome": "Tropical Wind",
+    "token": "tropical",
+    "cos_full": 0.4236,
+    "cos_centro": 0.2747,
+    "hsv": 0.8576,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm7-91",
+    "nome": "Mawile",
+    "token": "mawile",
+    "cos_full": 0.4232,
+    "cos_centro": 0.2411,
+    "hsv": 0.6777,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 1,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.2957,
+  "margem_centro": 0.2081,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY115",
+    "nome": "Shaymin",
+    "token": "shaymin",
+    "cos_full": 0.7341,
+    "cos_centro": 0.4938,
+    "hsv": 2.0808,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh12pt5gg-GG14",
+    "nome": "Comfey",
+    "token": "comfey",
+    "cos_full": 0.4385,
+    "cos_centro": 0.2856,
+    "hsv": 0.653,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swshp-SWSH010",
+    "nome": "Gossifleur",
+    "token": "gossifleur",
+    "cos_full": 0.4208,
+    "cos_centro": 0.2062,
+    "hsv": 0.2597,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm9-47",
+    "nome": "Joltik",
+    "token": "joltik",
+    "cos_full": 0.419,
+    "cos_centro": 0.4209,
+    "hsv": 0.3506,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sm8-5",
+    "nome": "Chikorita",
+    "token": "chikorita",
+    "cos_full": 0.418,
+    "cos_centro": 0.3471,
+    "hsv": 0.5357,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 2,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.194,
+  "margem_centro": 0.0811,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY120",
+    "nome": "Meloetta",
+    "token": "meloetta",
+    "cos_full": 0.6435,
+    "cos_centro": 0.3878,
+    "hsv": 1.3036,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh10tg-TG24",
+    "nome": "Allister",
+    "token": "allister",
+    "cos_full": 0.4495,
+    "cos_centro": 0.3067,
+    "hsv": 2.01,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm11-235",
+    "nome": "Misty's Favor",
+    "token": "misty",
+    "cos_full": 0.4485,
+    "cos_centro": 0.2781,
+    "hsv": 0.8333,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm6-128",
+    "nome": "Bonnie",
+    "token": "bonnie",
+    "cos_full": 0.4375,
+    "cos_centro": 0.2814,
+    "hsv": 1.2354,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8-229",
+    "nome": "Clemont's Quick Wit",
+    "token": "clemont",
+    "cos_full": 0.4372,
+    "cos_centro": 0.3815,
+    "hsv": 0.888,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 3,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.0301,
+  "margem_centro": -0.1616,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "bw7-104",
+    "nome": "Rattata",
+    "token": "rattata",
+    "cos_full": 0.4912,
+    "cos_centro": 0.3174,
+    "hsv": 0.8453,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "swsh11-28",
+    "nome": "Litleo",
+    "token": "litleo",
+    "cos_full": 0.4611,
+    "cos_centro": 0.479,
+    "hsv": 0.3874,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "xy6-20",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4499,
+    "cos_centro": 0.2844,
+    "hsv": 0.3197,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "733-78",
+    "nome": "Toxel",
+    "token": "toxel",
+    "cos_full": 0.439,
+    "cos_centro": 0.3873,
+    "hsv": 0.3834,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "me2pt5-29",
+    "nome": "Tepig",
+    "token": "tepig",
+    "cos_full": 0.4381,
+    "cos_centro": 0.288,
+    "hsv": 0.7437,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 4,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.0304,
+  "margem_centro": 0.0103,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY118",
+    "nome": "Keldeo",
+    "token": "keldeo",
+    "cos_full": 0.3959,
+    "cos_centro": 0.1948,
+    "hsv": 1.8083,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh9tg-TG01",
+    "nome": "Flareon",
+    "token": "flareon",
+    "cos_full": 0.3654,
+    "cos_centro": 0.1845,
+    "hsv": 2.1097,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swsh8-263",
+    "nome": "Shauna",
+    "token": "shauna",
+    "cos_full": 0.3508,
+    "cos_centro": 0.311,
+    "hsv": 2.1592,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "smp-SM196",
+    "nome": "Mewtwo-GX",
+    "token": "mewtwo",
+    "cos_full": 0.3499,
+    "cos_centro": 0.2593,
+    "hsv": 1.289,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh3-114",
+    "nome": "Grimmsnarl V",
+    "token": "grimmsnarl",
+    "cos_full": 0.3483,
+    "cos_centro": 0.2674,
+    "hsv": 1.3646,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 5,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.3648,
+  "margem_centro": 0.3016,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xyp-XY77",
+    "nome": "Dialga",
+    "token": "dialga",
+    "cos_full": 0.7328,
+    "cos_centro": 0.5786,
+    "hsv": 1.4214,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "hgss2-94",
+    "nome": "Suicune & Entei LEGEND",
+    "token": "suicune",
+    "cos_full": 0.368,
+    "cos_centro": 0.277,
+    "hsv": 1.2122,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swshp-SWSH166",
+    "nome": "Zacian V-UNION",
+    "token": "zacian",
+    "cos_full": 0.3622,
+    "cos_centro": 0.2674,
+    "hsv": 1.715,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "xyp-XY114",
+    "nome": "Darkrai",
+    "token": "darkrai",
+    "cos_full": 0.3529,
+    "cos_centro": 0.2408,
+    "hsv": 1.6196,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swshp-SWSH018",
+    "nome": "Zacian V",
+    "token": "zacian",
+    "cos_full": 0.3497,
+    "cos_centro": 0.1671,
+    "hsv": 0.5338,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 6,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.0296,
+  "margem_centro": -0.0631,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd12-5",
+    "nome": "Dewott",
+    "token": "dewott",
+    "cos_full": 0.4496,
+    "cos_centro": 0.2363,
+    "hsv": 2.2874,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "hgss3-77",
+    "nome": "Sage's Training",
+    "token": "sage",
+    "cos_full": 0.4201,
+    "cos_centro": 0.2994,
+    "hsv": 0.8979,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "col1-85",
+    "nome": "Sage's Training",
+    "token": "sage",
+    "cos_full": 0.4178,
+    "cos_centro": 0.2419,
+    "hsv": 0.8403,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh12pt5gg-GG60",
+    "nome": "Cynthia's Ambition",
+    "token": "cynthia",
+    "cos_full": 0.412,
+    "cos_centro": 0.2572,
+    "hsv": 2.464,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-53",
+    "nome": "Arven",
+    "token": "arven",
+    "cos_full": 0.4117,
+    "cos_centro": 0.1822,
+    "hsv": 0.9035,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 7,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.0252,
+  "margem_centro": 0.0132,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd12-11",
+    "nome": "Klang",
+    "token": "klang",
+    "cos_full": 0.7042,
+    "cos_centro": 0.6762,
+    "hsv": 1.3458,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "bw2-75",
+    "nome": "Klang",
+    "token": "klang",
+    "cos_full": 0.679,
+    "cos_centro": 0.663,
+    "hsv": 1.035,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "bw5-76",
+    "nome": "Klang",
+    "token": "klang",
+    "cos_full": 0.6169,
+    "cos_centro": 0.6165,
+    "hsv": 1.1394,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "swsh12-124",
+    "nome": "Klang",
+    "token": "klang",
+    "cos_full": 0.6068,
+    "cos_centro": 0.57,
+    "hsv": 0.7793,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "bw5-75",
+    "nome": "Klink",
+    "token": "klink",
+    "cos_full": 0.582,
+    "cos_centro": 0.5362,
+    "hsv": 1.1263,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 8,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.0025,
+  "margem_centro": -0.0982,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me2pt5-95",
+    "nome": "Hop's Phantump",
+    "token": "hop",
+    "cos_full": 0.5176,
+    "cos_centro": 0.2689,
+    "hsv": 0.7097,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "swsh9-52",
+    "nome": "Pachirisu",
+    "token": "pachirisu",
+    "cos_full": 0.5151,
+    "cos_centro": 0.3672,
+    "hsv": 0.4799,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "me5-37",
+    "nome": "Lampent",
+    "token": "lampent",
+    "cos_full": 0.5039,
+    "cos_centro": 0.3221,
+    "hsv": 0.5223,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex16-3",
+    "nome": "Armaldo",
+    "token": "armaldo",
+    "cos_full": 0.4963,
+    "cos_centro": 0.3695,
+    "hsv": 1.686,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8pt5-19",
+    "nome": "Slowking",
+    "token": "slowking",
+    "cos_full": 0.4941,
+    "cos_centro": 0.3039,
+    "hsv": 0.7282,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115707.jpg",
+  "quad": 9,
+  "labels": [
+   "dewott",
+   "klang",
+   "emolga",
+   "tepig",
+   "snivy",
+   "dialga",
+   "shaymin",
+   "keldeo",
+   "meloetta"
+  ],
+  "margem_full": 0.0101,
+  "margem_centro": -0.0645,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "me4-30",
+    "nome": "Emolga",
+    "token": "emolga",
+    "cos_full": 0.4534,
+    "cos_centro": 0.3613,
+    "hsv": 0.8023,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh45sv-SV074",
+    "nome": "Falinks",
+    "token": "falinks",
+    "cos_full": 0.4433,
+    "cos_centro": 0.4258,
+    "hsv": 0.6961,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv2-119",
+    "nome": "Falinks",
+    "token": "falinks",
+    "cos_full": 0.4392,
+    "cos_centro": 0.4482,
+    "hsv": 0.7117,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "mcd12-6",
+    "nome": "Emolga",
+    "token": "emolga",
+    "cos_full": 0.4351,
+    "cos_centro": 0.2368,
+    "hsv": 0.849,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "sv8-233",
+    "nome": "Jasmine's Gaze",
+    "token": "jasmine",
+    "cos_full": 0.4339,
+    "cos_centro": 0.3742,
+    "hsv": 0.9802,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 1,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.0208,
+  "margem_centro": 0.2975,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "dc1-18",
+    "nome": "Team Aqua's Mightyena",
+    "token": "team",
+    "cos_full": 0.491,
+    "cos_centro": 0.5196,
+    "hsv": 0.7118,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "xy8-26",
+    "nome": "Braixen",
+    "token": "braixen",
+    "cos_full": 0.4702,
+    "cos_centro": 0.2221,
+    "hsv": 0.5744,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ecard2-39",
+    "nome": "Togetic",
+    "token": "togetic",
+    "cos_full": 0.4669,
+    "cos_centro": 0.1035,
+    "hsv": 1.2664,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "xyp-XY128",
+    "nome": "White Kyurem",
+    "token": "white",
+    "cos_full": 0.4593,
+    "cos_centro": 0.0373,
+    "hsv": 0.9009,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "neo2-23",
+    "nome": "Houndoom",
+    "token": "houndoom",
+    "cos_full": 0.4273,
+    "cos_centro": 0.3138,
+    "hsv": 2.0072,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 2,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.0833,
+  "margem_centro": 0.1644,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "dc1-11",
+    "nome": "Team Magma's Claydol",
+    "token": "team",
+    "cos_full": 0.5372,
+    "cos_centro": 0.4761,
+    "hsv": 1.4549,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "ex3-17",
+    "nome": "Magneton",
+    "token": "magneton",
+    "cos_full": 0.4539,
+    "cos_centro": 0.3117,
+    "hsv": 0.1809,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "base6-28",
+    "nome": "Magneton",
+    "token": "magneton",
+    "cos_full": 0.4216,
+    "cos_centro": 0.0306,
+    "hsv": 0.5822,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "base3-26",
+    "nome": "Magneton",
+    "token": "magneton",
+    "cos_full": 0.4084,
+    "cos_centro": 0.0017,
+    "hsv": 0.5627,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "me2pt5-118",
+    "nome": "Rolycoly",
+    "token": "rolycoly",
+    "cos_full": 0.4016,
+    "cos_centro": 0.1199,
+    "hsv": 0.1718,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 3,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.224,
+  "margem_centro": 0.2412,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "dc1-9",
+    "nome": "Team Aqua's Seviper",
+    "token": "team",
+    "cos_full": 0.6505,
+    "cos_centro": 0.3474,
+    "hsv": 1.5506,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "xy8-55",
+    "nome": "Raikou",
+    "token": "raikou",
+    "cos_full": 0.4265,
+    "cos_centro": 0.1062,
+    "hsv": 0.8293,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "733-15",
+    "nome": "Zacian",
+    "token": "zacian",
+    "cos_full": 0.4218,
+    "cos_centro": 0.2717,
+    "hsv": 1.0444,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "dc1-22",
+    "nome": "Team Magma's Zangoose",
+    "token": "team",
+    "cos_full": 0.4101,
+    "cos_centro": 0.2712,
+    "hsv": 1.5599,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "gym2-110",
+    "nome": "Sabrina",
+    "token": "sabrina",
+    "cos_full": 0.3896,
+    "cos_centro": 0.0753,
+    "hsv": 1.8482,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 4,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.1365,
+  "margem_centro": 0.0449,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy10-56",
+    "nome": "Tyranitar",
+    "token": "tyranitar",
+    "cos_full": 0.6713,
+    "cos_centro": 0.3738,
+    "hsv": 0.836,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "xyp-XY130",
+    "nome": "Tyranitar",
+    "token": "tyranitar",
+    "cos_full": 0.5348,
+    "cos_centro": 0.3288,
+    "hsv": 0.8358,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sm8-8",
+    "nome": "Meganium",
+    "token": "meganium",
+    "cos_full": 0.486,
+    "cos_centro": 0.3722,
+    "hsv": 0.5206,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "sm8-121",
+    "nome": "Tyranitar-GX",
+    "token": "tyranitar",
+    "cos_full": 0.481,
+    "cos_centro": 0.2803,
+    "hsv": 2.0303,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "xyp-XY53",
+    "nome": "Sceptile-EX",
+    "token": "sceptile",
+    "cos_full": 0.4709,
+    "cos_centro": 0.4858,
+    "hsv": 0.9745,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 5,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.2163,
+  "margem_centro": 0.1912,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "dc1-21",
+    "nome": "Team Aqua's Sharpedo",
+    "token": "team",
+    "cos_full": 0.6477,
+    "cos_centro": 0.3832,
+    "hsv": 1.1638,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "xy11-83",
+    "nome": "Druddigon",
+    "token": "druddigon",
+    "cos_full": 0.4314,
+    "cos_centro": 0.192,
+    "hsv": 1.4599,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "xy9-14",
+    "nome": "Emboar-EX",
+    "token": "emboar",
+    "cos_full": 0.4284,
+    "cos_centro": 0.2608,
+    "hsv": 0.6611,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh8-163",
+    "nome": "Sharpedo",
+    "token": "sharpedo",
+    "cos_full": 0.4192,
+    "cos_centro": 0.2018,
+    "hsv": 0.5839,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "ex8-104",
+    "nome": "Sharpedo ex",
+    "token": "sharpedo",
+    "cos_full": 0.4125,
+    "cos_centro": 0.365,
+    "hsv": 1.1773,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 6,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.0424,
+  "margem_centro": -0.2156,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy8-38",
+    "nome": "Empoleon",
+    "token": "empoleon",
+    "cos_full": 0.5035,
+    "cos_centro": 0.3081,
+    "hsv": 1.6595,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex2-97",
+    "nome": "Kabutops ex",
+    "token": "kabutops",
+    "cos_full": 0.4611,
+    "cos_centro": 0.5237,
+    "hsv": 1.5534,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "733-82",
+    "nome": "Miraidon",
+    "token": "miraidon",
+    "cos_full": 0.4382,
+    "cos_centro": 0.3621,
+    "hsv": 2.0681,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-83",
+    "nome": "Busca do Brock",
+    "token": "busca",
+    "cos_full": 0.4348,
+    "cos_centro": 0.3351,
+    "hsv": 1.3168,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "dp3-60",
+    "nome": "Quagsire",
+    "token": "quagsire",
+    "cos_full": 0.4065,
+    "cos_centro": 0.3482,
+    "hsv": 1.5443,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 7,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.2717,
+  "margem_centro": 0.2459,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy8-20",
+    "nome": "Typhlosion",
+    "token": "typhlosion",
+    "cos_full": 0.6687,
+    "cos_centro": 0.5581,
+    "hsv": 0.5283,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "pop2-2",
+    "nome": "Pidgeot",
+    "token": "pidgeot",
+    "cos_full": 0.397,
+    "cos_centro": 0.3122,
+    "hsv": 0.8177,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sm75-6",
+    "nome": "Blaziken",
+    "token": "blaziken",
+    "cos_full": 0.3808,
+    "cos_centro": 0.2995,
+    "hsv": 0.4691,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "dp2-16",
+    "nome": "Typhlosion",
+    "token": "typhlosion",
+    "cos_full": 0.3788,
+    "cos_centro": 0.2239,
+    "hsv": 0.7134,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "xy12-104",
+    "nome": "Pidgeot-EX",
+    "token": "pidgeot",
+    "cos_full": 0.3729,
+    "cos_centro": 0.34,
+    "hsv": 0.4306,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 8,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.0719,
+  "margem_centro": 0.1655,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "xy9-3",
+    "nome": "Meganium",
+    "token": "meganium",
+    "cos_full": 0.4949,
+    "cos_centro": 0.4321,
+    "hsv": 0.8841,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv7-120",
+    "nome": "Tornadus",
+    "token": "tornadus",
+    "cos_full": 0.423,
+    "cos_centro": 0.2666,
+    "hsv": 0.401,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex3-19",
+    "nome": "Salamence",
+    "token": "salamence",
+    "cos_full": 0.4223,
+    "cos_centro": 0.156,
+    "hsv": 1.3653,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh8-197",
+    "nome": "Goodra",
+    "token": "goodra",
+    "cos_full": 0.4062,
+    "cos_centro": 0.1985,
+    "hsv": 0.6108,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "swsh6-134",
+    "nome": "Doctor",
+    "token": "doctor",
+    "cos_full": 0.4036,
+    "cos_centro": 0.2686,
+    "hsv": 0.4585,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115722.jpg",
+  "quad": 9,
+  "labels": [
+   "typhlosion",
+   "feraligatr",
+   "meganium",
+   "tyranitar",
+   "empoleon",
+   "sharpedo",
+   "claydol",
+   "mightyena",
+   "seviper"
+  ],
+  "margem_full": 0.0748,
+  "margem_centro": 0.0676,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "733-36",
+    "nome": "Mega Feraligatr ex",
+    "token": "mega",
+    "cos_full": 0.4551,
+    "cos_centro": 0.3892,
+    "hsv": 1.4974,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "col1-31",
+    "nome": "Skarmory",
+    "token": "skarmory",
+    "cos_full": 0.3803,
+    "cos_centro": 0.3216,
+    "hsv": 2.2314,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "pl2-38",
+    "nome": "Alakazam E4",
+    "token": "alakazam",
+    "cos_full": 0.3778,
+    "cos_centro": 0.2962,
+    "hsv": 0.8962,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "sm8-212",
+    "nome": "Morty",
+    "token": "morty",
+    "cos_full": 0.3689,
+    "cos_centro": 0.1741,
+    "hsv": 1.6813,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-24",
+    "nome": "Fire Energy",
+    "token": "fire",
+    "cos_full": 0.3662,
+    "cos_centro": 0.2938,
+    "hsv": 2.2,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115739.jpg",
+  "quad": 1,
+  "labels": [
+   "surskit",
+   "swellow",
+   "multi",
+   "cacnea",
+   "bulbasaur",
+   "luvdisc",
+   "forretress",
+   "sistema",
+   "ditto"
+  ],
+  "margem_full": 0.0814,
+  "margem_centro": 0.0961,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop3-11",
+    "nome": "Low Pressure System",
+    "token": "low",
+    "cos_full": 0.8499,
+    "cos_centro": 0.6585,
+    "hsv": 1.4903,
+    "correto": false
+   },
+   {
+    "rank": 2,
+    "id": "ex3-86",
+    "nome": "Low Pressure System",
+    "token": "low",
+    "cos_full": 0.7685,
+    "cos_centro": 0.5623,
+    "hsv": 0.2019,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "xy10-110",
+    "nome": "Scorched Earth",
+    "token": "scorched",
+    "cos_full": 0.5693,
+    "cos_centro": 0.4822,
+    "hsv": 0.3373,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "pop3-10",
+    "nome": "High Pressure System",
+    "token": "high",
+    "cos_full": 0.5565,
+    "cos_centro": 0.3626,
+    "hsv": 0.7606,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "xy5-138",
+    "nome": "Scorched Earth",
+    "token": "scorched",
+    "cos_full": 0.5245,
+    "cos_centro": 0.4424,
+    "hsv": 0.3363,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115739.jpg",
+  "quad": 2,
+  "labels": [
+   "surskit",
+   "swellow",
+   "multi",
+   "cacnea",
+   "bulbasaur",
+   "luvdisc",
+   "forretress",
+   "sistema",
+   "ditto"
+  ],
+  "margem_full": 0.1201,
+  "margem_centro": 0.2148,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop1-14",
+    "nome": "Surskit",
+    "token": "surskit",
+    "cos_full": 0.5198,
+    "cos_centro": 0.3533,
+    "hsv": 2.1437,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sm11-49",
+    "nome": "Araquanid",
+    "token": "araquanid",
+    "cos_full": 0.3996,
+    "cos_centro": 0.1385,
+    "hsv": 0.6083,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "neo3-42",
+    "nome": "Chinchou",
+    "token": "chinchou",
+    "cos_full": 0.3866,
+    "cos_centro": 0.2271,
+    "hsv": 0.9673,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "xy5-13",
+    "nome": "Surskit",
+    "token": "surskit",
+    "cos_full": 0.3858,
+    "cos_centro": 0.426,
+    "hsv": 0.6649,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "hgss3-87",
+    "nome": "Kyogre & Groudon LEGEND",
+    "token": "kyogre",
+    "cos_full": 0.3761,
+    "cos_centro": 0.386,
+    "hsv": 2.7607,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115739.jpg",
+  "quad": 3,
+  "labels": [
+   "surskit",
+   "swellow",
+   "multi",
+   "cacnea",
+   "bulbasaur",
+   "luvdisc",
+   "forretress",
+   "sistema",
+   "ditto"
+  ],
+  "margem_full": 0.136,
+  "margem_centro": 0.0097,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop2-13",
+    "nome": "Cacnea",
+    "token": "cacnea",
+    "cos_full": 0.6569,
+    "cos_centro": 0.4734,
+    "hsv": 0.7867,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex16-46",
+    "nome": "Cacnea",
+    "token": "cacnea",
+    "cos_full": 0.5209,
+    "cos_centro": 0.4637,
+    "hsv": 0.865,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "swsh45-4",
+    "nome": "Cacnea",
+    "token": "cacnea",
+    "cos_full": 0.4927,
+    "cos_centro": 0.4078,
+    "hsv": 0.253,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "bw9-9",
+    "nome": "Cacnea",
+    "token": "cacnea",
+    "cos_full": 0.4883,
+    "cos_centro": 0.4211,
+    "hsv": 0.5224,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "ex14-47",
+    "nome": "Cacnea",
+    "token": "cacnea",
+    "cos_full": 0.4762,
+    "cos_centro": 0.4232,
+    "hsv": 0.5258,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115739.jpg",
+  "quad": 4,
+  "labels": [
+   "surskit",
+   "swellow",
+   "multi",
+   "cacnea",
+   "bulbasaur",
+   "luvdisc",
+   "forretress",
+   "sistema",
+   "ditto"
+  ],
+  "margem_full": 0.2096,
+  "margem_centro": 0.0377,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop2-12",
+    "nome": "Bulbasaur",
+    "token": "bulbasaur",
+    "cos_full": 0.655,
+    "cos_centro": 0.4616,
+    "hsv": 0.8742,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "pop3-14",
+    "nome": "Ivysaur",
+    "token": "ivysaur",
+    "cos_full": 0.4454,
+    "cos_centro": 0.4239,
+    "hsv": 1.0581,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex15-57",
+    "nome": "Nidoran ♂ δ",
+    "token": "nidoran",
+    "cos_full": 0.4238,
+    "cos_centro": 0.3581,
+    "hsv": 0.5348,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hgss1-20",
+    "nome": "Feraligatr",
+    "token": "feraligatr",
+    "cos_full": 0.423,
+    "cos_centro": 0.283,
+    "hsv": 1.022,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "bw11-11",
+    "nome": "Swadloon",
+    "token": "swadloon",
+    "cos_full": 0.4002,
+    "cos_centro": 0.2885,
+    "hsv": 0.4733,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115739.jpg",
+  "quad": 5,
+  "labels": [
+   "surskit",
+   "swellow",
+   "multi",
+   "cacnea",
+   "bulbasaur",
+   "luvdisc",
+   "forretress",
+   "sistema",
+   "ditto"
+  ],
+  "margem_full": 0.0676,
+  "margem_centro": 0.0199,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop2-9",
+    "nome": "Multi Technical Machine 01",
+    "token": "multi",
+    "cos_full": 0.6442,
+    "cos_centro": 0.4486,
+    "hsv": 1.1127,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ecard1-144",
+    "nome": "Multi Technical Machine 01",
+    "token": "multi",
+    "cos_full": 0.5766,
+    "cos_centro": 0.4287,
+    "hsv": 1.2165,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "ecard2-129",
+    "nome": "Metal Cube 01",
+    "token": "metal",
+    "cos_full": 0.4529,
+    "cos_centro": 0.2394,
+    "hsv": 1.8039,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ecard2-140",
+    "nome": "Water Cube 01",
+    "token": "water",
+    "cos_full": 0.4516,
+    "cos_centro": 0.2737,
+    "hsv": 1.2406,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ecard2-121",
+    "nome": "Fighting Cube 01",
+    "token": "fighting",
+    "cos_full": 0.4328,
+    "cos_centro": 0.2347,
+    "hsv": 1.1923,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 1,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.0726,
+  "margem_centro": 0.0527,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-11",
+    "nome": "Mudkip",
+    "token": "mudkip",
+    "cos_full": 0.4794,
+    "cos_centro": 0.3269,
+    "hsv": 2.9329,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex2-50",
+    "nome": "Pelipper",
+    "token": "pelipper",
+    "cos_full": 0.4068,
+    "cos_centro": 0.2742,
+    "hsv": 1.3573,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv10-4",
+    "nome": "Pineco",
+    "token": "pineco",
+    "cos_full": 0.402,
+    "cos_centro": 0.225,
+    "hsv": 0.3692,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hgss2-94",
+    "nome": "Suicune & Entei LEGEND",
+    "token": "suicune",
+    "cos_full": 0.4017,
+    "cos_centro": 0.3712,
+    "hsv": 2.6022,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "733-95",
+    "nome": "Lucario",
+    "token": "lucario",
+    "cos_full": 0.388,
+    "cos_centro": 0.4271,
+    "hsv": 1.4453,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 2,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.1505,
+  "margem_centro": 0.1177,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-13",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.5785,
+    "cos_centro": 0.4503,
+    "hsv": 0.7349,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "hgss4-36",
+    "nome": "Kangaskhan",
+    "token": "kangaskhan",
+    "cos_full": 0.4279,
+    "cos_centro": 0.3326,
+    "hsv": 1.0757,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex2-73",
+    "nome": "Psyduck",
+    "token": "psyduck",
+    "cos_full": 0.4112,
+    "cos_centro": 0.3223,
+    "hsv": 0.92,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "np-12",
+    "nome": "Pikachu",
+    "token": "pikachu",
+    "cos_full": 0.4003,
+    "cos_centro": 0.2442,
+    "hsv": 0.4301,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "ex8-44",
+    "nome": "Plusle",
+    "token": "plusle",
+    "cos_full": 0.3981,
+    "cos_centro": 0.2234,
+    "hsv": 1.5806,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 3,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.1887,
+  "margem_centro": 0.2192,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-12",
+    "nome": "Pidgey",
+    "token": "pidgey",
+    "cos_full": 0.7378,
+    "cos_centro": 0.4421,
+    "hsv": 0.8175,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sm9-122",
+    "nome": "Pidgey",
+    "token": "pidgey",
+    "cos_full": 0.5491,
+    "cos_centro": 0.2229,
+    "hsv": 0.1436,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "base6-34",
+    "nome": "Pidgeotto",
+    "token": "pidgeotto",
+    "cos_full": 0.5397,
+    "cos_centro": 0.2653,
+    "hsv": 0.7593,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "base4-28",
+    "nome": "Pidgeotto",
+    "token": "pidgeotto",
+    "cos_full": 0.5307,
+    "cos_centro": 0.254,
+    "hsv": 0.9829,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "base1-22",
+    "nome": "Pidgeotto",
+    "token": "pidgeotto",
+    "cos_full": 0.486,
+    "cos_centro": 0.2314,
+    "hsv": 0.7965,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 4,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.1513,
+  "margem_centro": 0.2355,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-1",
+    "nome": "Chimecho δ",
+    "token": "chimecho",
+    "cos_full": 0.5756,
+    "cos_centro": 0.522,
+    "hsv": 0.7205,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "733-18",
+    "nome": "Cottonee",
+    "token": "cottonee",
+    "cos_full": 0.4242,
+    "cos_centro": 0.2865,
+    "hsv": 0.3975,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex3-95",
+    "nome": "Magcargo ex",
+    "token": "magcargo",
+    "cos_full": 0.3994,
+    "cos_centro": 0.2882,
+    "hsv": 0.9232,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "pop5-15",
+    "nome": "Zangoose δ",
+    "token": "zangoose",
+    "cos_full": 0.3864,
+    "cos_centro": 0.3708,
+    "hsv": 1.6773,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex13-37",
+    "nome": "Chimecho δ",
+    "token": "chimecho",
+    "cos_full": 0.3862,
+    "cos_centro": 0.2671,
+    "hsv": 0.7224,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 5,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.1515,
+  "margem_centro": 0.1221,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop3-16",
+    "nome": "Pichu Bros.",
+    "token": "pichu",
+    "cos_full": 0.6247,
+    "cos_centro": 0.5108,
+    "hsv": 1.4944,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex11-31",
+    "nome": "Sunny Castform",
+    "token": "sunny",
+    "cos_full": 0.4732,
+    "cos_centro": 0.3887,
+    "hsv": 0.6482,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "base5-83",
+    "nome": "Dark Raichu",
+    "token": "dark",
+    "cos_full": 0.4633,
+    "cos_centro": 0.4631,
+    "hsv": 0.5846,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex8-44",
+    "nome": "Plusle",
+    "token": "plusle",
+    "cos_full": 0.4616,
+    "cos_centro": 0.3795,
+    "hsv": 1.7909,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "dpp-DP05",
+    "nome": "Tropical Wind",
+    "token": "tropical",
+    "cos_full": 0.4594,
+    "cos_centro": 0.507,
+    "hsv": 0.6042,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 6,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.1276,
+  "margem_centro": -0.0402,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-11",
+    "nome": "Mudkip",
+    "token": "mudkip",
+    "cos_full": 0.6034,
+    "cos_centro": 0.2849,
+    "hsv": 2.6774,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "me3-41",
+    "nome": "Landorus",
+    "token": "landorus",
+    "cos_full": 0.4758,
+    "cos_centro": 0.3251,
+    "hsv": 0.5308,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "sv8-110",
+    "nome": "Landorus",
+    "token": "landorus",
+    "cos_full": 0.436,
+    "cos_centro": 0.3261,
+    "hsv": 0.5924,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "me2pt5-115",
+    "nome": "Pancham",
+    "token": "pancham",
+    "cos_full": 0.4231,
+    "cos_centro": 0.1539,
+    "hsv": 0.412,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8pt5-90",
+    "nome": "Noibat",
+    "token": "noibat",
+    "cos_full": 0.4118,
+    "cos_centro": 0.2286,
+    "hsv": 0.5429,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 7,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.0513,
+  "margem_centro": -0.0478,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop4-11",
+    "nome": "Mudkip",
+    "token": "mudkip",
+    "cos_full": 0.5035,
+    "cos_centro": 0.3451,
+    "hsv": 3.1837,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv7-86",
+    "nome": "Diancie",
+    "token": "diancie",
+    "cos_full": 0.4522,
+    "cos_centro": 0.3929,
+    "hsv": 0.7729,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex3-77",
+    "nome": "Torchic",
+    "token": "torchic",
+    "cos_full": 0.4498,
+    "cos_centro": 0.3569,
+    "hsv": 0.2708,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hgss3-77",
+    "nome": "Sage's Training",
+    "token": "sage",
+    "cos_full": 0.4353,
+    "cos_centro": 0.3046,
+    "hsv": 0.4876,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex9-37",
+    "nome": "Minun",
+    "token": "minun",
+    "cos_full": 0.4345,
+    "cos_centro": 0.3137,
+    "hsv": 0.8228,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115753.jpg",
+  "quad": 8,
+  "labels": [
+   "pichu",
+   "chimecho",
+   "energia",
+   "mudkip",
+   "pidgey",
+   "pikachu"
+  ],
+  "margem_full": 0.0988,
+  "margem_centro": 0.1012,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "pop3-16",
+    "nome": "Pichu Bros.",
+    "token": "pichu",
+    "cos_full": 0.5987,
+    "cos_centro": 0.5475,
+    "hsv": 1.6287,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex11-31",
+    "nome": "Sunny Castform",
+    "token": "sunny",
+    "cos_full": 0.4999,
+    "cos_centro": 0.4463,
+    "hsv": 0.5858,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "pop4-9",
+    "nome": "Pokémon Fan Club",
+    "token": "pokemon",
+    "cos_full": 0.4854,
+    "cos_centro": 0.4898,
+    "hsv": 1.2825,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex14-56",
+    "nome": "Meditite",
+    "token": "meditite",
+    "cos_full": 0.4784,
+    "cos_centro": 0.4684,
+    "hsv": 1.9022,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "hgss4-89",
+    "nome": "Twins",
+    "token": "twins",
+    "cos_full": 0.4767,
+    "cos_centro": 0.5705,
+    "hsv": 1.1244,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115812.jpg",
+  "quad": 1,
+  "labels": [
+   "oranguru",
+   "oricorio",
+   "mudsdale",
+   "deino"
+  ],
+  "margem_full": 0.2212,
+  "margem_centro": 0.3143,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "bw11-97",
+    "nome": "Deino",
+    "token": "deino",
+    "cos_full": 0.6841,
+    "cos_centro": 0.4635,
+    "hsv": 1.7554,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "xy3-50",
+    "nome": "Breloom",
+    "token": "breloom",
+    "cos_full": 0.4629,
+    "cos_centro": 0.1492,
+    "hsv": 1.6538,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "bw9-77",
+    "nome": "Zweilous",
+    "token": "zweilous",
+    "cos_full": 0.4572,
+    "cos_centro": 0.2298,
+    "hsv": 1.3989,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "bw5-70",
+    "nome": "Zorua",
+    "token": "zorua",
+    "cos_full": 0.4559,
+    "cos_centro": 0.2034,
+    "hsv": 1.3334,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "bw11-89",
+    "nome": "Zorua",
+    "token": "zorua",
+    "cos_full": 0.4546,
+    "cos_centro": 0.2711,
+    "hsv": 1.9455,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115812.jpg",
+  "quad": 2,
+  "labels": [
+   "oranguru",
+   "oricorio",
+   "mudsdale",
+   "deino"
+  ],
+  "margem_full": 0.0132,
+  "margem_centro": 0.0749,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM13",
+    "nome": "Oranguru",
+    "token": "oranguru",
+    "cos_full": 0.5083,
+    "cos_centro": 0.3067,
+    "hsv": 0.6885,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh3-133",
+    "nome": "Kangaskhan",
+    "token": "kangaskhan",
+    "cos_full": 0.4951,
+    "cos_centro": 0.2318,
+    "hsv": 1.3272,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "swsh12pt5-119",
+    "nome": "Oranguru",
+    "token": "oranguru",
+    "cos_full": 0.4816,
+    "cos_centro": 0.1985,
+    "hsv": 1.409,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "732-82",
+    "nome": "Gar&ccedil;onete",
+    "token": "gar",
+    "cos_full": 0.4519,
+    "cos_centro": 0.2276,
+    "hsv": 0.9905,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8-156",
+    "nome": "Oranguru",
+    "token": "oranguru",
+    "cos_full": 0.441,
+    "cos_centro": 0.1355,
+    "hsv": 0.9589,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115812.jpg",
+  "quad": 3,
+  "labels": [
+   "oranguru",
+   "oricorio",
+   "mudsdale",
+   "deino"
+  ],
+  "margem_full": 0.0026,
+  "margem_centro": -0.0184,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM19",
+    "nome": "Oricorio",
+    "token": "oricorio",
+    "cos_full": 0.5056,
+    "cos_centro": 0.4022,
+    "hsv": 0.5971,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "733-82",
+    "nome": "Miraidon",
+    "token": "miraidon",
+    "cos_full": 0.5031,
+    "cos_centro": 0.4205,
+    "hsv": 0.8576,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "hgss1-16",
+    "nome": "Butterfree",
+    "token": "butterfree",
+    "cos_full": 0.491,
+    "cos_centro": 0.3783,
+    "hsv": 0.7632,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex16-3",
+    "nome": "Armaldo",
+    "token": "armaldo",
+    "cos_full": 0.4801,
+    "cos_centro": 0.2214,
+    "hsv": 0.6272,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-67",
+    "nome": "Kirlia",
+    "token": "kirlia",
+    "cos_full": 0.4496,
+    "cos_centro": 0.2179,
+    "hsv": 0.4515,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115812.jpg",
+  "quad": 4,
+  "labels": [
+   "oranguru",
+   "oricorio",
+   "mudsdale",
+   "deino"
+  ],
+  "margem_full": 0.0842,
+  "margem_centro": 0.1198,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM20",
+    "nome": "Mudsdale",
+    "token": "mudsdale",
+    "cos_full": 0.54,
+    "cos_centro": 0.4943,
+    "hsv": 0.5371,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "sv5-92",
+    "nome": "Mudsdale",
+    "token": "mudsdale",
+    "cos_full": 0.4558,
+    "cos_centro": 0.3744,
+    "hsv": 1.0468,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "dp5-19",
+    "nome": "Flareon",
+    "token": "flareon",
+    "cos_full": 0.416,
+    "cos_centro": 0.3171,
+    "hsv": 2.2388,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh7-118",
+    "nome": "Zygarde",
+    "token": "zygarde",
+    "cos_full": 0.4127,
+    "cos_centro": 0.2471,
+    "hsv": 0.6002,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "neo2-23",
+    "nome": "Houndoom",
+    "token": "houndoom",
+    "cos_full": 0.4095,
+    "cos_centro": 0.3397,
+    "hsv": 1.5656,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115812.jpg",
+  "quad": 5,
+  "labels": [
+   "oranguru",
+   "oricorio",
+   "mudsdale",
+   "deino"
+  ],
+  "margem_full": 0.1506,
+  "margem_centro": -0.0878,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "smp-SM13",
+    "nome": "Oranguru",
+    "token": "oranguru",
+    "cos_full": 0.6492,
+    "cos_centro": 0.3132,
+    "hsv": 0.686,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "ex2-20",
+    "nome": "Pichu",
+    "token": "pichu",
+    "cos_full": 0.4987,
+    "cos_centro": 0.401,
+    "hsv": 0.8148,
+    "correto": false
+   },
+   {
+    "rank": 3,
+    "id": "ex2-51",
+    "nome": "Quilava",
+    "token": "quilava",
+    "cos_full": 0.4429,
+    "cos_centro": 0.2722,
+    "hsv": 0.7639,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-82",
+    "nome": "Gar&ccedil;onete",
+    "token": "gar",
+    "cos_full": 0.4306,
+    "cos_centro": 0.3647,
+    "hsv": 0.9569,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv10-166",
+    "nome": "Granite Cave",
+    "token": "granite",
+    "cos_full": 0.43,
+    "cos_centro": 0.3076,
+    "hsv": 0.315,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115836.jpg",
+  "quad": 1,
+  "labels": [
+   "lapras",
+   "chinchou",
+   "cutiefly",
+   "bewear",
+   "pangoro",
+   "drampa"
+  ],
+  "margem_full": 0.007,
+  "margem_centro": 0.0286,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd22-12",
+    "nome": "Bewear",
+    "token": "bewear",
+    "cos_full": 0.681,
+    "cos_centro": 0.5331,
+    "hsv": 0.4322,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh8-151",
+    "nome": "Bewear",
+    "token": "bewear",
+    "cos_full": 0.6741,
+    "cos_centro": 0.5045,
+    "hsv": 0.7233,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "733-83",
+    "nome": "Slowbro",
+    "token": "slowbro",
+    "cos_full": 0.523,
+    "cos_centro": 0.4292,
+    "hsv": 0.7136,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "swsh11-97",
+    "nome": "Makuhita",
+    "token": "makuhita",
+    "cos_full": 0.4869,
+    "cos_centro": 0.3483,
+    "hsv": 0.5875,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv8-104",
+    "nome": "Trapinch",
+    "token": "trapinch",
+    "cos_full": 0.4626,
+    "cos_centro": 0.3308,
+    "hsv": 1.3121,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115836.jpg",
+  "quad": 2,
+  "labels": [
+   "lapras",
+   "chinchou",
+   "cutiefly",
+   "bewear",
+   "pangoro",
+   "drampa"
+  ],
+  "margem_full": 0.0277,
+  "margem_centro": 0.0056,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd22-6",
+    "nome": "Lapras",
+    "token": "lapras",
+    "cos_full": 0.6046,
+    "cos_centro": 0.3957,
+    "hsv": 1.0836,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh6-29",
+    "nome": "Lapras",
+    "token": "lapras",
+    "cos_full": 0.5769,
+    "cos_centro": 0.3901,
+    "hsv": 1.0115,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "swsh1-113",
+    "nome": "Grapploct",
+    "token": "grapploct",
+    "cos_full": 0.4003,
+    "cos_centro": 0.2551,
+    "hsv": 0.5929,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "hsp-HGSS20",
+    "nome": "Entei",
+    "token": "entei",
+    "cos_full": 0.3834,
+    "cos_centro": 0.3606,
+    "hsv": 1.2446,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "732-155",
+    "nome": "Riolu",
+    "token": "riolu",
+    "cos_full": 0.3562,
+    "cos_centro": 0.2666,
+    "hsv": 1.2178,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115836.jpg",
+  "quad": 3,
+  "labels": [
+   "lapras",
+   "chinchou",
+   "cutiefly",
+   "bewear",
+   "pangoro",
+   "drampa"
+  ],
+  "margem_full": 0.018,
+  "margem_centro": 0.0923,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd22-13",
+    "nome": "Pangoro",
+    "token": "pangoro",
+    "cos_full": 0.5049,
+    "cos_centro": 0.267,
+    "hsv": 0.6801,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh8-174",
+    "nome": "Pangoro",
+    "token": "pangoro",
+    "cos_full": 0.4868,
+    "cos_centro": 0.1748,
+    "hsv": 1.0279,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sm4-60",
+    "nome": "Deino",
+    "token": "deino",
+    "cos_full": 0.4855,
+    "cos_centro": 0.187,
+    "hsv": 0.5772,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "ex1-18",
+    "nome": "Nosepass",
+    "token": "nosepass",
+    "cos_full": 0.4222,
+    "cos_centro": 0.2894,
+    "hsv": 1.7931,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "bw11-98",
+    "nome": "Zweilous",
+    "token": "zweilous",
+    "cos_full": 0.4166,
+    "cos_centro": 0.1547,
+    "hsv": 1.8369,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115836.jpg",
+  "quad": 4,
+  "labels": [
+   "lapras",
+   "chinchou",
+   "cutiefly",
+   "bewear",
+   "pangoro",
+   "drampa"
+  ],
+  "margem_full": 0.0483,
+  "margem_centro": 0.0447,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd22-14",
+    "nome": "Drampa",
+    "token": "drampa",
+    "cos_full": 0.5634,
+    "cos_centro": 0.4348,
+    "hsv": 1.2983,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh7-119",
+    "nome": "Drampa",
+    "token": "drampa",
+    "cos_full": 0.5151,
+    "cos_centro": 0.3901,
+    "hsv": 1.503,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "733-95",
+    "nome": "Lucario",
+    "token": "lucario",
+    "cos_full": 0.5052,
+    "cos_centro": 0.3797,
+    "hsv": 1.931,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "733-82",
+    "nome": "Miraidon",
+    "token": "miraidon",
+    "cos_full": 0.47,
+    "cos_centro": 0.439,
+    "hsv": 2.7922,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "sv9-124",
+    "nome": "Audino",
+    "token": "audino",
+    "cos_full": 0.4632,
+    "cos_centro": 0.4386,
+    "hsv": 1.6711,
+    "correto": false
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115836.jpg",
+  "quad": 5,
+  "labels": [
+   "lapras",
+   "chinchou",
+   "cutiefly",
+   "bewear",
+   "pangoro",
+   "drampa"
+  ],
+  "margem_full": 0.0404,
+  "margem_centro": 0.0035,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd22-8",
+    "nome": "Chinchou",
+    "token": "chinchou",
+    "cos_full": 0.7521,
+    "cos_centro": 0.542,
+    "hsv": 0.8067,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh7-52",
+    "nome": "Chinchou",
+    "token": "chinchou",
+    "cos_full": 0.7117,
+    "cos_centro": 0.5385,
+    "hsv": 0.5485,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "sv7-48",
+    "nome": "Chinchou",
+    "token": "chinchou",
+    "cos_full": 0.5573,
+    "cos_centro": 0.5266,
+    "hsv": 0.6397,
+    "correto": true
+   },
+   {
+    "rank": 4,
+    "id": "bw9-35",
+    "nome": "Chinchou",
+    "token": "chinchou",
+    "cos_full": 0.4906,
+    "cos_centro": 0.4373,
+    "hsv": 0.582,
+    "correto": true
+   },
+   {
+    "rank": 5,
+    "id": "neo3-42",
+    "nome": "Chinchou",
+    "token": "chinchou",
+    "cos_full": 0.4894,
+    "cos_centro": 0.5256,
+    "hsv": 0.6138,
+    "correto": true
+   }
+  ]
+ },
+ {
+  "foto": "20260822_115836.jpg",
+  "quad": 6,
+  "labels": [
+   "lapras",
+   "chinchou",
+   "cutiefly",
+   "bewear",
+   "pangoro",
+   "drampa"
+  ],
+  "margem_full": 0.0093,
+  "margem_centro": 0.0541,
+  "top5": [
+   {
+    "rank": 1,
+    "id": "mcd22-11",
+    "nome": "Cutiefly",
+    "token": "cutiefly",
+    "cos_full": 0.6456,
+    "cos_centro": 0.4365,
+    "hsv": 1.4446,
+    "correto": true
+   },
+   {
+    "rank": 2,
+    "id": "swsh7-78",
+    "nome": "Cutiefly",
+    "token": "cutiefly",
+    "cos_full": 0.6363,
+    "cos_centro": 0.3825,
+    "hsv": 0.8326,
+    "correto": true
+   },
+   {
+    "rank": 3,
+    "id": "732-21",
+    "nome": "Ralts",
+    "token": "ralts",
+    "cos_full": 0.5459,
+    "cos_centro": 0.5732,
+    "hsv": 0.2654,
+    "correto": false
+   },
+   {
+    "rank": 4,
+    "id": "732-66",
+    "nome": "Ralts",
+    "token": "ralts",
+    "cos_full": 0.5018,
+    "cos_centro": 0.5161,
+    "hsv": 1.1925,
+    "correto": false
+   },
+   {
+    "rank": 5,
+    "id": "ex14-21",
+    "nome": "Igglybuff",
+    "token": "igglybuff",
+    "cos_full": 0.4787,
+    "cos_centro": 0.5429,
+    "hsv": 0.7038,
+    "correto": false
+   }
+  ]
+ }
+]

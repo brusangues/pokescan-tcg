@@ -1,0 +1,142 @@
+{
+ "baseline": [
+  91,
+  123
+ ],
+ "catboost": [
+  90,
+  123
+ ],
+ "por_grupo": [
+  {
+   "grupo": "20260214_134324.jpg",
+   "baseline": "base 1/2",
+   "modelo": "modelo 1/2"
+  },
+  {
+   "grupo": "20260218_094410.jpg",
+   "baseline": "base 2/5",
+   "modelo": "modelo 2/5"
+  },
+  {
+   "grupo": "20260218_094527.jpg",
+   "baseline": "base 1/5",
+   "modelo": "modelo 1/5"
+  },
+  {
+   "grupo": "20260319_202701.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260320_134327.jpg",
+   "baseline": "base 0/1",
+   "modelo": "modelo 0/1"
+  },
+  {
+   "grupo": "20260328_222034.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260329_104229.jpg",
+   "baseline": "base 3/5",
+   "modelo": "modelo 3/5"
+  },
+  {
+   "grupo": "20260806_143517.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144254.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144302.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144317.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144323.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144329.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144336.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260806_144342.jpg",
+   "baseline": "base 1/1",
+   "modelo": "modelo 1/1"
+  },
+  {
+   "grupo": "20260822_114149.jpg",
+   "baseline": "base 2/2",
+   "modelo": "modelo 2/2"
+  },
+  {
+   "grupo": "20260822_115637.jpg",
+   "baseline": "base 6/7",
+   "modelo": "modelo 6/7"
+  },
+  {
+   "grupo": "20260822_115652.jpg",
+   "baseline": "base 7/9",
+   "modelo": "modelo 7/9"
+  },
+  {
+   "grupo": "20260822_115707.jpg",
+   "baseline": "base 7/9",
+   "modelo": "modelo 7/9"
+  },
+  {
+   "grupo": "20260822_115722.jpg",
+   "baseline": "base 4/9",
+   "modelo": "modelo 3/9"
+  },
+  {
+   "grupo": "20260822_115739.jpg",
+   "baseline": "base 4/5",
+   "modelo": "modelo 4/5"
+  },
+  {
+   "grupo": "20260822_115753.jpg",
+   "baseline": "base 8/8",
+   "modelo": "modelo 8/8"
+  },
+  {
+   "grupo": "20260822_115812.jpg",
+   "baseline": "base 5/5",
+   "modelo": "modelo 5/5"
+  },
+  {
+   "grupo": "20260822_115836.jpg",
+   "baseline": "base 6/6",
+   "modelo": "modelo 6/6"
+  },
+  {
+   "grupo": "folha_primarina",
+   "baseline": "base 12/15",
+   "modelo": "modelo 12/15"
+  },
+  {
+   "grupo": "folha_sylveon",
+   "baseline": "base 13/20",
+   "modelo": "modelo 13/20"
+  }
+ ]
+}
