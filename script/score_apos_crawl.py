@@ -138,6 +138,19 @@ def predict_base(df_base):
     except Exception as e:
         print(f'  ⚠️ BRL predict falhou: {e}')
         df_base['pred_brl'] = np.nan
+
+    # Fase 3 (Liga-first): modelo BRL treinado NO catálogo da Liga (23.3k cartas,
+    # MAE -42% vs atual no head-to-head). Onde cobre (linha {idE}-{num} no
+    # catálogo), SOBREPÕE pred_brl; fora, mantém o modelo antigo.
+    try:
+        import brl_liga
+        preds_liga = brl_liga.prever_linhas(df_base)
+        msk = preds_liga.notna()
+        if msk.any():
+            df_base.loc[msk, 'pred_brl'] = preds_liga[msk].values
+            print(f'  🇧🇷 pred_brl Liga-first aplicado em {int(msk.sum())}/{len(df_base)} cartas')
+    except Exception as e:
+        print(f'  ⚠️ BRL-Liga skip: {e}')
     return df_base, model, model_brl
 
 
