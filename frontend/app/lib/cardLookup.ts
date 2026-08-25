@@ -63,7 +63,22 @@ export async function loadScoredLatest(): Promise<any[]> {
       return s;
     });
   }
-  return _promises.scored;
+  return (await _promises.scored) as any[];
+}
+
+/** Predição BRL Liga-first p/ TODA carta do catálogo da Liga ({idE}-{num}). */
+let _predLiga: Record<string, { pred: number; real: number | null; sigla?: string; iCO?: number }> | null = null;
+
+export async function loadPredLiga() {
+  if (_predLiga) return _predLiga;
+  if (!_promises.predLiga) {
+    _promises.predLiga = getJson<Record<string, { pred: number; real: number | null; sigla?: string; iCO?: number }>>(
+      base('/data/pred_liga.json')
+    );
+  }
+  const p = (await _promises.predLiga) as Record<string, { pred: number; real: number | null; sigla?: string; iCO?: number }>;
+  _predLiga = p;
+  return p;
 }
 
 /** Índice id→chunk do detalhe. */
@@ -102,6 +117,33 @@ export async function loadCardDetalhe(id: string): Promise<any | null> {
  *  ('Alolan Exeggutor-V' == 'Alolan Exeggutor V' == 'alolanexeggutorv'). */
 export function normNome(n: string): string {
   return (n || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+/** Monta o objeto `modelo` do fallback Liga-first (mesmo shape do escorado). */
+function montarModeloLiga(
+  hit: { pred: number; real: number | null; sigla?: string; iCO?: number },
+  chave: string,
+  upside: number
+) {
+  return {
+    real: hit.real ?? hit.pred,
+    pred: hit.pred,
+    upside,
+    oportunidade:
+      upside > 25 ? '🔥 Subvalorizada' : upside > 10 ? '👍 Leve Desconto' : upside < -25 ? '💀 Inflacionada' : '⚖️ Preço Justo',
+    iCO: hit.iCO ?? 0,
+    moeda: 'R$',
+    liga_id: chave,
+    card_id: '',
+    nEN: '',
+    sNumber: '',
+    num: chave.split('-')[1] || '',
+    sigla: hit.sigla || '',
+    setNome: '',
+    fonte: 'Modelo Liga-first (Fase 3)',
+    is_jp: false,
+    ligaOk: true,
+  };
 }
 
 /**
@@ -305,7 +347,28 @@ export async function lookupCard(params: {
           is_jp: scored.is_jp || false,
           ligaOk,
         }
-      : null,
+      : await (async () => {
+          // Fallback Liga-first: sem escoragem do próprio set, usa a predição
+          // do modelo BRL treinado no catálogo da Liga ({idE}-{num}) + preço
+          // real da Liga quando houver. Resolve pela carta EN ({set_ptcg}-{num},
+          // alias gerado no pred_liga.json) — direto, sem depender do setMap.
+          const pl = await loadPredLiga() as Record<string, { pred: number; real: number | null; sigla?: string; iCO?: number }> | null;
+          if (!pl) return null;
+          const numN = parseInt(params.num || card.num || '', 10);
+          const chave = isNaN(numN) ? null : `${card.s}-${numN}`;
+          const hit = chave ? pl[chave] : null;
+          if (!hit) {
+            // sem alias EN: tenta a chave canônica {idE}-{num} via setMap
+            const eidLiga = Object.entries(setMap).find(([k, v]) => v === card.s && /^\d+$/.test(k))?.[0];
+            const k2 = eidLiga ? `${eidLiga}-${numN}` : null;
+            if (!k2 || !pl[k2]) return null;
+            const h2 = pl[k2];
+            const up2 = h2.real ? ((h2.pred - h2.real) / h2.real) * 100 : 0;
+            return montarModeloLiga(h2, k2, up2);
+          }
+          const upside0 = hit.real ? ((hit.pred - hit.real) / hit.real) * 100 : 0;
+          return montarModeloLiga(hit, chave!, upside0);
+        })(),
   };
 }
 
