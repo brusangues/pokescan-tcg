@@ -24,6 +24,8 @@
 
 **Fase 2.3 — Site consome o catálogo Liga (lookup pt-BR): FEITO.** `cards_basico` em `build_static_data.py` lê o `catalogo_liga.json` e anexa as coleções pt-BR verdadeiras (MEP/MEPR) ao `cards.json` do site com preço BRL + imagem (repositorio.sbrauble.com). `cards.json`: 20.478 EN + **299 pt-BR**.
 
+**Fase 3 — Modelos BRL Liga-first: FEITO (25/08).** A/B head-to-head aprovado (`fase3_ab_head2head.py`, mesmas 2603 cartas do holdout): MAE R$39,16→R$22,77 (−42%), R² 0,162→0,611, erroRelMed 44,8%→25,4%. Integração: `script/brl_liga.py` (CatBoost no catálogo da Liga, 23.295 cartas; USD como feature) + `predict_base` sobrepõe `pred_brl` onde cobre (**55%** da base; resto mantém o modelo atual — sem risco de regressão fora da cobertura). Efeito real no snapshot: Inflacionadas 6047→4605, Preço Justo 3311→4225. TAG `pre-liga-first-brl` marca o estado anterior.
+
 **Em andamento / pendente:**
 - Inversão total (Liga dirigindo catálogo/modelos) segue as Fases 1–4.
 
