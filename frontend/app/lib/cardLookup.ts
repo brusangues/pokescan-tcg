@@ -233,6 +233,13 @@ export async function lookupCard(params: {
         const richB = (b.setNome ? 1 : 0) + (b.sNumber ? 1 : 0) + (b.nEN ? 1 : 0);
         return (sigB - sigA) * 10 + (setB - setA) * 9 + (richB - richA);
       })[0] || null;
+    // Guard final: NÃO emprestar preço de homônimo de outro set. Se nenhum
+    // candidato é do set da página, o registro "mais rico" seria de outra
+    // carta — mostrar seu preço como se fosse desta é pior que não mostrar.
+    // (Auditoria: ~7.4k páginas sem cobertura no snapshot caíam aqui.)
+    if (scored && setDoRegistro(scored) !== setDaPagina) {
+      scored = null;
+    }
   }
 
   const ligaOk = scored?.is_jp
