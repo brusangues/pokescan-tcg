@@ -214,14 +214,24 @@ export async function lookupCard(params: {
   const nomeScored = (s: any) =>
     normNome(String(s.nEN || s.nome || '').split('(')[0]);
   if (!scored) {
+    // Bônus forte quando o SET do registro bate com o set da página já
+    // resolvida (card.s) — ex.: /card?set=me3&num=50 resolve a carta no set
+    // ptcg 'me3'; o registro escorado certo tem sigla Liga 'POR' e o setMap
+    // (que tem siglas Liga como CHAVE: 'por'->'me3') confirma o par.
+    // Sem isso, um hit homônimo de outro set ganhava o desempate e mostrava
+    // preço/set errados.
+    const setDaPagina = card.s;
+    const setDoRegistro = (s: any) => String(setMap[String(s.sigla || '').toLowerCase()] || '');
     scored = scoredCards
       .filter((s: any) => nomeScored(s) === nomeCard)
       .sort((a: any, b: any) => {
         const sigA = a.sigla?.toLowerCase() === sigla ? 1 : 0;
         const sigB = b.sigla?.toLowerCase() === sigla ? 1 : 0;
+        const setA = setDoRegistro(a) === setDaPagina ? 1 : 0;
+        const setB = setDoRegistro(b) === setDaPagina ? 1 : 0;
         const richA = (a.setNome ? 1 : 0) + (a.sNumber ? 1 : 0) + (a.nEN ? 1 : 0);
         const richB = (b.setNome ? 1 : 0) + (b.sNumber ? 1 : 0) + (b.nEN ? 1 : 0);
-        return (sigB - sigA) * 10 + (richB - richA);
+        return (sigB - sigA) * 10 + (setB - setA) * 9 + (richB - richA);
       })[0] || null;
   }
 
