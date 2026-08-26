@@ -42,6 +42,12 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Ideias**: (a) seção de resultados colapsável/aba ("Câmera" | "Buscar") no topo; (b) resultados da busca em bottom-sheet deslizante (padrão mobile); (c) busca fixa no topo com resultados inline e upload acessível por FAB. Validar em 375px.
 - Tags: scanner, frontend, mobile
 
+### [P2] 39. Busca por texto em qualquer campo da carta (multicritério)
+- **Hoje**: procura em nome, número, coleção, raridade e id — mas **um termo de cada vez**. "Gengar stormfront" não acha Gengar porque "stormfront" é o **nome do set** e o buscador não combina carta×set juntos.
+- **Ideia**: suportar consultas com 2+ termos — ex. "Gengar stormfront" deve cruzar nome da carta (Gengar) com o nome do set (Stormfront). Implementar como busca por palavras (cada token casa com um campo: nome, set, coleção, raridade, número, id) e exige que todos os tokens tenham match (em qualquer campo). Cuidado com debounce/perf (índice de 20k+ cartas) e com ranking quando vários campos casam.
+- **Exemplo de aceite**: "Gengar stormfront" → retorna o Gengar de Stormfront; "charizard 201" → Charizard do set com número 201; "reverse holo" → cartas com a variante no nome.
+- Tags: scanner, frontend, busca
+
 ### [P2] 36. Botão "Carregar índice" — linguagem de usuário, não de engenharia
 - **Hoje**: revela detalhes internos (quantos MB baixando, modelo/índice/WASM) — usuário não quer saber como funciona.
 - **Ideia**: copy orientada ao objetivo: "Ativar motor de busca" / "Preparar scanner" com estado único de progresso ("Preparando… pode levar alguns segundos") e pronto ("Motor pronto ✓"). MBs/detalhes técnicos ficam num `<details>` discreto "ver detalhes" para curiosos/debug. Avisar que é one-time (cache do navegador).
