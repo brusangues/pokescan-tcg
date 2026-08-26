@@ -61,7 +61,7 @@ function CardResult({ card, score, rank }: { card: any; score?: number; rank?: n
           href={`${getBasePath()}/card?set=${encodeURIComponent(card.s || card.set_id)}&num=${encodeURIComponent(card.num || card.sNumber)}&nome=${encodeURIComponent(card.n || card.nome)}`}
           className="inline-flex items-center gap-1 mt-2 text-xs text-[#d40b2e] hover:underline"
         >
-          <ExternalLink className="w-3 h-3" /> Ver detalhes e escoragem
+          <ExternalLink className="w-3 h-3" /> Ver detalhes e preço
         </a>
       </div>
     </div>
@@ -370,6 +370,8 @@ export default function Scanner() {
   const [textResults, setTextResults] = useState<any[] | null>(null);
   const [textTotal, setTextTotal] = useState(0);
   const [textLoading, setTextLoading] = useState(false);
+  // P2.35: abas Foto/Buscar — mobile decide o que fica visível sem rolar
+  const [aba, setAba] = useState<'foto' | 'buscar'>('foto');
 
   // Auto crop (OpenCV)
   const [autoCrop, setAutoCrop] = useState(true);
@@ -391,6 +393,7 @@ export default function Scanner() {
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     const q = textQuery.trim();
+    if (q.length >= 2) setAba('buscar');
     if (q.length < 2) {
       setTextResults(null);
       setTextTotal(0);
@@ -691,8 +694,29 @@ export default function Scanner() {
         </div>
       </div>
 
+      {/* Abas Foto | Buscar — visíveis só no mobile (desktop mostra os dois lados) */}
+      <div className="md:hidden grid grid-cols-2 gap-2">
+        {([
+          ['foto', 'Foto', Camera],
+          ['buscar', 'Buscar', Search],
+        ] as const).map(([id, label, Icon]) => (
+          <button
+            key={id}
+            onClick={() => setAba(id)}
+            className={`inline-flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 font-display font-bold text-sm transition-colors ${
+              aba === id
+                ? 'bg-[#d40b2e] text-white border-[#2b2517] shadow-[0_2px_0_0_rgba(43,37,23,0.8)]'
+                : 'bg-[#fffdf7] text-[#6b6252] border-[#2b2517]/25 hover:bg-[#f3e9d2]'
+            }`}
+          >
+            <Icon className="w-4 h-4" />
+            {label}
+          </button>
+        ))}
+      </div>
+
       {/* Barra de busca por texto — funciona sem carregar o scanner */}
-      <div className="bg-[#fffdf7] p-4 rounded-2xl shadow-sm border border-[#2b2517]/15">
+      <div className={`${aba === 'buscar' ? '' : 'hidden md:block'} bg-[#fffdf7] p-4 rounded-2xl shadow-sm border border-[#2b2517]/15`}>
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
             <Type className="w-4 h-4 text-[#998f7c] absolute left-3 top-1/2 -translate-y-1/2" />
@@ -722,9 +746,10 @@ export default function Scanner() {
         )}
       </div>
 
+      {/* Upload + Resultados: lado a lado no desktop; por aba no mobile */}
       <div className="grid md:grid-cols-2 gap-8">
         {/* Upload Area */}
-        <div className="space-y-4">
+        <div className={`space-y-4 ${aba === 'foto' ? '' : 'hidden md:block'}`}>
           <div
             {...getRootProps()}
             className={`
@@ -789,7 +814,7 @@ export default function Scanner() {
         </div>
 
         {/* Results Area — busca por texto tem prioridade; senão, resultados do scanner */}
-        <div className="space-y-4">
+        <div className={`space-y-4 ${aba === 'buscar' ? '' : 'hidden md:block'}`}>
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-[#292318]">
               {mostrandoTexto ? 'Resultado da busca' : 'Resultado'}
@@ -799,7 +824,7 @@ export default function Scanner() {
                 onClick={() => setTextQuery('')}
                 className="text-xs text-[#d40b2e] hover:underline inline-flex items-center gap-1"
               >
-                <X className="w-3 h-3" /> voltar ao scanner
+                <X className="w-3 h-3" /> voltar à foto
               </button>
             )}
           </div>
