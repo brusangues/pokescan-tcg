@@ -65,6 +65,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | Hero do scanner "Escaneie ou busque pelo nome" (P3.37) | `b1f9c0d` |
 | **Nome pt-BR da Liga nas cartas (P1.33)** — `cards_basico` anexa nPT/nEN via en_id do catálogo (13.728 cartas/66%); `cardLookup` prioriza nPT; EN vira secundário na /card. Ex.: Brás, Professor Carvalho Impostor | `72c9b47` |
 | **Busca multicritério no scanner (P1.34)** — consulta vira tokens; cada token casa com QUALQUER campo (nome, nome pt-BR /nPT, set, número, id, raridade); carta só entra se TODOS os tokens casam. Ex.: "gengar stormfront" → Gengar do Stormfront; "charizard 201" → Reshiram & Charizard-GX; "carvalho" → Professor Carvalho/Impostor | `d148df1` |
+| **Fallback completo cartas EN-only (P2.41)** — cartas sem presença direta na Liga (ex. `smp-SM108` Ash's Pikachu, base2, promos) ganham predição BRL do modelo (features usd/rar/types derivadas do cache EN; 6.729 cartas cobertas) + link de **busca na Liga por nome** (não link direto, pois não há sigla/edição correta). Fix `parseInt('SM108')=NaN` que quebrava promos alfanuméricas | `35e9ed5` |
 
 ## Liga-first — Fase 3 (modelos)
 
