@@ -1,0 +1,21 @@
+{
+ "baseline": {
+  "total": 115,
+  "ach": 74
+ },
+ "proposto": {
+  "total": 115,
+  "ach": 74
+ },
+ "ganho": 0,
+ "topk": 5,
+ "margem_min": 0.03,
+ "n_fotos": 29,
+ "cases": {
+  "amb": 46,
+  "amb_orb_acertou": 32,
+  "amb_top1_ja_acertava": 0,
+  "amb_tinha_certa_topk": 35,
+  "conf": 77
+ }
+}

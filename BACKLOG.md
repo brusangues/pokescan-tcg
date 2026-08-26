@@ -28,9 +28,10 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 💡 P2 — Melhorias de produto
 
-### [P2] 32. Scanner matching: verificador ORB/template-match nos top-3
+### [P2] 32. Scanner matching: sinal independente p/ fechar gap até teto top-5
+- **Estado (26/08)**: verificador ORB prototipado offline (`experiments/orb_prototipo.py`, base rotulada, métrica agregada por carta) — **caminho ORB DESCARTADO por evidência**. DINOv2 top-1 = 74/115 (64.3%); +ORB verificando ambiguidades = 75/115 (65.2%) top-3, 74/115 top-5 → ganho ~0. O ORB discrimina bem por crop (46 ambíguos → 35 a certa nos top-k → acertou 32), mas essas cartas já tinham sido achadas em outro crop da mesma foto. Conclusão: o gap ao teto está em **cartas fora do top-5 ou não detectadas pela segmentação**, não em reordenar os top-k.
 - **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`) — só um sinal INDEPENDENTE do DINOv2 pode fechar o gap.
-- **Ideia**: OpenCV.js (já carregado no scanner) faz match de features ORB entre o crop query e a imagem oficial dos top-3 candidatos; arte de carta é única — geometria confirmando = boost do candidato. Prototimar OFFLINE primeiro (réplica Python + base rotulada, mesma metodologia dos estudos anteriores) antes de portar pro browser.
+- **Próximo passo sugerido**: atacar o recall do top-k (aumentar índice p/ cartas que hoje não chegam ao top-5, melhorar segmentação p/ recuperar cartas não detectadas) em vez de refinamento rank.
 - Tags: scanner, matching, cv
 
 ### [P2] 33. Base rotulada manual — continuar crescendo (retreinar re-rank no futuro)
