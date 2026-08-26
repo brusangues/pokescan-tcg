@@ -8,11 +8,11 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-### [P1] 33. Nome pt-BR da Liga nas cartas do site
-- **Exemplo**: [/card?set=sv8pt5&num=135&nome=Brassius](https://brusangues.github.io/pokescan-tcg/card/?set=sv8pt5&num=135&nome=Brassius) mostra "Brassius" — a Liga tem `nPT: Brás` (linha 649-135 do catálogo). O `cards.json` só leva nome EN; o catálogo Liga já resolve.
-- **Ideia**: `build_static_data` anexar `nPT` (decodificar entidades HTML: `Br&aacute;s`) às cartas com join EN no cards.json/carddetail; front mostra pt-BR como nome principal (EN como secundário/tooltip). Avaliar impacto na busca por texto (indexar ambos) e nos links compartilhados (`?nome=` continua aceitando EN).
-- **Cobertura esperada**: ~13.7k cartas com join EN (44% do catálogo); liga_only já usa nPT naturalmente.
-- Tags: frontend, dados, liga-first, pt-BR
+### [P1] 34. Busca multicritério no scanner (qualquer campo, multi-termo)
+- **Problema**: busca atual cobre nome/número/coleção/raridade/id, mas um termo por vez — "Gengar stormfront" não casa porque "stormfront" é o nome do set e a busca não cruza carta×set.
+- **Ideia**: consulta por tokens — cada token pode casar com QUALQUER campo (nome, set/coleção, raridade, número, id) e todos os tokens precisam de match. Ex.: "Gengar stormfront" → Gengar do set Stormfront; "charizard 201" → Charizard número 201; "reverse holo" → variante no nome.
+- **Cuidado**: debounce/perf (índice 20k+); ranking quando múltiplos campos casam; manutenção da busca por palavras existente como fallback.
+- Tags: scanner, frontend, busca
 
 ### [P1] 31. Subsets japoneses
 - **Feito (19/08)**: 14 sets 1:1 re-mapeados p/ o set EN correto (ver FEATURES.md) — o P1.31 principal está resolvido.
@@ -27,37 +27,6 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 ---
 
 ## 💡 P2 — Melhorias de produto
-
-### [P2] 34. Identidade visual — sair da "cara de site gerado por IA"
-- **Tells** (pesquisa 25/08 — saasui.design, joshuasnoddy.com): gradiente roxo→índigo (o tell nº 1), tudo centralizado (hero + subhead + 1 botão + 3 cards), fonte Inter, glassmorphism com sombras suaves, espaçamento uniforme sem hierarquia, componentes default de UI kit sem customização (shadcn/Tailwind cru), cards idênticos em grade, emojis decorativos. Nosso site tem vários: `rounded-2xl shadow-sm border-gray-200` em todo card, indigo como cor única, hero centrado.
-- **Direção sugerida** (escolher 1 tema):
-  - **A. "Guia de colecionador"** — estética de cardápio/álbum oficial Pokémon: fundo papel/creme, tipografia display arredondada (tipo Baloo/Nunito), cores por TIPO de carta (fogo=vermelho, água=azul…) como acento contextual, badges estilo TCG. Combina com o domínio; distintivo.
-  - **B. "Terminal de preços"** — denso e funcional tipo Bloomberg/pro-finance: tabelas compactas, mono p/ números (tabular-nums), verde/vermelho de mercado, dark mode nativo. Prioriza a informação sobre o enfeite.
-  - **C. "Editorial esportivo"** — alto contraste, headlines fortes serifadas, fotos grandes das cartas, ritmo assimétrico (quebrar a grade). Mais trabalho, mais memorável.
-  - Em qualquer um: definir primitives próprias (1 botão, 1 input, 1 elevação), reduzir radius padrão, trocar Inter, matar o gradiente roxo.
-- Tags: frontend, design
-
-### [P2] 35. Scanner mobile — busca por texto presa abaixo do banner de upload
-- **Problema**: resultados da busca por texto só aparecem DEPOIS do banner de subir carta; no mobile o usuário rola muito (ou nem descobre que a busca responde). Fluxo texto ≠ fluxo câmera competem pelo mesmo espaço vertical.
-- **Ideias**: (a) seção de resultados colapsável/aba ("Câmera" | "Buscar") no topo; (b) resultados da busca em bottom-sheet deslizante (padrão mobile); (c) busca fixa no topo com resultados inline e upload acessível por FAB. Validar em 375px.
-- Tags: scanner, frontend, mobile
-
-### [P2] 39. Busca por texto em qualquer campo da carta (multicritério)
-- **Hoje**: procura em nome, número, coleção, raridade e id — mas **um termo de cada vez**. "Gengar stormfront" não acha Gengar porque "stormfront" é o **nome do set** e o buscador não combina carta×set juntos.
-- **Ideia**: suportar consultas com 2+ termos — ex. "Gengar stormfront" deve cruzar nome da carta (Gengar) com o nome do set (Stormfront). Implementar como busca por palavras (cada token casa com um campo: nome, set, coleção, raridade, número, id) e exige que todos os tokens tenham match (em qualquer campo). Cuidado com debounce/perf (índice de 20k+ cartas) e com ranking quando vários campos casam.
-- **Exemplo de aceite**: "Gengar stormfront" → retorna o Gengar de Stormfront; "charizard 201" → Charizard do set com número 201; "reverse holo" → cartas com a variante no nome.
-- Tags: scanner, frontend, busca
-
-### [P2] 36. Botão "Carregar índice" — linguagem de usuário, não de engenharia
-- **Hoje**: revela detalhes internos (quantos MB baixando, modelo/índice/WASM) — usuário não quer saber como funciona.
-- **Ideia**: copy orientada ao objetivo: "Ativar motor de busca" / "Preparar scanner" com estado único de progresso ("Preparando… pode levar alguns segundos") e pronto ("Motor pronto ✓"). MBs/detalhes técnicos ficam num `<details>` discreto "ver detalhes" para curiosos/debug. Avisar que é one-time (cache do navegador).
-- Tags: scanner, frontend, ux
-
-### [P2] 38. Copy institucional: desacoplar a marca "Liga" da interface
-- **Diretriz (usuário, 25/08)**: o site não deve evidenciar que raspa a Liga Pokémon. O **link** "Ver na Liga" na página da carta pode continuar (referência útil), mas o preço em reais deve ser sempre apresentado como **"preço em reais" / "Preço real (R$)"** — nunca "preço Liga"/"Preço real (Liga)". Vale para todo o site (landing, cards, tabelas, labels).
-- **Onde mexer**: `CardDetailContent.tsx` ("Preço real (Liga)"→"Preço real (R$)", "Set (Liga)"→"Coleção"), landing (`page.tsx` — "monitoramos a Liga Pokémon"→"monitoramos o mercado brasileiro"), `ScoredTable/ScoredCardRow`, textos de features/como-funciona, `gera_pred_liga.py` fonte exibida ("Modelo Liga-first (Fase 3)"→nome neutro tipo "Modelo PokéScan").
-- **Regra permanente**: menções à Liga só em (a) o link externo da carta e (b) docs internos/código — nunca em labels visíveis de preço/dado.
-- Tags: frontend, ux, copy
 
 ### [P2] 32. Scanner matching: verificador ORB/template-match nos top-3
 - **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`) — só um sinal INDEPENDENTE do DINOv2 pode fechar o gap.
