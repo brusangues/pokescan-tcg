@@ -26,7 +26,20 @@ echo "==> 1/4 Gerando dados estáticos (public/data)"
 
 echo "==> 2/4 Build Next.js (Node 20)"
 cd "$FRONTEND_W" 2>/dev/null || cd /c/projects/pokescan-tcg/frontend
-rm -rf .next out
+# Limpa artefatos arquivo por arquivo (sem rm -rf — o usuário pediu; rmdir no
+# Windows deixa 'Device or resource busy' se algo segurar o diretório).
+"$PYTHON" -c "import os,stat
+def ap(pos,n):
+    for r,d,f in os.walk(pos,topdown=False):
+        for x in f:
+            p_=os.path.join(r,x); os.chmod(p_,stat.S_IWRITE); os.remove(p_); n+=1
+        for x in d:
+            try: os.rmdir(os.path.join(r,x))
+            except OSError: pass
+    return n
+for t in (r'.next','out'):
+    if os.path.isdir(t): ap(t,0)
+"
 NEXT_PUBLIC_BASE_PATH=/pokescan-tcg \
   PATH="$(dirname "$NODE20"):$PATH" \
   "$NODE20" node_modules/next/dist/bin/next build
