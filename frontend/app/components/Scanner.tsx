@@ -23,11 +23,11 @@ function loadImage(dataUrl: string): Promise<HTMLImageElement> {
 function CardResult({ card, score, rank }: { card: any; score?: number; rank?: number }) {
   return (
     <div
-      className={`flex gap-4 bg-white rounded-xl border p-4 ${
-        rank === 1 ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-gray-100 opacity-90'
+      className={`flex gap-4 bg-[#fffdf7] rounded-xl border p-4 ${
+        rank === 1 ? 'border-[#2b2517]/30 ring-1 ring-[#d40b2e]/15' : 'border-[#2b2517]/15 opacity-90'
       }`}
     >
-      <div className="relative w-20 h-28 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+      <div className="relative w-20 h-28 bg-[#f3e9d2] rounded-lg overflow-hidden shrink-0">
         {card.img ? (
           <Image src={card.img} alt={card.n || card.nome} fill className="object-contain" unoptimized />
         ) : (
@@ -38,20 +38,20 @@ function CardResult({ card, score, rank }: { card: any; score?: number; rank?: n
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
-          <h4 className="font-bold text-gray-900 truncate">{card.n || card.nome}</h4>
+          <h4 className="font-bold text-[#292318] truncate">{card.n || card.nome}</h4>
           {score != null && (
             <span className={`text-xs font-mono px-2 py-0.5 rounded-full shrink-0 ${
-              rank === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600'
+              rank === 1 ? 'bg-[#d40b2e] text-white' : 'bg-[#f3e9d2] text-[#6b6252]'
             }`}>
               {rank === 1 ? '✓ Melhor' : `#${rank}`} · {(score * 100).toFixed(1)}%
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-500 truncate">
+        <p className="text-sm text-[#6b6252] truncate">
           {card.sn || card.set_name} · {card.num || card.sNumber}
         </p>
         <div className="flex items-center justify-between mt-2 text-sm">
-          <span className="text-xs text-gray-400">{card.r || '—'}</span>
+          <span className="text-xs text-[#998f7c]">{card.r || '—'}</span>
           {card.p != null && (
             <span className="font-medium text-emerald-600">${card.p.toFixed(2)}</span>
           )}
@@ -59,7 +59,7 @@ function CardResult({ card, score, rank }: { card: any; score?: number; rank?: n
         {/* <a> com href prefixado manualmente — next/link duplica basePath em hrefs com query */}
         <a
           href={`${getBasePath()}/card?set=${encodeURIComponent(card.s || card.set_id)}&num=${encodeURIComponent(card.num || card.sNumber)}&nome=${encodeURIComponent(card.n || card.nome)}`}
-          className="inline-flex items-center gap-1 mt-2 text-xs text-indigo-600 hover:underline"
+          className="inline-flex items-center gap-1 mt-2 text-xs text-[#d40b2e] hover:underline"
         >
           <ExternalLink className="w-3 h-3" /> Ver detalhes e escoragem
         </a>
@@ -109,15 +109,15 @@ function DeteccaoCard({ d, idx, onRemove }: {
   const incerta = !!(melhor && melhor.score >= THRESH && melhor.margin != null && melhor.margin < MARGEM_MIN);
   const pequena = d.larguraPx > 0 && d.larguraPx < LARGURA_MINIMA;
   return (
-    <div className={`bg-white rounded-xl border p-3 transition-colors ${aberta ? 'border-indigo-300 ring-1 ring-indigo-100' : 'border-gray-200'}`}>
+    <div className={`bg-[#fffdf7] rounded-xl border p-3 transition-colors ${aberta ? 'border-[#2b2517]/30 ring-1 ring-[#d40b2e]/15' : 'border-[#2b2517]/20'}`}>
       <div className="flex items-center justify-between gap-2 mb-2">
-        <h4 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+        <h4 className="text-sm font-semibold text-[#292318] flex items-center gap-2">
           Carta {idx + 1}
           {d.origem === 'manual' && (
-            <span className="text-[10px] font-medium text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">✂ manual</span>
+            <span className="text-[10px] font-medium text-[#d40b2e] bg-[#f3e9d2] px-1.5 py-0.5 rounded">✂ manual</span>
           )}
           {d.larguraPx > 0 && (
-            <span className="text-[10px] font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-mono text-[#998f7c] bg-[#f3e9d2] px-1.5 py-0.5 rounded">
               {d.larguraPx}px
             </span>
           )}
@@ -144,12 +144,12 @@ function DeteccaoCard({ d, idx, onRemove }: {
         <button
           onClick={() => setAberta(!aberta)}
           title={aberta ? 'Fechar similares' : 'Ver cartas similares'}
-          className={`relative w-20 h-28 bg-gray-100 rounded-lg overflow-hidden shrink-0 border-2 transition-colors ${
-            aberta ? 'border-indigo-400' : 'border-transparent hover:border-indigo-300'
+          className={`relative w-20 h-28 bg-[#f3e9d2] rounded-lg overflow-hidden shrink-0 border-2 transition-colors ${
+            aberta ? 'border-[#d40b2e]/60' : 'border-transparent hover:border-[#2b2517]/30'
           }`}
         >
           <Image src={d.preview} alt={`Carta ${idx + 1}`} fill className="object-contain" unoptimized />
-          <span className="absolute bottom-0 inset-x-0 text-[9px] text-center text-indigo-700 bg-indigo-50/90 py-0.5">
+          <span className="absolute bottom-0 inset-x-0 text-[9px] text-center text-[#a90924] bg-[#f3e9d2]/90 py-0.5">
             {aberta ? '− fechar' : '▸ similares'}
           </span>
         </button>
@@ -158,23 +158,23 @@ function DeteccaoCard({ d, idx, onRemove }: {
             <>
               <div className="text-xs font-bold text-green-700">
                 ✓ {melhor.card.n}
-                <span className="ml-2 text-[10px] font-mono text-gray-400">
+                <span className="ml-2 text-[10px] font-mono text-[#998f7c]">
                   {(melhor.score * 100).toFixed(1)}%
                 </span>
               </div>
-              <div className="text-[10px] text-gray-500 font-mono truncate">
+              <div className="text-[10px] text-[#6b6252] font-mono truncate">
                 {melhor.card.sn} · {melhor.card.num}
               </div>
               <div className="flex flex-wrap gap-1 pt-0.5">
                 {d.matches.slice(1, 3).map((r) => (
-                  <span key={r.card.id} className="text-[10px] text-gray-400">
+                  <span key={r.card.id} className="text-[10px] text-[#998f7c]">
                     #{r.rank} {r.card.n} ({(r.score * 100).toFixed(0)}%)
                   </span>
                 ))}
               </div>
               <button
                 onClick={() => setAberta(!aberta)}
-                className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline"
+                className="inline-flex items-center gap-1 text-[10px] text-[#d40b2e] hover:underline"
               >
                 {aberta ? '− Ocultar similares' : `▸ Ver ${d.matches.length} cartas similares`}
               </button>
@@ -183,16 +183,16 @@ function DeteccaoCard({ d, idx, onRemove }: {
             <>
               <div className="text-xs font-bold text-amber-600">
                 ⚠ Incerto (ambíguo) — {melhor.card.n}
-                <span className="ml-2 text-[10px] font-mono text-gray-400">
+                <span className="ml-2 text-[10px] font-mono text-[#998f7c]">
                   {(melhor.score * 100).toFixed(1)}% · margem {(melhor.margin! * 100).toFixed(1)}pp
                 </span>
               </div>
-              <div className="text-[10px] text-gray-600 mt-0.5">
+              <div className="text-[10px] text-[#6b6252] mt-0.5">
                 Mais de um candidato plausível ({(melhor.margin! * 100).toFixed(1)}pp). Pode não ser esta carta — confira os similares ou recorte manual.
               </div>
               <button
                 onClick={() => setAberta(!aberta)}
-                className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline mt-1"
+                className="inline-flex items-center gap-1 text-[10px] text-[#d40b2e] hover:underline mt-1"
               >
                 {aberta ? '− Ocultar' : `▸ Ver ${d.matches.length} candidatos`}
               </button>
@@ -200,12 +200,12 @@ function DeteccaoCard({ d, idx, onRemove }: {
           ) : (
             <div className="text-xs text-amber-700">
               ⚠ Não identificada (melhor match {(melhor ? melhor.score * 100 : 0).toFixed(1)}% — abaixo do limiar)
-              <div className="text-[10px] text-gray-400 mt-0.5">
+              <div className="text-[10px] text-[#998f7c] mt-0.5">
                 Aproxime a câmera ou escaneie esta carta separadamente.
               </div>
               <button
                 onClick={() => setAberta(!aberta)}
-                className="inline-flex items-center gap-1 text-[10px] text-indigo-600 hover:underline mt-1"
+                className="inline-flex items-center gap-1 text-[10px] text-[#d40b2e] hover:underline mt-1"
               >
                 {aberta ? '− Ocultar' : '▸ Ver candidatos mesmo assim'}
               </button>
@@ -216,8 +216,8 @@ function DeteccaoCard({ d, idx, onRemove }: {
 
       {/* Lista de cartas similares (top-5 do match desta região) */}
       {aberta && (
-        <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
-          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">
+        <div className="mt-3 pt-3 border-t border-[#2b2517]/15 space-y-2">
+          <p className="text-[10px] font-semibold text-[#998f7c] uppercase tracking-wide">
             Cartas similares à carta {idx + 1}
           </p>
           {d.matches.map((r) => (
@@ -316,14 +316,14 @@ function ManualCrop({ dataUrl, onCrop, onCancel }: {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold text-indigo-700 flex items-center gap-1">
+        <p className="text-xs font-semibold text-[#a90924] flex items-center gap-1">
           <Scissors className="w-3.5 h-3.5" /> Recortar carta manualmente
         </p>
-        <button onClick={onCancel} className="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center gap-1">
+        <button onClick={onCancel} className="text-xs text-[#6b6252] hover:text-[#292318] inline-flex items-center gap-1">
           <X className="w-3 h-3" /> cancelar
         </button>
       </div>
-      <div className="inline-block rounded-xl border border-indigo-300 overflow-hidden bg-white shadow-sm">
+      <div className="inline-block rounded-xl border border-[#2b2517]/30 overflow-hidden bg-[#fffdf7] shadow-sm">
         <canvas
           ref={canvasRef}
           onMouseDown={mouseDown}
@@ -333,13 +333,13 @@ function ManualCrop({ dataUrl, onCrop, onCancel }: {
           className="block cursor-crosshair select-none"
         />
       </div>
-      <p className="text-[11px] text-gray-400">
+      <p className="text-[11px] text-[#998f7c]">
         Arraste sobre a carta que a detecção automática não encontrou e toque em escanear.
       </p>
       <button
         disabled={!rect}
         onClick={() => rect && onCrop(rect)}
-        className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-[#d40b2e] text-white hover:bg-[#a90924] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
       >
         <Plus className="w-3.5 h-3.5" /> Escanear seleção
       </button>
@@ -579,17 +579,17 @@ export default function Scanner() {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Status / Progress */}
-      <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+      <div className="bg-[#fffdf7] p-6 rounded-2xl shadow-sm border border-[#2b2517]/15">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold flex items-center gap-2">
-            <Search className="w-5 h-5 text-indigo-600" />
+            <Search className="w-5 h-5 text-[#d40b2e]" />
             Scanner
           </h2>
           <span className={`px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wide ${
             phase === 'ready' ? 'bg-green-100 text-green-700' :
             phase === 'error' ? 'bg-red-100 text-red-700' :
             phase === 'scanning' ? 'bg-amber-100 text-amber-700' :
-            'bg-indigo-100 text-indigo-700'
+            'bg-[#f3e9d2] text-[#a90924]'
           }`}>
             {phase === 'idle' ? 'Descarregado' : phase === 'loading' ? 'Carregando' : phase === 'ready' ? 'Pronto' : phase === 'scanning' ? 'Analisando' : 'Erro'}
           </span>
@@ -597,30 +597,37 @@ export default function Scanner() {
 
         {phase === 'idle' && (
           <div className="space-y-4">
-            <div className="text-sm text-gray-600 leading-relaxed">
-              O scanner roda 100% no seu navegador (nada é enviado a servidores). Para usar, é preciso
-              baixar <strong>~53 MB</strong> na primeira vez (modelo de visão, detector de bordas e índice de
-              20.4 mil cartas). Depois disso, tudo fica em cache.
+            <div className="text-sm text-[#6b6252] leading-relaxed">
+              A identificação acontece tudo aqui no seu navegador — nada é enviado para servidores.
+              Na primeira vez, o <strong>motor de busca</strong> precisa ser preparado: pode levar
+              alguns segundos. Feito isso, fica pronto para as próximas vezes.
             </div>
             <button
               onClick={startLoad}
-              className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl transition-colors"
+              className="inline-flex items-center gap-2 bg-[#d40b2e] hover:bg-[#a90924] text-white font-medium px-5 py-2.5 rounded-xl transition-colors"
             >
               <Download className="w-4 h-4" />
-              Carregar scanner (~40 MB)
+              Ativar motor de busca
             </button>
+            <details className="text-xs text-[#998f7c]">
+              <summary className="cursor-pointer hover:text-[#6b6252]">Ver detalhes técnicos</summary>
+              <p className="mt-2 leading-relaxed">
+                Baixa o motor de visão + o índice de 20,4 mil cartas (~53 MB) na primeira vez;
+                depois fica em cache no navegador.
+              </p>
+            </details>
           </div>
         )}
 
         {phase === 'loading' && (
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-gray-500">
+            <div className="flex justify-between text-sm text-[#6b6252]">
               <span>{progressLabel}</span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-[#f3e9d2] rounded-full overflow-hidden">
               <div
-                className="h-full bg-indigo-600 transition-all duration-300"
+                className="h-full bg-[#d40b2e] transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -648,15 +655,15 @@ export default function Scanner() {
           <div className="flex items-center gap-2 text-sm text-red-600">
             <AlertCircle className="w-4 h-4" />
             {errorMsg}
-            <button onClick={startLoad} className="ml-2 text-indigo-600 hover:underline font-medium">
+            <button onClick={startLoad} className="ml-2 text-[#d40b2e] hover:underline font-medium">
               Tentar novamente
             </button>
           </div>
         )}
 
         {/* Auto crop (OpenCV) */}
-        <div className="mt-4 pt-4 border-t border-gray-100">
-          <div className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+        <div className="mt-4 pt-4 border-t border-[#2b2517]/15">
+          <div className="text-xs font-semibold text-[#6b6252] uppercase tracking-wide mb-2">
             Pré-processamento da imagem
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
@@ -665,50 +672,50 @@ export default function Scanner() {
                 type="radio"
                 checked={autoCrop}
                 onChange={() => setAutoCrop(true)}
-                className="accent-indigo-600 shrink-0"
+                className="accent-[#d40b2e] shrink-0"
               />
-              <span className="text-gray-700">Auto crop (OpenCV)</span>
-              <span className="hidden lg:inline text-xs text-gray-400">detecta bordas e corrige perspectiva</span>
+              <span className="text-[#292318]">Auto crop (OpenCV)</span>
+              <span className="hidden lg:inline text-xs text-[#998f7c]">detecta bordas e corrige perspectiva</span>
             </label>
             <label className="inline-flex items-center gap-2 text-sm cursor-pointer min-w-0">
               <input
                 type="radio"
                 checked={!autoCrop}
                 onChange={() => setAutoCrop(false)}
-                className="accent-indigo-600 shrink-0"
+                className="accent-[#d40b2e] shrink-0"
               />
-              <span className="text-gray-700">Imagem original</span>
-              <span className="hidden lg:inline text-xs text-gray-400">sem transformações</span>
+              <span className="text-[#292318]">Imagem original</span>
+              <span className="hidden lg:inline text-xs text-[#998f7c]">sem transformações</span>
             </label>
           </div>
         </div>
       </div>
 
       {/* Barra de busca por texto — funciona sem carregar o scanner */}
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+      <div className="bg-[#fffdf7] p-4 rounded-2xl shadow-sm border border-[#2b2517]/15">
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
-            <Type className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Type className="w-4 h-4 text-[#998f7c] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               value={textQuery}
               onChange={e => setTextQuery(e.target.value)}
               placeholder="Buscar carta por nome, número, coleção, raridade ou id..."
-              className="w-full pl-9 pr-9 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-9 py-2.5 text-sm border border-[#2b2517]/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d40b2e]/60"
             />
             {textQuery && (
               <button
                 onClick={() => setTextQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[#998f7c] hover:text-[#6b6252]"
                 title="Limpar busca"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
-          {textLoading && <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />}
+          {textLoading && <Loader2 className="w-4 h-4 text-[#d40b2e] animate-spin" />}
         </div>
         {textTotal > 0 && (
-          <div className="text-xs text-gray-500 mt-2">
+          <div className="text-xs text-[#6b6252] mt-2">
             {textTotal.toLocaleString('pt-BR')} carta{textTotal !== 1 ? 's' : ''} encontrada{textTotal !== 1 ? 's' : ''}
             {textTotal > 10 && ' — mostrando as 10 primeiras'}
           </div>
@@ -722,7 +729,7 @@ export default function Scanner() {
             {...getRootProps()}
             className={`
               relative aspect-square rounded-2xl border-2 border-dashed transition-all cursor-pointer flex flex-col items-center justify-center p-8 text-center
-              ${isDragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'}
+              ${isDragActive ? 'border-[#d40b2e] bg-[#f3e9d2]' : 'border-[#2b2517]/20 hover:border-[#2b2517]/30 hover:bg-[#f3e9d2]'}
               ${phase !== 'ready' ? 'opacity-50 cursor-not-allowed' : ''}
             `}
           >
@@ -732,7 +739,7 @@ export default function Scanner() {
               <div className="w-full h-full grid grid-cols-2 gap-2 p-4">
                 <div className="relative flex flex-col min-h-0">
                   <Image src={preview} alt="Foto original" fill className="object-contain" unoptimized />
-                  <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-gray-500 bg-white/80 py-0.5">
+                  <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-[#6b6252] bg-[#fffdf7]/80 py-0.5">
                     Original
                   </span>
                 </div>
@@ -749,7 +756,7 @@ export default function Scanner() {
                       <div className="w-full h-full flex items-center justify-center text-gray-300">
                         <ImageOff className="w-8 h-8" />
                       </div>
-                      <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-gray-400 bg-white/80 py-0.5">
+                      <span className="absolute bottom-0 inset-x-0 text-[10px] text-center text-[#998f7c] bg-[#fffdf7]/80 py-0.5">
                         {autoCrop ? 'Sem clipping' : 'Auto crop desligado'}
                       </span>
                     </>
@@ -758,25 +765,25 @@ export default function Scanner() {
               </div>
             ) : (
               <>
-                <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mb-4">
+                <div className="w-16 h-16 bg-[#f3e9d2] text-[#d40b2e] rounded-full border-2 border-[#2b2517] flex items-center justify-center mb-4">
                   <Camera className="w-8 h-8" />
                 </div>
-                <p className="font-medium text-gray-900">Envie a foto de uma carta</p>
-                <p className="text-sm text-gray-500 mt-1">ou clique para escolher o arquivo</p>
+                <p className="font-medium text-[#292318]">Envie a foto de uma carta</p>
+                <p className="text-sm text-[#6b6252] mt-1">ou clique para escolher o arquivo</p>
               </>
             )}
 
             {phase === 'scanning' && (
-              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-2xl">
+              <div className="absolute inset-0 bg-[#fffdf7]/80 backdrop-blur-sm flex items-center justify-center rounded-2xl">
                 <div className="flex flex-col items-center gap-3">
-                  <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
-                  <span className="font-medium text-indigo-900">Analisando...</span>
+                  <Loader2 className="w-8 h-8 text-[#d40b2e] animate-spin" />
+                  <span className="font-medium text-[#292318]">Analisando...</span>
                 </div>
               </div>
             )}
           </div>
 
-          <p className="text-xs text-center text-gray-400">
+          <p className="text-xs text-center text-[#998f7c]">
             JPG, PNG. Para melhores resultados, use uma imagem clara de uma única carta.
           </p>
         </div>
@@ -784,13 +791,13 @@ export default function Scanner() {
         {/* Results Area — busca por texto tem prioridade; senão, resultados do scanner */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900">
+            <h3 className="text-lg font-semibold text-[#292318]">
               {mostrandoTexto ? 'Resultado da busca' : 'Resultado'}
             </h3>
             {mostrandoTexto && textResults && textResults.length > 0 && (
               <button
                 onClick={() => setTextQuery('')}
-                className="text-xs text-indigo-600 hover:underline inline-flex items-center gap-1"
+                className="text-xs text-[#d40b2e] hover:underline inline-flex items-center gap-1"
               >
                 <X className="w-3 h-3" /> voltar ao scanner
               </button>
@@ -807,12 +814,12 @@ export default function Scanner() {
             /* Multi-carta: um card por detecção + crop manual (Fase 2-D) */
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-[#998f7c]">
                   {deteccoes.length} carta{deteccoes.length !== 1 ? 's' : ''} detectada{deteccoes.length !== 1 ? 's' : ''}
                 </span>
                 <button
                   onClick={() => setModoCrop(m => !m)}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 hover:underline"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-[#d40b2e] hover:underline"
                 >
                   <Scissors className="w-3.5 h-3.5" />
                   {modoCrop ? 'fechar recorte' : '✂ recortar carta manualmente'}
@@ -832,7 +839,7 @@ export default function Scanner() {
               ))}
             </div>
           ) : mostrandoTexto && textQuery.trim().length >= 2 ? (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2]">
               <Search className="w-12 h-12 mb-3 opacity-20" />
               <p>Nenhuma carta encontrada para "{textQuery.trim()}"</p>
             </div>
@@ -841,12 +848,12 @@ export default function Scanner() {
               {modoCrop ? (
                 <ManualCrop dataUrl={preview} onCrop={handleCrop} onCancel={() => setModoCrop(false)} />
               ) : (
-                <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
+                <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2]">
                   <Search className="w-12 h-12 mb-3 opacity-20" />
                   <p className="mb-2">Nenhuma carta detectada automaticamente.</p>
                   <button
                     onClick={() => setModoCrop(true)}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-[#d40b2e] text-white hover:bg-[#a90924]"
                   >
                     <Scissors className="w-3.5 h-3.5" /> Recortar cartas manualmente
                   </button>
@@ -854,7 +861,7 @@ export default function Scanner() {
               )}
             </div>
           ) : (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-gray-400 border border-gray-100 rounded-2xl bg-gray-50">
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2]">
               <Search className="w-12 h-12 mb-3 opacity-20" />
               <p>Nenhuma carta escaneada ainda</p>
             </div>

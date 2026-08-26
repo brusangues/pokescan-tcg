@@ -56,7 +56,15 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Scanner: avaliação contra base rotulada MANUAL + calibrações** — base `pokescan-tcg-labels` (137 cartas 100% manuais): detecção 117≈115; matching 62%→74% acerto@1 (teto top-5 83%); pct NÃO discrimina (THRESH mantido 0.40). **(1)** Fix score>100%: clamp [0,1]+guard NaN/Inf no `scannerEngine.search` (query corrompido de crop degenerado — índice verificado normalizado). **(2)** Re-rank por MARGEM top1−top2: `ScanResult.margin`; MARGEM_MIN=3pp → match ambíguo vira "⚠ Incerto" em vez de verde confiante (elimina ~73% dos falsos confiantes mantendo ~75% dos acertos). **(3)** Segmentação ADAPTATIVA: minArea .02 + 2º passe .008 se ≥4 quads (62%→64% sem regressão nas solitárias). Réplica Python fiel p/ debug visual: `debug_segmentacao.py` (+overlays em `experiments/debug_crops/`), `sweep_detecao.py`. Relatório: `docs/AVALIACAO_LABELS.md`. Loop de teste: dev tem bug de hidratação (`output:export`+`next dev`) → usar build estático Node20 + http.server. | `c4b237f`,`0334c09`,`20f481f` |
 | **Re-rank aprendido: estudado e NEGATIVO (não integrar)** — sinais leves (centro-zoom, HSV, rank, margens) + CatBoost LOFO (folhas agrupadas) sobre 615 pares: 73,2% vs 74,0% baseline (−0,8pp) — só reaprende o cosseno. Teto top-5=83% exige sinal independente (ORB) ou mais labels. Dataset/harness ficam (`rerank_sinais.py`, `treinar_rerank.py`, `rerank_pares.json`). | `0901db4` |
 
+## Frontend — tema & copia
+
+| Feature | Commit |
+|---|---|
+| Tema A "Guia de colecionador" em todo o site (P2.34) + copy institucional (P2.38) | `d6954ed` |
+| Scanner sem indigo; hero ''Escaneie ou busque pelo nome'' (P3.37) + copy do motor orientada ao usuário, MBs em <details> (P2.36) + seletor de dias do /hits em dropdown compacto ‹› | `(pendente commit)` |
+
 ## Liga-first — Fase 3 (modelos)
+
 
 | Feature | Commit / quando |
 |---|---|

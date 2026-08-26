@@ -76,10 +76,6 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Ideia**: máscara por células do binder (grade 3x3 detectável pelas costuras) ou CLAHE local antes do Canny. Medir na base antes (réplica Python fiel: `debug_segmentacao.py`).
 - Tags: scanner, segmentação, cv
 
-### [P3] 37. Referência do scanner — comunicar que também é buscador
-- **Hoje**: textos/instruções do /scanner falam só de foto/câmera; a busca por texto (nome, número, coleção, raridade — sem carregar o motor) é um recurso descoberto por acaso.
-- **Ideia**: copy da referência/hero mencionar os dois usos: "Escaneie uma carta ou busque pelo nome". Avaliar placeholder do input e o texto do botão principal.
-- Tags: scanner, frontend, ux
 
 ### [P3] 17. Modelo dedicado para cartas JP
 - Hoje JP usa o modelo global EN via fallback (mapeamento de 62 siglas); usuário pediu modelo JP dedicado, mas sem features exclusivas decidiu-se pelo fallback

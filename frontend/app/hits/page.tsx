@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, FileText } from 'lucide-react';
+import { RefreshCw, AlertCircle, Clock, Zap, Loader, Calendar, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import NavBar from '@/app/components/NavBar';
 import ScoredTable from '@/app/components/ScoredTable';
@@ -130,69 +130,89 @@ export default function HitsPage() {
             <button onClick={() => setAviso(null)} className="ml-2 font-bold hover:text-amber-900">✕</button>
           </div>
         )}
-        {/* Seletor de data e janela */}
+        {/* Seletor de data e janela — dropdown compacto + navegação ‹ › */}
         {dias && dias.length > 0 && (
           <div className="bg-[#fffdf7] rounded-2xl p-4 border border-[#2b2517]/20 mb-6 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <Calendar className="w-4 h-4 text-[#d40b2e]" />
-              <h2 className="text-sm font-semibold text-[#292318]">Selecionar janela</h2>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {dias.map((dia: Dia) => (
-                <div key={dia.data} className="relative">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-[#d40b2e]" />
+                <h2 className="text-sm font-semibold text-[#292318]">Janela</h2>
+              </div>
+              <div className="flex items-center gap-2">
+                {/* ‹ dia anterior */}
+                <button
+                  onClick={() => {
+                    const i = dias.findIndex((d: Dia) => selectedFile && d.arquivos.includes(selectedFile));
+                    const alvo = dias[Math.max(0, (i < 0 ? 0 : i) - 1)];
+                    if (alvo) selectArquivo(alvo.arquivos[0]);
+                  }}
+                  disabled={!selectedFile || (selectedFile && dias[0].arquivos.includes(selectedFile))}
+                  className="p-1.5 rounded-lg border border-[#2b2517]/20 text-[#292318] hover:bg-[#f3e9d2] disabled:opacity-30 disabled:cursor-not-allowed"
+                  aria-label="Dia anterior"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                {/* dropdown do dia atual */}
+                <div className="relative">
                   <button
-                    onClick={() => {
-                      const abrindo = expandedDay !== dia.data;
-                      setExpandedDay(abrindo ? dia.data : null);
-                      // Feedback no 1º clique: dia antigo não tem dados no build estático
-                      if (abrindo && selectedFile && !dia.arquivos.includes(selectedFile)) {
-                        setAviso('Execuções antigas não estão no build estático — mostrando a mais recente.');
-                      }
-                    }}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${
-                      selectedFile && dia.arquivos.includes(selectedFile)
-                        ? 'bg-[#d40b2e] text-white border-[#d40b2e]'
-                        : 'bg-[#fffdf7] text-[#292318] border-[#2b2517]/20 hover:bg-[#f3e9d2]'
-                    }`}
+                    onClick={() => setExpandedDay(expandedDay ? null : '__drop__')}
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 text-sm font-semibold rounded-lg border-2 border-[#2b2517] bg-[#fffdf7] hover:bg-[#f3e9d2] transition-colors"
                   >
-                    {dia.label}
-                    <ChevronDown className={`w-3 h-3 transition-transform ${expandedDay === dia.data ? 'rotate-180' : ''}`} />
+                    <Clock className="w-4 h-4 text-[#d40b2e]" />
+                    {(dias.find((d: Dia) => selectedFile && d.arquivos.includes(selectedFile)) || dias[0]).label}
+                    <ChevronDown className={`w-4 h-4 transition-transform ${expandedDay === '__drop__' ? 'rotate-180' : ''}`} />
                   </button>
-                  {expandedDay === dia.data && (
-                    <div className="absolute top-full mt-1 left-0 bg-[#fffdf7] rounded-lg shadow-lg border border-[#2b2517]/20 py-1 z-20 min-w-[200px]">
-                      {dia.arquivos.length <= 1 ? (
-                        <button
-                          onClick={() => { selectArquivo(dia.arquivos[0]); setExpandedDay(null); }}
-                          className="w-full text-left px-3 py-1.5 text-xs text-[#6b6252] hover:bg-[#f3e9d2] flex items-center gap-2"
-                        >
-                          <FileText className="w-3 h-3" />
-                          Única execução
-                        </button>
-                      ) : (
-                        dia.arquivos.map((f: string) => {
-                          const timeMatch = f.match(/_(\d{6})\.csv$/);
-                          const time = timeMatch ? `${timeMatch[1].slice(0, 2)}:${timeMatch[1].slice(2, 4)}` : '';
-                          const isActive = f === selectedFile;
+                  {expandedDay === '__drop__' && (
+                    <>
+                      {/* fecha ao clicar fora */}
+                      <div className="fixed inset-0 z-20" onClick={() => setExpandedDay(null)} />
+                      <div className="absolute top-full mt-1 right-0 bg-[#fffdf7] rounded-xl shadow-lg border-2 border-[#2b2517]/80 py-1 z-30 min-w-[220px] max-h-72 overflow-y-auto">
+                        {dias.map((dia: Dia) => {
+                          const isAtivo = selectedFile && dia.arquivos.includes(selectedFile);
                           return (
-                            <button
-                              key={f}
-                              onClick={() => { selectArquivo(f); setExpandedDay(null); }}
-                              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-[#f3e9d2] flex items-center gap-2 ${
-                                isActive ? 'bg-[#f3e9d2] text-[#a90924] font-medium' : 'text-[#6b6252]'
-                              }`}
-                            >
-                              <FileText className={`w-3 h-3 ${isActive ? 'text-[#d40b2e]' : 'text-[#998f7c]'}`} />
-                              {time ? `${time}` : 'Última'}
-                              {isActive && <span className="text-[10px] text-indigo-400 ml-auto">✓</span>}
-                            </button>
+                            <div key={dia.data} className="relative">
+                              <button
+                                onClick={() => {
+                                  selectArquivo(dia.arquivos[0]);
+                                  setExpandedDay(null);
+                                }}
+                                className={`w-full text-left px-3 py-2 text-xs flex items-center gap-2 ${
+                                  isAtivo ? 'bg-[#f3e9d2] text-[#a90924] font-semibold' : 'text-[#292318] hover:bg-[#f3e9d2]'
+                                }`}
+                              >
+                                {isAtivo && <span className="text-[#d40b2e]">✓</span>}
+                                <span className={isAtivo ? '' : 'pl-5'}>{dia.label}</span>
+                                {dia.arquivos.length > 1 && (
+                                  <span className="ml-auto text-[10px] text-[#998f7c] tnum">{dia.arquivos.length}×</span>
+                                )}
+                              </button>
+                            </div>
                           );
-                        })
-                      )}
-                    </div>
+                        })}
+                      </div>
+                    </>
                   )}
                 </div>
-              ))}
+                {/* › próximo dia */}
+                <button
+                  onClick={() => {
+                    const i = dias.findIndex((d: Dia) => selectedFile && d.arquivos.includes(selectedFile));
+                    if (i < 0) return;
+                    const alvo = dias[Math.min(dias.length - 1, i + 1)];
+                    if (alvo && !alvo.arquivos.includes(selectedFile)) selectArquivo(alvo.arquivos[0]);
+                  }}
+                  disabled={!selectedFile || (selectedFile && dias[dias.length - 1].arquivos.includes(selectedFile))}
+                  className="p-1.5 rounded-lg border border-[#2b2517]/20 text-[#292318] hover:bg-[#f3e9d2] disabled:opacity-30 disabled:cursor-not-allowed"
+                  aria-label="Próximo dia"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
+            {/* aviso de execução antiga */}
+            {aviso && (
+              <p className="text-xs text-[#a90924] mt-2">{aviso}</p>
+            )}
           </div>
         )}
 
