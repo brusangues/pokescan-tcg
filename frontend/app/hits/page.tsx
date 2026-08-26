@@ -68,9 +68,9 @@ export default function HitsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 text-gray-500">
-          <Loader className="w-8 h-8 animate-spin text-indigo-600" />
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-[#6b6252]">
+          <Loader className="w-8 h-8 animate-spin text-[#d40b2e]" />
           <p className="text-sm">Carregando dados dos hits...</p>
         </div>
       </div>
@@ -79,14 +79,14 @@ export default function HitsPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center space-y-4">
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center">
+        <div className="bg-[#fffdf7] p-8 rounded-2xl shadow-lg max-w-md text-center space-y-4">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
             <AlertCircle className="w-8 h-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold text-gray-900">Erro ao carregar</h2>
-          <p className="text-sm text-gray-500">{error}</p>
-          <button onClick={() => fetchData()} className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
+          <h2 className="text-lg font-bold text-[#292318]">Erro ao carregar</h2>
+          <p className="text-sm text-[#6b6252]">{error}</p>
+          <button onClick={() => fetchData()} className="inline-flex items-center gap-2 px-4 py-2 bg-[#d40b2e] text-white rounded-lg hover:bg-[#a90924] transition-colors text-sm">
             <RefreshCw className="w-4 h-4" /> Tentar novamente
           </button>
         </div>
@@ -102,23 +102,23 @@ export default function HitsPage() {
                 todas;
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#fbf4e6]">
       <NavBar />
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[#fffdf7] border-b border-[#2b2517]/20">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-indigo-600" />
+            <h1 className="text-xl font-bold text-[#292318] flex items-center gap-2">
+              <Zap className="w-5 h-5 text-[#d40b2e]" />
               Hits da Liga Pokémon
             </h1>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-[#998f7c] mt-0.5">
               {data.ultimaAtualizacao && (
                 <><Clock className="w-3 h-3 inline mr-1" />{new Date(data.ultimaAtualizacao).toLocaleString('pt-BR')}</>
               )}
             </p>
           </div>
-          <button onClick={() => fetchData(selectedFile ?? undefined)} className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Atualizar">
-            <RefreshCw className="w-4 h-4 text-gray-500" />
+          <button onClick={() => fetchData(selectedFile ?? undefined)} className="p-2 hover:bg-[#f3e9d2] rounded-lg transition-colors" title="Atualizar">
+            <RefreshCw className="w-4 h-4 text-[#6b6252]" />
           </button>
         </div>
       </div>
@@ -132,10 +132,10 @@ export default function HitsPage() {
         )}
         {/* Seletor de data e janela */}
         {dias && dias.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 border border-gray-200 mb-6 shadow-sm">
+          <div className="bg-[#fffdf7] rounded-2xl p-4 border border-[#2b2517]/20 mb-6 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
-              <Calendar className="w-4 h-4 text-indigo-500" />
-              <h2 className="text-sm font-semibold text-gray-700">Selecionar janela</h2>
+              <Calendar className="w-4 h-4 text-[#d40b2e]" />
+              <h2 className="text-sm font-semibold text-[#292318]">Selecionar janela</h2>
             </div>
             <div className="flex flex-wrap gap-2">
               {dias.map((dia: Dia) => (
@@ -151,19 +151,19 @@ export default function HitsPage() {
                     }}
                     className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${
                       selectedFile && dia.arquivos.includes(selectedFile)
-                        ? 'bg-indigo-600 text-white border-indigo-600'
-                        : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                        ? 'bg-[#d40b2e] text-white border-[#d40b2e]'
+                        : 'bg-[#fffdf7] text-[#292318] border-[#2b2517]/20 hover:bg-[#f3e9d2]'
                     }`}
                   >
                     {dia.label}
                     <ChevronDown className={`w-3 h-3 transition-transform ${expandedDay === dia.data ? 'rotate-180' : ''}`} />
                   </button>
                   {expandedDay === dia.data && (
-                    <div className="absolute top-full mt-1 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20 min-w-[200px]">
+                    <div className="absolute top-full mt-1 left-0 bg-[#fffdf7] rounded-lg shadow-lg border border-[#2b2517]/20 py-1 z-20 min-w-[200px]">
                       {dia.arquivos.length <= 1 ? (
                         <button
                           onClick={() => { selectArquivo(dia.arquivos[0]); setExpandedDay(null); }}
-                          className="w-full text-left px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50 flex items-center gap-2"
+                          className="w-full text-left px-3 py-1.5 text-xs text-[#6b6252] hover:bg-[#f3e9d2] flex items-center gap-2"
                         >
                           <FileText className="w-3 h-3" />
                           Única execução
@@ -177,11 +177,11 @@ export default function HitsPage() {
                             <button
                               key={f}
                               onClick={() => { selectArquivo(f); setExpandedDay(null); }}
-                              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 flex items-center gap-2 ${
-                                isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'text-gray-600'
+                              className={`w-full text-left px-3 py-1.5 text-xs hover:bg-[#f3e9d2] flex items-center gap-2 ${
+                                isActive ? 'bg-[#f3e9d2] text-[#a90924] font-medium' : 'text-[#6b6252]'
                               }`}
                             >
-                              <FileText className={`w-3 h-3 ${isActive ? 'text-indigo-500' : 'text-gray-400'}`} />
+                              <FileText className={`w-3 h-3 ${isActive ? 'text-[#d40b2e]' : 'text-[#998f7c]'}`} />
                               {time ? `${time}` : 'Última'}
                               {isActive && <span className="text-[10px] text-indigo-400 ml-auto">✓</span>}
                             </button>
@@ -198,9 +198,9 @@ export default function HitsPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-          <div className="bg-white p-3 sm:p-4 rounded-xl border border-gray-200">
-            <p className="text-[10px] sm:text-xs text-gray-500 uppercase tracking-wide">Total escorado</p>
-            <p className="text-xl sm:text-2xl font-bold text-gray-900">{data.total}</p>
+          <div className="bg-[#fffdf7] p-3 sm:p-4 rounded-xl border border-[#2b2517]/20">
+            <p className="text-[10px] sm:text-xs text-[#6b6252] uppercase tracking-wide">Total escorado</p>
+            <p className="text-xl sm:text-2xl font-bold text-[#292318]">{data.total}</p>
           </div>
           <div className="bg-green-50 p-3 sm:p-4 rounded-xl border border-green-200">
             <p className="text-[10px] sm:text-xs text-green-700 uppercase tracking-wide">🔥 Subvalorizadas</p>
@@ -221,7 +221,7 @@ export default function HitsPage() {
               key={t}
               onClick={() => setTab(t as any)}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
-                tab === t ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                tab === t ? 'bg-[#d40b2e] text-white shadow-sm' : 'bg-[#fffdf7] text-[#6b6252] hover:bg-[#f3e9d2] border border-[#2b2517]/20'
               }`}
             >
               {t === 'oportunidades' ? `🔥 Comprar (${subvalorizadas.length})` :
@@ -235,7 +235,7 @@ export default function HitsPage() {
         <ScoredTable cards={cards} />
 
         {data.ultimaAtualizacao && (
-          <p className="text-xs text-gray-400 text-right pt-3">
+          <p className="text-xs text-[#998f7c] text-right pt-3">
             Arquivo: {data.arquivo} · {new Date(data.ultimaAtualizacao).toLocaleString('pt-BR')}
           </p>
         )}

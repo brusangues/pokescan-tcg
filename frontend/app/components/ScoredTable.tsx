@@ -13,15 +13,15 @@ interface ScoredTableProps {
  */
 export default function ScoredTable({ cards, emptyMessage = 'Nenhuma carta encontrada nessa categoria.' }: ScoredTableProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-[#fffdf7] rounded-2xl shadow-sm border border-[#2b2517]/20 overflow-hidden">
       {cards.length === 0 ? (
-        <div className="px-6 py-12 text-center text-gray-400">{emptyMessage}</div>
+        <div className="px-6 py-12 text-center text-[#998f7c]">{emptyMessage}</div>
       ) : (
         /* Scroll horizontal (mobile): header + rows rolam juntos, como no /features */
         <div className="overflow-x-auto">
           <div className="min-w-[660px]">
             {/* Header */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-50 border-b border-gray-200 text-[11px] font-semibold text-gray-500 uppercase tracking-wide">
+            <div className="flex items-center gap-2 px-4 py-2 bg-[#f3e9d2] border-b border-[#2b2517]/20 text-[11px] font-semibold text-[#6b6252] uppercase tracking-wide">
               <span className="flex-1">Carta</span>
               <span className="w-20 text-right">Real</span>
               <span className="w-20 text-right">Predito</span>

@@ -140,7 +140,7 @@ function montarModeloLiga(
     num: chave.split('-')[1] || '',
     sigla: hit.sigla || '',
     setNome: '',
-    fonte: 'Modelo Liga-first (Fase 3)',
+    fonte: 'Modelo PokéScan',
     is_jp: false,
     ligaOk: true,
   };
@@ -348,7 +348,7 @@ export async function lookupCard(params: {
           ligaOk,
         }
       : await (async () => {
-          // Fallback Liga-first: sem escoragem do próprio set, usa a predição
+          // Fallback PokéScan: sem escoragem do próprio set, usa a predição
           // do modelo BRL treinado no catálogo da Liga ({idE}-{num}) + preço
           // real da Liga quando houver. Resolve pela carta EN ({set_ptcg}-{num},
           // alias gerado no pred_liga.json) — direto, sem depender do setMap.

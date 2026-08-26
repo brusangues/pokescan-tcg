@@ -9,8 +9,8 @@ interface CardDisplayProps {
 
 export default function CardDisplay({ card, similarity }: CardDisplayProps) {
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-      <div className="relative aspect-[2.5/3.5] w-full bg-gray-100">
+    <div className="bg-[#fffdf7] rounded-xl shadow-lg overflow-hidden border border-[#2b2517]/15 hover:shadow-xl transition-shadow duration-300">
+      <div className="relative aspect-[2.5/3.5] w-full bg-[#f3e9d2]">
         <Image
           src={card.images.large}
           alt={card.name}
@@ -27,15 +27,15 @@ export default function CardDisplay({ card, similarity }: CardDisplayProps) {
       <div className="p-4 space-y-2">
         <div className="flex justify-between items-start">
           <div>
-            <h3 className="text-lg font-bold text-gray-900">{card.name}</h3>
-            <p className="text-sm text-gray-500">{card.supertype} - {card.subtypes.join(', ')}</p>
+            <h3 className="text-lg font-bold text-[#292318]">{card.name}</h3>
+            <p className="text-sm text-[#6b6252]">{card.supertype} - {card.subtypes.join(', ')}</p>
           </div>
-          <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded text-gray-600">
+          <span className="text-xs font-mono bg-[#f3e9d2] px-2 py-1 rounded text-[#6b6252]">
             {card.number}/{card.set.printedTotal}
           </span>
         </div>
         
-        <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="flex items-center gap-2 text-sm text-[#6b6252]">
           <span className="font-medium">Set:</span>
           <div className="flex items-center gap-1">
             {card.set.images.symbol && (
@@ -47,13 +47,13 @@ export default function CardDisplay({ card, similarity }: CardDisplayProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 mt-2 pt-2 border-t border-gray-100">
+        <div className="grid grid-cols-2 gap-2 text-xs text-[#6b6252] mt-2 pt-2 border-t border-[#2b2517]/15">
           <div>
-            <span className="block font-medium text-gray-700">Artist</span>
+            <span className="block font-medium text-[#292318]">Artist</span>
             {card.artist || 'Unknown'}
           </div>
           <div>
-            <span className="block font-medium text-gray-700">Rarity</span>
+            <span className="block font-medium text-[#292318]">Rarity</span>
             {card.rarity || 'Common'}
           </div>
         </div>

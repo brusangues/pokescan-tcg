@@ -47,6 +47,12 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Ideia**: copy orientada ao objetivo: "Ativar motor de busca" / "Preparar scanner" com estado único de progresso ("Preparando… pode levar alguns segundos") e pronto ("Motor pronto ✓"). MBs/detalhes técnicos ficam num `<details>` discreto "ver detalhes" para curiosos/debug. Avisar que é one-time (cache do navegador).
 - Tags: scanner, frontend, ux
 
+### [P2] 38. Copy institucional: desacoplar a marca "Liga" da interface
+- **Diretriz (usuário, 25/08)**: o site não deve evidenciar que raspa a Liga Pokémon. O **link** "Ver na Liga" na página da carta pode continuar (referência útil), mas o preço em reais deve ser sempre apresentado como **"preço em reais" / "Preço real (R$)"** — nunca "preço Liga"/"Preço real (Liga)". Vale para todo o site (landing, cards, tabelas, labels).
+- **Onde mexer**: `CardDetailContent.tsx` ("Preço real (Liga)"→"Preço real (R$)", "Set (Liga)"→"Coleção"), landing (`page.tsx` — "monitoramos a Liga Pokémon"→"monitoramos o mercado brasileiro"), `ScoredTable/ScoredCardRow`, textos de features/como-funciona, `gera_pred_liga.py` fonte exibida ("Modelo Liga-first (Fase 3)"→nome neutro tipo "Modelo PokéScan").
+- **Regra permanente**: menções à Liga só em (a) o link externo da carta e (b) docs internos/código — nunca em labels visíveis de preço/dado.
+- Tags: frontend, ux, copy
+
 ### [P2] 32. Scanner matching: verificador ORB/template-match nos top-3
 - **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`) — só um sinal INDEPENDENTE do DINOv2 pode fechar o gap.
 - **Ideia**: OpenCV.js (já carregado no scanner) faz match de features ORB entre o crop query e a imagem oficial dos top-3 candidatos; arte de carta é única — geometria confirmando = boost do candidato. Prototimar OFFLINE primeiro (réplica Python + base rotulada, mesma metodologia dos estudos anteriores) antes de portar pro browser.

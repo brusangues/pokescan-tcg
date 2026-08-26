@@ -79,13 +79,13 @@ export default function SnapshotPage() {
   const MetricCard = ({ label, value, sub, color, icon: Icon }: {
     label: string; value: string | number; sub?: string; color: string; icon: any;
   }) => (
-    <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+    <div className="bg-[#fffdf7] p-4 rounded-xl border border-[#2b2517]/20 shadow-sm">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{label}</p>
+        <p className="text-xs text-[#6b6252] uppercase tracking-wide font-medium">{label}</p>
         <Icon className={`w-5 h-5 ${color}`} />
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+      <p className="text-2xl font-bold text-[#292318]">{value}</p>
+      {sub && <p className="text-xs text-[#998f7c] mt-0.5">{sub}</p>}
     </div>
   );
 
@@ -93,9 +93,9 @@ export default function SnapshotPage() {
 
   if (loading && !data) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4 text-gray-500">
-          <Loader className="w-10 h-10 animate-spin text-indigo-600" />
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-[#6b6252]">
+          <Loader className="w-10 h-10 animate-spin text-[#d40b2e]" />
           <p className="text-sm">Carregando dados do snapshot...</p>
         </div>
       </div>
@@ -104,14 +104,14 @@ export default function SnapshotPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center space-y-4">
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center">
+        <div className="bg-[#fffdf7] p-8 rounded-2xl shadow-lg max-w-md text-center space-y-4">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
             <AlertCircle className="w-8 h-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold text-gray-900">Erro ao carregar</h2>
-          <p className="text-sm text-gray-500">{error}</p>
-          <button onClick={() => fetchData()} className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">
+          <h2 className="text-lg font-bold text-[#292318]">Erro ao carregar</h2>
+          <p className="text-sm text-[#6b6252]">{error}</p>
+          <button onClick={() => fetchData()} className="inline-flex items-center gap-2 px-4 py-2 bg-[#d40b2e] text-white rounded-lg hover:bg-[#a90924] text-sm">
             <RefreshCw className="w-4 h-4" /> Tentar novamente
           </button>
         </div>
@@ -127,26 +127,26 @@ export default function SnapshotPage() {
                 todas;
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
+    <div className="min-h-screen bg-[#fbf4e6] pb-12">
       {/* Header */}
       <NavBar />
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[#fffdf7] border-b border-[#2b2517]/20">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-xl font-bold text-[#292318] flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-purple-600" />
               Snapshot da Liga Pokémon
             </h1>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-[#998f7c] mt-0.5">
               {data.ultimaAtualizacao && (
                 <><Clock className="w-3 h-3 inline mr-1" />{new Date(data.ultimaAtualizacao).toLocaleString('pt-BR')}</>
               )}
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {loading && <Loader className="w-4 h-4 animate-spin text-gray-400" />}
-            <button onClick={() => fetchData(selectedFile ?? undefined)} className="p-2 hover:bg-gray-100 rounded-lg" title="Atualizar">
-              <RefreshCw className="w-4 h-4 text-gray-500" />
+            {loading && <Loader className="w-4 h-4 animate-spin text-[#998f7c]" />}
+            <button onClick={() => fetchData(selectedFile ?? undefined)} className="p-2 hover:bg-[#f3e9d2] rounded-lg" title="Atualizar">
+              <RefreshCw className="w-4 h-4 text-[#6b6252]" />
             </button>
           </div>
         </div>
@@ -163,10 +163,10 @@ export default function SnapshotPage() {
 
         {/* Seletor de semana/arquivo */}
         {semanas && semanas.length > 0 && (
-          <section className="bg-white rounded-2xl p-4 border border-gray-200 shadow-sm">
+          <section className="bg-[#fffdf7] rounded-2xl p-4 border border-[#2b2517]/20 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <Calendar className="w-4 h-4 text-purple-500" />
-              <h2 className="text-sm font-semibold text-gray-700">Selecionar snapshot</h2>
+              <h2 className="text-sm font-semibold text-[#292318]">Selecionar snapshot</h2>
             </div>
             <div className="flex flex-wrap gap-2">
               {semanas.map((sem: Semana) => {
@@ -183,27 +183,27 @@ export default function SnapshotPage() {
                         }
                       }}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors border ${
-                        isActive ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'
+                        isActive ? 'bg-purple-600 text-white border-purple-600' : 'bg-[#fffdf7] text-[#292318] border-[#2b2517]/20 hover:bg-[#f3e9d2]'
                       }`}
                     >
                       {sem.label}
                       <ChevronDown className={`w-3 h-3 transition-transform ${expandedWeek === sem.label ? 'rotate-180' : ''}`} />
                     </button>
                     {expandedWeek === sem.label && (
-                      <div className="absolute top-full mt-1 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20 min-w-[230px]">
+                      <div className="absolute top-full mt-1 left-0 bg-[#fffdf7] rounded-lg shadow-lg border border-[#2b2517]/20 py-1 z-20 min-w-[230px]">
                         {sem.arquivos.map((f: ArquivoDisponivel) => (
                           <button
                             key={f.arquivo}
                             onClick={() => { selectArquivo(f.arquivo); setExpandedWeek(null); }}
-                            className={`w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50 flex items-center justify-between gap-2 ${
-                              f.arquivo === selectedFile ? 'bg-purple-50 text-purple-700 font-medium' : 'text-gray-600'
+                            className={`w-full text-left px-3 py-1.5 text-xs hover:bg-[#f3e9d2] flex items-center justify-between gap-2 ${
+                              f.arquivo === selectedFile ? 'bg-purple-50 text-purple-700 font-medium' : 'text-[#6b6252]'
                             }`}
                           >
                             <span className="flex items-center gap-2">
-                              <FileText className={`w-3 h-3 ${f.arquivo === selectedFile ? 'text-purple-500' : 'text-gray-400'}`} />
+                              <FileText className={`w-3 h-3 ${f.arquivo === selectedFile ? 'text-purple-500' : 'text-[#998f7c]'}`} />
                               {f.label}
                             </span>
-                            <span className="text-[10px] text-gray-400">{f.cartas} cartas</span>
+                            <span className="text-[10px] text-[#998f7c]">{f.cartas} cartas</span>
                           </button>
                         ))}
                       </div>
@@ -217,8 +217,8 @@ export default function SnapshotPage() {
 
         {/* Métricas */}
         <section>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-            <Target className="w-4 h-4 text-gray-400" />
+          <h2 className="text-sm font-semibold text-[#6b6252] uppercase tracking-wide mb-3 flex items-center gap-2">
+            <Target className="w-4 h-4 text-[#998f7c]" />
             Métricas do Snapshot
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -256,7 +256,7 @@ export default function SnapshotPage() {
               key={t}
               onClick={() => setTab(t as any)}
               className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors whitespace-nowrap shrink-0 ${
-                tab === t ? 'bg-purple-600 text-white shadow-sm' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                tab === t ? 'bg-purple-600 text-white shadow-sm' : 'bg-[#fffdf7] text-[#6b6252] hover:bg-[#f3e9d2] border border-[#2b2517]/20'
               }`}
             >
               {t === 'oportunidades' ? `🔥 Comprar (${subvalorizadas.length})` :
@@ -270,7 +270,7 @@ export default function SnapshotPage() {
         <ScoredTable cards={cards} />
 
         {/* Footer */}
-        <div className="text-center text-xs text-gray-400 pt-4">
+        <div className="text-center text-xs text-[#998f7c] pt-4">
           Arquivo: {data.arquivo} · {new Date(data.ultimaAtualizacao).toLocaleString('pt-BR')}
         </div>
       </div>

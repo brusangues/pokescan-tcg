@@ -40,7 +40,7 @@ export default function PriceHistory({ ligaId, nome, sigla, moeda }: PriceHistor
   if (erro) return null;
   if (!serie) {
     return (
-      <p className="text-xs text-gray-400 py-2">
+      <p className="text-xs text-[#998f7c] py-2">
         {ligaId || nome ? 'Carregando histórico…' : 'Sem histórico disponível para esta carta.'}
       </p>
     );
@@ -79,7 +79,7 @@ export default function PriceHistory({ ligaId, nome, sigla, moeda }: PriceHistor
   return (
     <div className="mt-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-bold text-gray-900">Evolução de Preço</h3>
+        <h3 className="text-sm font-bold text-[#292318]">Evolução de Preço</h3>
         <span className={`text-xs font-semibold ${varPct >= 0 ? 'text-green-600' : 'text-red-600'}`}>
           {varPct >= 0 ? '+' : ''}{varPct.toFixed(0)}% no período
         </span>
@@ -123,7 +123,7 @@ export default function PriceHistory({ ligaId, nome, sigla, moeda }: PriceHistor
       </svg>
 
       {/* Legenda */}
-      <div className="flex items-center gap-4 mt-2 text-[11px] text-gray-500">
+      <div className="flex items-center gap-4 mt-2 text-[11px] text-[#6b6252]">
         <span className="inline-flex items-center gap-1.5">
           <span className="w-3 h-0.5 bg-emerald-500 inline-block rounded" /> Preço real ({moedaS})
         </span>
@@ -133,7 +133,7 @@ export default function PriceHistory({ ligaId, nome, sigla, moeda }: PriceHistor
             Preço justo (modelo)
           </span>
         )}
-        <span className="ml-auto text-gray-400">{serie.length} pontos · hits diários + snapshots</span>
+        <span className="ml-auto text-[#998f7c]">{serie.length} pontos · hits diários + snapshots</span>
       </div>
     </div>
   );

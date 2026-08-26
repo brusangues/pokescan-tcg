@@ -40,24 +40,24 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
   });
 
   return (
-    <div className={`flex items-center gap-2 px-4 py-2.5 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors ${isSub ? 'bg-green-50/30' : isInfla ? 'bg-red-50/30' : ''}`}>
+    <div className={`flex items-center gap-2 px-4 py-2.5 border-b border-[#2b2517]/15 last:border-0 hover:bg-[#f3e9d2] transition-colors ${isSub ? 'bg-green-50/30' : isInfla ? 'bg-red-50/30' : ''}`}>
       {/* Nome */}
       <div className="flex-1 min-w-0">
         {/* <a> com href já prefixado por cardLink (getBasePath) — o next/link
             duplica o basePath em hrefs com query no client */}
         <a
           href={cardLink({ card_id: card.card_id, nome_en: card.nEN || card.nome, sSigla: card.sigla })}
-          className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 hover:underline truncate block"
+          className="text-sm font-semibold text-[#d40b2e] hover:text-indigo-800 hover:underline truncate block"
         >
           {card.nome}
         </a>
         {/* Set: sigla + nome completo + link Liga */}
         <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
-          <span className="text-[10px] font-mono bg-gray-100 px-1.5 py-0.5 rounded text-gray-500 shrink-0">
+          <span className="text-[10px] font-mono bg-[#f3e9d2] px-1.5 py-0.5 rounded text-[#6b6252] shrink-0">
             {card.sigla}
           </span>
           {card.setNome && (
-            <span className="text-[11px] text-gray-400 truncate">{card.setNome}</span>
+            <span className="text-[11px] text-[#998f7c] truncate">{card.setNome}</span>
           )}
           {ligaUrl && (
             <a
@@ -76,12 +76,12 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
 
       {/* Real */}
       <div className="text-right shrink-0 w-20">
-        <p className="text-sm font-bold text-gray-800">{card.moeda}{real.toFixed(2)}</p>
+        <p className="text-sm font-bold text-[#292318]">{card.moeda}{real.toFixed(2)}</p>
       </div>
 
       {/* Pred */}
       <div className="text-right shrink-0 w-20">
-        <p className="text-sm text-gray-600">{card.moeda}{pred.toFixed(2)}</p>
+        <p className="text-sm text-[#6b6252]">{card.moeda}{pred.toFixed(2)}</p>
       </div>
 
       {/* Upside */}
@@ -103,7 +103,7 @@ export default function ScoredCardRow({ card }: { card: ScoredCardRowData }) {
 
       {/* Status */}
       <div className="shrink-0 w-24 text-right">
-        <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${isSub ? 'text-green-700 bg-green-100' : isInfla ? 'text-red-700 bg-red-100' : 'text-gray-500 bg-gray-100'}`}>
+        <span className={`text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${isSub ? 'text-green-700 bg-green-100' : isInfla ? 'text-red-700 bg-red-100' : 'text-[#6b6252] bg-[#f3e9d2]'}`}>
           {card.oportunidade.replace('🔥 ', '').replace('💀 ', '')}
         </span>
       </div>

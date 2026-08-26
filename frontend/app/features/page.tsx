@@ -93,10 +93,10 @@ export default function FeaturesPage() {
     const w = Math.max(Math.abs(t.r) / Math.max(max, 0.01) * 100, 3);
     return (
       <div className="flex items-center gap-2 text-[10px]">
-        <span className="w-40 truncate text-gray-600" title={`${t.f} — ${t.g}`}>
+        <span className="w-40 truncate text-[#6b6252]" title={`${t.f} — ${t.g}`}>
           {t.f}
         </span>
-        <div className="flex-1 h-3.5 bg-gray-100 rounded overflow-hidden">
+        <div className="flex-1 h-3.5 bg-[#f3e9d2] rounded overflow-hidden">
           <div
             className={`h-full ${pos ? 'bg-green-500 ml-auto' : 'bg-red-500'}`}
             style={{ width: `${w}%`, float: pos ? 'right' : 'left' }}
@@ -111,47 +111,47 @@ export default function FeaturesPage() {
 
   if (error && !loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 max-w-md text-center">
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center p-6">
+        <div className="bg-[#fffdf7] rounded-2xl shadow-sm border border-[#2b2517]/20 p-8 max-w-md text-center">
           <ShieldAlert className="w-10 h-10 text-red-500 mx-auto mb-4" />
-          <h1 className="text-lg font-bold text-gray-900">Erro ao carregar</h1>
-          <p className="text-sm text-gray-500 mt-2">{error}</p>
-          <p className="text-xs text-gray-400 mt-2">Rode <code className="bg-gray-100 px-1 rounded">script/export_features.py</code> + <code className="bg-gray-100 px-1 rounded">script/shap_cartas.py</code> e o build.</p>
+          <h1 className="text-lg font-bold text-[#292318]">Erro ao carregar</h1>
+          <p className="text-sm text-[#6b6252] mt-2">{error}</p>
+          <p className="text-xs text-[#998f7c] mt-2">Rode <code className="bg-[#f3e9d2] px-1 rounded">script/export_features.py</code> + <code className="bg-[#f3e9d2] px-1 rounded">script/shap_cartas.py</code> e o build.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
+    <div className="min-h-screen bg-[#fbf4e6] p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-1">
-          <Bug className="w-6 h-6 text-indigo-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Features do Modelo</h1>
+          <Bug className="w-6 h-6 text-[#d40b2e]" />
+          <h1 className="text-2xl font-bold text-[#292318]">Features do Modelo</h1>
           <span className="text-[10px] font-semibold uppercase bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full ml-2">
             debug
           </span>
         </div>
-        <p className="text-sm text-gray-500 mb-4">
+        <p className="text-sm text-[#6b6252] mb-4">
           Predições com todas as features (CatBoost USD + BRL), labels reais e <b>SHAP values</b> por carta
           (quanto cada feature puxa o preço para cima/baixo).
         </p>
 
         {/* Barra de controles */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-4 flex flex-wrap items-center gap-3">
+        <div className="bg-[#fffdf7] rounded-xl shadow-sm border border-[#2b2517]/20 p-4 mb-4 flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[220px]">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#998f7c] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               value={search}
               onChange={e => { setSearch(e.target.value); setOffset(0); }}
               placeholder="Buscar por nome, id ou set..."
-              className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-3 py-2 text-sm border border-[#2b2517]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
           <select
             value={limit}
             onChange={e => { setLimit(Number(e.target.value)); setOffset(0); }}
-            className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white"
+            className="text-sm border border-[#2b2517]/20 rounded-lg px-3 py-2 bg-[#fffdf7]"
           >
             <option value={50}>50 linhas</option>
             <option value={100}>100 linhas</option>
@@ -159,11 +159,11 @@ export default function FeaturesPage() {
           </select>
           <button
             onClick={() => { setOffset(0); setShapAberto({}); }}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700"
+            className="inline-flex items-center gap-2 px-3 py-2 bg-[#d40b2e] text-white text-sm rounded-lg hover:bg-[#a90924]"
           >
             <RefreshCw className="w-4 h-4" /> Reiniciar
           </button>
-          <div className="text-xs text-gray-500 ml-auto">
+          <div className="text-xs text-[#6b6252] ml-auto">
             <Database className="w-3.5 h-3.5 inline mr-1" />
             {total} cartas {geradoEm && <>· gerado {new Date(geradoEm).toLocaleString('pt-BR')}</>}
           </div>
@@ -171,21 +171,21 @@ export default function FeaturesPage() {
 
         {/* Paginação */}
         <div className="flex items-center justify-between mb-2 text-sm">
-          <span className="text-gray-500">
+          <span className="text-[#6b6252]">
             Mostrando {total === 0 ? 0 : offset + 1}–{Math.min(offset + pagina.length, total)} de {total}
           </span>
           <div className="flex gap-2">
             <button
               onClick={() => setOffset(Math.max(0, offset - limit))}
               disabled={offset === 0}
-              className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs disabled:opacity-40 hover:bg-gray-50"
+              className="px-3 py-1.5 border border-[#2b2517]/20 rounded-lg text-xs disabled:opacity-40 hover:bg-[#f3e9d2]"
             >
               ← Anterior
             </button>
             <button
               onClick={() => setOffset(offset + limit)}
               disabled={offset + pagina.length >= total}
-              className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs disabled:opacity-40 hover:bg-gray-50"
+              className="px-3 py-1.5 border border-[#2b2517]/20 rounded-lg text-xs disabled:opacity-40 hover:bg-[#f3e9d2]"
             >
               Próxima →
             </button>
@@ -194,14 +194,14 @@ export default function FeaturesPage() {
 
         {/* Tabela */}
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-gray-400">
+          <div className="flex items-center justify-center py-20 text-[#998f7c]">
             <RefreshCw className="w-5 h-5 animate-spin mr-2" /> Carregando...
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="bg-[#fffdf7] rounded-xl shadow-sm border border-[#2b2517]/20 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-xs whitespace-nowrap">
-                <thead className="bg-gray-50 text-gray-500 uppercase tracking-wide text-[10px]">
+                <thead className="bg-[#f3e9d2] text-[#6b6252] uppercase tracking-wide text-[10px]">
                   <tr>
                     <th className="px-3 py-2 text-left">Carta</th>
                     <th className="px-3 py-2 text-right">Label R$</th>
@@ -223,10 +223,10 @@ export default function FeaturesPage() {
                     const maxR = Math.max(...topBrl.map(t => Math.abs(t.r)), 0.01);
                     const aberto = !!shapAberto[r.id];
                     return (
-                      <tr key={`${r.id}-${i}`} className="border-t border-gray-100 hover:bg-indigo-50/30 align-top">
+                      <tr key={`${r.id}-${i}`} className="border-t border-[#2b2517]/15 hover:bg-[#f3e9d2]/30 align-top">
                         <td className="px-3 py-2">
-                          <div className="font-semibold text-gray-800">{r.name}</div>
-                          <div className="text-gray-400 font-mono text-[10px]">
+                          <div className="font-semibold text-[#292318]">{r.name}</div>
+                          <div className="text-[#998f7c] font-mono text-[10px]">
                             {r.id} · {r.set_id}
                           </div>
                           {diff !== null && (
@@ -242,7 +242,7 @@ export default function FeaturesPage() {
                         <td className="px-3 py-2">
                           {s ? (
                             <div className="space-y-1 py-1">
-                              <div className="text-[10px] text-gray-400 font-mono">
+                              <div className="text-[10px] text-[#998f7c] font-mono">
                                 base ≈ R$ {Math.expm1(s.brl.bias).toFixed(2)} · {topBrl.length} features mais influentes
                               </div>
                               {topBrl.map((t, j) => (
@@ -250,13 +250,13 @@ export default function FeaturesPage() {
                               ))}
                               <button
                                 onClick={() => setShapAberto({ ...shapAberto, [r.id]: !aberto })}
-                                className="text-[10px] text-indigo-500 hover:text-indigo-700 inline-flex items-center gap-0.5 mt-1"
+                                className="text-[10px] text-[#d40b2e] hover:text-[#a90924] inline-flex items-center gap-0.5 mt-1"
                               >
                                 {aberto ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                                 SHAP em USD
                               </button>
                               {aberto && (
-                                <div className="space-y-1 mt-1 pl-2 border-l-2 border-gray-100">
+                                <div className="space-y-1 mt-1 pl-2 border-l-2 border-[#2b2517]/15">
                                   {s.usd.top.map((t, j) => (
                                     <ShapBar key={j} t={t} moeda="$" max={Math.max(...s.usd.top.map(x => Math.abs(x.r)), 0.01)} />
                                   ))}
@@ -273,8 +273,8 @@ export default function FeaturesPage() {
                             <div className="grid grid-cols-2 gap-x-4 gap-y-0.5">
                               {featureCols.map(c => (
                                 <div key={c} className="flex justify-between gap-2 text-[10px]">
-                                  <span className="text-gray-400 truncate" title={c}>{c}</span>
-                                  <span className="font-mono text-gray-700 shrink-0">{fmt(r[c])}</span>
+                                  <span className="text-[#998f7c] truncate" title={c}>{c}</span>
+                                  <span className="font-mono text-[#292318] shrink-0">{fmt(r[c])}</span>
                                 </div>
                               ))}
                             </div>

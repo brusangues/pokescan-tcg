@@ -1,1 +1,106 @@
 @import "tailwindcss";
+
+/* ============================================================
+   PokeScan TCG — Tema A "Guia de colecionador"
+   Papel/creme + tinta quente, vermelho pokébola p/ ação,
+   cores por TIPO de carta como acento contextual.
+   Sem gradientes roxos, sem indigo default.
+   ============================================================ */
+
+@theme {
+  /* superfícies */
+  --color-paper: #fbf4e6;        /* fundo geral (creme) */
+  --color-paper-deep: #f3e9d2;   /* faixas/superfícies alternadas */
+  --color-card-face: #fffdf7;    /* face de cartas/painéis */
+  --color-frame: #2b2517;        /* borda de moldura (tinta escura quente) */
+
+  /* texto */
+  --color-ink: #292318;
+  --color-ink-soft: #6b6252;
+  --color-ink-faint: #998f7c;
+
+  /* ação/marca */
+  --color-poke-red: #d40b2e;
+  --color-poke-red-dark: #a90924;
+  --color-poke-blue: #2a75bb;
+  --color-poke-yellow: #f2c11e;
+
+  /* tipos (acentos contextuais) */
+  --type-grass: #3fa129;
+  --type-fire: #ee5f18;
+  --type-water: #2a75bb;
+  --type-electric: #dd9f00;
+  --type-fighting: #b23c2b;
+  --type-psychic: #9a5b9e;
+
+  --font-display: var(--font-baloo), "Trebuchet MS", sans-serif;
+  --font-body: var(--font-nunito), system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+/* ---- primitives próprias (nada de shadcn/Tailwind cru) ---- */
+
+/* Moldura estilo carta TCG: face clara + borda de tinta */
+.card-frame {
+  background-color: var(--color-card-face);
+  border: 2px solid var(--color-frame);
+  border-radius: 14px;
+  box-shadow: 0 2px 0 0 rgba(43, 37, 23, 0.55);
+}
+.card-frame-hover {
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.card-frame-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 0 rgba(43, 37, 23, 0.55);
+}
+
+/* Botão primário: pokébola vermelha, sombra dura (sem blur de glassmorphism) */
+.btn-poke {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background-color: var(--color-poke-red);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: 12px;
+  padding: .8rem 1.6rem;
+  border: 2px solid var(--color-frame);
+  box-shadow: 0 3px 0 0 rgba(43, 37, 23, 0.8);
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+.btn-poke:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 0 0 rgba(43, 37, 23, 0.8);
+}
+.btn-poke:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 0 rgba(43, 37, 23, 0.8);
+}
+
+/* Badge estilo selo TCG */
+.badge-poke {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  background: var(--color-paper-deep);
+  border: 1.5px solid rgba(43, 37, 23, 0.35);
+  border-radius: 999px;
+  padding: .2rem .65rem;
+}
+
+/* Número tabular p/ preços */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}

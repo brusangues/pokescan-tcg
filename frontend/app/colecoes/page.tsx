@@ -43,7 +43,7 @@ const BUCKET_LABEL: Record<string, string> = {
 };
 
 const RARITY_COLOR: Record<string, string> = {
-  dr: 'text-slate-600',
+  dr: 'text-[#6b6252]',
   fa: 'text-amber-600',
   ar: 'text-rose-600',
   sir: 'text-purple-600',
@@ -52,10 +52,10 @@ const RARITY_COLOR: Record<string, string> = {
   shiny_ur: 'text-fuchsia-600',
   shiny: 'text-pink-600',
   matk: 'text-orange-600',
-  rare: 'text-slate-500',
-  uncommon: 'text-slate-400',
-  common: 'text-slate-400',
-  filler: 'text-slate-400',
+  rare: 'text-[#6b6252]',
+  uncommon: 'text-[#998f7c]',
+  common: 'text-[#998f7c]',
+  filler: 'text-[#998f7c]',
 };
 
 function fmt(v: number | undefined | null, dec = 2): string {
@@ -104,9 +104,9 @@ export default function ColecoesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-[#fbf4e6]">
         <NavBar />
-        <div className="flex items-center justify-center py-24 text-slate-400">
+        <div className="flex items-center justify-center py-24 text-[#998f7c]">
           <Loader className="animate-spin mr-2" size={20} /> Carregando coleções…
         </div>
       </div>
@@ -114,11 +114,11 @@ export default function ColecoesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[#fbf4e6]">
       <NavBar />
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-bold text-slate-800 mb-1">Coleções — EV do booster</h1>
-        <p className="text-sm text-slate-500 mb-4">
+        <h1 className="text-2xl font-bold text-[#292318] mb-1">Coleções — EV do booster</h1>
+        <p className="text-sm text-[#6b6252] mb-4">
           Valor esperado (R$) de um booster de cada coleção, calculado com os preços atuais da Liga
           (Σ probabilidade de pull × preço médio das cartas da raridade). Pull rates dos estudos
           internacionais (TCGPlayer/ThePriceDex) ajustados pela razão de cartas por booster:
@@ -126,12 +126,12 @@ export default function ColecoesPage() {
         </p>
 
         {/* Slider do preço do booster */}
-        <div className="bg-white rounded-xl border border-slate-200 p-4 mb-6 shadow-sm">
+        <div className="bg-[#fffdf7] rounded-xl border border-[#2b2517]/20 p-4 mb-6 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <label className="text-sm font-semibold text-slate-700">
+            <label className="text-sm font-semibold text-[#292318]">
               Preço do booster (R$)
             </label>
-            <span className="text-lg font-bold text-indigo-600 tabular-nums">R$ {fmt(precoBooster, 2)}</span>
+            <span className="text-lg font-bold text-[#d40b2e] tabular-nums">R$ {fmt(precoBooster, 2)}</span>
           </div>
           <input
             type="range"
@@ -142,11 +142,11 @@ export default function ColecoesPage() {
             onChange={(e) => setPrecoBooster(parseFloat(e.target.value))}
             className="w-full accent-indigo-600"
           />
-          <div className="flex justify-between text-[11px] text-slate-400 mt-1">
+          <div className="flex justify-between text-[11px] text-[#998f7c] mt-1">
             <span>R$ 1</span>
             <span>R$ 100</span>
           </div>
-          <p className="text-xs text-slate-400 mt-2">
+          <p className="text-xs text-[#998f7c] mt-2">
             Use o slider para simular o custo do booster — o ranking reordena pelo ganho esperado (EV − preço).
             O preço de mercado da Liga (caixa/36 ou avulso) aparece em cada linha como referência.
           </p>
@@ -160,13 +160,13 @@ export default function ColecoesPage() {
 
         {/* Filtro por ano de lançamento */}
         <div className="flex items-center gap-2 mb-4 flex-wrap">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Ano:</span>
+          <span className="text-xs font-semibold text-[#6b6252] uppercase tracking-wide">Ano:</span>
           <button
             onClick={() => setAnoFiltro('todos')}
             className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
               anoFiltro === 'todos'
-                ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'
+                ? 'bg-[#d40b2e] text-white border-[#d40b2e]'
+                : 'bg-[#fffdf7] text-[#6b6252] border-[#2b2517]/25 hover:border-[#d40b2e]/60'
             }`}
           >
             Todos
@@ -177,8 +177,8 @@ export default function ColecoesPage() {
               onClick={() => setAnoFiltro(a)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                 anoFiltro === a
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-white text-slate-600 border-slate-300 hover:border-indigo-400'
+                  ? 'bg-[#d40b2e] text-white border-[#d40b2e]'
+                  : 'bg-[#fffdf7] text-[#6b6252] border-[#2b2517]/25 hover:border-[#d40b2e]/60'
               }`}
             >
               {a}
@@ -187,11 +187,11 @@ export default function ColecoesPage() {
         </div>
 
         {/* Tabela */}
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+        <div className="bg-[#fffdf7] rounded-xl border border-[#2b2517]/20 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="bg-slate-100 text-left text-xs uppercase tracking-wide text-slate-500">
+                <tr className="bg-[#f3e9d2] text-left text-xs uppercase tracking-wide text-[#6b6252]">
                   <th className="px-4 py-3">Coleção</th>
                   <th className="px-3 py-3 text-right">EV/booster</th>
                   <th className="px-3 py-3 text-right">Mercado</th>
@@ -213,7 +213,7 @@ export default function ColecoesPage() {
                         <TrendingDown size={14} /> −R$ {fmt(Math.abs(upside))}
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 text-slate-500">
+                      <span className="inline-flex items-center gap-1 text-[#6b6252]">
                         <Minus size={14} /> ≈ equilibrado
                       </span>
                     );
@@ -231,29 +231,29 @@ export default function ColecoesPage() {
                   return (
                     <Fragment key={r.set}>
                     <tr
-                      className="border-t border-slate-100 hover:bg-slate-50 cursor-pointer"
+                      className="border-t border-[#2b2517]/15 hover:bg-[#fbf4e6] cursor-pointer"
                       onClick={() => setExpanded(expanded === r.set ? null : r.set)}
                     >
                       <td className="px-4 py-3">
-                        <div className="font-medium text-slate-800">{r.nome}</div>
-                        <div className="text-xs text-slate-400 uppercase">
+                        <div className="font-medium text-[#292318]">{r.nome}</div>
+                        <div className="text-xs text-[#998f7c] uppercase">
                           {r.set}
-                          {r.ano ? <span className="ml-2 normal-case text-slate-400">• {r.ano}</span> : null}
+                          {r.ano ? <span className="ml-2 normal-case text-[#998f7c]">• {r.ano}</span> : null}
                         </div>
                       </td>
-                      <td className="px-3 py-3 text-right tabular-nums font-semibold text-slate-800">
+                      <td className="px-3 py-3 text-right tabular-nums font-semibold text-[#292318]">
                         R$ {fmt(r.ev)}
                       </td>
-                      <td className="px-3 py-3 text-right tabular-nums text-slate-500">
+                      <td className="px-3 py-3 text-right tabular-nums text-[#6b6252]">
                         {r.booster_preco != null ? (
                           <>
                             R$ {fmt(r.booster_preco)}
-                            <div className="text-[11px] text-slate-400">
+                            <div className="text-[11px] text-[#998f7c]">
                               {r.caixa?.tipo === 'caixa' ? `caixa/36 · ${r.caixa?.menor ? 'menor R$ ' + fmt(r.caixa.menor, 2) : ''}` : 'avulso'}
                             </div>
                           </>
                         ) : (
-                          <span className="text-slate-300">—</span>
+                          <span className="text-[#998f7c]">—</span>
                         )}
                       </td>
                       <td className="px-3 py-3 text-right tabular-nums">{chip}</td>
@@ -261,27 +261,27 @@ export default function ColecoesPage() {
                         {covBadge}
                         {cov < 50 && <AlertTriangle size={12} className="inline ml-1 text-red-400" />}
                       </td>
-                      <td className="px-3 py-3 text-slate-300">
+                      <td className="px-3 py-3 text-[#998f7c]">
                         {expanded === r.set ? '▴' : '▾'}
                       </td>
                     </tr>
                     {/* Linha expandida INLINE (logo abaixo da linha clicada) */}
                     {expanded === r.set && (
-                      <tr className="bg-slate-50/60">
-                        <td colSpan={6} className="px-4 py-4 border-t border-slate-100">
-                          <p className="text-xs text-slate-500 mb-2 flex items-center gap-1">
+                      <tr className="bg-[#fbf4e6]/60">
+                        <td colSpan={6} className="px-4 py-4 border-t border-[#2b2517]/15">
+                          <p className="text-xs text-[#6b6252] mb-2 flex items-center gap-1">
                             <Info size={13} /> Contribuição esperada de cada raridade (probabilidade × preço médio):
                           </p>
                           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             {Object.entries(r.breakdown).map(([b, v]) => (
-                              <div key={b} className="bg-white rounded-lg border border-slate-200 px-3 py-2">
-                                <div className={`text-xs font-medium ${RARITY_COLOR[b] || 'text-slate-600'}`}>
+                              <div key={b} className="bg-[#fffdf7] rounded-lg border border-[#2b2517]/20 px-3 py-2">
+                                <div className={`text-xs font-medium ${RARITY_COLOR[b] || 'text-[#6b6252]'}`}>
                                   {BUCKET_LABEL[b] || b}
                                 </div>
-                                <div className="text-sm font-semibold text-slate-800 tabular-nums">
+                                <div className="text-sm font-semibold text-[#292318] tabular-nums">
                                   R$ {fmt((v as BucketInfo).contrib)}
                                 </div>
-                                <div className="text-[11px] text-slate-400">
+                                <div className="text-[11px] text-[#998f7c]">
                                   {(v as BucketInfo)['1em']
                                     ? `1 em ${(v as BucketInfo)['1em']} · média R$ ${fmt((v as BucketInfo).media)}`
                                     : `prob. ${((v as BucketInfo).prob ?? 0 * 100).toFixed(1)}% · média R$ ${fmt((v as BucketInfo).media)}`}
@@ -300,7 +300,7 @@ export default function ColecoesPage() {
           </div>
         </div>
 
-        <p className="text-xs text-slate-400 mt-4">
+        <p className="text-xs text-[#998f7c] mt-4">
           ⚠️ Coleções com cobertura &lt;50% têm o EV subestimado (faltam preços de cartas da Liga no snapshot) — trate
           o ranking delas com cautela. O EV usa o preço <strong>médio</strong> das cartas da raridade no set; o valor
           real por booster depende das cartas sorteadas.

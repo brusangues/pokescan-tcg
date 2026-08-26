@@ -27,7 +27,7 @@ function RowTendencia({ c, dir }: { c: TendCard; dir: 'up' | 'down' }) {
   const up = dir === 'up';
   return (
     <a href={href(c)} className="block">
-      <div className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0 hover:bg-slate-50 rounded-lg px-2 -mx-2 transition-colors">
+      <div className="flex items-center gap-3 py-2.5 border-b border-gray-50 last:border-0 hover:bg-[#fbf4e6] rounded-lg px-2 -mx-2 transition-colors">
         <img
           src={c.img}
           alt={c.nome}
@@ -36,13 +36,13 @@ function RowTendencia({ c, dir }: { c: TendCard; dir: 'up' | 'down' }) {
           onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
         />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-800 truncate">{c.nome}</p>
-          <p className="text-[11px] text-gray-400 truncate">{c.setNome} #{c.num} · {c.rarity}</p>
+          <p className="text-sm font-semibold text-[#292318] truncate">{c.nome}</p>
+          <p className="text-[11px] text-[#998f7c] truncate">{c.setNome} #{c.num} · {c.rarity}</p>
         </div>
         <div className="text-right shrink-0">
-          <p className="text-xs text-gray-500 tabular-nums">
-            <span className="line-through text-gray-400">${c.atual.toFixed(2)}</span>
-            <span className="ml-1 font-semibold text-gray-900">${c.prev.toFixed(2)}</span>
+          <p className="text-xs text-[#6b6252] tabular-nums">
+            <span className="line-through text-[#998f7c]">${c.atual.toFixed(2)}</span>
+            <span className="ml-1 font-semibold text-[#292318]">${c.prev.toFixed(2)}</span>
           </p>
         </div>
         <span
@@ -80,22 +80,22 @@ export default function TendenciasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader className="w-10 h-10 animate-spin text-indigo-600" />
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center">
+        <Loader className="w-10 h-10 animate-spin text-[#d40b2e]" />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl shadow-lg max-w-md text-center space-y-4">
+      <div className="min-h-screen bg-[#fbf4e6] flex items-center justify-center">
+        <div className="bg-[#fffdf7] p-8 rounded-2xl shadow-lg max-w-md text-center space-y-4">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto">
             <AlertCircle className="w-8 h-8 text-red-500" />
           </div>
-          <h2 className="text-lg font-bold text-gray-900">Erro ao carregar tendências</h2>
-          <p className="text-sm text-gray-500">{error}</p>
-          <button onClick={fetchData} className="mx-auto inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm">
+          <h2 className="text-lg font-bold text-[#292318]">Erro ao carregar tendências</h2>
+          <p className="text-sm text-[#6b6252]">{error}</p>
+          <button onClick={fetchData} className="mx-auto inline-flex items-center gap-2 px-4 py-2 bg-[#d40b2e] text-white rounded-lg hover:bg-[#a90924] text-sm">
             <RefreshCw className="w-4 h-4" /> Tentar novamente
           </button>
         </div>
@@ -107,28 +107,28 @@ export default function TendenciasPage() {
   const quedas: TendCard[] = data.quedas || [];
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-12">
+    <div className="min-h-screen bg-[#fbf4e6] pb-12">
       <NavBar />
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-[#fffdf7] border-b border-[#2b2517]/20">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-indigo-600" />
+            <h1 className="text-xl font-bold text-[#292318] flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-[#d40b2e]" />
               Tendência — próxima semana
             </h1>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-xs text-[#998f7c] mt-0.5">
               Previsão do modelo com base no histórico de preços (TCGCSV), em USD
             </p>
           </div>
-          <button onClick={fetchData} className="p-2 hover:bg-gray-100 rounded-lg" title="Atualizar">
-            <RefreshCw className="w-4 h-4 text-gray-500" />
+          <button onClick={fetchData} className="p-2 hover:bg-[#f3e9d2] rounded-lg" title="Atualizar">
+            <RefreshCw className="w-4 h-4 text-[#6b6252]" />
           </button>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-8">
         {data.gerado_em && (
-          <div className="flex items-center gap-2 text-xs text-gray-500">
+          <div className="flex items-center gap-2 text-xs text-[#6b6252]">
             <Calendar className="w-3.5 h-3.5" />
             Previsto em {new Date(data.gerado_em).toLocaleString('pt-BR')} ·{' '}
             {data.total} cartas na faixa de preço analisada (${2}–${150}, |tend|≥3%)
@@ -136,26 +136,26 @@ export default function TendenciasPage() {
         )}
 
         <div className="grid md:grid-cols-2 gap-6">
-          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-emerald-50/50">
+          <section className="bg-[#fffdf7] rounded-2xl border border-[#2b2517]/20 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-[#2b2517]/15 bg-emerald-50/50">
               <TrendingUp className="w-4 h-4 text-emerald-600" />
-              <h2 className="text-sm font-bold text-gray-800">Subidas previstas</h2>
-              <span className="ml-auto text-xs text-gray-400">{subidas.length} cartas</span>
+              <h2 className="text-sm font-bold text-[#292318]">Subidas previstas</h2>
+              <span className="ml-auto text-xs text-[#998f7c]">{subidas.length} cartas</span>
             </div>
             <div className="px-3 py-2">
-              {subidas.length === 0 && <p className="text-sm text-gray-400 py-4 text-center">Sem dados</p>}
+              {subidas.length === 0 && <p className="text-sm text-[#998f7c] py-4 text-center">Sem dados</p>}
               {subidas.map((c) => <RowTendencia key={c.card_id} c={c} dir="up" />)}
             </div>
           </section>
 
-          <section className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-100 bg-red-50/50">
+          <section className="bg-[#fffdf7] rounded-2xl border border-[#2b2517]/20 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-[#2b2517]/15 bg-red-50/50">
               <TrendingDown className="w-4 h-4 text-red-600" />
-              <h2 className="text-sm font-bold text-gray-800">Quedas previstas</h2>
-              <span className="ml-auto text-xs text-gray-400">{quedas.length} cartas</span>
+              <h2 className="text-sm font-bold text-[#292318]">Quedas previstas</h2>
+              <span className="ml-auto text-xs text-[#998f7c]">{quedas.length} cartas</span>
             </div>
             <div className="px-3 py-2">
-              {quedas.length === 0 && <p className="text-sm text-gray-400 py-4 text-center">Sem dados</p>}
+              {quedas.length === 0 && <p className="text-sm text-[#998f7c] py-4 text-center">Sem dados</p>}
               {quedas.map((c) => <RowTendencia key={c.card_id} c={c} dir="down" />)}
             </div>
           </section>
