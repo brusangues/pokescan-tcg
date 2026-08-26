@@ -79,6 +79,7 @@ interface CardData {
     fonte: string;
     is_jp?: boolean;
     ligaOk?: boolean;
+    buscaLiga?: string;
   } | null;
   error?: string;
   // Liga-first (P1.33): nome pt-BR + EN original (p/ tooltip)
@@ -336,6 +337,23 @@ function IdiomasSection({ dados, atual }: {
                 <h3 className="text-xs font-semibold text-[#6b6252] uppercase mb-1">Referência externa</h3>
                 <p className="text-sm font-medium text-[#d40b2e] group-hover:underline flex items-center gap-1">
                   {(card.set?.id || '').toUpperCase()} #{card.number}
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </p>
+              </a>
+            )}
+
+            {/* Fallback EN-only (P2.41): sem edição direta na Liga — link de BUSCA
+                pelo nome (a Liga localiza por nome; não há card_id/sigla certo) */}
+            {card.modelo && !card.modelo.ligaOk && card.modelo.buscaLiga && (
+              <a
+                href={`https://www.ligapokemon.com.br/?view=cards/card&card=${encodeURIComponent(card.modelo.buscaLiga)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-[#fffdf7] rounded-2xl p-4 border border-[#2b2517]/20 shadow-sm hover:border-[#2b2517]/30 hover:shadow-md transition-all group"
+              >
+                <h3 className="text-xs font-semibold text-[#6b6252] uppercase mb-1">Referência externa</h3>
+                <p className="text-sm font-medium text-[#d40b2e] group-hover:underline flex items-center gap-1">
+                  Buscar "{card.modelo.buscaLiga}" na Liga
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 </p>
               </a>

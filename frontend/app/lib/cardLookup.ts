@@ -121,7 +121,7 @@ export function normNome(n: string): string {
 
 /** Monta o objeto `modelo` do fallback Liga-first (mesmo shape do escorado). */
 function montarModeloLiga(
-  hit: { pred: number; real: number | null; sigla?: string; iCO?: number },
+  hit: { pred: number; real: number | null; sigla?: string; iCO?: number; nome?: string },
   chave: string,
   upside: number
 ) {
@@ -140,9 +140,11 @@ function montarModeloLiga(
     num: chave.split('-')[1] || '',
     sigla: hit.sigla || '',
     setNome: '',
+    // fallback EN-only: sem edição na Liga — usa busca por nome (não link direto)
+    ligaOk: !!hit.sigla,
+    buscaLiga: hit.nome || undefined,
     fonte: 'Modelo PokéScan',
     is_jp: false,
-    ligaOk: true,
   };
 }
 
@@ -355,15 +357,26 @@ export async function lookupCard(params: {
           // do modelo BRL treinado no catálogo da Liga ({idE}-{num}) + preço
           // real da Liga quando houver. Resolve pela carta EN ({set_ptcg}-{num},
           // alias gerado no pred_liga.json) — direto, sem depender do setMap.
-          const pl = await loadPredLiga() as Record<string, { pred: number; real: number | null; sigla?: string; iCO?: number }> | null;
+          const pl = await loadPredLiga() as Record<string, { pred: number; real: number | null; sigla?: string; iCO?: number; nome?: string }> | null;
           if (!pl) return null;
-          const numN = parseInt(params.num || card.num || '', 10);
-          const chave = isNaN(numN) ? null : `${card.s}-${numN}`;
-          const hit = chave ? pl[chave] : null;
+          // P1.34/fallback completo: suporta número alfanumérico (ex. promos "SM108")
+          // e resolve por card.s + num (alias EN no pred_liga) — o parseInt antigo
+          // quebrava (parseInt('SM108') = NaN) e caía fora de cobertura.
+          const numStr = String(params.num || card.num || '').trim();
+          // tenta a chave exata primeiro (cards.json num pode ser "SM108" ou "1")
+          let chave: string | null = null;
+          let hit = numStr ? (pl[`${card.s}-${numStr}`] ?? null) : null;
+          if (!hit && /^\d+$/.test(numStr)) {
+            const kI = `${card.s}-${parseInt(numStr, 10)}`;
+            hit = pl[kI] ?? null;
+            if (hit) chave = kI;
+          } else if (hit) {
+            chave = `${card.s}-${numStr}`;
+          }
           if (!hit) {
             // sem alias EN: tenta a chave canônica {idE}-{num} via setMap
             const eidLiga = Object.entries(setMap).find(([k, v]) => v === card.s && /^\d+$/.test(k))?.[0];
-            const k2 = eidLiga ? `${eidLiga}-${numN}` : null;
+            const k2 = eidLiga && /^\d+$/.test(numStr) ? `${eidLiga}-${parseInt(numStr, 10)}` : null;
             if (!k2 || !pl[k2]) return null;
             const h2 = pl[k2];
             const up2 = h2.real ? ((h2.pred - h2.real) / h2.real) * 100 : 0;
