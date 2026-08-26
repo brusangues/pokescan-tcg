@@ -64,6 +64,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | Scanner mobile abas Foto/Buscar (P2.35) + copy motor "Ativar motor de busca", MBs em `<details>` (P2.36) + seletor de dias do /hits em dropdown `‹ ›` | `b1f9c0d`,`ae042ae` |
 | Hero do scanner "Escaneie ou busque pelo nome" (P3.37) | `b1f9c0d` |
 | **Nome pt-BR da Liga nas cartas (P1.33)** — `cards_basico` anexa nPT/nEN via en_id do catálogo (13.728 cartas/66%); `cardLookup` prioriza nPT; EN vira secundário na /card. Ex.: Brás, Professor Carvalho Impostor | `72c9b47` |
+| **Busca multicritério no scanner (P1.34)** — consulta vira tokens; cada token casa com QUALQUER campo (nome, nome pt-BR /nPT, set, número, id, raridade); carta só entra se TODOS os tokens casam. Ex.: "gengar stormfront" → Gengar do Stormfront; "charizard 201" → Reshiram & Charizard-GX; "carvalho" → Professor Carvalho/Impostor | `(a commitar)` |
 
 ## Liga-first — Fase 3 (modelos)
 

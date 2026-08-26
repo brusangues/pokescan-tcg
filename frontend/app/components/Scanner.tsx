@@ -68,16 +68,38 @@ function CardResult({ card, score, rank }: { card: any; score?: number; rank?: n
   );
 }
 
-/** Rank de busca por texto: 0 exato, 1 prefixo/número, 2 contém nome, 3 coleção/id, 4 raridade, -1 sem match. */
+/**
+ * Busca por texto MULTICRITÉRIO (P1.34): a consulta é dividida em tokens e
+ * CADA token pode casar com QUALQUER campo (nome, set/coleção, número, id,
+ * raridade). A carta só entra se TODOS os tokens casarem em (em qualquer
+ * campo). Ex.: "gengar stormfront" → Gengar (nome) + Stormfront (set).
+ * Retorno = soma dos ranks por token (menor = melhor). -1 = sem match total.
+ */
 function rankCard(c: any, ql: string): number {
+  const tokens = ql.split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return -1;
+  let total = 0;
+  for (const tok of tokens) {
+    const s = tokenMatch(c, tok);
+    if (s < 0) return -1; // qualquer token sem casar em nenhum campo => não é hit
+    total += s;
+  }
+  return total;
+}
+
+/** Rank de UM token contra a carta: 0 exato nome, 1 prefixo nome/num, 2 contém nome, 3 set/id, 4 raridade, -1 sem match. */
+function tokenMatch(c: any, tok: string): number {
   const n = (c.n || '').toLowerCase();
-  if (n === ql) return 0;
-  if (n.startsWith(ql)) return 1;
-  if ((c.num || '') === ql) return 1;
-  if (n.includes(ql)) return 2;
-  if ((c.sn || '').toLowerCase().includes(ql)) return 3;
-  if ((c.id || '').toLowerCase().includes(ql)) return 3;
-  if ((c.r || '').toLowerCase().includes(ql)) return 4;
+  const nPT = (c.nPT || '').toLowerCase();
+  if (n === tok || (nPT && nPT === tok)) return 0;
+  // número: token numérico casa com num (ex.: "201")
+  const num = String(c.num || '').toLowerCase();
+  if (tok === num) return 1;
+  if (n.startsWith(tok) || (nPT && nPT.startsWith(tok))) return 1;
+  if (n.includes(tok) || (nPT && nPT.includes(tok))) return 2;
+  if ((c.sn || '').toLowerCase().includes(tok)) return 3;
+  if ((c.id || '').toLowerCase().includes(tok)) return 3;
+  if ((c.r || '').toLowerCase().includes(tok)) return 4;
   return -1;
 }
 
