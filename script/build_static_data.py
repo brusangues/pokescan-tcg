@@ -373,17 +373,33 @@ def _enxuga_card(c: dict) -> dict:
 def cards_basico() -> list:
     """Catálogo enxuto p/ lookup (mesmo shape do cards.json do scanner)."""
     raw = json.loads(PTCG_CACHE.read_text(encoding='utf-8'))
-    out = [{
-        'id': c['id'],
-        'n': c.get('name') or '',
-        's': c.get('set', {}).get('id') or '',
-        'sn': c.get('set', {}).get('name') or '',
-        'num': c.get('number') or '',
-        'r': c.get('rarity') or '',
-        'p': (c.get('tcgplayer', {}).get('prices', {}) or {}).get('holofoil', {}).get('market')
-             or (c.get('tcgplayer', {}).get('prices', {}) or {}).get('normal', {}).get('market'),
-        'img': c.get('images', {}).get('small') or c.get('images', {}).get('large'),
-    } for c in raw]
+    # Liga-first (P1.33): mapa en_id -> (nPT, nEN) p/ nome pt-BR no site
+    npt_by_en = {}
+    try:
+        _cat = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))
+        for _c in _cat:
+            if _c.get('en_id'):
+                npt_by_en[_c['en_id']] = (_c.get('nPT') or '', _c.get('nEN') or '')
+    except Exception as _e:
+        print('⚠ cards_basico nPT skip:', _e)
+    out = []
+    for c in raw:
+        entry = {
+            'id': c['id'],
+            'n': c.get('name') or '',
+            's': c.get('set', {}).get('id') or '',
+            'sn': c.get('set', {}).get('name') or '',
+            'num': c.get('number') or '',
+            'r': c.get('rarity') or '',
+            'p': (c.get('tcgplayer', {}).get('prices', {}) or {}).get('holofoil', {}).get('market')
+                 or (c.get('tcgplayer', {}).get('prices', {}) or {}).get('normal', {}).get('market'),
+            'img': c.get('images', {}).get('small') or c.get('images', {}).get('large'),
+        }
+        npt, nen = npt_by_en.get(c['id'], ('', ''))
+        if npt:
+            entry['nPT'] = html.unescape(npt)
+            entry['nEN'] = html.unescape(nen.split('(')[0].strip())
+        out.append(entry)
     # Fase 2.3 (Liga-first): inclui as coleções pt-BR da LIGA (ex. MEP/MEPR) no lookup do site
     try:
         cfg = json.loads((REPO / 'data' / 'liga' / 'ptbr_edicoes.json').read_text(encoding='utf-8')).get('edicoes', {})

@@ -301,7 +301,10 @@ export async function lookupCard(params: {
 
   return {
     id: card.id,
-    name: detalhe?.name || card.n,
+    name: (card as any).nPT || detalhe?.name || card.n,
+    // Liga-first (P1.33): nome pt-BR (quando tem) + EN p/ tooltip
+    nPT: (card as any).nPT || null,
+    nEN: (card as any).nEN || null,
     // Liga-first (pt-BR): campos do catálogo da LIGA (link "Ver na Liga" + BRL)
     liga_nen: (card as any).liga_nen || null,
     liga_ico: (card as any).liga_ico ?? null,

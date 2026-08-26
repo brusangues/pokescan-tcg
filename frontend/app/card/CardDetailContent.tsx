@@ -81,6 +81,9 @@ interface CardData {
     ligaOk?: boolean;
   } | null;
   error?: string;
+  // Liga-first (P1.33): nome pt-BR + EN original (p/ tooltip)
+  nPT?: string | null;
+  nEN?: string | null;
   }
 
 /** Seção 'Mesma carta em outros idiomas' — agrupa por idioma (PT/EN/JP). */
@@ -281,6 +284,9 @@ function IdiomasSection({ dados, atual }: {
             <ArrowLeft className="w-4 h-4" /> Voltar
           </a>
           <h1 className="text-3xl font-bold tracking-tight">{card.name}</h1>
+          {card.nPT && card.nEN && card.nEN !== card.name && (
+            <p className="text-[#f3e9d2]/70 text-base mt-0.5">{card.nEN}</p>
+          )}
           <p className="text-[#f3e9d2] text-sm mt-1">{card.set.name} — #{card.number}/{card.set.printedTotal}</p>
         </div>
       </div>
