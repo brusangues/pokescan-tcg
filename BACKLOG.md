@@ -30,8 +30,9 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 ## 🔬 P3 — Experimentos / ideias
 
 ### [P3] 34. Segmentação: binder com fundo preto perde a fileira inferior
-- **Evidência**: foto `20260822_115216` (binder 9-pocket fundo preto) — Canny+Otsu acham 4-6 quads de 8; as cartas perdidas ficam nas bordas (topo/fundo) contra o fundo escuro. Overlays em `experiments/debug_crops/`.
-- **Ideia**: máscara por células do binder (grade 3x3 detectável pelas costuras) ou CLAHE local antes do Canny. Medir na base antes (réplica Python fiel: `debug_segmentacao.py`).
+- **Evidência**: foto `20260822_115216` (binder 9-pocket fundo preto, 3000x4000, 8 cartas) — Canny+Otsu globais acham 4-6 quads de 8; as perdidas ficam nas bordas (topo/fundo) contra o fundo escuro. Grade real detectável pelas costuras (vinil) = 3 col × 3 linhas. Overlays em `experiments/debug_crops/`.
+- **Medido (26/08)**: diagnótico confirma grade 3x3; detecção por célula com grade FIXA 3x3 recupera 8/8 (baseline 6). Mas **portar ao browser por "busca por validação de todas as grades" (2x2..4x2) gerou FALSOS** — `detectCardQuads` passou a detectar 10 caixas em fotos de 8/9 cartas, e o matching confiável não melhorou (apareceram nomes errados). Protótipos em `experiments/{diag_grid,detectar_grid_binder,recall_deteccao_grid,matching_gain_grid}.py`.
+- **Conclusão**: detectar a grade **por busca de todas as grades** é ruim no browser (super-detecta). **Rumo certo**: detectar a grade SÓ pelas COSTURAS robustas do binder (linhas escuras contínuas de vinil) e preencher apenas as células que ficaram vazias no passe global — nunca testar grades múltiplas. Medir de novo na base rotulada antes de portar (mesma lição do P2.32: validar matching real no browser, não só detecção offline).
 - Tags: scanner, segmentação, cv
 
 ### [P3] 17. Modelo dedicado para cartas JP + subsets japoneses
