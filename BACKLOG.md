@@ -39,10 +39,6 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Gatilho**: com ~3x a base atual, retreinar o re-rank — hoje não generaliza (dataset pequeno). Cada nova foto rotulada também melhora a avaliação de segmentação/matching.
 - Tags: scanner, dados, rotulagem
 
-### [P2] 10. Alertas de oportunidade (Telegram)
-- Crons já escoram e formatam top 10; **Ideia**: alerta dedicado quando uma carta cruza thresholds (ex. upside > +50% e iCO >= 3) — hoje é só na listagem
-- Tags: crons, notificações
-
 ---
 
 ## 🔬 P3 — Experimentos / ideias
