@@ -107,7 +107,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 
 ## Em aberto no backlog
 
-Ver [`BACKLOG.md`](BACKLOG.md): P1.29 (modelo de previsão temporal USD),
-P2.10 (alertas Telegram), P2.29 (calibrar threshold multi-carta),
-P3.17-23, P3.25-27 (incl. explicabilidade via SHAP — P3.27), P3.30
-(multi-carta Fase 2).
+Ver [`BACKLOG.md`](BACKLOG.md): P2.32 (scanner matching — gap ao teto top-5),
+P2.33 (base rotulada manual), P3.17 (modelo JP + subsets JP), P3.34 (binder
+preto), P3.18 (dinov2-large), P3.19 (ensembling), P3.30.ext (alerta de
+tendência), P3.20/21/26 (coleção do usuário, PWA, jsfeat).

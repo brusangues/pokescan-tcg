@@ -8,21 +8,7 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-### [P1] 34. Busca multicritério no scanner (qualquer campo, multi-termo)
-- **Problema**: busca atual cobre nome/número/coleção/raridade/id, mas um termo por vez — "Gengar stormfront" não casa porque "stormfront" é o nome do set e a busca não cruza carta×set.
-- **Ideia**: consulta por tokens — cada token pode casar com QUALQUER campo (nome, set/coleção, raridade, número, id) e todos os tokens precisam de match. Ex.: "Gengar stormfront" → Gengar do set Stormfront; "charizard 201" → Charizard número 201; "reverse holo" → variante no nome.
-- **Cuidado**: debounce/perf (índice 20k+); ranking quando múltiplos campos casam; manutenção da busca por palavras existente como fallback.
-- Tags: scanner, frontend, busca
-
-### [P1] 31. Subsets japoneses
-- **Feito (19/08)**: 14 sets 1:1 re-mapeados p/ o set EN correto (ver FEATURES.md) — o P1.31 principal está resolvido.
-- **Resta**: os subsets japoneses da era SWSH têm correspondência EN APENAS PARCIAL (cov 30-70%) e numeração ≠ EN — mapeá-los a 1 set daria nome/número errado; hoje resolvem por fallback de NOME (mais correto). Reavaliar caso a projeto decida suportar os sets JP nativos.
-- Tags: dados, mapeamento, set, JP
-
-### [P1] 30. Alerta de tendência + integração da previsão ao scanner
-- **Feito (19/08)**: ranking de tendência da próxima semana implementado (página /tendencias — ver FEATURES.md); P1.30 principal resolvido.
-- **Resta (extensão)**: disparar alerta quando carta entra no top de subida prevista (relacionado ao P2.10); integrar a previsão ao scanner/similaridade (mostrar tendência no resultado de scan evitando cartas em queda).
-- Tags: dados, TCGCSV, modelagem, produto
+> **Vazio** — a última P1 (P1.34, busca multicritério) foi concluída em 26/08. Os próximos candidatos estão em P2 (→ P2.32). Incluir aqui o próximo item a ser atacado.
 
 ---
 
@@ -48,11 +34,11 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Ideia**: máscara por células do binder (grade 3x3 detectável pelas costuras) ou CLAHE local antes do Canny. Medir na base antes (réplica Python fiel: `debug_segmentacao.py`).
 - Tags: scanner, segmentação, cv
 
-
-### [P3] 17. Modelo dedicado para cartas JP
-- Hoje JP usa o modelo global EN via fallback (mapeamento de 62 siglas); usuário pediu modelo JP dedicado, mas sem features exclusivas decidiu-se pelo fallback
-- **Ideia futura**: coletar mais dados JP (histórico de preços da Liga) e treinar modelo separado
-- Tags: modelagem, JP
+### [P3] 17. Modelo dedicado para cartas JP + subsets japoneses
+- Hoje JP usa o modelo global EN via fallback (mapeamento de 62 siglas); usuário pediu modelo JP dedicado, mas sem features exclusivas decidiu-se pelo fallback.
+- **Subsets JP (restante do P1.31)**: subsets japoneses da era SWSH têm correspondência EN APENAS PARCIAL (cov 30-70%) e numeração ≠ EN — mapeá-los a 1 set daria nome/número errado; hoje resolvem por fallback de NOME (mais correto). Reavaliar caso o projeto decida suportar os sets JP nativos.
+- **Ideia futura**: coletar mais dados JP (histórico de preços da Liga) e treinar modelo separado.
+- Tags: modelagem, JP, mapeamento
 
 ### [P3] 18. Embeddings: testar dinov2-large em produção
 - Ablações: `large/cls+mean/pca32` teve R² 0.2948 vs `base` 0.2870 (+0.008); base foi integrado por custo/velocidade
@@ -62,6 +48,10 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 ### [P3] 19. Ensembling USD+BRL
 - BRL usa USD como feature; **Ideia**: testar blend (média ponderada) ou stacked model
 - Tags: modelagem
+
+### [P3] 30.ext. Alerta de tendência + integrar previsão ao scanner (extensão do P1.30)
+- P1.30 concluído (`/tendencias`, FEATURES). **Resta**: disparar alerta quando carta entra no top de subida prevista (relacionado ao P2.10 já feito); integrar a previsão ao scanner/similaridade (mostrar tendência no resultado de scan evitando cartas em queda).
+- Tags: dados, TCGCSV, modelagem, produto
 
 ### [P3] 20. Alertas de cartas da coleção do usuário
 - **Ideia**: usuário marca cartas que possui; o sistema avisa quando elas sobem/descem
