@@ -15,10 +15,11 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 ## 💡 P2 — Melhorias de produto
 
 ### [P2] 32. Scanner matching: sinal independente p/ fechar gap até teto top-5
-- **Estado (26/08)**: verificador ORB prototipado offline (`experiments/orb_prototipo.py`, base rotulada, métrica agregada por carta) — **caminho ORB DESCARTADO por evidência**. DINOv2 top-1 = 74/115 (64.3%); +ORB verificando ambiguidades = 75/115 (65.2%) top-3, 74/115 top-5 → ganho ~0. O ORB discrimina bem por crop (46 ambíguos → 35 a certa nos top-k → acertou 32), mas essas cartas já tinham sido achadas em outro crop da mesma foto. Conclusão: o gap ao teto está em **cartas fora do top-5 ou não detectadas pela segmentação**, não em reordenar os top-k.
-- **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`) — só um sinal INDEPENDENTE do DINOv2 pode fechar o gap.
-- **Próximo passo sugerido**: atacar o recall do top-k (aumentar índice p/ cartas que hoje não chegam ao top-5, melhorar segmentação p/ recuperar cartas não detectadas) em vez de refinamento rank.
-- Tags: scanner, matching, cv
+- **Estado (02/09 — indexação RESOLVIDA)**: diagnosticado que 17.296 cartas do catálogo da Liga NÃO estavam no índice (só 20.741 de 31.281). `build_search_index` agora anexa todas as cartas da Liga fora do índice (imagem `img_liga` baixada por `script/baixar_imagens_liga.py`); índice reconstruído 20.741→**37.679** (+16.938). Self-match das novas validadas (~0.97-0.99 @top1=id); deploy publicado. Commit `1de0650` + deploy.
+- **Limite conhecido**: `Lílian`, `Pikachu do Ash`, `Sistema de Pressão Baixa`, `Energia Misturada` NÃO existem no catálogo Liga (ausência de dados, não de índice).
+- **Resta (matching)**: ORB descartado (26/08) — o gap ao teto está em cartas fora do top-5 por **embedding fraco** (Team Aqua/Magma ~0.49-0.68, Juiz, Vileplume = cosseno baixo) e **segmentação** (cartas não detectadas). Próximos passos: augmentação do índice p/ as cartas com cosseno baixo; melhorar segmentação p/ recuperar cartas não detectadas.
+- **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`).
+- Tags: scanner, matching, cv, indexação
 
 ### [P2] 33. Base rotulada manual — continuar crescendo (retreinar re-rank no futuro)
 - **Estado**: `C:/Projects/pokescan-tcg-labels` — 29 fotos/137 cartas rotuladas 100% manual (99% corretas). Harness completo pronto: `experiments/rerank_sinais.py` (gera dataset de pares) + `treinar_rerank.py` (CatBoost LOFO com folhas agrupadas).
