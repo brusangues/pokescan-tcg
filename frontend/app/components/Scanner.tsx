@@ -52,7 +52,7 @@ function CardResult({ card, score, rank }: { card: any; score?: number; rank?: n
         </p>
         <div className="flex items-center justify-between mt-2 text-sm">
           <span className="text-xs text-[#998f7c]">{card.r || '—'}</span>
-          {card.p != null && (
+          {typeof card.p === 'number' && (
             <span className="font-medium text-emerald-600">${card.p.toFixed(2)}</span>
           )}
         </div>

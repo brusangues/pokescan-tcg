@@ -430,6 +430,49 @@ def cards_basico() -> list:
             })
     except Exception as e:
         print('⚠ cards_basico (pt-BR Liga) skip:', e)
+    # Correção P1.35: adiciona as cartas LIGA_ONLY (sem en_id) indexadas no
+    # scanner pelo P2.32 (37.679 no índice, mas fora do cards.json de busca).
+    # Espelha o padrão das pt-BR ({sigla}-{num}) p/ o link /card?set&num resolver
+    # (estratégia 2 do cardLookup) — o scan gera set={sigla}&num={num}.
+    try:
+        catalogo = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))
+        nomes_ptbr2 = {v.get('sigla', '').upper(): v.get('nome', '') for v in cfg.values()}
+        _ids_nao_duplicar = {x['id'] for x in out}
+        n_liga_only = 0
+        for c in catalogo:
+            if c.get('en_id'):
+                continue  # já está no catálogo EN
+            if not c.get('img_liga'):
+                continue  # sem imagem p/ exibir
+            num_raw = str(c.get('num') or c.get('sN') or '')
+            if not num_raw or '-' in num_raw or '/' in num_raw:
+                continue  # malformado (idE, range)
+            sigla2 = str(c.get('sigla') or c.get('sSigla') or '?').lower()
+            cid2 = f'{sigla2}-{num_raw.split(".")[0]}'
+            if cid2 in _ids_nao_duplicar:
+                continue
+            npt2 = (c.get('nPT') or '').strip()
+            nen2 = (c.get('nEN') or c.get('nome_en') or '').split('(')[0].strip()
+            sp = c.get('img_liga') or ''
+            img2 = ('https://repositorio.sbrauble.com' + sp.replace('//', '/', 1)) if sp.startswith('//') else sp
+            out.append({
+                'id': cid2,
+                'n': npt2 or nen2 or cid2,
+                's': sigla2,
+                'sn': nomes_ptbr2.get(c.get('sigla', '').upper(), c.get('ed_sNomePortugues') or c.get('sNomePortugues') or sigla2),
+                'num': num_raw.split('.')[0],
+                'r': '',
+                'p': c.get('preco_brl_p1a') or c.get('preco_menor'),
+                'img': img2,
+                'liga_ico': c.get('iCO'),
+                'moeda': 'BRL',
+            })
+            _ids_nao_duplicar.add(cid2)
+            n_liga_only += 1
+        if n_liga_only:
+            print(f'   liga_only adicionadas ao cards.json de busca: {n_liga_only}')
+    except Exception as e:
+        print('⚠ cards_basico (liga_only P1.35) skip:', e)
     return out
 
 
