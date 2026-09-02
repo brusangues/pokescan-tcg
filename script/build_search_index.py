@@ -114,6 +114,52 @@ if PTBR_CFG.exists():
             n_ptbr += 1
 print(f'Cartas totais: {len(com_img)} (catálogo {len(com_img)-n_ptbr} + pt-BR da Liga {n_ptbr})')
 
+# ── 0b. Cartas da LIGA fora do índice (P2.32): anexa TODAS as cartas do
+#      catálogo (data/catalogo_liga.json) que NÃO estão no cards.json atual e
+#      têm imagem local (data/img_cache/{id}.png — baixada por
+#      baixar_imagens_liga.py da img_liga da Liga). Estas são arte exclusiva
+#      (subsets JP/coleções pt-BR/promos) que o usuário fotografa e nunca casava.
+#      O id segue o padrão pt-BR: {idE}-{num} com set = sigla da edição Liga.
+ids_atuais = {c['id'] for c in com_img}
+LIGA_CAT = BASE / 'data' / 'catalogo_liga.json'
+n_liga_extra = 0
+if LIGA_CAT.exists():
+    cat_liga = json.loads(LIGA_CAT.read_text(encoding='utf-8'))
+    for c in cat_liga:
+        eid = c.get('en_id')
+        num_raw = str(c.get('num') or c.get('sN') or '')
+        # pula ids malformados do catálogo: num vazio ou range tipo "08-09"
+        if not num_raw or '-' in num_raw or '/' in num_raw:
+            continue
+        cid = eid if eid else f"{c.get('idE')}-{num_raw}"
+        if cid in ids_atuais:
+            continue
+        local = IMG_CACHE / f'{cid}.png'
+        if not local.exists():
+            continue  # sem imagem = não dá p/ embedding
+        sigla = str(c.get('sigla') or c.get('sSigla') or '?').lower()
+        npt = (c.get('nPT') or '').strip()
+        nen = (c.get('nome_en') or c.get('nEN') or '').split('(')[0].strip()
+        img_url = c.get('img_liga') or ''
+        if img_url.startswith('//'):
+            img_url = 'https://repositorio.sbrauble.com' + img_url
+        elif img_url.startswith('/'):
+            img_url = 'https://repositorio.sbrauble.com' + img_url
+        com_img.append({
+            'id': cid,
+            'name': npt or nen or cid,
+            'number': num_raw.split('.')[0],
+            'rarity': c.get('iRaridade') or c.get('raridade_detalhada') or 'Promocional',
+            'supertype': 'Pokémon', 'subtypes': ['Promotional'],
+            'set': {'id': sigla, 'name': c.get('ed_sNomePortugues') or c.get('sNomePortugues') or c.get('sN') or sigla},
+            'tcgplayer': None,
+            'images': {'small': img_url},
+            '_local_img': str(local),
+        })
+        n_liga_extra += 1
+        ids_atuais.add(cid)  # evita duplicar id repetido no catálogo
+    print(f'Cartas totais: {len(com_img)} (+ {n_liga_extra} cartas da Liga fora do índice, P2.32)')
+
 def open_img(card):
     if '_local_img' in card:
         return Image.open(card['_local_img']).convert('RGB')
