@@ -8,13 +8,13 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-> **Vazio** — a última P1 (P1.35, busca textual das liga_only) foi resolvida em 02/09. Os próximos candidatos estão em P2 (→ P2.32 matching) e P1.36 (link /card?card_id).
+> **Vazio** — P1.35 e P1.36 resolvidos/descartados em 02/09. Próximo candidato: P2.32 matching (embedding fraco/segmentação).
 
-### [P1] 36. Link `/card?card_id=...` retorna 404 (só `set+num+nome` abre)
-- **Bug revelado pelo teste de integração**: `cards.ts`/`cardLookup.ts` geram links `/card?card_id={card_id}` (`getCardLink` e referências em `/card`), mas navegar para `/card?card_id=base1-4` **retorna página de 404**. O único formato que abre é `/card/?set=...&num=...&nome=...` (usado nos links do Scanner/tendencias). Rotas com `card_id` são caminho morto.
-- **Confirmado**: `/card/?set=base1&num=4&nome=Charizard` abre; `/card?card_id=base1-4` → 404 "Página não encontrada".
-- **Ação**: verificar de onde vêm os links `card_id` no produto (algum componente usa o formato morto?) e unificar em `set+num+nome`, ou fazer a rota `/card` aceitar resolução por `card_id`. Ajustar `tests` p/ cobrir a rota canônica.
-- Tags: frontend, rota, bug, teste-integracao
+### [P1] 36. ~~Link `/card?card_id=...` retorna 404~~ → NÃO-BUG (descartado)
+- **Verificado (02/09)**: a rota `/card/?card_id={idE}-{lang}-{num}` **funciona** — `411-en-4` (Charmander), `298-en-13` (Ninetales), `71-en-60`, `722-en-109` abrem. O formato canônico do `card_id` é `{idE}-{lang}-{num}` (base `71-en-60`), não `base1-4`.
+- **Falso-positivo**: o teste de integração original usava `card_id=base1-4` (formato do ID do scanner), que é errado para a rota `/card`. Nenhum código do produto gera `card_id` nesse formato (o `ScoredCardRow` usa `card.card_id` = `{idE}-{lang}-{num}`).
+- Teste atualizado p/ cobrir a rota canônica (`--card-id-canonic`); **9/9 checks** no site publicado.
+- Tags: frontend, rota, não-bug, teste-integracao
 
 ---
 

@@ -19,6 +19,7 @@ Flags:
   --card-set S      set da carta a validar na /card (default 246)
   --card-num N      num da carta a validar na /card (default 14)
   --card-nome NOME  nome da carta a validar na /card (default 'Charizard')
+  --card-id-canonic ID  card_id canônico {idE}-{lang}-{num} a validar (default 71-en-60)
   --card-busca T    termo de busca textual (default 'charizard'; precisa existir
                     no cards.json do site, não no índice do scanner)
 Exit: 0 = pass, 1 = falha (com quais checks falharam na saída).
@@ -72,6 +73,7 @@ async def main():
     ap.add_argument('--card-set', default='base1')
     ap.add_argument('--card-num', default='4')
     ap.add_argument('--card-nome', default='Charizard')
+    ap.add_argument('--card-id-canonic', default='71-en-60')
     ap.add_argument('--card-busca', default='charizard')
     a = ap.parse_args()
     base = 'http://localhost:8080' if a.local else a.base
@@ -189,6 +191,18 @@ async def main():
                 continue
         if not card_ok:
             check('carta abre na /card (set+num+nome)', False, 'só título de 404/vazio')
+        # rota canônica card_id (formato {idE}-{lang}-{num}, ex 71-en-60)
+        try:
+            await page.goto(base + f'/card/?card_id={a.card_id_canonic}', wait_until='networkidle', timeout=60000)
+            await page.wait_for_timeout(3000)
+            corpo = await page.evaluate('document.body.textContent')
+            inicio = ' '.join(corpo.split())[:600]
+            vazio = 'Página não encontrada' in inicio and not re.search(r'#\s*\d+', inicio)
+            tem_nome = bool(re.search(r'[A-Za-zÀ-ÿ]{4,}', inicio))
+            check(f'/card?card_id canônico ({a.card_id_canonic}) abre', bool(tem_nome and not vazio),
+                  'abre' if (tem_nome and not vazio) else '404/vazio')
+        except Exception as e:
+            check(f'/card?card_id canônico ({a.card_id_canonic})', False, str(e)[:60])
 
         # 5. Busca por texto (debounce + loadCards assíncrono; digita char a char)
         try:
