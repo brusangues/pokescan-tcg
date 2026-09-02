@@ -17,6 +17,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | Fallback offline do scanner + badge de carta JP | `4f53558` |
 | **Indexação cartas da Liga (P2.32)** — 17.296 cartas do catálogo fora do índice; `baixar_imagens_liga.py` + `build_search_index` anexam as liga_only (16.938); índice 20.741→**37.679**; self-match ~0.97-0.99 | `1de0650` |
 | **Busca textual acha as liga_only (P1.35)** — cards.json de busca espelha as ~16.2k liga_only (20.778→36.998) p/ o scanner detectar E a busca/texto achar; fix crash `card.p.toFixed` (p string/null nas liga_only) | `11f3702` |
+| **Teste de integração E2E** (`script/teste_integracao.py`) — Playwright contra o site publicado ou build local; 9 checks (assets, índice >25MB c/ liga_only, motor, scan multi-carta, /card set+num, /card card_id canônico, busca). Revelou P1.35 + descartou P1.36 (não-bug). Comando documentado na skill `pokescan-scanner-integracao` | `ed63a23` + `0819260` |
 
 ## Site (export estático — GitHub Pages)
 
