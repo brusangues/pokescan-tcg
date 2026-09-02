@@ -15,6 +15,8 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Scanner multi-carta (Fase 1)** — detecta até 10 quadriláteros por foto, warpeia e identifica cada um; avisos "carta pequena" (<300px) e "não identificada" (<55%), alternativas e link /card | `15821f6` |
 | **Fixes QA rodada 2+3** — BUG 1-4/obs 3-4 (rodada 2) + BUG 3 (rodada 3): upload após busca por texto escondia o scan (agora limpa a busca no onDrop) | `3c9dacf` + `90b14d6` |
 | Fallback offline do scanner + badge de carta JP | `4f53558` |
+| **Indexação cartas da Liga (P2.32)** — 17.296 cartas do catálogo fora do índice; `baixar_imagens_liga.py` + `build_search_index` anexam as liga_only (16.938); índice 20.741→**37.679**; self-match ~0.97-0.99 | `1de0650` |
+| **Busca textual acha as liga_only (P1.35)** — cards.json de busca espelha as ~16.2k liga_only (20.778→36.998) p/ o scanner detectar E a busca/texto achar; fix crash `card.p.toFixed` (p string/null nas liga_only) | `11f3702` |
 
 ## Site (export estático — GitHub Pages)
 

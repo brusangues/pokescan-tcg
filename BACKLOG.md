@@ -8,14 +8,7 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 
 ## 🚀 P1 — Próxima feature
 
-> **Vazio** — a última P1 (P1.34, busca multicritério) foi concluída em 26/08. Os próximos candidatos estão em P2 (→ P2.32). Incluir aqui o próximo item a ser atacado.
-
-### [P1] 35. Busca textual não acha as cartas da Liga re-indexadas no scanner (P2.32)
-- **Bug revelado pelo teste de integração (`script/teste_integracao.py`, 02/09)**: buscar "detetive" (Detetive Pikachu, `246-14`/`344-98`/`440-337`, agora NO índice do scanner com 37.679 cartas) **retorna 0 resultados** na busca textual.
-- **Causa raiz**: a busca textual usa `loadCards()` → `frontend/public/data/cards.json` (catálogo de exibição, **~20.7k cartas EN**), que é **uma estrutura diferente do índice do scanner** (`frontend/public/scanner/cards.json` + index.bin, 37.679 incluindo liga_only). As cartas da Liga indexadas no scanner não foram adicionadas ao cards.json de busca → o scanner detecta a carta, mas a busca de texto não a encontra. Inconsistência de cobertura.
-- **Api de teste**: `--card-busca 'detetive'` `--card-set 246 --card-num 14` deve achar; hoje falha. Termos que existem no cards.json do site (charizard, gengar) funcionam.
-- **Soluções candidatas**: (a) sincronizar/derivar o cards.json de busca a partir do índice do scanner (mesma fonte); (b) buscar também no índice do scanner (embeddings já carregados) com fallback por nome; (c) adicionar as cartas liga_only ao cards.json de exibição.
-- Tags: scanner, busca, P2.32, bug, teste-integracao
+> **Vazio** — a última P1 (P1.35, busca textual das liga_only) foi resolvida em 02/09. Os próximos candidatos estão em P2 (→ P2.32 matching) e P1.36 (link /card?card_id).
 
 ### [P1] 36. Link `/card?card_id=...` retorna 404 (só `set+num+nome` abre)
 - **Bug revelado pelo teste de integração**: `cards.ts`/`cardLookup.ts` geram links `/card?card_id={card_id}` (`getCardLink` e referências em `/card`), mas navegar para `/card?card_id=base1-4` **retorna página de 404**. O único formato que abre é `/card/?set=...&num=...&nome=...` (usado nos links do Scanner/tendencias). Rotas com `card_id` são caminho morto.
