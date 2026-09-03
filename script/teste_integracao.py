@@ -22,6 +22,8 @@ Flags:
   --card-id-canonic ID  card_id canônico {idE}-{lang}-{num} a validar (default 71-en-60)
   --card-busca T    termo de busca textual (default 'charizard'; precisa existir
                     no cards.json do site, não no índice do scanner)
+  --col-card-id ID  carta p/ testar a coleção (default 411-en-4 Charmander)
+  --col-nome NOME   nome esperado da carta na coleção (default Charmander)
 Exit: 0 = pass, 1 = falha (com quais checks falharam na saída).
 
 Uso: python script/teste_integracao.py [--local] [--base URL]
@@ -76,6 +78,8 @@ async def main():
     ap.add_argument('--card-id-canonic', default='71-en-60')
     ap.add_argument('--lig-card-id', default='733-1')
     ap.add_argument('--card-busca', default='charizard')
+    ap.add_argument('--col-card-id', default='411-en-4')  # carta p/ testar a coleção
+    ap.add_argument('--col-nome', default='Charmander')
     a = ap.parse_args()
     base = 'http://localhost:8080' if a.local else a.base
 
@@ -241,6 +245,57 @@ async def main():
                   '' if ok_busca else 'nenhuma carta encontrada')
         except Exception as e:
             check(f'busca "{a.card_busca}"', False, str(e)[:80])
+
+        # 6. Coleção pessoal local (P2.37) — marcar 'Tenho' + página /minha-colecao
+        # 6a. Página /minha-colecao vazia (localStorage limpo no contexto novo)
+        try:
+            await page.goto(base + '/minha-colecao/', wait_until='networkidle', timeout=60000)
+            await page.wait_for_timeout(2500)
+            corpo = await page.evaluate('document.body.textContent')
+            vazia = 'coleção está vazia' in corpo.lower() or 'coleção está vazia' in corpo.lower()
+            check('página /minha-colecao carrega (vazia)', vazia,
+                  '' if vazia else 'não achou estado vazio')
+        except Exception as e:
+            check('/minha-colecao vazia', False, str(e)[:60])
+
+        # 6b. Marcar carta na coleção pelo /card (via card_id canônico)
+        try:
+            await page.goto(base + f'/card/?card_id={a.col_card_id}', wait_until='networkidle', timeout=60000)
+            await page.wait_for_function('document.body.textContent.includes("Tenho esta carta")', timeout=45000)
+            await page.locator('button:has-text("Tenho esta carta")').click()
+            await page.wait_for_timeout(800)
+            corpo = await page.evaluate('document.body.textContent')
+            marcou = 'na coleção' in corpo
+            check('botão "Tenho esta carta" marca a carta', marcou)
+        except Exception as e:
+            check('marcar carta na coleção', False, str(e)[:60])
+
+        # 6c. /minha-colecao mostra a carta + valor resolvido
+        try:
+            await page.goto(base + '/minha-colecao/', wait_until='networkidle', timeout=60000)
+            ok_preco = False
+            for _ in range(25):
+                await page.wait_for_timeout(1500)
+                corpo = await page.evaluate('document.body.textContent')
+                tem_carta = a.col_nome in corpo
+                tem_mercado = 'valor real' in corpo.lower()
+                if tem_carta and tem_mercado and re.search(r'R\$\s*[\d.,]+', corpo):
+                    ok_preco = True
+                    break
+            check('coleção mostra carta + valor real/estimado', ok_preco,
+                  f'nome={a.col_nome} presente' if ok_preco else 'sem carta ou valor')
+        except Exception as e:
+            check('coleção mostra valor', False, str(e)[:60])
+
+        # 6d. NavBar tem a rota 'Minha coleção'
+        try:
+            await page.goto(base + '/', wait_until='networkidle', timeout=60000)
+            await page.wait_for_timeout(2000)
+            corpo = await page.evaluate('document.body.textContent')
+            tem_rota = 'minha coleção' in corpo.lower()
+            check('NavBar tem rota "Minha coleção"', tem_rota)
+        except Exception as e:
+            check('NavBar rota coleção', False, str(e)[:60])
 
         await ctx.close(); await bro.close()
 
