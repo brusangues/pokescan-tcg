@@ -194,6 +194,12 @@ function DeteccaoCard({ d, idx, onRemove }: {
               <div className="text-[10px] text-[#6b6252] font-mono truncate">
                 {melhor.card.sn} · {melhor.card.num}
               </div>
+              {/* P2.37: marcar na coleção */}
+              {melhor.card.id && (
+                <div className="pt-0.5">
+                  <TenhoButton variante="row" id={melhor.card.id} nome={melhor.card.n || ''} img={melhor.card.img} s={melhor.card.s} num={melhor.card.num} />
+                </div>
+              )}
               <div className="flex flex-wrap gap-1 pt-0.5">
                 {d.matches.slice(1, 3).map((r) => (
                   <span key={r.card.id} className="text-[10px] text-[#998f7c]">
