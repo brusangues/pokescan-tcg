@@ -7,6 +7,7 @@ import ScannerEngine, { ScanResult } from '@/app/lib/scannerEngine';
 import { detectCardQuads, warpCard } from '@/app/lib/cardClip';
 import { getBasePath } from '@/app/lib/basePath';
 import { loadCards } from '@/app/lib/cardLookup';
+import TenhoButton from '@/app/components/TenhoButton';
 import Image from 'next/image';
 
 /** Carrega um dataURL em um elemento <img> (para processar no OpenCV). */
@@ -57,12 +58,18 @@ function CardResult({ card, score, rank }: { card: any; score?: number; rank?: n
           )}
         </div>
         {/* <a> com href prefixado manualmente — next/link duplica basePath em hrefs com query */}
-        <a
-          href={`${getBasePath()}/card?set=${encodeURIComponent(card.s || card.set_id)}&num=${encodeURIComponent(card.num || card.sNumber)}&nome=${encodeURIComponent(card.n || card.nome)}`}
-          className="inline-flex items-center gap-1 mt-2 text-xs text-[#d40b2e] hover:underline"
-        >
-          <ExternalLink className="w-3 h-3" /> Ver detalhes e preço
-        </a>
+        <div className="flex items-center gap-2 mt-2 flex-wrap">
+          <a
+            href={`${getBasePath()}/card?set=${encodeURIComponent(card.s || card.set_id)}&num=${encodeURIComponent(card.num || card.sNumber)}&nome=${encodeURIComponent(card.n || card.nome)}`}
+            className="inline-flex items-center gap-1 text-xs text-[#d40b2e] hover:underline"
+          >
+            <ExternalLink className="w-3 h-3" /> Ver detalhes e preço
+          </a>
+          {/* P2.37: marcar na coleção */}
+          {card.id && (
+            <TenhoButton variante="row" id={card.id} nome={card.n || card.nome || ''} img={card.img} s={card.s || card.set_id} num={card.num || card.sNumber} />
+          )}
+        </div>
       </div>
     </div>
   );

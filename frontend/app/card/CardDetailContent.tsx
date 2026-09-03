@@ -8,6 +8,7 @@ import {
   DollarSign, Palette, Hash, Shield, Layers, Languages,
 } from 'lucide-react';
 import PriceHistory from '@/app/components/PriceHistory';
+import TenhoButton from '@/app/components/TenhoButton';
 import { lookupCard, normNome } from '@/app/lib/cardLookup';
 import { getBasePath } from '@/app/lib/basePath';
 
@@ -288,6 +289,10 @@ function IdiomasSection({ dados, atual }: {
           {card.nPT && card.nEN && card.nEN !== card.name && (
             <p className="text-[#f3e9d2]/70 text-base mt-0.5">{card.nEN}</p>
           )}
+          {/* P2.37: botão eu tenho (coleção local) */}
+          <div className="mt-3">
+            <TenhoButton id={card.id} nome={card.name} img={card.images?.small || null} s={card.set?.id} num={card.number} />
+          </div>
           <p className="text-[#f3e9d2] text-sm mt-1">{card.set.name} — #{card.number}/{card.set.printedTotal}</p>
         </div>
       </div>
