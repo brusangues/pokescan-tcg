@@ -171,6 +171,13 @@ async def main():
             check('scan detecta várias cartas', n_detectadas >= 4, f'{n_detectadas} cartas')
             check('ao menos 1 carta identificada (✓ com %)', n_ident >= 1, f'{n_ident} identificadas')
 
+        # 6e. Botão 'Tenho' no resultado do SCAN (bug a5a9814) — DeteccaoCard
+        try:
+            n_tenho = await page.evaluate("""() => [...document.querySelectorAll('button')].filter(b=>b.title==='Adicionar à minha coleção').length""")
+            check('botão "Tenho" no resultado do scan', n_tenho >= 1, f'{n_tenho} cartas marcáveis')
+        except Exception as e:
+            check('botão Tenho no scan', False, str(e)[:60])
+
         # 4. Página /card (formato set+num+nome — como o app gera os links)
         card_ok = False
         import urllib.parse as _up
