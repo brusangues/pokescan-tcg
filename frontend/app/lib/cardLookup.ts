@@ -176,8 +176,13 @@ export async function lookupCard(params: {
     const eid = parts[0];
     const lang = parts[1];
     const number = parts[2] ?? parts[1];
+    // Migração índice único: eid numérico já é a chave direta no cards.json
+    // (liga_only usam {idE}-{num}, ex 246-14). Tenta direto antes do set_map.
+    if (/^\d+$/.test(eid) && number) {
+      card = byId.get(`${eid}-${number}`) || byId.get(`${eid}-${parseInt(number)}`);
+    }
     const ptcgSet = setMap[eid];
-    if (lang !== 'jp' && ptcgSet && number) {
+    if (!card && lang !== 'jp' && ptcgSet && number) {
       card = byId.get(`${ptcgSet}-${number}`) || byId.get(`${ptcgSet}-${parseInt(number)}`);
     }
   }

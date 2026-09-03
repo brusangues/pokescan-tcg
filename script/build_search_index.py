@@ -105,7 +105,8 @@ if PTBR_CFG.exists():
                 'number': num,
                 'rarity': 'Promocional', 'supertype': 'Pokémon',
                 'subtypes': ['Promotional'],
-                'set': {'id': (meta.get('sigla') or '').lower(), 'name': meta.get('nome', meta.get('sigla', ''))},
+                # Migração índice único: set.id = idE (não sigla) p/ consistência com o resto
+                'set': {'id': str(idE), 'name': meta.get('nome', meta.get('sigla', ''))},
                 'tcgplayer': None,
                 'images': {'small': (f"https://www.pokemon.com/static-assets/content-assets/cms2-pt-br/img/cards/full/MEP/MEP_PT-BR_{num}.png"
                                      if 'MEP_PT-BR' in (mask or '') else carta.get('sP', ''))},
@@ -137,7 +138,8 @@ if LIGA_CAT.exists():
         local = IMG_CACHE / f'{cid}.png'
         if not local.exists():
             continue  # sem imagem = não dá p/ embedding
-        sigla = str(c.get('sigla') or c.get('sSigla') or '?').lower()
+        idE_s = str(c.get('idE') or '').strip()
+        nome_ed = c.get('ed_sNomePortugues') or c.get('sNomePortugues') or c.get('sN') or idE_s
         npt = (c.get('nPT') or '').strip()
         nen = (c.get('nome_en') or c.get('nEN') or '').split('(')[0].strip()
         img_url = c.get('img_liga') or ''
@@ -151,7 +153,8 @@ if LIGA_CAT.exists():
             'number': num_raw.split('.')[0],
             'rarity': c.get('iRaridade') or c.get('raridade_detalhada') or 'Promocional',
             'supertype': 'Pokémon', 'subtypes': ['Promotional'],
-            'set': {'id': sigla, 'name': c.get('ed_sNomePortugues') or c.get('sNomePortugues') or c.get('sN') or sigla},
+            # Migração índice único: set.id = idE (string) — casa com /card?set={idE}&num
+            'set': {'id': idE_s, 'name': nome_ed},
             'tcgplayer': None,
             'images': {'small': img_url},
             '_local_img': str(local),

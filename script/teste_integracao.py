@@ -74,6 +74,7 @@ async def main():
     ap.add_argument('--card-num', default='4')
     ap.add_argument('--card-nome', default='Charizard')
     ap.add_argument('--card-id-canonic', default='71-en-60')
+    ap.add_argument('--lig-card-id', default='733-1')
     ap.add_argument('--card-busca', default='charizard')
     a = ap.parse_args()
     base = 'http://localhost:8080' if a.local else a.base
@@ -203,6 +204,19 @@ async def main():
                   'abre' if (tem_nome and not vazio) else '404/vazio')
         except Exception as e:
             check(f'/card?card_id canônico ({a.card_id_canonic})', False, str(e)[:60])
+
+        # rota liga_only (chave canônica {idE}-{num}) — valida id direto do scanner
+        try:
+            await page.goto(base + f'/card/?card_id={a.lig_card_id}', wait_until='networkidle', timeout=60000)
+            await page.wait_for_timeout(3000)
+            corpo = await page.evaluate('document.body.textContent')
+            inicio = ' '.join(corpo.split())[:600]
+            vazio = 'Página não encontrada' in inicio and not re.search(r'#\s*\d+', inicio)
+            lig_ok = bool(re.search(r'[A-Za-zÀ-ÿ]{4,}', inicio) and not vazio)
+            check(f'/card liga_only (id {a.lig_card_id}) abre', lig_ok,
+                  'abre' if lig_ok else '404/vazio')
+        except Exception as e:
+            check(f'/card liga_only ({a.lig_card_id})', False, str(e)[:60])
 
         # 5. Busca por texto (debounce + loadCards assíncrono; digita char a char)
         try:

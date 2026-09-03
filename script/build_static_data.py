@@ -400,40 +400,52 @@ def cards_basico() -> list:
             entry['nPT'] = html.unescape(npt)
             entry['nEN'] = html.unescape(nen.split('(')[0].strip())
         out.append(entry)
-    # Fase 2.3 (Liga-first): inclui as coleções pt-BR da LIGA (ex. MEP/MEPR) no lookup do site
+    # Fase 2.3 (Liga-first): coleções pt-BR da LIGA (ex. MEP/MEPR) no lookup do site.
+    # Migração índice único: id={idE}-{num}, s={idE} (mesmo do bloco liga_only e do
+    # scanner) — elimina a duplicação mepr-x vs {idE}-x.
     try:
         cfg = json.loads((REPO / 'data' / 'liga' / 'ptbr_edicoes.json').read_text(encoding='utf-8')).get('edicoes', {})
         siglas_ptbr = {v.get('sigla', '').upper() for v in cfg.values()}
         nomes_ptbr = {v.get('sigla', '').upper(): v.get('nome', '') for v in cfg.values()}
         catalogo = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))
+        _ids_2 = {x['id'] for x in out}
         for c in catalogo:
             if c.get('sigla') not in siglas_ptbr:
                 continue  # só coleções pt-BR verdadeiras (decisão da curadoria)
+            if c.get('en_id'):
+                continue  # EN já veio do catálogo
+            num2 = str(c.get('num') or c.get('sN') or '')
+            if not num2 or '-' in num2 or '/' in num2:
+                continue
+            idE3 = str(c.get('idE') or '').strip()
+            num2c = num2.split('.')[0]
+            if not idE3 or not num2c:
+                continue
+            cid3 = f'{idE3}-{num2c}'
+            if cid3 in _ids_2:
+                continue
             sp = c.get('img_liga') or ''
             img = ('https://repositorio.sbrauble.com' + sp.replace('//', '/', 1)) if sp.startswith('//') else sp
             out.append({
-                # id {sigla}-{num} p/ o lookup client-side resolver set+num
-                # (estratégia 2 do cardLookup) — o scanner usa o SEU cards.json
-                # (public/scanner/) com id {idE}-{num}, são arquivos distintos
-                'id': f"{(c.get('sigla') or '').lower()}-{c.get('num')}",
+                'id': cid3,
                 'n': c.get('nPT') or c.get('nEN', '').split('(')[0].strip(),
-                's': c.get('sigla', '').lower(),
+                's': idE3,
                 'sn': nomes_ptbr.get(c.get('sigla', ''), c.get('sigla', '')),
-                'num': c.get('num') or '',
+                'num': num2c,
                 'r': '',
                 'p': c.get('preco_brl_p1a') or c.get('preco_menor'),
                 'img': img,
-                # Liga-first (Fase 2.3): campos p/ link "Ver na Liga" + infos BRL na /card
                 'liga_nen': c.get('nEN', ''),
                 'liga_ico': c.get('iCO'),
                 'moeda': 'BRL',
             })
+            _ids_2.add(cid3)
     except Exception as e:
         print('⚠ cards_basico (pt-BR Liga) skip:', e)
-    # Correção P1.35: adiciona as cartas LIGA_ONLY (sem en_id) indexadas no
-    # scanner pelo P2.32 (37.679 no índice, mas fora do cards.json de busca).
-    # Espelha o padrão das pt-BR ({sigla}-{num}) p/ o link /card?set&num resolver
-    # (estratégia 2 do cardLookup) — o scan gera set={sigla}&num={num}.
+    # Migração índice único: cartas LIGA_ONLY (sem en_id) priorizadas no scanner
+    # pelo P2.32. Usamos id={idE}-{num}, s={idE} — mesmo do build_search_index —
+    # p/ o link /card?set={idE}&num={num} resolver pela estratégia 2 do cardLookup
+    # e ELIMINAR as colisões de {sigla}-{num} com en_id.
     try:
         catalogo = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))
         nomes_ptbr2 = {v.get('sigla', '').upper(): v.get('nome', '') for v in cfg.values()}
@@ -446,9 +458,12 @@ def cards_basico() -> list:
                 continue  # sem imagem p/ exibir
             num_raw = str(c.get('num') or c.get('sN') or '')
             if not num_raw or '-' in num_raw or '/' in num_raw:
-                continue  # malformado (idE, range)
-            sigla2 = str(c.get('sigla') or c.get('sSigla') or '?').lower()
-            cid2 = f'{sigla2}-{num_raw.split(".")[0]}'
+                continue  # malformado (range)
+            idE2 = str(c.get('idE') or '').strip()
+            num_clean = num_raw.split('.')[0]
+            if not idE2 or not num_clean:
+                continue
+            cid2 = f'{idE2}-{num_clean}'
             if cid2 in _ids_nao_duplicar:
                 continue
             npt2 = (c.get('nPT') or '').strip()
@@ -458,9 +473,9 @@ def cards_basico() -> list:
             out.append({
                 'id': cid2,
                 'n': npt2 or nen2 or cid2,
-                's': sigla2,
-                'sn': nomes_ptbr2.get(c.get('sigla', '').upper(), c.get('ed_sNomePortugues') or c.get('sNomePortugues') or sigla2),
-                'num': num_raw.split('.')[0],
+                's': idE2,
+                'sn': nomes_ptbr2.get(c.get('sigla', '').upper(), c.get('ed_sNomePortugues') or c.get('sNomePortugues') or c.get('sigla') or idE2),
+                'num': num_clean,
                 'r': '',
                 'p': c.get('preco_brl_p1a') or c.get('preco_menor'),
                 'img': img2,
@@ -472,7 +487,7 @@ def cards_basico() -> list:
         if n_liga_only:
             print(f'   liga_only adicionadas ao cards.json de busca: {n_liga_only}')
     except Exception as e:
-        print('⚠ cards_basico (liga_only P1.35) skip:', e)
+        print('⚠ cards_basico (liga_only índice único) skip:', e)
     return out
 
 
