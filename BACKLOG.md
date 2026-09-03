@@ -27,6 +27,13 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`).
 - Tags: scanner, matching, cv, indexação
 
+### [P2] 37. Coleção pessoal local (localStorage) — alicerce pronto (índice único)
+- **Objetivo (discutido 02/09)**: marcar "tenho" em qualquer carta / página (scanner, /card, busca); coleção persistida em `localStorage`; página própria `/minha-colecao` com valor estimado vs real + upside. Wishlist vira depois.
+- **Alicerce pronto**: a migração do índice único (chave canônica `en_id` / `{idE}-{num}`, commit `bac57da`, tag `pre-idx-unico`) dá a chave estável p/ somar valores e cruzar preço escorado (scored_latest). Link `/card?card_id={idE}-{num}` e `/card?set={idE}&num` já resolvem.
+- **Escopo**: botão "Tenho" (toggle, qtd) no scanner/card/busca; `localStorage` (`pokescan.colecao`); página dedicada; valor estimado (modelo BRL) vs real (scored) + upside; exportar/importar JSON.
+- **Nota**: site é estático (GitHub Pages) → localStorage (não cookies); única ressalva é por-navegador → backup via JSON export.
+- Tags: produto, frontend, coleção, localStorage
+
 ### [P2] 33. Base rotulada manual — continuar crescendo (retreinar re-rank no futuro)
 - **Estado**: `C:/Projects/pokescan-tcg-labels` — 29 fotos/137 cartas rotuladas 100% manual (99% corretas). Harness completo pronto: `experiments/rerank_sinais.py` (gera dataset de pares) + `treinar_rerank.py` (CatBoost LOFO com folhas agrupadas).
 - **Gatilho**: com ~3x a base atual, retreinar o re-rank — hoje não generaliza (dataset pequeno). Cada nova foto rotulada também melhora a avaliação de segmentação/matching.
