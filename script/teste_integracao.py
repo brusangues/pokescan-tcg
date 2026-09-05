@@ -304,6 +304,51 @@ async def main():
         except Exception as e:
             check('NavBar rota coleção', False, str(e)[:60])
 
+        # 7. Smoke test — percorre TODAS as páginas (captura erros de render/break)
+        # Cada página tem: label (navbar) + sentinel de conteúdo carregado.
+        # Sentinel vazio => espera mais; se nunca chega a carregar, é bug de dados.
+        paginas = [
+            # (rota, label, sentinel_de_conteudo_carregado)
+            ('/', 'PokéScan', 'PokéScan'),
+            ('/dashboard', 'Dashboard', 'Dashboard'),
+            ('/hits', 'Hits', 'Hits'),
+            ('/snapshot', 'Snapshot', 'Snapshot'),
+            ('/tendencias', 'Tendências', 'Tendências'),
+            ('/colecoes', 'Coleções', 'Coleções'),
+            ('/minha-colecao', 'Minha coleção', 'Minha coleção'),
+            ('/scanner', 'Scanner', 'SCANNER'),
+            ('/changelog', 'Changelog', 'Changelog'),
+            ('/card/?set=base1&num=4&nome=Charizard', 'Charizard', 'Charizard'),
+        ]
+        for rota, label, sentinel in paginas:
+            try:
+                page_errors = []
+                erro_fn = lambda e: page_errors.append(str(e))
+                page.on('pageerror', erro_fn)
+                await page.goto(base + rota, wait_until='domcontentloaded', timeout=60000)
+                # espera o sentinel aparecer (skeleton/loading some) até 15s
+                ok_sentinel = False
+                for _ in range(10):
+                    await page.wait_for_timeout(1500)
+                    corpo = await page.evaluate('document.body.textContent')
+                    if sentinel.lower() in corpo.lower():
+                        ok_sentinel = True
+                        break
+                corpo = await page.evaluate('document.body.textContent')
+                page.remove_listener('pageerror', erro_fn)
+                # critérios: sentinel presente + sem erro de runtime + nao 404 + sem marcadores de falha de dados
+                nao_404 = re.search(r'[A-Za-zÀ-ÿ]{4,}', corpo) is not None
+                dados_ok = not any(k in corpo.lower() for k in
+                    ['erro ao carregar', 'falha ao carregar', 'não foi possível carregar', 'application error'])
+                sem_erro = not page_errors
+                ok = ok_sentinel and nao_404 and sem_erro and dados_ok
+                check(f'página "{label}" ({rota})', ok,
+                      [] if ok else [f'sem sentinel={sentinel!r}' if not ok_sentinel else '',
+                                     'pageerror' if page_errors else '',
+                                     'erro dados' if not dados_ok else ''])
+            except Exception as e:
+                check(f'página "{label}" ({rota})', False, str(e)[:60])
+
         await ctx.close(); await bro.close()
 
     # Resumo
