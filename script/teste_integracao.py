@@ -349,6 +349,37 @@ async def main():
             except Exception as e:
                 check(f'página "{label}" ({rota})', False, str(e)[:60])
 
+        # 8. Header (NavBar) bloqueia o conteúdo por trás ao rolar
+        #    Regressão: sintaxe de var do Tailwind v3 na v4 (bg-[--color-x])
+        #    gera CSS inválido -> fundo transparente -> conteúdo vaza pela barra.
+        try:
+            for rota in ['/', '/dashboard', '/tendencias']:
+                await page.goto(base + rota, wait_until='domcontentloaded', timeout=60000)
+                await page.wait_for_timeout(2000)
+                await page.evaluate('window.scrollTo(0, 1200)')
+                await page.wait_for_timeout(500)
+                info = await page.evaluate('''() => {
+                    const h = document.querySelector('header');
+                    if (!h) return null;
+                    const cs = getComputedStyle(h);
+                    const r = h.getBoundingClientRect();
+                    // alfa do background computado (0 = transparente)
+                    let alfa = 0;
+                    const m = cs.backgroundColor.match(/rgba?\\(([^)]+)\\)/);
+                    if (m) { const partes = m[1].split(',').map(s => s.trim());
+                             alfa = partes.length === 4 ? parseFloat(partes[3]) : 1; }
+                    const el = document.elementFromPoint(r.width/2, Math.max(2, r.height/2));
+                    return {bg: cs.backgroundColor, alfa, op: cs.opacity,
+                            dentro: h.contains(el)};
+                }''')
+                if not info:
+                    check(f'header opaco em {rota}', False, 'sem <header>')
+                    continue
+                ok = info['alfa'] > 0 and info['op'] == '1' and info['dentro']
+                check(f'header opaco (bloqueia conteúdo) em {rota}', ok,
+                      '' if ok else f"bg={info['bg']} alfa={info['alfa']} dentro={info['dentro']}")
+        except Exception as e:
+            check('header opaco (bloqueia conteúdo)', False, str(e)[:60])
         await ctx.close(); await bro.close()
 
     # Resumo
