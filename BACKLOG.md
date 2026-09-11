@@ -32,12 +32,6 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Gatilho**: com ~3x a base atual, retreinar o re-rank — hoje não generaliza (dataset pequeno). Cada nova foto rotulada também melhora a avaliação de segmentação/matching.
 - Tags: scanner, dados, rotulagem
 
-### [P2] 43. Coleção com graduação (PSA/CGC/AGS) — condição por unidade + valor graduado
-- **Ideia**: na Minha Coleção (P2.37), registrar por unidade a condição e, quando graduada, a certificadora e a escala (ex. "PSA GEM-MT 10"), mostrando o valor da graduada separado do raw.
-- **Dado público na origem**: os anúncios trazem `is_graded` + `grading{company_acronym, company_name, scale, company_url}` (CGC/AGS/PSA), com filtro "Cartas Graduadas / Não Graduadas" — levantamento em `references/liga-historico-precos-graduacao.md` (skill pokescan-tcg).
-- **Resta**: coletar preço de referência **por graduação** (o P2.42 cobre o preço geral/vendas verificadas) e definir a UI (badge "Graduada" + empresa/escala junto da quantidade).
-- Tags: produto, coleção, frontend, dados
-
 ---
 
 ## 🔬 P3 — Experimentos / ideias

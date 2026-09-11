@@ -38,6 +38,11 @@ sys.path.insert(0, str(RAIZ / 'crawler'))
 
 from crawler_liga_hits import get_driver, parse_pagina_carta, url_carta  # noqa: E402
 
+# Schema do registro no cache. Subir quando um campo novo entrar:
+# registros com sv antigo voltam para a FRENTE da fila (refetch).
+# sv=2: + grad (anuncios graduados: empresa/escala/preco)
+SV = 2
+
 CATALOGO = RAIZ / 'data' / 'catalogo_liga.json'
 SAIDA = RAIZ / 'data' / 'liga' / 'vendas_3m.json'
 
@@ -59,25 +64,35 @@ def grava_estado(estado: dict) -> None:
     tmp.replace(SAIDA)
 
 
-def monta_fila(estado: dict, dias_refresh: int) -> list:
+def monta_fila(estado: dict, dias_refresh: int, ids: list | None = None) -> list:
     cat = json.loads(CATALOGO.read_text(encoding='utf-8'))
     corte = date.today().toordinal() - dias_refresh
-    itens = []
+    if ids:
+        # alvo explicito (validacao/refresh pontual) — ignora idade do cache
+        alvo = set(ids)
+        return [(k, c) for c in cat
+                for k in [f"{c.get('idE')}-{c.get('num')}"] if k in alvo]
+    velhos, normais = [], []
     for c in cat:
         idE, num = c.get('idE'), c.get('num')
         if idE is None or not num:
             continue
         k = f'{idE}-{num}'
         reg = estado.get(k)
+        # registro de schema antigo (ainda sem graduados) fura a fila
+        if reg and int(reg.get('sv') or 0) < SV:
+            velhos.append((-int(c.get('iCO') or 0), k, c))
+            continue
         if reg and reg.get('ts'):
             try:
                 if date.fromisoformat(reg['ts']).toordinal() > corte:
                     continue
             except ValueError:
                 pass
-        itens.append((-int(c.get('iCO') or 0), k, c))
-    itens.sort(key=lambda t: (t[0], t[1]))
-    return [(k, c) for _, k, c in itens]
+        normais.append((-int(c.get('iCO') or 0), k, c))
+    velhos.sort(key=lambda t: (t[0], t[1]))
+    normais.sort(key=lambda t: (t[0], t[1]))
+    return [(k, c) for _, k, c in velhos + normais]
 
 
 def num_url(carta: dict) -> str:
@@ -105,11 +120,16 @@ def registra(dados: dict, carta: dict, hoje: str) -> dict | None:
                   'p': dados.get('vendas_menor'),
                   'm': dados.get('vendas_medio'),
                   'g': dados.get('vendas_maior')}
-    if not (normal or foil or vendas):
+    grad = {}
+    if dados.get('anuncios_graduados'):
+        grad = {'n': dados.get('anuncios_graduados'),
+                'e': dados.get('graded_amostras') or []}
+    if not (normal or foil or vendas or grad):
         return None
     return {'idE': carta['idE'], 'num': carta['num'], 'sigla': carta.get('sigla'),
             'nEN': carta.get('nEN'), 'normal': normal, 'foil': foil,
-            'vendas': vendas, 'n_anuncios': dados.get('iCO_real'), 'ts': hoje}
+            'vendas': vendas, 'grad': grad, 'n_anuncios': dados.get('iCO_real'),
+            'sv': SV, 'ts': hoje}
 
 
 def main() -> int:
@@ -117,11 +137,14 @@ def main() -> int:
     ap.add_argument('--limite', type=int, default=400, help='cartas por rodada')
     ap.add_argument('--dias-refresh', type=int, default=7, help='idade maxima do dado')
     ap.add_argument('--sleep', type=float, default=0.4, help='pausa entre cartas (s)')
+    ap.add_argument('--ids', type=str, default='',
+                    help='lista de ids (ex: 72-4,733-23) - so essas cartas')
     args = ap.parse_args()
 
     hoje = date.today().isoformat()
     estado = carrega_estado()
-    itens = monta_fila(estado, args.dias_refresh)
+    ids = [x.strip() for x in args.ids.split(',') if x.strip()]
+    itens = monta_fila(estado, args.dias_refresh, ids)
     total = min(args.limite, len(itens))
     print(f'fila: {len(itens)} cartas a atualizar | cache atual: {len(estado)} | rodada: {total}')
     if not itens:

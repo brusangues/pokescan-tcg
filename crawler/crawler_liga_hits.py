@@ -98,6 +98,25 @@ def url_carta(nEN, sSigla, num):
     return f'https://www.ligapokemon.com.br/?view=cards/card&card={card_param}&ed={sSigla}&num={num}'
 
 
+def _preco_float(v):
+    """'2.799,90' / '2799.90' / 2799.9 -> float; None se vazio/invalido."""
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    t = str(v).strip().replace('R$', '').replace(' ', '')
+    if not t:
+        return None
+    if ',' in t and '.' in t:
+        t = t.replace('.', '').replace(',', '.')
+    elif ',' in t:
+        t = t.replace(',', '.')
+    try:
+        return float(t)
+    except ValueError:
+        return None
+
+
 def parse_pagina_carta(src):
     """Extrai dados da página individual: iCO real, raridade, artista, preços."""
     dados = {}
@@ -147,6 +166,24 @@ def parse_pagina_carta(src):
                 q = a.get('qualid')
                 qtd_qual[q] = qtd_qual.get(q, 0) + 1
             dados['anuncios_por_qualidade'] = qtd_qual
+
+            # Anuncios GRADUADOS: trazem precoFinal em texto plano (os raw usam
+            # precoCss ofuscado) + grading{company_acronym,company_name,scale}.
+            # So a pagina individual da carta expoe esse JSON.
+            grad, n_grad = [], 0
+            for a in stock:
+                if str(a.get('is_graded')) != '1' and not a.get('grading'):
+                    continue
+                n_grad += 1
+                g = a.get('grading') or {}
+                pr = _preco_float(a.get('precoFinal'))
+                if pr is not None:
+                    grad.append([g.get('company_acronym') or g.get('company_name') or '?',
+                                 str(g.get('scale') or ''), pr])
+            if n_grad:
+                dados['anuncios_graduados'] = n_grad
+                # ate 12 amostras, mais caras primeiro (referencia da /card)
+                dados['graded_amostras'] = sorted(grad, key=lambda t: -t[2])[:12]
         except Exception:
             pass
 

@@ -140,7 +140,8 @@ async def main():
                     const r = await fetch('{base}/data/cards.json');
                     const j = await r.json();
                     const com = j.filter(c => c && c.v3m);
-                    const campos = com.every(c => Array.isArray(c.v3m.v) || Array.isArray(c.v3m.n) || Array.isArray(c.v3m.f));
+                    const campos = com.every(c => Array.isArray(c.v3m.v) || Array.isArray(c.v3m.n) || Array.isArray(c.v3m.f)
+                        || (c.v3m.gr && c.v3m.gr.n > 0));
                     const vendas = com.filter(c => Array.isArray(c.v3m.v)).length;
                     return {{total: j.length, com: com.length, campos: campos, vendas: vendas,
                              ts: com.length ? (com[0].v3m.ts || '') : ''}};
@@ -262,6 +263,57 @@ async def main():
         except Exception as e:
             check('carta mostra vendas verificadas (3 meses)', False, str(e)[:60])
 
+        # P2.43 — anúncios de cartas GRADUADAS (contrato do `gr` + bloco na /card)
+        gr_info = None
+        try:
+            gr_info = await page.evaluate(f"""async ()=>{{
+                const r = await fetch('{base}/data/cards.json');
+                const j = await r.json();
+                const com = j.filter(c => c && c.v3m && c.v3m.gr && c.v3m.gr.n);
+                const c0 = com.find(c => Array.isArray(c.v3m.gr.e) && c.v3m.gr.e.length) || com[0];
+                const e = c0 && c0.v3m.gr.e ? c0.v3m.gr.e : [];
+                const ok_amostra = e.length > 0 && e.every(a => Array.isArray(a) && a.length >= 3
+                    && typeof a[0] === 'string' && a[0].length > 0
+                    && typeof a[2] === 'number' && a[2] > 0);
+                return {{n: com.length, id: c0 ? c0.id : '', nome: c0 ? c0.n : '',
+                         amostras: e.length, ok_amostra: ok_amostra}};
+            }}""")
+            check('catálogo: anúncios graduados (gr) com empresa/escala/preço',
+                  gr_info['n'] > 0 and gr_info['ok_amostra'],
+                  f"{gr_info['n']} cartas com graduadas · ex. {gr_info['nome']} ({gr_info['id']}) · {gr_info['amostras']} amostras")
+        except Exception as e:
+            check('catálogo: anúncios graduados (gr)', False, str(e)[:60])
+
+        try:
+            # `card_id` na URL é o id da Liga ({idE}-{num}); o id do índice é
+            # {ptcg}-{num} nas cartas com equivalência EN. Tentamos as cartas
+            # liga_only com gr e, por fim, o Charizard BS (72-4).
+            cands = await page.evaluate(f"""async ()=>{{
+                const r = await fetch('{base}/data/cards.json');
+                const j = await r.json();
+                return j.filter(x => x && x.v3m && x.v3m.gr && x.v3m.gr.n
+                                     && /^\\d+$/.test(String(x.s || '')))
+                        .slice(0, 3).map(x => x.id);
+            }}""")
+            achou = None
+            diag = ''
+            pg3 = await ctx.new_page()
+            try:
+                for cid in list(cands or []) + ['72-4']:
+                    await pg3.goto(base + f'/card/?card_id={cid}', wait_until='networkidle', timeout=60000)
+                    try:
+                        await pg3.wait_for_selector('text=Cartas graduadas à venda', timeout=12000)
+                        achou = cid
+                        break
+                    except Exception:
+                        corpo = ' '.join((await pg3.evaluate('document.body.textContent')).split())
+                        diag = f'{cid}: {len(corpo)}ch vendas={"Vendas verificadas" in corpo}'
+            finally:
+                await pg3.close()
+            check('carta mostra cartas graduadas à venda (P2.43)', bool(achou), f'carta={achou or diag}')
+        except Exception as e:
+            check('carta mostra cartas graduadas à venda (P2.43)', False, str(e)[:60])
+
         # 5. Busca por texto (debounce + loadCards assíncrono; digita char a char)
         try:
             await page.goto(base + '/scanner/', wait_until='networkidle', timeout=60000)
@@ -336,6 +388,50 @@ async def main():
             check('NavBar tem rota "Minha coleção"', tem_rota)
         except Exception as e:
             check('NavBar rota coleção', False, str(e)[:60])
+
+        # 6e/6f. P2.43 — coleção por unidade: graduação com valor próprio + migração
+        # Contexto próprio: semeia o localStorage ANTES do primeiro load da página.
+        colecao_seed = {
+            'base1-4': {
+                'id': 'base1-4', 'nome': 'Charizard', 's': 'base1', 'num': '4',
+                'qtd': 2, 'addAt': 1,
+                'unidades': [{'cond': 'NM'}, {'grad': {'emp': 'PSA', 'esc': 'GEM-MT 10'}}],
+            },
+            'fake-999': {'id': 'fake-999', 'nome': 'Carta antiga', 'qtd': 2, 'addAt': 2},
+        }
+        ctx2 = await bro.new_context(viewport={'width': 1400, 'height': 1100})
+        try:
+            pg2 = await ctx2.new_page()
+            await pg2.add_init_script(
+                "try{localStorage.setItem('pokescan.colecao', "
+                + json.dumps(json.dumps(colecao_seed)) + ")}catch(e){}")
+            await pg2.goto(base + '/minha-colecao/', wait_until='networkidle', timeout=60000)
+            await pg2.wait_for_timeout(2500)
+            try:
+                await pg2.locator('button:has-text("Unidades e condição")').first.click(timeout=8000)
+                await pg2.wait_for_timeout(800)
+            except Exception:
+                pass
+            corpo = ''
+            for _ in range(20):
+                await pg2.wait_for_timeout(1500)
+                corpo = ' '.join((await pg2.evaluate('document.body.textContent')).split())
+                if 'Valor graduado' in corpo and 'Referência' in corpo:
+                    break
+            m = re.search(r'Valor graduado \(referência de mercado\)\s*(R\$ [\d.,]+)', corpo)
+            val = 0.0
+            if m:
+                val = float(m.group(1).replace('R$', '').replace('.', '').replace(',', '.').strip())
+            check('coleção: unidade graduada com valor de mercado próprio (P2.43)',
+                  bool(m) and val > 0 and bool(re.search(r'Referência: PSA', corpo)),
+                  f'valor graduado R$ {val:.2f}' if val else 'sem valor graduado')
+            check('coleção: item antigo (só qtd) migra para unidades (P2.43)',
+                  'Carta antiga' in corpo and 'Unidades e condição (2)' in corpo,
+                  'item sem `unidades` virou 2 unidades')
+        except Exception as e:
+            check('coleção: unidade graduada (P2.43)', False, str(e)[:60])
+        finally:
+            await ctx2.close()
 
         # 7. Smoke test — percorre TODAS as páginas (captura erros de render/break)
         # Cada página tem: label (navbar) + sentinel de conteúdo carregado.

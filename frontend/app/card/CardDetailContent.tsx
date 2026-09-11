@@ -11,6 +11,7 @@ import PriceHistory from '@/app/components/PriceHistory';
 import TenhoButton from '@/app/components/TenhoButton';
 import { lookupCard, normNome } from '@/app/lib/cardLookup';
 import { getBasePath } from '@/app/lib/basePath';
+import { agrupaGraduadas } from '@/app/lib/grading';
 
 /** Cache de módulo do índice de idiomas (uma busca por sessão). */
 let _idiomasCache: Record<string, any> | null = null;
@@ -92,6 +93,8 @@ interface CardData {
     f?: (number | null)[];
     na?: number | null;
     ts?: string;
+    /** Anúncios GRADUADOS (empresa, escala, preço) — oferta, não venda. */
+    gr?: { n?: number; e?: [string, string, number][] } | null;
   } | null;
   flavorText?: string;
   attacks?: { name: string; cost?: string[]; damage?: string; text?: string }[];
@@ -602,6 +605,44 @@ function IdiomasSection({ dados, atual }: {
                   </p>
                 </div>
               )}
+
+              {/* Anúncios de cartas GRADUADAS (PSA/CGC/BGS/AGS) — oferta, não venda */}
+              {card.vendas_3m?.gr?.n ? (
+                <div className="mb-4 pt-4 border-t border-[#2b2517]/15">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h3 className="text-sm font-semibold text-[#6b6252]">Cartas graduadas à venda</h3>
+                    <span className="text-xs font-semibold text-[#292318] bg-[#f3e9d2] px-2 py-0.5 rounded-full whitespace-nowrap">
+                      {card.vendas_3m.gr.n} {card.vendas_3m.gr.n === 1 ? 'anúncio' : 'anúncios'}
+                    </span>
+                  </div>
+                  <div className="space-y-1 mt-2">
+                    {[...agrupaGraduadas(card.vendas_3m.gr.e)].map(([emp, r]) => (
+                      <div key={emp} className="flex justify-between text-sm">
+                        <span className="text-[#6b6252]">
+                          {emp}{r.n > 1 ? ` · ${r.n} anúncios` : ''}
+                        </span>
+                        <span className="font-medium text-[#292318]">
+                          {r.menor === r.maior ? brl(r.menor) : `${brl(r.menor)} – ${brl(r.maior)}`}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  {(card.vendas_3m.gr.e?.length || 0) > 0 && (
+                    <ul className="mt-2 pt-2 border-t border-[#2b2517]/10 space-y-0.5">
+                      {card.vendas_3m.gr.e!.map((a, i) => (
+                        <li key={i} className="flex justify-between text-xs text-[#6b6252]">
+                          <span>{a[0]}{a[1] ? ` · ${a[1]}` : ''}</span>
+                          <span className="text-[#292318]">{brl(a[2])}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="text-xs text-[#998f7c] mt-2">
+                    Ofertas de cartas já graduadas (não são vendas concretizadas). Compare com a sua
+                    unidade em Minha coleção.
+                  </p>
+                </div>
+              ) : null}
 
               {/* TCGPlayer */}
               {card.tcgplayer?.prices && (
