@@ -42,11 +42,11 @@ export default function NavBar() {
   const isActive = (href: string) => pathname === href || pathname?.startsWith(href + '/');
 
   return (
-    <header className="bg-[--color-card-face] border-b-2 border-[#2b2517] sticky top-0 z-10">
+    <header className="bg-[var(--color-card-face)] border-b-2 border-[#2b2517] sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 shrink-0">
           <Pokeball className="w-8 h-8" />
-          <h1 className="font-display text-xl sm:text-2xl font-bold text-[--color-ink] tracking-tight">
+          <h1 className="font-display text-xl sm:text-2xl font-bold text-[var(--color-ink)] tracking-tight">
             PokéScan <span className="text-[#d40b2e]">TCG</span>
           </h1>
         </Link>
@@ -62,7 +62,7 @@ export default function NavBar() {
                 className={`flex items-center gap-1.5 text-sm font-semibold px-3 py-1.5 rounded-xl transition-colors ${
                   isActive(item.href)
                     ? 'text-white bg-[#d40b2e] shadow-[0_2px_0_0_rgba(43,37,23,0.8)]'
-                    : 'text-[--color-ink-soft] hover:text-[--color-ink] hover:bg-[--color-paper-deep]'
+                    : 'text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:bg-[var(--color-paper-deep)]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -75,7 +75,7 @@ export default function NavBar() {
         {/* Botão hambúrguer (mobile) */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden p-2 rounded-lg text-[--color-ink-soft] hover:bg-[--color-paper-deep]"
+          className="md:hidden p-2 rounded-lg text-[var(--color-ink-soft)] hover:bg-[var(--color-paper-deep)]"
           aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
         >
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -84,7 +84,7 @@ export default function NavBar() {
 
       {/* Menu mobile (dropdown) */}
       {menuOpen && (
-        <nav className="md:hidden border-t-2 border-[#2b2517]/20 bg-[--color-card-face] px-4 py-2">
+        <nav className="md:hidden border-t-2 border-[#2b2517]/20 bg-[var(--color-card-face)] px-4 py-2">
           {NAV_ITEMS.map(item => {
             const Icon = item.icon;
             return (
@@ -94,8 +94,8 @@ export default function NavBar() {
                 onClick={() => setMenuOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                   isActive(item.href)
-                    ? 'text-[#d40b2e] bg-[--color-paper-deep]'
-                    : 'text-[--color-ink] hover:bg-[--color-paper-deep]'
+                    ? 'text-[#d40b2e] bg-[var(--color-paper-deep)]'
+                    : 'text-[var(--color-ink)] hover:bg-[var(--color-paper-deep)]'
                 }`}
               >
                 <Icon className="w-4 h-4" />

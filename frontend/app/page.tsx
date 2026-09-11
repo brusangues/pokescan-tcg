@@ -39,16 +39,16 @@ const FEATURES = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[--color-paper]">
+    <div className="min-h-screen bg-[var(--color-paper)]">
       <NavBar />
 
       {/* Hero — assimétrico, tipografia display, sem gradiente */}
-      <div className="border-b-2 border-[#2b2517] bg-[--color-paper-deep]">
+      <div className="border-b-2 border-[#2b2517] bg-[var(--color-paper-deep)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
           <div className="grid md:grid-cols-[1.4fr_1fr] gap-10 items-center">
             <div>
               <span className="badge-poke mb-5">Preço justo de Pokémon TCG em R$</span>
-              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] text-[--color-ink]">
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.05] text-[var(--color-ink)]">
                 Saiba quanto a sua carta{' '}
                 <span className="relative inline-block">
                   <span className="relative z-10">vale no Brasil</span>
@@ -56,7 +56,7 @@ export default function LandingPage() {
                 </span>
                 {' '}— antes de pagar.
               </h2>
-              <p className="text-[--color-ink-soft] text-lg max-w-xl mt-6 leading-relaxed">
+              <p className="text-[var(--color-ink-soft)] text-lg max-w-xl mt-6 leading-relaxed">
                 Monitoramos o mercado brasileiro todos os dias, comparamos com o mercado
                 global (TCGPlayer + Cardmarket) e apontamos onde o preço está torto.
                 Escaneie a carta ou busque pelo nome.
@@ -80,15 +80,15 @@ export default function LandingPage() {
             <div className="card-frame p-6 grid grid-cols-3 gap-4 text-center">
               <div>
                 <p className="font-display text-2xl sm:text-3xl font-bold tnum">20k+</p>
-                <p className="text-xs text-[--color-ink-faint] mt-1">cartas na base</p>
+                <p className="text-xs text-[var(--color-ink-faint)] mt-1">cartas na base</p>
               </div>
               <div>
                 <p className="font-display text-2xl sm:text-3xl font-bold tnum">170+</p>
-                <p className="text-xs text-[--color-ink-faint] mt-1">sets na base</p>
+                <p className="text-xs text-[var(--color-ink-faint)] mt-1">sets na base</p>
               </div>
               <div>
                 <p className="font-display text-2xl sm:text-3xl font-bold tnum">07:00</p>
-                <p className="text-xs text-[--color-ink-faint] mt-1">escoragem diária</p>
+                <p className="text-xs text-[var(--color-ink-faint)] mt-1">escoragem diária</p>
               </div>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function LandingPage() {
                   {f.title}
                   <ArrowRight className="w-4 h-4 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                 </h4>
-                <p className="text-sm text-[--color-ink-soft] mt-2 leading-relaxed flex-1">{f.description}</p>
+                <p className="text-sm text-[var(--color-ink-soft)] mt-2 leading-relaxed flex-1">{f.description}</p>
               </Link>
             );
           })}
@@ -151,7 +151,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <p className="font-display font-bold text-sm">{titulo}</p>
-                  <p className="text-xs text-[--color-ink-soft] mt-1 leading-relaxed">{desc}</p>
+                  <p className="text-xs text-[var(--color-ink-soft)] mt-1 leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}
@@ -168,7 +168,7 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <footer className="border-t-2 border-[#2b2517] py-8 text-center text-xs text-[--color-ink-faint]">
+      <footer className="border-t-2 border-[#2b2517] py-8 text-center text-xs text-[var(--color-ink-faint)]">
         <p>PokéScan TCG — preços do mercado brasileiro e global. Não é afiliado à Pokémon Company.</p>
       </footer>
     </div>
