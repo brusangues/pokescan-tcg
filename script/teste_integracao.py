@@ -77,6 +77,7 @@ async def main():
     ap.add_argument('--card-nome', default='Charizard')
     ap.add_argument('--card-id-canonic', default='71-en-60')
     ap.add_argument('--lig-card-id', default='733-1')
+    ap.add_argument('--vendas-card-id', default='733-23')  # carta com vendas verificadas
     ap.add_argument('--card-busca', default='charizard')
     ap.add_argument('--col-card-id', default='411-en-4')  # carta p/ testar a coleção
     ap.add_argument('--col-nome', default='Charmander')
@@ -132,6 +133,24 @@ async def main():
             except Exception:
                 cbytes = 0
             check('cards.json não-vazio', cbytes > 40000, f"{cbytes/1e6:.1f}MB chars")
+
+            # catálogo do site: bloco de vendas verificadas (v3m) anexado pelo build
+            try:
+                v3m = await page.evaluate(f"""async ()=>{{
+                    const r = await fetch('{base}/data/cards.json');
+                    const j = await r.json();
+                    const com = j.filter(c => c && c.v3m);
+                    const campos = com.every(c => Array.isArray(c.v3m.v) || Array.isArray(c.v3m.n) || Array.isArray(c.v3m.f));
+                    const vendas = com.filter(c => Array.isArray(c.v3m.v)).length;
+                    return {{total: j.length, com: com.length, campos: campos, vendas: vendas,
+                             ts: com.length ? (com[0].v3m.ts || '') : ''}};
+                }}""")
+            except Exception as e:
+                check('catálogo: vendas verificadas (v3m)', False, str(e)[:60])
+            else:
+                check('catálogo: vendas verificadas (v3m)',
+                      v3m['com'] > 0 and v3m['campos'],
+                      f"{v3m['com']} de {v3m['total']} cartas · {v3m['vendas']} com vendas · ts {v3m['ts']}")
 
         # 2. Motor PRONTO + dropzone habilitado
         mot_ok = False
@@ -228,6 +247,20 @@ async def main():
                   'abre' if lig_ok else '404/vazio')
         except Exception as e:
             check(f'/card liga_only ({a.lig_card_id})', False, str(e)[:60])
+
+        # bloco de vendas verificadas (3 meses) na /card
+        try:
+            await page.goto(base + f'/card/?card_id={a.vendas_card_id}', wait_until='networkidle', timeout=60000)
+            await page.wait_for_timeout(3500)
+            corpo = ' '.join((await page.evaluate('document.body.textContent')).split())
+            tem_bloco = 'Vendas verificadas (3 meses)' in corpo
+            tem_rs = bool(re.search(r'R\$\s?\d', corpo))
+            tem_volume = bool(re.search(r'(Mais de [\d.]+ unidades|Menos de 5 unidades)', corpo))
+            check('carta mostra vendas verificadas (3 meses)',
+                  tem_bloco and tem_rs and tem_volume,
+                  f"bloco={tem_bloco} R$={tem_rs} volume={tem_volume}")
+        except Exception as e:
+            check('carta mostra vendas verificadas (3 meses)', False, str(e)[:60])
 
         # 5. Busca por texto (debounce + loadCards assíncrono; digita char a char)
         try:

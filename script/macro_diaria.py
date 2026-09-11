@@ -113,6 +113,11 @@ def main():
     a_out, a_ok, a_dur = rodar('ALERTAS', [PY, 'script/alertas_oportunidade.py', '--tipo', 'hits',
                                            '--upside-min', '50', '--ico-min', '3'])
 
+    # 4. VENDAS VERIFICADAS (incremental: vendas dos ultimos 3 meses + preco N/F)
+    out_v, ok_v, dur_v = rodar('VENDAS · enriquecedor',
+                               [PY, 'script/enriquecer_vendas_liga.py', '--limite', '400'])
+    m_v = extrai(out_v, {'cache': r'FIM:\s*(\d+)\s*registros'})
+
     # ── RELATÓRIO CONSOLIDADO ──────────────────────────────────────────────
     print('\n' + '═' * 52)
     print('📊 MACRO DIÁRIA — RESUMO')
@@ -126,6 +131,7 @@ def main():
     print(f'  {"✅" if ok_escore else "❌"} HITS escore       ({dur_escore/60:.0f}min)')
     print(f'  {"✅" if ok_snap else "❌"} SNAPSHOT crawl    ({dur_snap/60:.0f}min)')
     print(f'  {"✅" if ok_snap_esc else "❌"} SNAPSHOT escore   ({dur_snap_esc/60:.0f}min)')
+    print(f'  {"✅" if ok_v else "❌"} VENDAS enriquec.  ({dur_v/60:.0f}min)')
 
     # Contadores HITS
     print('\n🔥 HITS —', m_hits.get('total') or '?', 'cartas escoradas',
@@ -136,6 +142,7 @@ def main():
     # Contadores SNAPSHOT
     print('🏞️  SNAPSHOT —', m_snap.get('total') or '?', 'cartas escoradas',
           f'(sub {m_snap.get("sub") or 0} · infl {m_snap.get("infl") or 0})')
+    print('💰 VENDAS verificadas —', m_v.get('cache') or '?', 'cartas com dados de venda')
 
     # As oportunidades (se o alerta emitiu algo) — o a_out já veio impresso acima
     if a_out.strip():

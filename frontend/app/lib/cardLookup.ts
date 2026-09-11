@@ -317,6 +317,8 @@ export async function lookupCard(params: {
     liga_ico: (card as any).liga_ico ?? null,
     moeda: (card as any).moeda || 'USD',
     preco_brl: typeof (card as any).p === 'number' ? (card as any).p : parseFloat((card as any).p) || null,
+    // Vendas verificadas (3 meses) + preço de anúncio por tipo (N/F) — enriquecedor
+    vendas_3m: (card as any).v3m || null,
     supertype: detalhe?.supertype,
     subtypes: detalhe?.subtypes,
     hp: detalhe?.hp,

@@ -15,6 +15,33 @@ import { getBasePath } from '@/app/lib/basePath';
 /** Cache de módulo do índice de idiomas (uma busca por sessão). */
 let _idiomasCache: Record<string, any> | null = null;
 
+/** Faixas de volume de vendas: `q` é o índice do piso da faixa. */
+const BUCKETS_VOLUME = [
+  5, 10, 20, 30, 40, 50, 100, 250, 500, 750,
+  1000, 1500, 2000, 2500, 5000, 10000, 25000, 50000, 100000,
+];
+
+/** Rótulo de volume de vendas (sem `q` válido: menos de 5 unidades). */
+function rotuloVolume(q?: number) {
+  if (q != null && BUCKETS_VOLUME[q] != null) {
+    return `Mais de ${BUCKETS_VOLUME[q].toLocaleString('pt-BR')} unidades`;
+  }
+  return 'Menos de 5 unidades';
+}
+
+/** Reais formatados (pt-BR) ou travessão quando não há valor. */
+function brl(x?: number | null) {
+  if (x == null) return '—';
+  return `R$ ${x.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+/** '2026-09-11' -> '11/09/2026'. */
+function dataBR(iso?: string) {
+  if (!iso) return '';
+  const p = iso.split('-');
+  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : '';
+}
+
 interface CardData {
   id: string;
   name: string;
@@ -57,6 +84,15 @@ interface CardData {
   liga_ico?: number | null;
   moeda?: string;
   preco_brl?: number | null;
+  // Vendas verificadas (3 meses) + preços de anúncio por tipo (N/F)
+  vendas_3m?: {
+    v?: (number | null)[];
+    q?: number;
+    n?: (number | null)[];
+    f?: (number | null)[];
+    na?: number | null;
+    ts?: string;
+  } | null;
   flavorText?: string;
   attacks?: { name: string; cost?: string[]; damage?: string; text?: string }[];
   abilities?: { name: string; text: string }[];
@@ -495,6 +531,75 @@ function IdiomasSection({ dados, atual }: {
                     <span className="text-[#6b6252]">Preço mercado</span>
                     <span className="font-medium text-[#292318]">R$ {card.preco_brl.toFixed(2)}</span>
                   </div>
+                </div>
+              )}
+
+              {/* Vendas verificadas (3 meses) + preço de anúncio por tipo (N/F) */}
+              {card.vendas_3m && (card.vendas_3m.n || card.vendas_3m.f || card.vendas_3m.v) && (
+                <div className="mb-4 pt-4 border-t border-[#2b2517]/15">
+                  <div className="flex items-baseline justify-between gap-2">
+                    <h3 className="text-sm font-semibold text-[#6b6252]">Vendas verificadas (3 meses)</h3>
+                    {card.vendas_3m.v && (
+                      <span className="text-xs font-semibold text-[#a90924] bg-[#f6e0e4] px-2 py-0.5 rounded-full whitespace-nowrap">
+                        {rotuloVolume(card.vendas_3m.q)}
+                      </span>
+                    )}
+                  </div>
+
+                  {card.vendas_3m.v ? (
+                    <div className="grid grid-cols-3 gap-2 mt-2">
+                      <div>
+                        <div className="text-xs text-[#998f7c]">Menor</div>
+                        <div className="text-sm font-medium text-[#292318]">{brl(card.vendas_3m.v[0])}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-[#998f7c]">Média</div>
+                        <div className="text-sm font-medium text-[#292318]">{brl(card.vendas_3m.v[1])}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-[#998f7c]">Maior</div>
+                        <div className="text-sm font-medium text-[#292318]">{brl(card.vendas_3m.v[2])}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-xs text-[#998f7c] mt-1">
+                      Sem vendas registradas nos últimos 3 meses.
+                    </p>
+                  )}
+
+                  {(card.vendas_3m.n || card.vendas_3m.f) && (
+                    <div className="mt-3 pt-3 border-t border-[#2b2517]/15">
+                      <h4 className="text-xs text-[#998f7c] mb-1">
+                        Preço de venda por tipo
+                        {card.vendas_3m.na != null ? ` · ${card.vendas_3m.na} anúncios` : ''}
+                      </h4>
+                      <div className="space-y-1">
+                        {card.vendas_3m.n && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-[#6b6252]">Normal</span>
+                            <span className="font-medium text-[#292318]">
+                              {brl(card.vendas_3m.n[0])} – {brl(card.vendas_3m.n[2])}
+                              <span className="text-xs text-[#998f7c] ml-1">média {brl(card.vendas_3m.n[1])}</span>
+                            </span>
+                          </div>
+                        )}
+                        {card.vendas_3m.f && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-[#6b6252]">Foil</span>
+                            <span className="font-medium text-[#292318]">
+                              {brl(card.vendas_3m.f[0])} – {brl(card.vendas_3m.f[2])}
+                              <span className="text-xs text-[#998f7c] ml-1">média {brl(card.vendas_3m.f[1])}</span>
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <p className="text-xs text-[#998f7c] mt-2">
+                    Vendas concretizadas em reais
+                    {card.vendas_3m.ts ? `, atualizado em ${dataBR(card.vendas_3m.ts)}` : ''}.
+                  </p>
                 </div>
               )}
 

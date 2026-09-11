@@ -119,6 +119,19 @@ def parse_pagina_carta(src):
                     dados['preco_menor_anuncio'] = p0.get('p')
                     dados['preco_medio_anuncio'] = p0.get('m')
                     dados['preco_maior_anuncio'] = p0.get('g')
+                # Extras '2' = Foil (o '0' e Normal) - preco de anuncio p/m/g
+                p2 = pr.get('2') or {}
+                if isinstance(p2, dict) and p2:
+                    dados['preco_foil_menor'] = p2.get('p')
+                    dados['preco_foil_medio'] = p2.get('m')
+                    dados['preco_foil_maior'] = p2.get('g')
+                # ls = 'Vendas nos Ultimos 3 meses' (vendas concretizadas/verificadas)
+                ls = e.get('ls') or {}
+                if isinstance(ls, dict) and ls:
+                    dados['vendas_q'] = ls.get('q')
+                    dados['vendas_menor'] = ls.get('p')
+                    dados['vendas_medio'] = ls.get('m')
+                    dados['vendas_maior'] = ls.get('g')
         except Exception:
             pass
 

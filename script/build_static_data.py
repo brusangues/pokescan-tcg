@@ -370,6 +370,67 @@ def _enxuga_card(c: dict) -> dict:
     return card
 
 
+def _num(x):
+    """float ou None (precos de anuncio vem como string no HTML da Liga)."""
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+
+
+_VENDAS_CACHE = None
+
+
+def _vendas_maps() -> tuple:
+    """Mapas do cache de VENDAS VERIFICADAS (enriquecedor da pagina da carta).
+
+    por_pid: pTCG id -> registro (join via en_id do catalogo da Liga)
+    por_liga: '{idE}-{num}' -> registro
+
+    Forma compacta gravada no cards.json (chave `v3m`):
+      v = [menor, media, maior] vendas concretizadas dos ultimos 3 meses (R$)
+      q = bucket de volume (ver BUCKETS_VOLUME no front)
+      n = [p, m, g] precos de anuncio da versao Normal
+      f = [p, m, g] precos de anuncio da versao Foil
+      na = quantidade de anuncios | ts = data da coleta
+    """
+    global _VENDAS_CACHE
+    if _VENDAS_CACHE is not None:
+        return _VENDAS_CACHE
+    por_liga: dict = {}
+    por_pid: dict = {}
+    try:
+        arq = REPO / 'data' / 'liga' / 'vendas_3m.json'
+        registros = json.loads(arq.read_text(encoding='utf-8'))
+        for chave, reg in registros.items():
+            item = {'ts': reg.get('ts'), 'na': reg.get('n_anuncios')}
+            vd = reg.get('vendas') or {}
+            if vd.get('m') is not None:
+                item['v'] = [_num(vd.get('p')), _num(vd.get('m')), _num(vd.get('g'))]
+                if vd.get('q') is not None:
+                    item['q'] = vd.get('q')
+            nm = reg.get('normal') or {}
+            if nm.get('m') is not None:
+                item['n'] = [_num(nm.get('p')), _num(nm.get('m')), _num(nm.get('g'))]
+            fl = reg.get('foil') or {}
+            if fl.get('m') is not None:
+                item['f'] = [_num(fl.get('p')), _num(fl.get('m')), _num(fl.get('g'))]
+            if len(item) > 1:
+                por_liga[chave] = item
+        catalogo = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))
+        for c in catalogo:
+            en = c.get('en_id')
+            if not en:
+                continue
+            reg = por_liga.get(f"{c.get('idE')}-{c.get('num')}")
+            if reg:
+                por_pid[en] = reg
+    except Exception as e:
+        print('⚠ vendas_3m skip:', e)
+    _VENDAS_CACHE = (por_pid, por_liga)
+    return _VENDAS_CACHE
+
+
 def cards_basico() -> list:
     """Catálogo enxuto p/ lookup (mesmo shape do cards.json do scanner)."""
     raw = json.loads(PTCG_CACHE.read_text(encoding='utf-8'))
@@ -488,6 +549,17 @@ def cards_basico() -> list:
             print(f'   liga_only adicionadas ao cards.json de busca: {n_liga_only}')
     except Exception as e:
         print('⚠ cards_basico (liga_only índice único) skip:', e)
+    # Vendas verificadas (3 meses) + preco de anuncio por tipo (N/F).
+    # Anexa apenas nas cartas com dado coletado pelo enriquecedor.
+    por_pid, por_liga = _vendas_maps()
+    n_v3m = 0
+    for _e in out:
+        _item = por_liga.get(_e.get('id')) or por_pid.get(_e.get('id'))
+        if _item:
+            _e['v3m'] = _item
+            n_v3m += 1
+    if n_v3m:
+        print(f'   vendas verificadas anexadas: {n_v3m}')
     return out
 
 

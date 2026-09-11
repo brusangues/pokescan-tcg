@@ -32,6 +32,12 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Gatilho**: com ~3x a base atual, retreinar o re-rank — hoje não generaliza (dataset pequeno). Cada nova foto rotulada também melhora a avaliação de segmentação/matching.
 - Tags: scanner, dados, rotulagem
 
+### [P2] 43. Coleção com graduação (PSA/CGC/AGS) — condição por unidade + valor graduado
+- **Ideia**: na Minha Coleção (P2.37), registrar por unidade a condição e, quando graduada, a certificadora e a escala (ex. "PSA GEM-MT 10"), mostrando o valor da graduada separado do raw.
+- **Dado público na origem**: os anúncios trazem `is_graded` + `grading{company_acronym, company_name, scale, company_url}` (CGC/AGS/PSA), com filtro "Cartas Graduadas / Não Graduadas" — levantamento em `references/liga-historico-precos-graduacao.md` (skill pokescan-tcg).
+- **Resta**: coletar preço de referência **por graduação** (o P2.42 cobre o preço geral/vendas verificadas) e definir a UI (badge "Graduada" + empresa/escala junto da quantidade).
+- Tags: produto, coleção, frontend, dados
+
 ---
 
 ## 🔬 P3 — Experimentos / ideias
@@ -75,3 +81,10 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **O que falta no jsfeat**: não tem `approxPolyDP`/`warpPerspective` nativos — precisaria implementar (Douglas-Peucker ~40 linhas; transform de perspectiva via math manual ou rasterização) — e validar razão de aspecto igual
 - **Plano**: só se o download virar problema real (GitHub Pages/dados móveis); manter OpenCV.js como implementação canônica da Fase 1
 - Tags: scanner, clipping, frontend, P3
+
+### [P3] 44. Histórico de preços longo (6–12 meses) — série completa exige login
+- **Estado (11/09)**: existe aba "Histórico de Preços" na página de carta e página dedicada `?view=cards/pricehistory`, com períodos de 1/3/6/12 meses e lista de vendas individuais — **só para usuário logado**; a página dedicada também cai em challenge anti-bot para browser automatizado (curl → 403; `web_extract` passa).
+- **O que dá para consumir sem login** (feito no P2.42): resumo de vendas dos últimos **3 meses** (menor/média/maior + faixa de volume) e preço de venda por tipo (Normal/Foil).
+- **Ideias**: avaliar conta de serviço própria para a série completa (checar termos de uso) **ou** manter só o link "Ver na Liga" para o histórico longo; o endpoint de vendas exige sessão.
+- Referência: `references/liga-historico-precos-graduacao.md` (skill pokescan-tcg).
+- Tags: dados, crawler, produto
