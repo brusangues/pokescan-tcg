@@ -66,6 +66,7 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 |---|---|
 | Tema A "Guia de colecionador" em todo o site (P2.34) + copy institucional (P2.38) — creme/papel, Baloo2+Nunito, pokébola, vermelho ação, sem indigo/roxo; "preço em reais", link "Ver na Liga" mantido | `d6954ed` |
 | **Coleção pessoal local (P2.37)** — botão "Tenho esta carta" no /card, scanner e busca; persiste em localStorage (`pokescan.colecao`, chave `{s}-{num}` do cards.json); página `/minha-colecao` com Valor real (mercado) vs Estimado (preço justo) + Upside + qtd ajustável + exportar/importar JSON | `1b6ea96` |
+| **Coleção com graduação (P2.43)** — cada unidade guarda a condição (M/NM/SP/MP/HP/D) e, se graduada, certificadora + escala (PSA/CGC/BGS/AGS, escala em texto livre). O valor **graduado** entra somado em separado ("Valor graduado · referência de mercado") e a linha da unidade mostra a referência real (`Referência: PSA · 5 anúncios · R$ 4.000,00 – R$ 34.999,95`). Fonte: anúncios de cartas graduadas da Liga (`is_graded` + `grading{company_acronym,scale}` + `precoFinal`), novo bloco `gr` no cards.json (135 cartas) + bloco "Cartas graduadas à venda" na /card | `ea3b754` |
 | Scanner mobile abas Foto/Buscar (P2.35) + copy motor "Ativar motor de busca", MBs em `<details>` (P2.36) + seletor de dias do /hits em dropdown `‹ ›` | `b1f9c0d`,`ae042ae` |
 | Hero do scanner "Escaneie ou busque pelo nome" (P3.37) | `b1f9c0d` |
 | **Nome pt-BR da Liga nas cartas (P1.33)** — `cards_basico` anexa nPT/nEN via en_id do catálogo (13.728 cartas/66%); `cardLookup` prioriza nPT; EN vira secundário na /card. Ex.: Brás, Professor Carvalho Impostor | `72c9b47` |
@@ -122,5 +123,5 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 Ver [`BACKLOG.md`](BACKLOG.md): P2.32 (scanner matching — gap ao teto top-5),
 P2.33 (base rotulada manual), P3.17 (modelo JP + subsets JP), P3.34 (binder
 preto), P3.18 (dinov2-large), P3.19 (ensembling), P3.30.ext (alerta de
-tendência), P3.20/21/26 (coleção do usuário, PWA, jsfeat), P2.43 (coleção com
-graduação), P3.44 (histórico de preços longo exige login).
+tendência), P3.20/21/26 (coleção do usuário, PWA, jsfeat),
+P3.44 (histórico de preços longo exige login).
