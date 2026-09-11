@@ -100,6 +100,12 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 | **Sets de Megaevolução (me1-me5)** + filtro de ano de lançamento no /colecoes | `934882b` |
 | Preço USD movido para a seção "Previsão do Modelo" + links da Liga em nova aba — P2.17 | `18acbf8` |
 
+## Preços & Vendas
+
+| Feature | Commit |
+|---|---|
+| **Vendas verificadas (3 meses) + preço de venda por tipo (N/F) na /card** — P2.42. `v3m` no cards.json (menor/média/maior das vendas concretizadas + faixa de volume; anúncios Normal/Foil com menor/média/maior). Enriquecedor incremental visita a página da carta (fila por iCO, 400/dia no cron, cache `data/liga/vendas_3m.json`); seed inicial 495 cartas (421 com vendas). | `1e484ed` |
+
 ## Dashboard & Análise
 
 | Feature | Commit |
@@ -116,4 +122,5 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 Ver [`BACKLOG.md`](BACKLOG.md): P2.32 (scanner matching — gap ao teto top-5),
 P2.33 (base rotulada manual), P3.17 (modelo JP + subsets JP), P3.34 (binder
 preto), P3.18 (dinov2-large), P3.19 (ensembling), P3.30.ext (alerta de
-tendência), P3.20/21/26 (coleção do usuário, PWA, jsfeat).
+tendência), P3.20/21/26 (coleção do usuário, PWA, jsfeat), P2.43 (coleção com
+graduação), P3.44 (histórico de preços longo exige login).
