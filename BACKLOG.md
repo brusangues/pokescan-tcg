@@ -32,6 +32,16 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Gatilho**: com ~3x a base atual, retreinar o re-rank — hoje não generaliza (dataset pequeno). Cada nova foto rotulada também melhora a avaliação de segmentação/matching.
 - Tags: scanner, dados, rotulagem
 
+### [P2] 45. Coleção: busca, filtros, ordenação e completude por set
+- **Ideia**: com 50+ cartas a lista fica crua. Busca por nome, filtros (raw × graduada, com × sem preço, idioma, tipo) e ordenação (valor, upside, data, set). Agrupar por set com completude ("MEW: 34 de 165, faltam 131") e, opcionalmente, a lista de faltantes.
+- **Base pronta**: `listarColecao`/`unidadesDe` (P2.43) e o preço por condição/tipo (P2.44) já dão o que filtrar.
+- Tags: produto, coleção, frontend
+
+### [P2] 46. Coleção: histórico do valor do acervo (snapshot + gráfico)
+- **Ideia**: guardar um snapshot diário do valor da coleção (localStorage) e mostrar a evolução em gráfico ("R$ 8.200 em 01/09 → R$ 9.100 hoje"). É o gancho de retorno ao site.
+- **Cuidado**: valor só do que tem referência; marcar claramente as unidades sem preço para o gráfico não mentir.
+- Tags: produto, coleção, dados
+
 ---
 
 ## 🔬 P3 — Experimentos / ideias
@@ -82,3 +92,16 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Ideias**: avaliar conta de serviço própria para a série completa (checar termos de uso) **ou** manter só o link "Ver na Liga" para o histórico longo; o endpoint de vendas exige sessão.
 - Referência: `references/liga-historico-precos-graduacao.md` (skill pokescan-tcg).
 - Tags: dados, crawler, produto
+
+### [P3] 45. Coleção: portabilidade — CSV, backup e link compartilhável
+- **Contexto**: a coleção vive só em localStorage (some ao limpar o navegador). Hoje existe exportar/importar JSON.
+- **Ideias**: exportar **CSV** (abre em planilha), lembrete/backup automático (com data do último), **link somente-leitura com a coleção comprimida em base64 na URL** (trocar lista com amigo sem backend) e, se um dia houver backend, sincronizar entre dispositivos.
+- Tags: produto, coleção, dados
+
+### [P3] 46. Coleção: foto e nota por unidade
+- **Ideia**: anexar foto da carta real (IndexedDB, não localStorage) e nota livre por unidade ("comprada na loja X", "canto com defeito", "assinada"). Útil em venda/troca e para conferir o estado real.
+- Tags: produto, coleção, frontend
+
+### [P3] 47. Coleção: modo binder, edição em massa e conferência com o scanner
+- **Ideias**: grade visual de imagens na ordem física do fichário; aplicar condição/tipo/idioma a N unidades de uma vez e duplicar unidade; adicionar em lote as cartas detectadas no scan, com um "modo conferência" (bater o binder físico contra a coleção).
+- Tags: produto, coleção, scanner

@@ -204,23 +204,31 @@ export function totalGraduadas(map: ColecaoMap): number {
 }
 
 /**
- * Valor da coleção. 'estimado' = preço justo do modelo (pred BRL), 'real' =
- * preço de mercado escorado — ambos só fazem sentido para unidades RAW (o
- * modelo aprendeu preço de anúncio comum, não de carta graduada).
- *
- * Unidades GRADUADAS entram em `realGraduado`, usando a referência de mercado
- * dos ANÚNCIOS GRADUADOS da Liga (min/mediana/max). Sem dado de graduação para
- * aquela empresa, a unidade não é somada e conta em `nSemRefGrad` — nunca
- * inventamos um preço de graduada a partir do raw.
+ * Valor da coleção.
+ *  - `estimado` = preço justo do modelo (pred BRL) — só faz sentido para RAW
+ *    (o modelo aprendeu preço de anúncio comum, não de carta graduada).
+ *  - `real` = referência de mercado da unidade RAW. Prioriza o preço dos
+ *    ANÚNCIOS DA MESMA CONDIÇÃO/TIPO (`v3m.pc`); sem esse dado, cai para o preço
+ *    de mercado geral da carta (`v3m.n`/`v3m.f`/`v3m.v` via `cardLookup`).
+ *  - `realGraduado` = referência dos anúncios GRADUADOS (mesma certificadora e
+ *    escala quando existir). Sem dado, a unidade NÃO é somada e conta em
+ *    `nSemRefGrad` — nunca inventamos preço de graduada a partir do raw.
+ *  - `pago`/`lucro` = custo declarado pelo dono por unidade e a diferença para
+ *    a referência de mercado (só unidades que têm preço E custo entram no lucro).
  */
 export interface ValorColecao {
   estimado: number;      // soma dos preços justos (BRL) das unidades raw
-  real: number;          // soma dos preços reais escorados (BRL) das unidades raw
+  real: number;          // soma das referências de mercado (BRL) das unidades raw
   realGraduado: number;  // soma da referência de mercado das unidades graduadas
-  nGraduadas: number;    // unidades graduadas na coleção
-  nSemRefGrad: number;   // unidades graduadas sem referência de mercado
+  pago: number;          // soma do que o dono declarou ter pago
+  lucro: number;         // (referência - pago) das unidades com preço E custo
+  nGraduadas: number;    // unidades graduadas
+  nSemRefGrad: number;   // graduadas sem referência de mercado
+  nRefFina: number;      // raw com referência por condição/tipo
+  nRefGenerica: number;  // raw somadas com o mercado geral (sem pc)
+  nComPago: number;      // unidades com custo declarado
   upsidePct: number;     // (estimado-real)/real × 100 (só raw)
-  nComPreco: number;     // unidades raw com preço resolvido
+  nComPreco: number;     // unidades com preço resolvido
   nTotal: number;        // unidades na coleção
 }
 
@@ -228,28 +236,41 @@ export interface ValorColecao {
 export function calcularValor(
   itens: ColecaoItem[],
   preco: (id: string) => { real?: number | null; estimado?: number | null } | null,
-  gradRef?: (id: string, empresa?: string | null) => number | null
+  gradRef?: (id: string, empresa?: string | null, escala?: string | null) => number | null,
+  condRef?: (id: string, cond?: string | null, tipo?: string | null) => number | null
 ): ValorColecao {
-  let estimado = 0, real = 0, realGraduado = 0, nCom = 0, nGrad = 0, nSemRef = 0, nTotal = 0;
+  let estimado = 0, real = 0, realGraduado = 0, pago = 0, lucro = 0;
+  let nCom = 0, nGrad = 0, nSemRef = 0, nTotal = 0, nFina = 0, nGenerica = 0, nComPago = 0;
   for (const it of itens) {
     const unids = unidadesDe(it);
     const p = preco(it.id);
     for (const u of unids) {
       nTotal++;
+      const custo = Number(u.pago) || 0;
       if (u.grad?.emp) {
         nGrad++;
-        const ref = gradRef ? gradRef(it.id, u.grad.emp) : null;
-        if (ref != null && ref > 0) realGraduado += ref;
-        else nSemRef++;
+        const ref = (gradRef ? gradRef(it.id, u.grad.emp, u.grad.esc) : null) || 0;
+        if (ref > 0) {
+          realGraduado += ref;
+          if (custo > 0) { pago += custo; lucro += ref - custo; nComPago++; }
+        } else {
+          nSemRef++;
+          // declarou custo mas não há referência de mercado: conta o custo,
+          // não o lucro (não dá para calcular sem preço).
+          if (custo > 0) { pago += custo; nComPago++; }
+        }
         continue;
       }
-      if (p) {
-        const r = Number(p.real) || 0;
-        const e = Number(p.estimado) || 0;
-        real += r;
-        estimado += e;
-        if (r > 0 || e > 0) nCom++;
-      }
+      const refFina = (condRef ? condRef(it.id, u.cond, u.tipo) : null) || 0;
+      const refGeral = Number(p?.real) || 0;
+      const ref = refFina > 0 ? refFina : refGeral;
+      if (refFina > 0) nFina++;
+      else if (refGeral > 0) nGenerica++;
+      real += ref;
+      const est = Number(p?.estimado) || 0;
+      estimado += est;
+      if (ref > 0 || est > 0) nCom++;
+      if (custo > 0) { pago += custo; nComPago++; if (ref > 0) lucro += ref - custo; }
     }
   }
   const upsidePct = real > 0 ? ((estimado - real) / real) * 100 : 0;
@@ -257,8 +278,13 @@ export function calcularValor(
     estimado,
     real,
     realGraduado,
+    pago,
+    lucro,
     nGraduadas: nGrad,
     nSemRefGrad: nSemRef,
+    nRefFina: nFina,
+    nRefGenerica: nGenerica,
+    nComPago,
     upsidePct,
     nComPreco: nCom,
     nTotal,

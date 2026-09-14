@@ -41,7 +41,7 @@ from crawler_liga_hits import get_driver, parse_pagina_carta, url_carta  # noqa:
 # Schema do registro no cache. Subir quando um campo novo entrar:
 # registros com sv antigo voltam para a FRENTE da fila (refetch).
 # sv=2: + grad (anuncios graduados: empresa/escala/preco)
-SV = 2
+SV = 3
 
 CATALOGO = RAIZ / 'data' / 'catalogo_liga.json'
 SAIDA = RAIZ / 'data' / 'liga' / 'vendas_3m.json'
@@ -124,11 +124,13 @@ def registra(dados: dict, carta: dict, hoje: str) -> dict | None:
     if dados.get('anuncios_graduados'):
         grad = {'n': dados.get('anuncios_graduados'),
                 'e': dados.get('graded_amostras') or []}
-    if not (normal or foil or vendas or grad):
+    pc = dados.get('preco_cond') or {}
+    if not (normal or foil or vendas or grad or pc):
         return None
     return {'idE': carta['idE'], 'num': carta['num'], 'sigla': carta.get('sigla'),
             'nEN': carta.get('nEN'), 'normal': normal, 'foil': foil,
-            'vendas': vendas, 'grad': grad, 'n_anuncios': dados.get('iCO_real'),
+            'vendas': vendas, 'grad': grad, 'pc': pc,
+            'n_anuncios': dados.get('iCO_real'),
             'sv': SV, 'ts': hoje}
 
 

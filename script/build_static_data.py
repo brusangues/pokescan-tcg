@@ -394,6 +394,8 @@ def _vendas_maps() -> tuple:
       f = [p, m, g] precos de anuncio da versao Foil
       na = quantidade de anuncios | ts = data da coleta
       gr = {n: n de anuncios graduados, e: [[empresa, escala, preco], ...]}
+      pc = {cond: {tipo: [n, menor, mediana, maior]}} (preco dos anuncios por
+           condicao; tipo = N/F/O conforme extras)
     """
     global _VENDAS_CACHE
     if _VENDAS_CACHE is not None:
@@ -423,6 +425,14 @@ def _vendas_maps() -> tuple:
                 item['gr'] = {'n': gr.get('n'),
                               'e': [[str(a[0]), str(a[1] or ''), _num(a[2])]
                                     for a in (gr.get('e') or []) if len(a) >= 3]}
+            # Preco por CONDICAO dos anuncios NAO graduados:
+            # {'NM': {'N': [n, menor, mediana, maior], 'F': [...]}, 'SP': {...}}
+            # 1=M, 2=NM, 3=SP, 4=MP, 5=HP, 6=D; extras 0=Normal, 2=Foil, resto=O.
+            pc = reg.get('pc') or {}
+            if pc:
+                item['pc'] = {lbl: {tp: [_num(x) for x in v]
+                                    for tp, v in (ts or {}).items()}
+                              for lbl, ts in pc.items()}
             if len(item) > 1:
                 por_liga[chave] = item
         catalogo = json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8'))

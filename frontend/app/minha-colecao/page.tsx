@@ -22,13 +22,22 @@ import {
   importarColecao, exportarJSON, calcularValor, type ColecaoMap,
 } from '@/app/lib/colecao';
 import {
-  CONDICOES, EMPRESAS, unidadesDe, referenciaGraduada, type Condicao,
+  CONDICOES, EMPRESAS, IDIOMAS, TIPOS, rotuloTipo, unidadesDe, referenciaGraduada,
+  referenciaCondicao, type Condicao, type Idioma, type Tipo,
 } from '@/app/lib/grading';
 
 interface PrecoItem {
   real?: number | null;
   estimado?: number | null;
-  grad?: { n?: number; e?: [string, string, number][] } | null;
+  /** Bloco `v3m` da carta: vendas verificadas (v), preço por TIPO (n/f),
+   * anúncios graduados (gr) e preço por CONDIÇÃO/TIPO dos anúncios (pc). */
+  v3m?: {
+    v?: number[];
+    n?: number[];
+    f?: number[];
+    gr?: { n?: number; e?: [string, string, number][] } | null;
+    pc?: Record<string, Record<string, number[]>> | null;
+  } | null;
 }
 
 const brl = (v: number) =>
@@ -54,7 +63,8 @@ export default function MinhaColecaoPage() {
 
   const itens = useMemo(() => listarColecao(map), [map]);
 
-  // resolve preços (batch) + anúncios graduados da carta
+  // resolve preços (batch) + bloco v3m da carta (vendas, por tipo, graduados,
+  // preço por condição/tipo)
   useEffect(() => {
     if (!loaded || itens.length === 0) return;
     let ativo = true;
@@ -69,7 +79,7 @@ export default function MinhaColecaoPage() {
           if (card) {
             const real = card.modelo?.real ?? null;
             const estimado = card.modelo?.pred ?? (card.preco_brl as number) ?? null;
-            res[it.id] = { real, estimado, grad: card.graduadas || null };
+            res[it.id] = { real, estimado, v3m: (card.vendas_3m as PrecoItem['v3m']) || null };
           }
         } catch { /* segue */ }
         if (!ativo) return;
@@ -79,14 +89,35 @@ export default function MinhaColecaoPage() {
     return () => { ativo = false; };
   }, [loaded, itens, map]);
 
-  // referência de mercado de uma unidade graduada (anúncios graduados da Liga)
-  const gradRefDe = (id: string, empresa?: string | null): number | null => {
-    const ref = referenciaGraduada(precos[id]?.grad?.e, empresa);
+  /**
+   * Referência de mercado de uma unidade GRADUADA: anúncios graduados da Liga,
+   * priorizando mesma certificadora E mesma escala.
+   */
+  const gradRefDe = (id: string, empresa?: string | null, escala?: string | null): number | null => {
+    const ref = referenciaGraduada(precos[id]?.v3m?.gr?.e, empresa, escala);
     return ref ? ref.mediana : null;
   };
 
+  /**
+   * Referência de mercado de uma unidade RAW: preço dos anúncios na MESMA
+   * condição/tipo (`pc`); sem esse dado, preço de venda POR TIPO da carta
+   * (`n`/`f`); sem nada disso, o mercado geral da carta (fallback do cálculo).
+   */
+  const condRefDe = (id: string, cond?: string | null, tipo?: string | null): number | null => {
+    const v3m = precos[id]?.v3m;
+    // Unidade sem condição/tipo declarados (coleção antiga) NÃO entra em balde
+    // arbitrário: cai direto no mercado geral da carta.
+    if (cond || tipo) {
+      const fino = referenciaCondicao(v3m?.pc, cond, tipo);
+      if (fino) return fino.mediana;
+    }
+    const arr = tipo === 'F' ? v3m?.f : tipo === 'N' ? v3m?.n : null;
+    if (Array.isArray(arr) && typeof arr[1] === 'number' && arr[1] > 0) return arr[1];
+    return null;
+  };
+
   const valor = useMemo(
-    () => calcularValor(itens, (id) => precos[id] || null, gradRefDe),
+    () => calcularValor(itens, (id) => precos[id] || null, gradRefDe, condRefDe),
     [itens, precos]
   );
 
@@ -170,6 +201,7 @@ export default function MinhaColecaoPage() {
                 <p className="text-2xl font-black">{brl(valor.real)}</p>
                 <p className="text-xs text-[#f3e9d2]/60 mt-1">
                   unidades sem graduação · {valor.nComPreco} de {valor.nTotal - valor.nGraduadas} com preço
+                  {valor.nRefFina > 0 && <> · {valor.nRefFina} pela condição/tipo</>}
                 </p>
               </div>
               <div className="bg-[#fffdf7] rounded-2xl p-5 border border-[#2b2517]/20 shadow-sm">
@@ -202,11 +234,32 @@ export default function MinhaColecaoPage() {
                 </div>
                 <p className="text-xs text-[#6b6252] mt-2">
                   Mediana dos <b>anúncios de cartas já graduadas</b> na Liga Pokémon (oferta, não venda
-                  concretizada), considerando a mesma certificadora quando existe.
+                  concretizada), considerando a mesma certificadora e a mesma escala quando existem.
                   {valor.nSemRefGrad > 0 && (
                     <> {valor.nSemRefGrad} unidade{valor.nSemRefGrad !== 1 ? 's' : ''} sem anúncio graduado
                     publicado — não entram na soma.</>
                   )}
+                </p>
+              </section>
+            )}
+
+            {/* Custo declarado x referência de mercado (P2.44) */}
+            {valor.nComPago > 0 && (
+              <section className="bg-[#fffdf7] rounded-2xl p-5 border border-[#2b2517]/20 shadow-sm mb-6">
+                <div className="flex items-baseline justify-between flex-wrap gap-2">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-[#6b6252] mb-1">Lucro sobre o que você pagou</p>
+                    <p className={`text-2xl font-black ${valor.lucro >= 0 ? 'text-emerald-600' : 'text-[#a90924]'}`}>
+                      {valor.lucro >= 0 ? '+' : ''}{brl(valor.lucro)}
+                    </p>
+                  </div>
+                  <span className="text-xs font-semibold text-[#292318] bg-[#f3e9d2] px-2.5 py-1 rounded-full">
+                    pagou {brl(valor.pago)} · {valor.nComPago} unidade{valor.nComPago !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <p className="text-xs text-[#6b6252] mt-2">
+                  Lucro = referência de mercado − o que você declarou ter pago, contando só as unidades
+                  com preço <b>e</b> custo informados (unidade sem referência não entra).
                 </p>
               </section>
             )}
@@ -277,7 +330,10 @@ export default function MinhaColecaoPage() {
                         <div className="space-y-1.5">
                           {unids.map((u, i) => {
                             const grad = !!u.grad?.emp;
-                            const ref = grad ? referenciaGraduada(p?.grad?.e, u.grad?.emp) : null;
+                            const refG = grad
+                              ? referenciaGraduada(p?.v3m?.gr?.e, u.grad?.emp, u.grad?.esc)
+                              : null;
+                            const refC = grad ? null : referenciaCondicao(p?.v3m?.pc, u.cond, u.tipo);
                             return (
                               <div key={i} className="flex flex-wrap items-center gap-2 text-xs">
                                 <span className="w-8 font-semibold text-[#998f7c]">#{i + 1}</span>
@@ -289,6 +345,24 @@ export default function MinhaColecaoPage() {
                                 >
                                   <option value="">condição —</option>
                                   {CONDICOES.map((c) => <option key={c.v} value={c.v}>{c.rotulo}</option>)}
+                                </select>
+                                <select
+                                  value={u.tipo || ''}
+                                  disabled={grad}
+                                  onChange={(e) => setMap(setUnidade(it.id, i, { tipo: (e.target.value || undefined) as Tipo | undefined }))}
+                                  className="border border-[#2b2517]/20 rounded-lg px-2 py-1 bg-white text-[#292318] disabled:opacity-40"
+                                >
+                                  <option value="">tipo —</option>
+                                  {TIPOS.map((t) => <option key={t.v} value={t.v}>{t.rotulo}</option>)}
+                                </select>
+                                <select
+                                  value={u.lang || ''}
+                                  disabled={grad}
+                                  onChange={(e) => setMap(setUnidade(it.id, i, { lang: (e.target.value || undefined) as Idioma | undefined }))}
+                                  className="border border-[#2b2517]/20 rounded-lg px-2 py-1 bg-white text-[#292318] disabled:opacity-40"
+                                >
+                                  <option value="">idioma —</option>
+                                  {IDIOMAS.map((l) => <option key={l} value={l}>{l}</option>)}
                                 </select>
                                 <label className="inline-flex items-center gap-1 text-[#292318] cursor-pointer">
                                   <input
@@ -315,19 +389,46 @@ export default function MinhaColecaoPage() {
                                     />
                                   </>
                                 )}
+                                <label className="inline-flex items-center gap-1 text-[#6b6252]">
+                                  pago R$
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    value={u.pago ?? ''}
+                                    placeholder="—"
+                                    onChange={(e) => {
+                                      const v = e.target.value === '' ? undefined : Number(e.target.value);
+                                      setMap(setUnidade(it.id, i, { pago: v != null && isFinite(v) && v >= 0 ? v : undefined }));
+                                    }}
+                                    className="border border-[#2b2517]/20 rounded-lg px-2 py-1 bg-white text-[#292318] w-24"
+                                  />
+                                </label>
                                 <button
                                   onClick={() => setMap(removeUnidade(it.id, i))}
                                   className="ml-auto text-[#998f7c] hover:text-[#a90924]"
                                 >
                                   remover
                                 </button>
-                                {grad && (
+                                {grad ? (
                                   <p className="w-full text-[11px] text-[#6b6252] pl-10">
-                                    {ref
-                                      ? <>Referência: <b>{ref.empresa || 'todas as certificadoras'}</b> · {ref.n} anúncio{ref.n !== 1 ? 's' : ''} · {brl(ref.menor)} – {brl(ref.maior)} (mediana {brl(ref.mediana)})</>
+                                    {refG
+                                      ? <>Referência: <b>{refG.empresa || 'todas as certificadoras'}</b>
+                                        {refG.exato && refG.escala
+                                          ? <> · mesma escala ({refG.escala})</>
+                                          : refG.escala ? <> · escala {refG.escala}</> : <> · qualquer escala</>}
+                                        {' '}· {refG.n} anúncio{refG.n !== 1 ? 's' : ''} · {brl(refG.menor)} – {brl(refG.maior)} (mediana {brl(refG.mediana)})</>
                                       : <>Sem anúncio graduado desta carta na Liga — unidade não entra no valor graduado.</>}
                                   </p>
-                                )}
+                                ) : (u.cond || u.tipo) ? (
+                                  <p className="w-full text-[11px] text-[#6b6252] pl-10">
+                                    {refC
+                                      ? <>Referência <b>{refC.cond || 'qualquer condição'} · {rotuloTipo(refC.tipo)}</b>
+                                        {refC.exato ? ' (mesma condição e tipo)' : ' (aproximada)'}
+                                        {' '}· {refC.n} anúncio{refC.n !== 1 ? 's' : ''} · {brl(refC.menor)} – {brl(refC.maior)} (mediana {brl(refC.mediana)})</>
+                                      : <>Sem anúncio nesta condição/tipo — unidade entra pelo mercado geral da carta.</>}
+                                  </p>
+                                ) : null}
                               </div>
                             );
                           })}
@@ -339,9 +440,9 @@ export default function MinhaColecaoPage() {
                           >
                             <Plus className="w-3.5 h-3.5" /> unidade
                           </button>
-                          {p?.grad?.n ? (
+                          {p?.v3m?.gr?.n ? (
                             <span className="text-[11px] text-[#998f7c]">
-                              {p.grad.n} anúncio{p.grad.n !== 1 ? 's' : ''} graduado{p.grad.n !== 1 ? 's' : ''} desta carta na Liga
+                              {p.v3m.gr.n} anúncio{p.v3m.gr.n !== 1 ? 's' : ''} graduado{p.v3m.gr.n !== 1 ? 's' : ''} desta carta na Liga
                             </span>
                           ) : null}
                         </div>

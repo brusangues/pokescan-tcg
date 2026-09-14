@@ -184,6 +184,31 @@ def parse_pagina_carta(src):
                 dados['anuncios_graduados'] = n_grad
                 # ate 12 amostras, mais caras primeiro (referencia da /card)
                 dados['graded_amostras'] = sorted(grad, key=lambda t: -t[2])[:12]
+            # Preco por CONDICAO: anuncios NAO graduados tem precoFinal em texto
+            # plano e qualid (1=M, 2=NM, 3=SP, 4=MP, 5=HP, 6=D) + extras
+            # (0=Normal, 2=Foil, outros=especiais). Gera
+            # { 'NM': {'N': [n, menor, mediana, maior], 'F': [...]}, ... }.
+            _lbl = {'1': 'M', '2': 'NM', '3': 'SP', '4': 'MP', '5': 'HP', '6': 'D'}
+            _bruto = {}
+            for a in stock:
+                if a.get('is_graded') in (1, '1') or a.get('grading'):
+                    continue
+                pr = _preco_float(a.get('precoFinal'))
+                if not pr or pr <= 0:
+                    continue
+                lbl = _lbl.get(str(a.get('qualid') or ''))
+                if not lbl:
+                    continue
+                ex = a.get('extras')
+                tp = 'N' if ex in (0, '0') else ('F' if ex in (2, '2') else 'O')
+                _bruto.setdefault(lbl, {}).setdefault(tp, []).append(pr)
+            if _bruto:
+                dados['preco_cond'] = {
+                    lbl: {tp: [len(v), min(v), sorted(v)[len(v) // 2], max(v)]
+                          for tp, v in tipos.items()}
+                    for lbl, tipos in _bruto.items()
+                }
+
         except Exception:
             pass
 

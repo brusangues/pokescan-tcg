@@ -394,8 +394,15 @@ async def main():
         colecao_seed = {
             'base1-4': {
                 'id': 'base1-4', 'nome': 'Charizard', 's': 'base1', 'num': '4',
-                'qtd': 2, 'addAt': 1,
-                'unidades': [{'cond': 'NM'}, {'grad': {'emp': 'PSA', 'esc': 'GEM-MT 10'}}],
+                'qtd': 4, 'addAt': 1,
+                # 1: raw NM foil PT com custo declarado; 2: raw SP foil;
+                # 3: PSA com escala publicada; 4: PSA sem a escala publicada
+                'unidades': [
+                    {'cond': 'NM', 'tipo': 'F', 'lang': 'PT', 'pago': 500},
+                    {'cond': 'SP', 'tipo': 'F'},
+                    {'grad': {'emp': 'PSA', 'esc': 'NM 7'}},
+                    {'grad': {'emp': 'PSA', 'esc': 'GEM-MT 10'}},
+                ],
             },
             'fake-999': {'id': 'fake-999', 'nome': 'Carta antiga', 'qtd': 2, 'addAt': 2},
         }
@@ -428,6 +435,38 @@ async def main():
             check('coleção: item antigo (só qtd) migra para unidades (P2.43)',
                   'Carta antiga' in corpo and 'Unidades e condição (2)' in corpo,
                   'item sem `unidades` virou 2 unidades')
+
+            # P2.44 — preço por CONDIÇÃO/TIPO, referência graduada pela escala,
+            # tipo/idioma por unidade e custo declarado → lucro
+            pc = await pg2.evaluate(f"""async ()=>{{
+                const r = await fetch('{base}/data/cards.json');
+                const j = await r.json();
+                const com = j.filter(c => c.v3m && c.v3m.pc && Object.keys(c.v3m.pc).length);
+                const c0 = com[0];
+                const ok = !!c0 && Object.entries(c0.v3m.pc).every(([k, ts]) =>
+                    /^(M|NM|SP|MP|HP|D)$/.test(k) && Object.values(ts).every(a =>
+                        Array.isArray(a) && a.length >= 4 && typeof a[2] === 'number' && a[2] > 0));
+                return {{n: com.length, ok: ok, ex: c0 ? Object.keys(c0.v3m.pc).join('/') : ''}};
+            }}""")
+            check('catálogo: preço por condição/tipo (pc) dos anúncios (P2.44)',
+                  pc['n'] > 0 and pc['ok'],
+                  f"{pc['n']} cartas com pc · ex. condições {pc['ex']}")
+
+            check('coleção: referência pela condição+tipo da unidade (P2.44)',
+                  'Referência NM · Foil' in corpo and 'mesma condição e tipo' in corpo,
+                  'unidade NM/Foil casou condição e tipo')
+
+            check('coleção: referência graduada casando a escala (P2.44)',
+                  'mesma escala (NM 7)' in corpo,
+                  'unidade PSA NM 7 casou a escala publicada')
+
+            mLuc = re.search(r'Lucro sobre o que você pagou\s*\+?(R\$ [\d.,]+)', corpo)
+            vLuc = 0.0
+            if mLuc:
+                vLuc = float(mLuc.group(1).replace('R$', '').replace('.', '').replace(',', '.').strip())
+            check('coleção: custo declarado vira lucro (P2.44)',
+                  bool(mLuc) and vLuc > 0 and 'pagou R$ 500,00' in corpo,
+                  f'lucro R$ {vLuc:.2f} sobre pago R$ 500,00' if mLuc else 'sem bloco de lucro')
         except Exception as e:
             check('coleção: unidade graduada (P2.43)', False, str(e)[:60])
         finally:
