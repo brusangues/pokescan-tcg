@@ -30,13 +30,22 @@ def rodar(passo: str, cmd: list, timeout=3600) -> str:
     print(f'\n▶ {passo}', flush=True)
     t0 = time.time()
     try:
+        # stdin=DEVNULL: sob cron o processo sobe sem console (handle de STDIN
+        # invalido) e o subprocess tentaria duplicar STD_INPUT_HANDLE ->
+        # OSError [WinError 6] "The handle is invalid".
         r = subprocess.run(cmd, cwd=str(BASE), capture_output=True, text=True,
+                           stdin=subprocess.DEVNULL,
                            encoding='utf-8', errors='replace', timeout=timeout)
         out = (r.stdout or '') + (r.stderr or '')
         ok = r.returncode == 0
     except subprocess.TimeoutExpired:
         ok = False
         out = f'TIMEOUT após {timeout}s'
+    except Exception as e:
+        # Um passo nao pode derrubar a macro toda (ex.: OSError [WinError 6] do
+        # subprocess sob cron sem console): segue e reporta ❌ no resumo final.
+        ok = False
+        out = f'ERRO em {cmd[1:3]}: {type(e).__name__}: {e}'
     dur = time.time() - t0
     status = '✅' if ok else '❌'
     print(f'{status} {passo} ({dur/60:.0f}min)')
