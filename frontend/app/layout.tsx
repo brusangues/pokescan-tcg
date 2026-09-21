@@ -1,6 +1,7 @@
 import type {Metadata} from 'next';
 import {Baloo_2, Nunito} from 'next/font/google';
 import './globals.css'; // Global styles
+import Analytics from './components/Analytics';
 
 const baloo = Baloo_2({
   subsets: ['latin'],
@@ -22,7 +23,10 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="pt-BR" className={`${baloo.variable} ${nunito.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
