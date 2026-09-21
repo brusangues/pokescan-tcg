@@ -137,11 +137,24 @@ async def main():
             # catálogo do site: bloco de vendas verificadas (v3m) anexado pelo build
             try:
                 v3m = await page.evaluate(f"""async ()=>{{
-                    const r = await fetch('{base}/data/cards.json');
-                    const j = await r.json();
+                    // O cards.json e republicado a cada deploy: logo apos publicar, o
+                    // CDN pode devolver versao parcial/404 por alguns segundos. Retenta.
+                    const busca = async () => {{
+                        let erro = '';
+                        for (let i = 0; i < 4; i++) {{
+                            try {{
+                                const r = await fetch('{base}/data/cards.json', {{cache: 'no-store'}});
+                                if (r.ok) return await r.json();
+                                erro = 'HTTP ' + r.status;
+                            }} catch (e) {{ erro = String(e).slice(0, 50); }}
+                            await new Promise(res => setTimeout(res, 2500));
+                        }}
+                        throw new Error(erro || 'cards.json indisponivel');
+                    }};
+                    const j = await busca();
                     const com = j.filter(c => c && c.v3m);
                     const campos = com.every(c => Array.isArray(c.v3m.v) || Array.isArray(c.v3m.n) || Array.isArray(c.v3m.f)
-                        || (c.v3m.gr && c.v3m.gr.n > 0));
+                        || (c.v3m.gr && c.v3m.gr.n > 0) || (c.v3m.pc && Object.keys(c.v3m.pc).length > 0));
                     const vendas = com.filter(c => Array.isArray(c.v3m.v)).length;
                     return {{total: j.length, com: com.length, campos: campos, vendas: vendas,
                              ts: com.length ? (com[0].v3m.ts || '') : ''}};

@@ -119,6 +119,14 @@ Lista de features, correções e melhorias **entregues**. Itens resolvidos do
 
 ---
 
+## Infra & métricas
+
+| Feature | Commit |
+|---|---|
+| **Google Analytics 4 (G-E6CYP4RSLH)** — tag `gtag.js` no layout (Next `Script`, `afterInteractive`), ativa **só no build publicado** (`NEXT_PUBLIC_BASE_PATH` definido) e só envia hit quando o host é `brusangues.github.io` — build local de validação não polui o relatório. `page_view` também nas navegações client-side (o `config()` cobre só a primeira; a SPA não gera as seguintes sozinha) | `70f451c` |
+
+---
+
 ## Em aberto no backlog
 
 Ver [`BACKLOG.md`](BACKLOG.md): P2.32 (scanner matching — gap ao teto top-5),
