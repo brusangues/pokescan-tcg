@@ -139,7 +139,8 @@ if LIGA_CAT.exists():
         if not local.exists():
             continue  # sem imagem = não dá p/ embedding
         idE_s = str(c.get('idE') or '').strip()
-        nome_ed = c.get('ed_sNomePortugues') or c.get('sNomePortugues') or c.get('sN') or idE_s
+        nome_ed = (c.get('ed_sNomePortugues') or c.get('sNomePortugues')
+                   or c.get('sSigla') or idE_s)
         npt = (c.get('nPT') or '').strip()
         nen = (c.get('nome_en') or c.get('nEN') or '').split('(')[0].strip()
         img_url = c.get('img_liga') or ''

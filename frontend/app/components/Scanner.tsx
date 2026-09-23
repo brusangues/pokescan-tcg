@@ -137,6 +137,11 @@ function DeteccaoCard({ d, idx, onRemove }: {
   const identificada = !!(melhor && melhor.score >= THRESH && !(melhor.margin != null && melhor.margin < MARGEM_MIN));
   const incerta = !!(melhor && melhor.score >= THRESH && melhor.margin != null && melhor.margin < MARGEM_MIN);
   const pequena = d.larguraPx > 0 && d.larguraPx < LARGURA_MINIMA;
+  // Mesma arte em várias coleções (reimpressão): o embedding não distingue a
+  // impressão, então é mais honesto avisar do que apresentar um printing errado.
+  const mesmaArte = melhor
+    ? d.matches.filter((r) => (r.card?.n || '') === (melhor.card?.n || '')).length
+    : 0;
   return (
     <div className={`bg-[#fffdf7] rounded-xl border p-3 transition-colors ${aberta ? 'border-[#2b2517]/30 ring-1 ring-[#d40b2e]/15' : 'border-[#2b2517]/20'}`}>
       <div className="flex items-center justify-between gap-2 mb-2">
@@ -186,6 +191,12 @@ function DeteccaoCard({ d, idx, onRemove }: {
                   {(melhor.score * 100).toFixed(1)}%
                 </span>
               </div>
+              {mesmaArte >= 2 && (
+                <div className="text-[10px] text-amber-700">
+                  ⚠ Mesma arte em {mesmaArte} coleções — a impressão mostrada pode não ser a sua
+                  (o scanner identifica a arte, não a reimpressão).
+                </div>
+              )}
               <div className="text-[10px] text-[#6b6252] font-mono truncate">
                 {melhor.card.sn} · {melhor.card.num}
               </div>
