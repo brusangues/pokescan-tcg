@@ -34,6 +34,9 @@ MODEL = str(BASE / 'experiments' / 'models' / 'dv_model_uint8.onnx')
 BATCH = 32
 # PAUSA: respiro entre lotes, em segundos (alivia CPU/temperatura; 0 = sem pausa)
 PAUSA = float(os.environ.get('IDX_PAUSA', '0'))
+# PAUSA_CARTA: respiro POR CARTA, em segundos (tem prioridade sobre PAUSA).
+# O lote inteiro dorme de uma vez, então o fan tem tempo de baixar de verdade.
+PAUSA_CARTA = float(os.environ.get('IDX_PAUSA_CARTA', '0'))
 N_COMP = 128
 
 VARIANTS = ['rot_2', 'persp2']   # + base = 3 cópias por carta
@@ -195,8 +198,9 @@ elif raw.shape[0] < len(com_img):
         if feito % (BATCH * 20) == 0:      # ~640 cartas: checkpoint contra reboot
             np.save(RAW_PATH, raw)
             print(f'  💾 checkpoint orig {raw.shape[0]}/{len(com_img)} ({time.time()-t0:.0f}s)', flush=True)
-        if PAUSA:
-            time.sleep(PAUSA)
+        _pausa = PAUSA_CARTA * len(novos[i:i+BATCH]) if PAUSA_CARTA else PAUSA
+        if _pausa:
+            time.sleep(_pausa)
     np.save(RAW_PATH, raw)
     print(f'Originais INCREMENTAIS: +{len(novos)} -> {raw.shape} em {time.time()-t0:.0f}s')
 else:
@@ -234,8 +238,9 @@ if aug is None or aug.shape[0] != (len(com_img) * STRIDE_AUG):
             aug = np.concatenate([aug, build_aug_slice(novos[i:i+200])])
             np.save(AUG_PATH, aug)     # checkpoint: reboot perde no máximo 1 bloco
             print(f'  💾 checkpoint var {aug.shape[0]}/{target} ({time.time()-t0:.0f}s)', flush=True)
-        if PAUSA:
-            time.sleep(PAUSA)
+        _pausa = PAUSA_CARTA * len(novos[i:i+200]) if PAUSA_CARTA else PAUSA
+        if _pausa:
+            time.sleep(_pausa)
         print(f'Variantes INCREMENTAIS: +{novos.__len__()} cartas -> {aug.shape} em {time.time()-t0:.0f}s')
     else:
         t0 = time.time()
