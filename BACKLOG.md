@@ -27,6 +27,12 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`).
 - Tags: scanner, matching, cv, indexação
 
+### [P2] 49. Mapeamento sigla↔set inglês: corrigir entradas erradas e casar edições EN
+- **Estado (23/09)**: ao ingerir as 411 edições que faltavam na Liga, **43.774 cartas ficaram liga_only**. O grosso é legítimo (JP/chinês/promos sem par em inglês: MC 766, XYPJ 470, SMPJ 437, S4A 330, SV4A 360...). Mas parte são edições **inglesas** hospedadas na Liga (ex.: ROS = 112 cartas) que deveriam **casar** com o set EN e hoje não casam.
+- **Causa**: `data/liga/liga_set_sigla_ptcg.json` tem entradas erradas/legadas (ex.: `xy6` → `SV3`, quando o cache do pokemontcg.io diz `ptcgoCode=ROS` para xy6). O `rebuild_set_mapping.py` casa por nome+número (heurística, limiar 4) e **não sobrescreve** entrada existente.
+- **Resta**: passe de auditoria no mapping (comparar `ptcgoCode` do cache com a sigla mapeada, listar divergências), decidir o que sobrescrever, re-rodar catálogo + índice. Efeito: menos arte duplicada no índice do scanner (menos ambiguidade no match).
+- Tags: catalogo, liga, mapeamento, indice
+
 ### [P2] 33. Base rotulada manual — continuar crescendo (retreinar re-rank no futuro)
 - **Estado**: `C:/Projects/pokescan-tcg-labels` — 29 fotos/137 cartas rotuladas 100% manual (99% corretas). Harness completo pronto: `experiments/rerank_sinais.py` (gera dataset de pares) + `treinar_rerank.py` (CatBoost LOFO com folhas agrupadas).
 - **Gatilho**: com ~3x a base atual, retreinar o re-rank — hoje não generaliza (dataset pequeno). Cada nova foto rotulada também melhora a avaliação de segmentação/matching.

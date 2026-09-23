@@ -69,9 +69,29 @@ def main():
     mapping = json.loads(MAP_PATH.read_text(encoding='utf-8')) if MAP_PATH.exists() else {}
     usadas = set(mapping.values())
 
+    # Passe DIRETO por ptcgoCode (o código oficial da edição em inglês: ROS, BUS,
+    # UPR...). É exato, não depende de nome nem de número — era o que faltava para
+    # as edições antigas (XY/SM) entrarem CASADAS com o inglês em vez de virarem
+    # liga_only, duplicando no índice do scanner uma arte que já existe lá.
+    codigo_ptcg = {}
+    for c in cards:
+        s = c.get('set') or {}
+        cod = (s.get('ptcgoCode') or '').strip().upper()
+        if cod and s.get('id'):
+            codigo_ptcg[cod] = s.get('id')
+    sigla_upper = {sig.upper(): sig for sig in liga_sets}
     novos = {}
+    for cod, sid in codigo_ptcg.items():
+        if sid in mapping or sid in novos:
+            continue
+        sig = sigla_upper.get(cod)
+        if sig and sig not in usadas:
+            novos[sid] = sig
+            usadas.add(sig)
+            print(f'  = {sid} → {sig} (ptcgoCode)')
+
     for sid, cartas in ptcg_sets.items():
-        if sid in mapping:
+        if sid in mapping or sid in novos:
             continue
         set_ids = set(cartas) & identificadoras
         if not set_ids:
