@@ -145,15 +145,10 @@ function DeteccaoCard({ d, idx, onRemove }: {
           {d.origem === 'manual' && (
             <span className="text-[10px] font-medium text-[#d40b2e] bg-[#f3e9d2] px-1.5 py-0.5 rounded">✂ manual</span>
           )}
-          {d.larguraPx > 0 && (
-            <span className="text-[10px] font-mono text-[#998f7c] bg-[#f3e9d2] px-1.5 py-0.5 rounded">
-              {d.larguraPx}px
-            </span>
-          )}
         </h4>
         <div className="flex items-center gap-1">
           {pequena && (
-            <span className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full" title="Cartas pequenas perdem detalhe no match — aproxime a câmera">
+            <span className="text-[10px] text-amber-600 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full" title={`Carta com ~${Math.round(d.larguraPx)}px na foto — abaixo de ${LARGURA_MINIMA}px o match piora; aproxime a câmera`}>
               ⚠ carta pequena
             </span>
           )}
@@ -386,7 +381,11 @@ export default function Scanner() {
   const [phase, setPhase] = useState<'idle' | 'loading' | 'ready' | 'scanning' | 'error'>('idle');
   const [progress, setProgress] = useState(0);
   const [progressLabel, setProgressLabel] = useState('');
-  const [results, setResults] = useState<ScanResult[] | null>(null);
+  // P2.48: o resultado do scan vive ABAIXO da imagem (mesma aba Foto). Ao chegar
+  // resultado novo, rolamos até ele — antes o resultado só aparecia na aba
+  // "Buscar" e o usuário achava que o scan tinha falhado.
+  const resultadoScanRef = useRef<HTMLDivElement | null>(null);
+  const qtdAnterior = useRef(0);
   const [preview, setPreview] = useState<string | null>(null);
   const [clippedPreview, setClippedPreview] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -489,8 +488,8 @@ export default function Scanner() {
       const dataUrl = e.target?.result as string;
       setPreview(dataUrl);
       setClippedPreview(null);
-      setResults(null);
       setDeteccoes(null);
+      qtdAnterior.current = 0; // foto nova: rearma o "rolar até o resultado"
       // BUG 3 (QA rodada 3): limpa a busca por texto — senão o resultado do
       // scan fica invisível atrás de 'Resultado da busca'
       setTextQuery('');
@@ -544,9 +543,8 @@ export default function Scanner() {
           deteccoes.push({ preview: reg.preview, larguraPx: reg.larguraPx, matches: top });
         }
         setDeteccoes(deteccoes);
-        // compat: fluxo de 1 carta usa o primeiro resultado
+        // foto de 1 carta: mantém o "após clipping" ao lado da original
         if (deteccoes.length === 1) {
-          setResults(deteccoes[0].matches);
           setClippedPreview(regioes[0].origem === 'clip' ? regioes[0].preview : null);
         }
       } catch (err) {
@@ -610,9 +608,19 @@ export default function Scanner() {
     disabled: phase !== 'ready',
   });
 
-  // Resultados ativos: busca por texto tem prioridade visual
+  // Busca por texto: vive na coluna da direita (aba "Buscar" no mobile). O
+  // resultado do SCAN não entra mais aqui — ele rende abaixo da imagem, na aba Foto.
   const mostrandoTexto = textResults !== null;
-  const mostrandoResultados = mostrandoTexto ? textResults! : results;
+
+  // Ao chegar resultado novo de scan, rola até ele: antes o resultado aparecia
+  // só na outra aba e o usuário ia procurar (achando que o scan tinha falhado).
+  useEffect(() => {
+    const n = deteccoes?.length || 0;
+    if (n > qtdAnterior.current) {
+      resultadoScanRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    qtdAnterior.current = n;
+  }, [deteccoes]);
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
@@ -629,7 +637,7 @@ export default function Scanner() {
             phase === 'scanning' ? 'bg-amber-100 text-amber-700' :
             'bg-[#f3e9d2] text-[#a90924]'
           }`}>
-            {phase === 'idle' ? 'Descarregado' : phase === 'loading' ? 'Carregando' : phase === 'ready' ? 'Pronto' : phase === 'scanning' ? 'Analisando' : 'Erro'}
+            {phase === 'idle' ? 'Motor não carregado' : phase === 'loading' ? 'Preparando motor' : phase === 'ready' ? 'Pronto' : phase === 'scanning' ? 'Analisando' : 'Erro'}
           </span>
         </div>
 
@@ -846,84 +854,87 @@ export default function Scanner() {
           <p className="text-xs text-center text-[#998f7c]">
             JPG, PNG. Para melhores resultados, use uma imagem clara de uma única carta.
           </p>
+
+          {/* RESULTADO DO SCAN — abaixo da imagem, na MESMA aba (P2.48) */}
+          <div ref={resultadoScanRef} className="scroll-mt-32 space-y-3">
+            {phase === 'scanning' && (
+              <div className="flex items-center justify-center gap-2 text-sm text-[#6b6252] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2] py-4 px-3 text-center">
+                <Loader2 className="w-4 h-4 text-[#d40b2e] animate-spin shrink-0" />
+                Procurando cartas na imagem… pode levar alguns segundos
+              </div>
+            )}
+
+            {phase !== 'scanning' && deteccoes && deteccoes.length > 0 && (
+              <>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <h3 className="text-lg font-semibold text-[#292318]">
+                    {deteccoes.length === 1
+                      ? '1 carta encontrada na imagem'
+                      : `${deteccoes.length} cartas encontradas na imagem`}
+                  </h3>
+                  <button
+                    onClick={() => setModoCrop(m => !m)}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-[#d40b2e] hover:underline"
+                  >
+                    <Scissors className="w-3.5 h-3.5" />
+                    {modoCrop ? 'fechar recorte' : '✂ recortar carta manualmente'}
+                  </button>
+                </div>
+                {modoCrop && preview && (
+                  <ManualCrop dataUrl={preview} onCrop={handleCrop} onCancel={() => setModoCrop(false)} />
+                )}
+                {deteccoes.map((d, i) => (
+                  <DeteccaoCard key={i} d={d} idx={i} onRemove={() => removerDetecao(i)} />
+                ))}
+              </>
+            )}
+
+            {phase !== 'scanning' && (!deteccoes || deteccoes.length === 0) && preview && (
+              <div className="flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2] p-6 text-center">
+                <Search className="w-10 h-10 mb-3 opacity-20" />
+                <p className="mb-1 font-medium text-[#6b6252]">Nenhuma carta detectada automaticamente.</p>
+                <p className="text-xs mb-3">Acontece com carta pequena na foto, sobreposição ou fundo muito claro.</p>
+                <button
+                  onClick={() => setModoCrop(true)}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-[#d40b2e] text-white hover:bg-[#a90924]"
+                >
+                  <Scissors className="w-3.5 h-3.5" /> Recortar cartas manualmente
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Results Area — busca por texto tem prioridade; senão, resultados do scanner */}
+        {/* Coluna 2 — busca por texto (no mobile, é a aba "Buscar") */}
         <div className={`space-y-4 ${aba === 'buscar' ? '' : 'hidden md:block'}`}>
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-[#292318]">
-              {mostrandoTexto ? 'Resultado da busca' : 'Resultado'}
-            </h3>
-            {mostrandoTexto && textResults && textResults.length > 0 && (
+            <h3 className="text-lg font-semibold text-[#292318]">Resultado da busca</h3>
+            {textQuery.trim().length > 0 && (
               <button
-                onClick={() => setTextQuery('')}
+                onClick={() => { setTextQuery(''); setAba('foto'); }}
                 className="text-xs text-[#d40b2e] hover:underline inline-flex items-center gap-1"
               >
-                <X className="w-3 h-3" /> voltar à foto
+                <X className="w-3 h-3" /> limpar e voltar à foto
               </button>
             )}
           </div>
 
-          {mostrandoTexto ? (
+          {mostrandoTexto && textResults && textResults.length > 0 ? (
             <div className="space-y-3">
               {(textResults as any[]).map((c, i) => (
                 <CardResult key={c.id} card={c} rank={i + 1} />
               ))}
             </div>
-          ) : deteccoes && deteccoes.length > 0 ? (
-            /* Multi-carta: um card por detecção + crop manual (Fase 2-D) */
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-[#998f7c]">
-                  {deteccoes.length} carta{deteccoes.length !== 1 ? 's' : ''} detectada{deteccoes.length !== 1 ? 's' : ''}
-                </span>
-                <button
-                  onClick={() => setModoCrop(m => !m)}
-                  className="inline-flex items-center gap-1 text-xs font-medium text-[#d40b2e] hover:underline"
-                >
-                  <Scissors className="w-3.5 h-3.5" />
-                  {modoCrop ? 'fechar recorte' : '✂ recortar carta manualmente'}
-                </button>
-              </div>
-              {modoCrop && preview && (
-                <ManualCrop dataUrl={preview} onCrop={handleCrop} onCancel={() => setModoCrop(false)} />
-              )}
-              {deteccoes.map((d, i) => (
-                <DeteccaoCard key={i} d={d} idx={i} onRemove={() => removerDetecao(i)} />
-              ))}
-            </div>
-          ) : mostrandoResultados && mostrandoResultados.length > 0 ? (
-            <div className="space-y-3">
-              {(results as ScanResult[]).map((r) => (
-                <CardResult key={r.card.id} card={r.card} score={r.score} rank={r.rank} />
-              ))}
-            </div>
-          ) : mostrandoTexto && textQuery.trim().length >= 2 ? (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2]">
-              <Search className="w-12 h-12 mb-3 opacity-20" />
+          ) : textQuery.trim().length >= 2 ? (
+            <div className="min-h-[220px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2] p-6 text-center">
+              <Search className="w-10 h-10 mb-3 opacity-20" />
               <p>Nenhuma carta encontrada para "{textQuery.trim()}"</p>
             </div>
-          ) : preview ? (
-            <div className="space-y-3">
-              {modoCrop ? (
-                <ManualCrop dataUrl={preview} onCrop={handleCrop} onCancel={() => setModoCrop(false)} />
-              ) : (
-                <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2]">
-                  <Search className="w-12 h-12 mb-3 opacity-20" />
-                  <p className="mb-2">Nenhuma carta detectada automaticamente.</p>
-                  <button
-                    onClick={() => setModoCrop(true)}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-[#d40b2e] text-white hover:bg-[#a90924]"
-                  >
-                    <Scissors className="w-3.5 h-3.5" /> Recortar cartas manualmente
-                  </button>
-                </div>
-              )}
-            </div>
           ) : (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2]">
-              <Search className="w-12 h-12 mb-3 opacity-20" />
-              <p>Nenhuma carta escaneada ainda</p>
+            <div className="min-h-[220px] flex flex-col items-center justify-center text-[#998f7c] border border-[#2b2517]/15 rounded-2xl bg-[#f3e9d2] p-6 text-center">
+              <Search className="w-10 h-10 mb-3 opacity-20" />
+              <p className="font-medium text-[#6b6252]">Busque por nome, número ou coleção</p>
+              <p className="text-xs mt-1">A busca por texto funciona sem enviar foto.</p>
             </div>
           )}
         </div>
