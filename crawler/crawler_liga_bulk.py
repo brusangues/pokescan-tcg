@@ -68,6 +68,27 @@ def discover_set_ids(max_range=1000, quiet=True, fronteira=40):
     to_test = set()
     for r in ranges:
         to_test.update(r)
+
+    # BURACOS no meio da faixa: ids nunca sondados entre o menor e o maior
+    # conhecido (ex.: idE 288 = TOT22 / Trick or Trade 2022 — a varredura ±5 da
+    # base nunca chegou lá, e a edição ficou fora do catálogo, do índice e dos
+    # hits). Sonda uma FATIA por execução e guarda o que já foi sondado, para a
+    # faixa inteira fechar em algumas semanas sem estourar o cron.
+    gaps_path = LIGA_DIR / 'gaps_sondados.json'
+    try:
+        gaps_sondados = set(json.loads(gaps_path.read_text(encoding='utf-8')))
+    except Exception:
+        gaps_sondados = set()
+    novos_gaps = []
+    if known:
+        buracos = [i for i in range(min(known), max(known) + 1)
+                   if i not in known and i not in gaps_sondados]
+        fatia = int(os.environ.get('LIGA_GAP_SLICE', '80'))
+        novos_gaps = buracos[:fatia]
+        to_test.update(novos_gaps)
+        if novos_gaps and not quiet:
+            print(f'  🕳️  {len(buracos)} ids nunca sondados; testando {len(novos_gaps)} agora')
+
     to_test -= known  # só testa os que não temos
 
     # Ranking de variação (mesma fonte dos hits): idE desconhecido = edição nova
@@ -106,6 +127,15 @@ def discover_set_ids(max_range=1000, quiet=True, fronteira=40):
             pass  # 403 ou sem cardsjson = set inexistente
         time.sleep(1)
     
+    # Marca os buracos sondados nesta execução (existam ou não) p/ a fatia
+    # rotativa avançar na próxima
+    if novos_gaps:
+        try:
+            gaps_path.write_text(json.dumps(sorted(gaps_sondados | set(novos_gaps))),
+                                 encoding='utf-8')
+        except Exception:
+            pass
+
     # Salva descobertos
     all_ids = sorted(known | discovered)
     SETS_KNOWN_PATH.write_text(json.dumps(all_ids, indent=2))
