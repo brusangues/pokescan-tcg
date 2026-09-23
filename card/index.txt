@@ -1,0 +1,21 @@
+1:"$Sreact.fragment"
+2:I[9766,[],""]
+3:I[8924,[],""]
+4:I[2619,["619","static/chunks/619-ba102abea3e3d0e4.js","974","static/chunks/app/page-540633bc4b770bae.js"],""]
+5:I[8108,["177","static/chunks/app/layout-d7e03eb17adec247.js"],"default"]
+6:I[1959,[],"ClientPageRoot"]
+7:I[1002,["108","static/chunks/108-7918e76b358e797d.js","869","static/chunks/869-c01a645b359059d5.js","437","static/chunks/app/card/page-974d7c56367c1eb0.js"],"default"]
+a:I[4431,[],"OutletBoundary"]
+c:I[5278,[],"AsyncMetadataOutlet"]
+e:I[4431,[],"ViewportBoundary"]
+10:I[4431,[],"MetadataBoundary"]
+11:"$Sreact.suspense"
+13:I[7150,[],""]
+:HL["/pokescan-tcg/_next/static/css/c1732dad578e4811.css","style"]
+0:{"P":null,"b":"Lv4UQnEUTwFaQk_in7J2V","p":"/pokescan-tcg","c":["","card",""],"i":false,"f":[[["",{"children":["card",{"children":["__PAGE__",{}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/pokescan-tcg/_next/static/css/c1732dad578e4811.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt-BR","className":"__variable_6c2277 __variable_a6b74c","children":["$","body",null,{"children":[["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","div",null,{"className":"min-h-screen flex items-center justify-center bg-[#fbf4e6]","children":["$","div",null,{"className":"text-center space-y-4","children":[["$","h1",null,{"className":"text-6xl font-bold text-gray-300","children":"404"}],["$","p",null,{"className":"text-[#6b6252]","children":"Página não encontrada"}],["$","$L4",null,{"href":"/","className":"text-[#d40b2e] hover:underline text-sm","children":"Voltar ao início"}]]}]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L5",null,{}]]}]}]]}],{"children":["card",["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L3",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L6",null,{"Component":"$7","searchParams":{},"params":{},"promises":["$@8","$@9"]}],null,["$","$La",null,{"children":["$Lb",["$","$Lc",null,{"promise":"$@d"}]]}]]}],{},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$Le",null,{"children":"$Lf"}],null],["$","$L10",null,{"children":["$","div",null,{"hidden":true,"children":["$","$11",null,{"fallback":null,"children":"$L12"}]}]}]]}],false]],"m":"$undefined","G":["$13",[]],"s":false,"S":true}
+8:{}
+9:"$0:f:0:1:2:children:2:children:1:props:children:0:props:params"
+f:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+b:null
+d:{"metadata":[["$","title","0",{"children":"PokéScan TCG"}],["$","meta","1",{"name":"description","content":"Identifique cartas de Pokémon TCG, confira o preço justo no mercado brasileiro e acompanhe oportunidades."}]],"error":null,"digest":"$undefined"}
+12:"$d:metadata"
