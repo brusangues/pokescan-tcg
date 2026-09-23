@@ -30,29 +30,62 @@ KNOWN_SET_IDS = sorted({
 })
 
 
-def discover_set_ids(max_range=1000, quiet=True):
-    """Tenta descobrir novos IDs de sets varrendo ranges."""
-    known = set(KNOWN_SET_IDS)
+def discover_set_ids(max_range=1000, quiet=True, fronteira=40):
+    """Descobre ids de edições da Liga.
+
+    Fontes, da mais barata para a mais cara:
+      1. ±5 em volta dos ids já conhecidos;
+      2. faixa hardcoded dos sv sets (760-780);
+      3. **FRONTEIRA** — ids acima do maior conhecido. Era o buraco: a sonda
+         parava em 784, então edições novas (inclusive comemorativas, tipo
+         "30th CELEBRATION" em idE 804/805/809/822) nunca eram descobertas e
+         ficavam fora do catálogo, do índice e dos hits;
+      4. ids citados no RANKING DE VARIAÇÃO — a mesma página que alimenta os
+         hits diários; se uma edição aparece lá e não temos, ela entra direto.
+    """
+    base = set(KNOWN_SET_IDS)                     # base p/ a varredura ±5
+    existentes = {int(p.stem[4:]) for p in LIGA_DIR.glob('set_*.json') if p.stem[4:].isdigit()}
+    known = base | existentes
     discovered = set()
-    
+
     if not quiet:
         print(f'🔎 Descobrindo sets (já temos {len(known)})...')
-    
-    # Varre ranges ao redor dos IDs conhecidos
+
+    # Varre ranges ao redor dos IDs conhecidos (só a BASE: varrer ±5 de 337
+    # set_*.json daria milhares de sondagens)
     ranges = []
-    for kid in known:
+    for kid in base:
         ranges.append(range(max(1, kid - 5), kid + 6))
-    
+
     # Adiciona faixas conhecidas de sets populares
     ranges.append(range(760, 780))   # sv sets
-    
+
+    # Fronteira: acima do maior id conhecido (o que estava faltando)
+    if known:
+        maior = max(known)
+        ranges.append(range(maior + 1, maior + 1 + fronteira))
+
     to_test = set()
     for r in ranges:
         to_test.update(r)
     to_test -= known  # só testa os que não temos
-    
+
+    # Ranking de variação (mesma fonte dos hits): idE desconhecido = edição nova
+    for period, order in (('1', '2'), ('1', '1')):
+        url = (f'https://www.ligapokemon.com.br/?view=cards/variacao'
+               f'&formato=&period={period}&order={order}')
+        try:
+            resp = selenium_get(url, quiet=quiet)
+            novos_rank = {int(x) for x in re.findall(r'"idE"\s*:\s*"(\d+)"', resp.text)}
+            for eid in sorted(novos_rank - known - discovered):
+                discovered.add(eid)
+                if not quiet:
+                    print(f'  🔥 ID {eid} (visto no ranking de variação)')
+        except Exception:
+            pass
+
     if not quiet:
-        print(f'  Testando {len(to_test)} possíveis IDs...')
+        print(f'  Testando {len(to_test)} possíveis IDs (até {max(to_test) if to_test else "-"})...')
     
     for eid in sorted(to_test):
         if eid in discovered:
