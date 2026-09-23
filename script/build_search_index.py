@@ -186,8 +186,13 @@ if raw is None:
 elif raw.shape[0] < len(com_img):
     t0 = time.time()
     novos = com_img[raw.shape[0]:]
-    rows = [embed_batch([open_img(c) for c in novos[i:i+BATCH]]) for i in range(0, len(novos), BATCH)]
-    raw = np.concatenate([raw] + rows)
+    feito = 0
+    for i in range(0, len(novos), BATCH):
+        raw = np.concatenate([raw, embed_batch([open_img(c) for c in novos[i:i+BATCH]])])
+        feito += BATCH
+        if feito % (BATCH * 20) == 0:      # ~640 cartas: checkpoint contra reboot
+            np.save(RAW_PATH, raw)
+            print(f'  💾 checkpoint orig {raw.shape[0]}/{len(com_img)} ({time.time()-t0:.0f}s)', flush=True)
     np.save(RAW_PATH, raw)
     print(f'Originais INCREMENTAIS: +{len(novos)} -> {raw.shape} em {time.time()-t0:.0f}s')
 else:
@@ -218,11 +223,13 @@ if aug is None or aug.shape[0] != (len(com_img) * STRIDE_AUG):
     t0 = time.time()
     target = len(com_img) * STRIDE_AUG
     if aug is not None and aug.shape[0] < target:
-        # anexa variantes das cartas novas
+        # anexa variantes das cartas novas — em blocos, com checkpoint
         n_old_cards = aug.shape[0] // STRIDE_AUG
         novos = com_img[n_old_cards:]
-        chunk = build_aug_slice(novos)
-        aug = np.concatenate([aug, chunk])
+        for i in range(0, len(novos), 200):
+            aug = np.concatenate([aug, build_aug_slice(novos[i:i+200])])
+            np.save(AUG_PATH, aug)     # checkpoint: reboot perde no máximo 1 bloco
+            print(f'  💾 checkpoint var {aug.shape[0]}/{target} ({time.time()-t0:.0f}s)', flush=True)
         print(f'Variantes INCREMENTAIS: +{novos.__len__()} cartas -> {aug.shape} em {time.time()-t0:.0f}s')
     else:
         t0 = time.time()
