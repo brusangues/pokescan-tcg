@@ -17,7 +17,7 @@ Saídas em data/scanner/:
 - index_pca128_fp32.bin (N*K x 128), index_pca128_fp16.bin (idem fp16)
 - row_cards.npy/.bin, pca128_stats.npy, pca_bundle.bin, ids.json, cards.json
 """
-import sys, json, time
+import sys, json, time, os
 from pathlib import Path
 import numpy as np
 from PIL import Image
@@ -32,6 +32,8 @@ OUT.mkdir(parents=True, exist_ok=True)
 
 MODEL = str(BASE / 'experiments' / 'models' / 'dv_model_uint8.onnx')
 BATCH = 32
+# PAUSA: respiro entre lotes, em segundos (alivia CPU/temperatura; 0 = sem pausa)
+PAUSA = float(os.environ.get('IDX_PAUSA', '0'))
 N_COMP = 128
 
 VARIANTS = ['rot_2', 'persp2']   # + base = 3 cópias por carta
@@ -193,6 +195,8 @@ elif raw.shape[0] < len(com_img):
         if feito % (BATCH * 20) == 0:      # ~640 cartas: checkpoint contra reboot
             np.save(RAW_PATH, raw)
             print(f'  💾 checkpoint orig {raw.shape[0]}/{len(com_img)} ({time.time()-t0:.0f}s)', flush=True)
+        if PAUSA:
+            time.sleep(PAUSA)
     np.save(RAW_PATH, raw)
     print(f'Originais INCREMENTAIS: +{len(novos)} -> {raw.shape} em {time.time()-t0:.0f}s')
 else:
@@ -230,6 +234,8 @@ if aug is None or aug.shape[0] != (len(com_img) * STRIDE_AUG):
             aug = np.concatenate([aug, build_aug_slice(novos[i:i+200])])
             np.save(AUG_PATH, aug)     # checkpoint: reboot perde no máximo 1 bloco
             print(f'  💾 checkpoint var {aug.shape[0]}/{target} ({time.time()-t0:.0f}s)', flush=True)
+        if PAUSA:
+            time.sleep(PAUSA)
         print(f'Variantes INCREMENTAIS: +{novos.__len__()} cartas -> {aug.shape} em {time.time()-t0:.0f}s')
     else:
         t0 = time.time()
