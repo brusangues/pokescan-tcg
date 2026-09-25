@@ -1,0 +1,18 @@
+{
+  "_fonte": "tcg.pokemon.com/pt-br/expansions/<slug>/ e pokemon.com/br — nomes oficiais pt-BR das expansões. Usado no site (busca, pagina da carta e preco por booster).",
+  "_atualizado": "2026-09-24",
+  "edicoes": {
+    "30C": "Celebração de 30 Anos",
+    "30C-C": "Celebração de 30 Anos — Coleção Clássica",
+    "30THP": "Celebração de 30 Anos — Promos",
+    "30C-R": "Celebração de 30 Anos — Mew RGB (R/G/B)",
+    "ASC": "Megaevolução — Heróis Excelsos",
+    "PRE": "Escarlate e Violeta — Evoluções Prismáticas"
+  },
+  "_notas": {
+    "30C-C": "30 cartas marcadas 'CC' (Classic Collection) na própria lista oficial; numeracao /30.",
+    "30C-R": "3 cartas — as Mew R/RGB, B/RGB e G/RGB, as mais raras da expansão.",
+    "ASC": "Copag/codigo ME02.5; sigla da Liga e ASC.",
+    "EV8.5": "Copag/codigo EV8.5; sigla da Liga a confirmar no catalogo local."
+  }
+}
