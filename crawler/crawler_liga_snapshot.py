@@ -16,6 +16,7 @@ LIGA_DIR.mkdir(parents=True, exist_ok=True)
 sys.path.insert(0, str(BASE_DIR / 'crawler'))
 from crawler_liga_bulk import discover_set_ids
 from scrapers import selenium_get
+import os
 
 SNAPSHOT_DIR = LIGA_DIR / 'snapshots'
 SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
@@ -34,7 +35,8 @@ def run_snapshot(max_sets=999):
         known = set()
 
     try:
-        novos = discover_set_ids(max_range=1000, quiet=True)
+        novos = discover_set_ids(max_range=1000, quiet=True,
+                                  fronteira=int(os.environ.get('LIGA_FRONTEIRA', '40')))
     except Exception as e:
         print(f'  ⚠️ discover_set_ids falhou ({e}); usando conhecidos')
         novos = set()
@@ -43,8 +45,12 @@ def run_snapshot(max_sets=999):
 
     print(f'\n📦 Total de sets: {len(todos_ids)}')
     if max_sets and max_sets < len(todos_ids):
-        todos_ids = todos_ids[:max_sets]
-        print(f'  Limitado a {max_sets} sets')
+        # Janela ROTATIVA: comeca num ponto diferente a cada dia, senao o teto
+        # diario deixaria as ultimas edicoes sem refresh para sempre.
+        import datetime as _dt
+        inicio = (_dt.date.today().toordinal() * max_sets) % len(todos_ids)
+        todos_ids = (todos_ids + todos_ids)[inicio:inicio + max_sets]
+        print(f'  Limitado a {max_sets} sets (janela rotativa desde {todos_ids[0]})')
 
     # 2. Baixar cada set (padrão do bulk: selenium_get + cardsjson)
     all_cards = []

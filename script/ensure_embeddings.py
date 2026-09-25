@@ -40,6 +40,8 @@ N_COMP = 32
 
 # ── 1. Baixa imagens faltantes ─────────────────────────────────────
 
+import os as _os
+
 def download_one(card):
     cid = card['id']
     path = CACHE_DIR / f'{cid}.png'
@@ -90,6 +92,10 @@ def ensure_embeddings(cards):
 
     faltam = [c for c in cards
               if c['id'] not in ids_com_emb and (CACHE_DIR / f'{c["id"]}.png').exists()]
+    limite = int(_os.environ.get('EMB_LIMITE', '0'))
+    if limite and len(faltam) > limite:
+        print(f'  ⏳ Orçamento do run: {limite} de {len(faltam)} cartas pendentes (EMB_LIMITE)')
+        faltam = faltam[:limite]
     if not faltam:
         print(f'  ✅ Todos com embedding ({len(ids_com_emb)})')
         return 0

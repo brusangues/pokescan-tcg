@@ -20,14 +20,15 @@ import sys
 import time
 from datetime import datetime
 from pathlib import Path
+import os
 
 BASE = Path(__file__).resolve().parent.parent
 PY = r'C:/Models/hermes/hermes-agent/venv/Scripts/python.exe'
 
 
-def rodar(passo: str, cmd: list, timeout=3600) -> str:
+def rodar(passo: str, cmd: list, timeout=1200) -> str:
     """Roda um subprocesso, capturando stdout+stderr. Retorna a saída (str)."""
-    print(f'\n▶ {passo}', flush=True)
+    print(f"\n▶ {passo} — {time.strftime('%H:%M:%S')}", flush=True)
     t0 = time.time()
     try:
         # stdin=DEVNULL: sob cron o processo sobe sem console (handle de STDIN
@@ -108,7 +109,9 @@ def main():
         except Exception:
             m_snap = {'total': '?', 'sub': None, 'infl': None, 'salvo': str(arquivo)}
     else:
-        out_snap, ok_snap, dur_snap = rodar('SNAPSHOT · crawler', [PY, 'crawler/crawler_liga_snapshot.py', '--max-sets', '999'])
+        out_snap, ok_snap, dur_snap = rodar('SNAPSHOT · crawler', [PY, 'crawler/crawler_liga_snapshot.py',
+                                     '--max-sets', os.environ.get('SNAP_MAX_SETS', '450')],
+              timeout=3000)
         out_snap_esc, ok_snap_esc, dur_snap_esc = rodar('SNAPSHOT · escore', [PY, 'script/score_apos_crawl.py', '--tipo', 'snapshot', '--top', '15'])
         m_snap = extrai(out_snap_esc, {
             'total': r'Total cartas enscoradas:\s*(\d+)',
