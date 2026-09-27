@@ -29,6 +29,15 @@ PY = r'C:/Models/hermes/hermes-agent/venv/Scripts/python.exe'
 def rodar(passo: str, cmd: list, timeout=1200) -> str:
     """Roda um subprocesso, capturando stdout+stderr. Retorna a saída (str)."""
     print(f"\n▶ {passo} — {time.strftime('%H:%M:%S')}", flush=True)
+    # Log em ARQUIVO (append): se o script for morto no meio (timeout), o
+    # ultimo passo registrado diz exatamente onde o tempo foi.
+    _log = BASE / 'data' / 'liga' / 'macro_run.log'
+    try:
+        _log.parent.mkdir(parents=True, exist_ok=True)
+        with open(_log, 'a', encoding='utf-8') as _f:
+            _f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} ▶ {passo}\n")
+    except Exception:
+        pass
     t0 = time.time()
     try:
         # stdin=DEVNULL: sob cron o processo sobe sem console (handle de STDIN
