@@ -1,0 +1,153 @@
+{
+ "_fonte": "derivado: edicoes da Liga que sao o mesmo set de uma edicao EN (2 sinais + limiar)",
+ "_criterio": ">= 10 cartas iguais E >= 70% das cartas da edicao",
+ "alias": {
+  "151C": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 192,
+   "iguais": 150,
+   "frac": 0.781,
+   "via": "busca global"
+  },
+  "ASCES": {
+   "set_en": "me2pt5",
+   "cartas_liga": 140,
+   "iguais": 140,
+   "frac": 1.0,
+   "via": "busca global"
+  },
+  "ASCPB": {
+   "set_en": "me2pt5",
+   "cartas_liga": 130,
+   "iguais": 130,
+   "frac": 1.0,
+   "via": "busca global"
+  },
+  "ASCTR": {
+   "set_en": "me2pt5",
+   "cartas_liga": 10,
+   "iguais": 10,
+   "frac": 1.0,
+   "via": "busca global"
+  },
+  "BKC08": {
+   "set_en": "dp1",
+   "cartas_liga": 12,
+   "iguais": 10,
+   "frac": 0.833,
+   "via": "busca global"
+  },
+  "CP1": {
+   "set_en": "dc1",
+   "cartas_liga": 34,
+   "iguais": 27,
+   "frac": 0.794,
+   "via": "busca global"
+  },
+  "CPM34": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 151,
+   "iguais": 137,
+   "frac": 0.907,
+   "via": "busca global"
+  },
+  "CPMG": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 154,
+   "iguais": 137,
+   "frac": 0.89,
+   "via": "busca global"
+  },
+  "CPMR": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 155,
+   "iguais": 137,
+   "frac": 0.884,
+   "via": "busca global"
+  },
+  "DPPR": {
+   "set_en": "dpp",
+   "cartas_liga": 56,
+   "iguais": 56,
+   "frac": 1.0,
+   "via": "busca global"
+  },
+  "DSE": {
+   "set_en": "dv1",
+   "cartas_liga": 20,
+   "iguais": 18,
+   "frac": 0.9,
+   "via": "busca global"
+  },
+  "HXY": {
+   "set_en": "xy0",
+   "cartas_liga": 39,
+   "iguais": 34,
+   "frac": 0.872,
+   "via": "busca global"
+  },
+  "LOR": {
+   "set_en": "swsh11",
+   "cartas_liga": 217,
+   "iguais": 171,
+   "frac": 0.788,
+   "via": "ptcgoCode"
+  },
+  "MPSPC": {
+   "set_en": "ru1",
+   "cartas_liga": 19,
+   "iguais": 16,
+   "frac": 0.842,
+   "via": "busca global"
+  },
+  "PTOS": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 150,
+   "iguais": 137,
+   "frac": 0.913,
+   "via": "busca global"
+  },
+  "SC": {
+   "set_en": "bw11",
+   "cartas_liga": 25,
+   "iguais": 25,
+   "frac": 1.0,
+   "via": "busca global"
+  },
+  "SI-JP": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 18,
+   "iguais": 13,
+   "frac": 0.722,
+   "via": "busca global"
+  },
+  "SMP": {
+   "set_en": "smp",
+   "cartas_liga": 250,
+   "iguais": 248,
+   "frac": 0.992,
+   "via": "busca global"
+  },
+  "SV2AM": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 153,
+   "iguais": 137,
+   "frac": 0.895,
+   "via": "busca global"
+  },
+  "SV2AP": {
+   "set_en": "sv3pt5",
+   "cartas_liga": 153,
+   "iguais": 137,
+   "frac": 0.895,
+   "via": "busca global"
+  },
+  "WPR": {
+   "set_en": "basep",
+   "cartas_liga": 61,
+   "iguais": 50,
+   "frac": 0.82,
+   "via": "busca global"
+  }
+ }
+}

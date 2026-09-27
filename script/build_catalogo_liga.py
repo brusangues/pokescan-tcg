@@ -27,6 +27,18 @@ sigla2set = {}
 for set_en, sigla in sm.items():
     sigla2set.setdefault(sigla.upper(), []).append(set_en)
 
+# Aliases: edicoes da Liga que sao o MESMO set de uma edicao EN (ex.: LOR = edicao
+# inglesa do Lost Origin). Ver data/liga/liga_siglas_alias.json (criterio: >= 70%
+# de cobertura de nome+numero). Sem isto elas ficam orfas e viram liga_only.
+_alias_path = LIGA / 'liga_siglas_alias.json'
+if _alias_path.exists():
+    _al = json.loads(_alias_path.read_text(encoding='utf-8')).get('alias', {})
+    for _sig, _d in _al.items():
+        sigla2set.setdefault(_sig.upper(), [])
+        if _d['set_en'] not in sigla2set[_sig.upper()]:
+            sigla2set[_sig.upper()].append(_d['set_en'])
+    print(f'  aliases EN aplicados: {len(_al)}')
+
 # 3. Índice EN por (set, número) — para o join por sN
 en_by_set_num = {}
 for c in EN:
