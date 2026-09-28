@@ -1,17 +1,20 @@
 {
-  "_fonte": "pesquisa web (tcg.pokemon.com/pt-br/expansions, pokemon.com/br, pokebeach, TCGplayer). Atualizado pela rotina semanal 'proximas-colecoes-pokemon'.",
+  "_fonte": "pesquisa web (tcg.pokemon.com/pt-br/expansions, pokemon.com/br, pokebeach, TCGplayer, ligapokemon artigos). Atualizado pela rotina semanal 'proximas-colecoes-pokemon' (sabado 20:00).",
   "_atualizado": "2026-09-28",
   "_para_que_serve": [
     "1) MAPEAMENTO: quando uma colecao e anunciada antes de aparecer no crawl, saber nome/sigla permite sondar a edicao na Liga cedo e fechar o gap sem esperar a fronteira chegar nela.",
-    "2) MODELO: a capa/pokemon principal de um lancamento futuro eh sinal de inflacao antecipada nas cartas existentes daquele Pokemon (ex.: Rayquaza na capa -> precos de Rayquaza antigos sobem so por expectativa, e tendem a recuar depois)."
+    "2) MODELO: a capa/pokemon principal de um lancamento futuro eh sinal de inflacao antecipada nas cartas existentes daquele Pokemon (ex.: Mega Rayquaza na capa do Reinado Delta -> precos de Rayquaza antigos sobem por expectativa, e tendem a recuar depois do lancamento)."
   ],
   "_esquema": {
     "nome_en": "nome oficial em ingles",
     "nome_ptbr": "nome oficial pt-BR (Copag)",
+    "codigo": "codigo da expansao (ME06, SV8.5...)",
     "sigla_liga": "sigla da edicao na Liga (se ja encontrada)",
     "idE": "id numerico da edicao na Liga (se ja encontrada)",
-    "lancamento_en": "YYYY-MM ou YYYY-MM-DD",
-    "lancamento_br": "YYYY-MM ou YYYY-MM-DD",
+    "contraparte_jp": "set japones equivalente (se houver), com sigla na Liga",
+    "lancamento_en": "YYYY-MM-DD (mercado internacional)",
+    "lancamento_br": "YYYY-MM-DD (Brasil)",
+    "lancamento_jp": "YYYY-MM-DD",
     "tipo": "expansao principal | especial | comemorativa | promo | subcolecao",
     "capa": ["Pokemon da capa"],
     "principais": ["Pokemon relevantes do set"],
@@ -21,8 +24,32 @@
   },
   "colecoes": [
     {
+      "nome_en": "Mega Evolution — Delta Reign",
+      "nome_ptbr": "Megaevolução — Reinado Delta",
+      "codigo": "ME06",
+      "sigla_liga": "nao encontrada",
+      "idE": null,
+      "contraparte_jp": {"nome": "Storm Emeralda", "sigla_liga": "M6", "idE": 806, "cartas_no_catalogo": 113, "lancamento_jp": "2026-07-31"},
+      "lancamento_en": "2026-11-06",
+      "lancamento_br": "2026-11-06",
+      "lancamento_jp": "2026-07-31",
+      "tipo": "expansao principal",
+      "capa": ["Mega Rayquaza ex"],
+      "principais": ["Mega Rayquaza ex"],
+      "status": "anunciada",
+      "no_catalogo": false,
+      "observacao": "A versao japonesa (M6 / Storm Emeralda) JA esta no catalogo com 113 cartas — o efeito de expectativa sobre cartas antigas de Rayquaza ja pode ser medido agora; o marco de virada (lancamento BR/EN) e 06/11/2026. Mecanica do set: 6 cartas de Estadio formando 3 Estadios Lendarios.",
+      "fontes": [
+        "https://www.pokemon.com/br/noticias/a-expansao-megaevolucao-reinado-delta-do-pokemon-estampas-ilustradas-chega-em-6-de-novembro-de-2026",
+        "https://www.pokemon.com/us/news/the-pokemon-tcg-mega-evolution-delta-reign-expansion-arrives-november-6-2026",
+        "https://tcgwatchtower.com/pokemon/sets/mega-evolution/delta-reign/cards",
+        "https://www.ligapokemon.com.br/?view=artigos/view&aid=5935"
+      ]
+    },
+    {
       "nome_en": "30th Celebration",
       "nome_ptbr": "Celebração de 30 Anos",
+      "codigo": "MEP",
       "sigla_liga": "30C",
       "idE": 804,
       "lancamento_en": "2026-09",
@@ -32,27 +59,31 @@
       "principais": ["Pikachu", "Mew", "Mewtwo", "Gengar", "Lugia", "Charizard"],
       "status": "lancada",
       "no_catalogo": true,
-      "observacao": "familia com 4 edicoes na Liga: 30C (804), 30C-C Coleção Clássica (805), 30THP promos (819), 30C-R Mew RGB (821). Taxa de tiragem MUITO acima do padrao (set comemorativo) — nao aceita taxa agregada de set normal no EV.",
+      "observacao": "familia com 4 edicoes na Liga: 30C (804), 30C-C Coleção Clássica (805), 30THP promos (819), 30C-R Mew RGB (821). Taxa de tiragem MUITO acima do padrao (set comemorativo) — nao aceita taxa agregada de set normal no EV. Pacote pt-BR: 6 cartas (o EN tem 5).",
       "fontes": ["https://tcg.pokemon.com/pt-br/expansions/30th-celebration/", "https://www.pokebeach.com/2026/09/30th-celebration-pull-rates-and-most-valuable-cards-worldwide-friendliest-pull-rates-of-the-modern-era"]
     },
     {
       "nome_en": "Ascended Heroes (ME02.5)",
       "nome_ptbr": "Megaevolução — Heróis Excelsos",
+      "codigo": "ME02.5",
       "sigla_liga": "ASC",
+      "idE": null,
       "lancamento_en": "2026",
       "lancamento_br": "2026",
       "tipo": "expansao principal",
-      "capa": ["Mega Rayquaza ex"],
+      "capa": [],
       "principais": [],
       "status": "lancada",
       "no_catalogo": true,
-      "observacao": "edicoes na Liga: ASC (295 cartas) + ASCES/ASCPB/ASCTR (variantes do mesmo set, aliasadas). Sem taxa de tiragem publicada ate agora.",
+      "observacao": "edicoes na Liga: ASC (295 cartas) + ASCES/ASCPB/ASCTR (variantes do mesmo set, aliasadas). CAPA NAO VERIFICADA — a hipotese anterior (Mega Rayquaza ex) era erro meu: o set do Rayquaza e o Reinado Delta, abaixo. Sem taxa de tiragem publicada ate agora.",
       "fontes": ["https://tcg.pokemon.com/pt-br/galleries/ascended-heroes/", "https://www.ligapokemon.com.br/?view=cards/search&card=ed=ASC"]
     },
     {
       "nome_en": "Prismatic Evolutions (SV8.5)",
       "nome_ptbr": "Escarlate e Violeta — Evoluções Prismáticas",
+      "codigo": "SV8.5",
       "sigla_liga": "PRE",
+      "idE": null,
       "lancamento_en": "2025-01",
       "lancamento_br": "2025",
       "tipo": "especial",
