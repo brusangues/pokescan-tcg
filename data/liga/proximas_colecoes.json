@@ -1,0 +1,67 @@
+{
+  "_fonte": "pesquisa web (tcg.pokemon.com/pt-br/expansions, pokemon.com/br, pokebeach, TCGplayer). Atualizado pela rotina semanal 'proximas-colecoes-pokemon'.",
+  "_atualizado": "2026-09-28",
+  "_para_que_serve": [
+    "1) MAPEAMENTO: quando uma colecao e anunciada antes de aparecer no crawl, saber nome/sigla permite sondar a edicao na Liga cedo e fechar o gap sem esperar a fronteira chegar nela.",
+    "2) MODELO: a capa/pokemon principal de um lancamento futuro eh sinal de inflacao antecipada nas cartas existentes daquele Pokemon (ex.: Rayquaza na capa -> precos de Rayquaza antigos sobem so por expectativa, e tendem a recuar depois)."
+  ],
+  "_esquema": {
+    "nome_en": "nome oficial em ingles",
+    "nome_ptbr": "nome oficial pt-BR (Copag)",
+    "sigla_liga": "sigla da edicao na Liga (se ja encontrada)",
+    "idE": "id numerico da edicao na Liga (se ja encontrada)",
+    "lancamento_en": "YYYY-MM ou YYYY-MM-DD",
+    "lancamento_br": "YYYY-MM ou YYYY-MM-DD",
+    "tipo": "expansao principal | especial | comemorativa | promo | subcolecao",
+    "capa": ["Pokemon da capa"],
+    "principais": ["Pokemon relevantes do set"],
+    "status": "anunciada | em-pre-venda | lancada",
+    "no_catalogo": "true/false — se ja temos as cartas no catalogo local",
+    "fontes": ["URLs"]
+  },
+  "colecoes": [
+    {
+      "nome_en": "30th Celebration",
+      "nome_ptbr": "Celebração de 30 Anos",
+      "sigla_liga": "30C",
+      "idE": 804,
+      "lancamento_en": "2026-09",
+      "lancamento_br": "2026-Q3",
+      "tipo": "comemorativa",
+      "capa": ["Pikachu"],
+      "principais": ["Pikachu", "Mew", "Mewtwo", "Gengar", "Lugia", "Charizard"],
+      "status": "lancada",
+      "no_catalogo": true,
+      "observacao": "familia com 4 edicoes na Liga: 30C (804), 30C-C Coleção Clássica (805), 30THP promos (819), 30C-R Mew RGB (821). Taxa de tiragem MUITO acima do padrao (set comemorativo) — nao aceita taxa agregada de set normal no EV.",
+      "fontes": ["https://tcg.pokemon.com/pt-br/expansions/30th-celebration/", "https://www.pokebeach.com/2026/09/30th-celebration-pull-rates-and-most-valuable-cards-worldwide-friendliest-pull-rates-of-the-modern-era"]
+    },
+    {
+      "nome_en": "Ascended Heroes (ME02.5)",
+      "nome_ptbr": "Megaevolução — Heróis Excelsos",
+      "sigla_liga": "ASC",
+      "lancamento_en": "2026",
+      "lancamento_br": "2026",
+      "tipo": "expansao principal",
+      "capa": ["Mega Rayquaza ex"],
+      "principais": [],
+      "status": "lancada",
+      "no_catalogo": true,
+      "observacao": "edicoes na Liga: ASC (295 cartas) + ASCES/ASCPB/ASCTR (variantes do mesmo set, aliasadas). Sem taxa de tiragem publicada ate agora.",
+      "fontes": ["https://tcg.pokemon.com/pt-br/galleries/ascended-heroes/", "https://www.ligapokemon.com.br/?view=cards/search&card=ed=ASC"]
+    },
+    {
+      "nome_en": "Prismatic Evolutions (SV8.5)",
+      "nome_ptbr": "Escarlate e Violeta — Evoluções Prismáticas",
+      "sigla_liga": "PRE",
+      "lancamento_en": "2025-01",
+      "lancamento_br": "2025",
+      "tipo": "especial",
+      "capa": ["Eevee"],
+      "principais": ["Eevee", "Leafeon ex", "Glaceon ex", "Sylveon ex", "Umbreon ex", "Espeon ex"],
+      "status": "lancada",
+      "no_catalogo": true,
+      "observacao": "unica das tres do comparativo de EV com taxa MEDIDA e publicada (TCGplayer, 1.200 pacotes): Ultra Rare 7,46% (1/13), ACE SPEC 4,68% (1/21).",
+      "fontes": ["https://tcg.pokemon.com/pt-br/expansions/prismatic-evolutions/", "https://www.tcgplayer.com/content/article/Pok%C3%A9mon-TCG-Prismatic-Evolutions-Pull-Rates/d94889ea-f76a-4a13-b74d-5b0b071220a7/"]
+    }
+  ]
+}
