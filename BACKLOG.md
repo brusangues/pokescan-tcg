@@ -27,11 +27,43 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 - **Evidência** (base rotulada manual, `docs/AVALIACAO_LABELS.md`): acerto@1 = 74%, teto top-5 = 83% (~9pp recuperáveis). Re-rank com sinais leves + CatBoost LOFO foi NEGATIVO (−0,8pp, `0901db4`).
 - Tags: scanner, matching, cv, indexação
 
-### [P2] 49. Mapeamento sigla↔set inglês: corrigir entradas erradas e casar edições EN
-- **Estado (23/09)**: ao ingerir as 411 edições que faltavam na Liga, **43.774 cartas ficaram liga_only**. O grosso é legítimo (JP/chinês/promos sem par em inglês: MC 766, XYPJ 470, SMPJ 437, S4A 330, SV4A 360...). Mas parte são edições **inglesas** hospedadas na Liga (ex.: ROS = 112 cartas) que deveriam **casar** com o set EN e hoje não casam.
-- **Causa**: `data/liga/liga_set_sigla_ptcg.json` tem entradas erradas/legadas (ex.: `xy6` → `SV3`, quando o cache do pokemontcg.io diz `ptcgoCode=ROS` para xy6). O `rebuild_set_mapping.py` casa por nome+número (heurística, limiar 4) e **não sobrescreve** entrada existente.
-- **Resta**: passe de auditoria no mapping (comparar `ptcgoCode` do cache com a sigla mapeada, listar divergências), decidir o que sobrescrever, re-rodar catálogo + índice. Efeito: menos arte duplicada no índice do scanner (menos ambiguidade no match).
-- Tags: catalogo, liga, mapeamento, indice
+### [P2] 49. Mapeamento sigla↔set inglês: **100% correto e monitorado** (nunca errado em silêncio)
+- **Regra do Bruno (30/09)**: o mapeamento tem de estar **100% a todo momento** — `en_id` errado contamina página da carta, preço, hits e índice do scanner. Vale mais ficar liga_only do que casar errado.
+- **Estado (28/09)**: 411 edições novas ingeridas; liga_only chegou a 43.774. **Aliases entregues**: 21 edições da Liga que são o mesmo set EN foram casadas (`liga_siglas_alias.json`), **join 17.082 → 20.564** e **liga_only 43.774 → 40.340**; índice do scanner caiu de 63.082 → **56.873** (−6,2 mil duplicatas). Commit `0d6635a`.
+- **Diagnóstico corrigido (importante)**: o comparador de nome+número **funciona** (LOR casa 171/217 com `swsh11`). Os dois defeitos reais eram: (a) eu escolher o candidato errado quando dois sets compartilham o `ptcgoCode` (peguei o subset TG de 30 cartas em vez do set de 217); (b) o arquivo 1:1 não comportar duas edições da Liga para o mesmo set EN.
+- **Critério do alias** (2 sinais + cobertura): `ptcgoCode` + sobreposição real ≥10 cartas e ≥70% das cartas da edição. O limiar frouxo (25%) aliasava **sets de reimpressão** (TOT24 → `sv6`), que casam com a origem por construção — 70% os recusa corretamente.
+- **PENDENTE (o "100%" ainda não está garantido)**:
+  1. **join exige nome?** O join casa por **número**, sem exigir o nome: nas edições com cobertura <100% (LOR = 79%) as cartas restantes entram com `en_id` possivelmente errado. Apertar para exigir nome (conservador) ou investigar caso a caso.
+  2. **auditoria contínua**: rodar a auditoria no ciclo da macro e **alertar** se aparecer edição nova sem mapeamento, par ambíguo ou divergência de `ptcgoCode` — é isso que sustenta "100% a todo momento".
+  3. **451 edições abaixo do limiar** a triar (a maioria é JP/CN/promo legítimo; incluir os casos JP no P3.17).
+  4. **`xy6 → SV3`** e outras entradas divergentes do `ptcgoCode` a revisar uma a uma.
+- Tags: catalogo, liga, mapeamento, indice, en_id
+
+### [P2] 50. Próximas coleções: prospecção → gap de mapeamento (fechar antes de aparecer no crawl)
+- **Estado (28/09)**: base criada em `data/liga/proximas_colecoes.json` (nome EN, nome pt-BR, código, sigla/idE da Liga, contraparte JP, lançamentos EN/BR/JP, tipo, capa, principais, status, fontes) + rotina semanal `proximas-colecoes-pokemon` (sábado 20:00, job `a90b63242a5f`, com regra de só afirmar o que tem URL).
+- **Resta**: `discover_set_ids` **não lê** esse arquivo ainda — hoje a prospecção grava e reporta, mas a sondagem automática da edição nova na Liga (pelo nome) não está plugada. É o que fecha o gap sem esperar a fronteira.
+- Tags: catalogo, liga, cron, mapeamento
+
+### [P2] 51. Sinal de lançamento no modelo (hype do Pokémon de capa)
+- **Ideia (Bruno)**: a capa de uma coleção anunciada infla cartas **já existentes** daquele Pokémon só por expectativa, e o efeito tende a recuar depois do lançamento. Ex.: **Reinado Delta (Delta Reign, ME06, 06/11/2026, capa Mega Rayquaza ex)** → Rayquaza antigos inflados antes, recuo depois.
+- **Features propostas**: `hype_lancamento` (o Pokémon da carta é capa/principal de coleção anunciada?) + `dias_para_lancamento` + `dias_desde_lancamento` (o efeito não é permanente — o modelo precisa aprender a **subida e a volta**).
+- **Experimento natural disponível**: a contraparte JP (**Storm Emeralda / M6**) **já está no catálogo** (idE 806, 113 cartas) desde 31/07/2026 → dá para medir Rayquaza antes/depois de 06/11/2026. Segundo caso: 30 Anos (Pikachu/Mew).
+- Tags: modelo, temporal, lancamento, precos
+
+### [P2] 52. EV por booster (página "preço por booster")
+- **Decidido (24-25/09)**: régua = pacote **pt-BR de 6 cartas**; taxas do proxy EN escaladas **×0,6** (premissa de mesma estrutura de slots, declarada no site); regra de idade: **agregado só para coleção >6 meses**; saída em número quando medido, **faixa** quando não fixado. Documentado em `docs/metodologia-ev-booster.md`.
+- **Nomes pt-BR das edições** gravados (`data/liga/nomes_edicoes_ptbr.json`): Celebração de 30 Anos (30C/30C-C/30THP/30C-R), Megaevolução — Heróis Excelsos (ASC), Escarlate e Violeta — Evoluções Prismáticas (PRE).
+- **Resta**: a **tabela de raridades** (tiers do TCGplayer ↔ códigos `iR` da Liga) — sem ela a soma cai em balde errado. Depois: EV das Prismáticas (única com taxa medida ✓), 30 Anos (faixa), Heróis Excelsos (sem taxa publicada → piso ou estimativa por comparáveis declarada).
+- Tags: ev, booster, precos, site
+
+### [P2] 53. Harness de teste: servidor local single-thread gera falha falsa
+- **Estado (28/09)**: a suíte local deu **19/38** com falhas espalhadas por todas as páginas (card, coleção, tendências, header) e **404 do `python -m http.server`** — que é **single-thread** e serializa 48 MB de índice + 15 MB de cards.json. O **mesmo teste contra o Pages passa 38/38**. Custo: horas caçando fantasma.
+- **Resta**: servir o `out/` com servidor multi-thread (ou `ThreadingHTTPServer`) no harness, e registrar no teste a distinção local×publicado.
+- Tags: testes, harness, infra
+
+### [P3] 48. Filtro do pacote no scanner (proporção de carta)
+- **Estado (23/09)**: no scan da foto do Trick or Trade, o **pacote** foi detectado como carta (razão de aspecto ≈0,56 cai dentro da janela aceita 0,45-0,95). Mexe em recall → **só mudar medindo na base rotulada** (lição do P3.34).
+- Tags: scanner, segmentacao, cv
 
 ### [P2] 33. Base rotulada manual — continuar crescendo (retreinar re-rank no futuro)
 - **Estado**: `C:/Projects/pokescan-tcg-labels` — 29 fotos/137 cartas rotuladas 100% manual (99% corretas). Harness completo pronto: `experiments/rerank_sinais.py` (gera dataset de pares) + `treinar_rerank.py` (CatBoost LOFO com folhas agrupadas).
@@ -51,6 +83,16 @@ Centraliza melhorias, bugs e ideias **pendentes**. Prioridade: P0 (crítico) →
 ---
 
 ## 🔬 P3 — Experimentos / ideias
+
+### [P3] 49. Semanal: ~4h não explicadas no orçamento cheio
+- **Estado (27/09)**: primeira execução da semanal (domingo 02:00) morreu no limite de 6h. Os passos conhecidos somam ~2h (descoberta ~30 min + snapshot dos 793 sets ~55 + enriquecedor 18 fixo + hits/escore ~10) → **~4h sem explicação**, e o script morto não deixou rastro (resumo final não é escrito).
+- **Já feito**: heartbeat por passo **em arquivo** (`data/liga/macro_run.log`, commit `7b14c36`) — agora um script morto deixa o último passo registrado; orçamentos apertados (buracos 400→200); job movido para **sábado 22:00** (9h de folga, sem colidir com a diária das 07:00 — a colisão aconteceu de fato em 27/09: as duas rodaram juntas por ~1h).
+- **Resta**: ler o log da execução de **03/10** e apontar o passo que estoura; depois limitar esse passo (não o job inteiro). Descartado como suspeito: o enriquecedor (fixo em 400 cartas/18 min).
+- Tags: cron, macro, infra, orcamento
+
+### [P3] 50. Cartas JP/CN recém-ingeridas mudam o peso do modelo JP
+- **Estado (28/09)**: as 411 edições novas trouxeram ~40 mil cartas liga_only, em maioria **japonesas/chinesas** (MC 766, XYPJ 470, SMPJ 437, S4A 330, SV4A 360, S8B 293...). Isso **soma ao P3.17** (modelo dedicado a cartas JP + subsets): deixou de ser ideia e virou gargalo de qualidade do match — hoje o índice trata JP e EN com o mesmo embedding.
+- Tags: modelo, jp, scanner, matching
 
 ### [P3] 34. Segmentação: binder com fundo preto perde a fileira inferior
 - **Evidência**: foto `20260822_115216` (binder 9-pocket fundo preto, 3000x4000, 8 cartas) — Canny+Otsu globais acham 4-6 quads de 8; as perdidas ficam nas bordas (topo/fundo) contra o fundo escuro. Grade real detectável pelas costuras (vinil) = 3 col × 3 linhas. Overlays em `experiments/debug_crops/`.
