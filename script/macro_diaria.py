@@ -78,6 +78,7 @@ def main():
     out, ok_hits, dur_hits = rodar('HITS · crawler', [PY, 'crawler/crawler_liga_hits.py', '--tipo', 'all'])
     print('   (crawler hits ok)' if ok_hits else '   (⚠ crawler hits falhou, segue?)')
     out_map, ok_map, dur_map = rodar('HITS · mapping', [PY, 'script/rebuild_set_mapping.py'])
+    out_aud, ok_aud, dur_aud = rodar('MAPEAMENTO · auditoria', [PY, 'script/audita_mapeamento.py'])
     out_emb, ok_emb, dur_emb = rodar('HITS · embeddings', [PY, 'script/ensure_embeddings.py'])
     out_escore, ok_escore, dur_escore = rodar('HITS · escore', [PY, 'script/score_apos_crawl.py', '--tipo', 'hits', '--top', '10'])
     m_hits = extrai(out_escore, {

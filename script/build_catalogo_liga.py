@@ -74,6 +74,15 @@ for eid in eids:
             if not cand: continue
             for se in sets_en:
                 en = en_by_set_num.get(se, {}).get(cand)
+                # TRAVA (30/09): exige NOME, alem do numero. Sem isto, edicoes com
+                # cobertura parcial casavam so por numero e podiam gravar en_id
+                # apontando para OUTRA carta. Melhor liga_only do que mentir.
+                if en:
+                    import re as _re
+                    _a = _re.sub(r"[^a-z0-9]", "", _re.sub(r"\(.*", "", str(en.get("name") or "")).lower())
+                    _b = _re.sub(r"[^a-z0-9]", "", _re.sub(r"\(.*", "", str(c.get("nEN") or "")).lower())
+                    if _a != _b:
+                        en = None
                 if en: break
             if en: break
         out.append({
