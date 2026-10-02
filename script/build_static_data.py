@@ -615,6 +615,11 @@ def historico_payload() -> dict:
     """Séries por card_id (chave canônica idE-lang-sN) e por nome+sigla — mesmo filtro do /api/historico."""
     files = sorted([f for f in SCORED.glob('scored_*.csv')
                     if f.name.startswith(('scored_hits_', 'scored_snapshot_'))])
+    # Corte de 30 dias (30/09): o arquivo publicado crescia para sempre (chegou a
+    # 106 MB e o GitHub recusou o push, limite de 100 MB/arquivo). A lista esta
+    # ordenada por nome, e o nome carrega a data -> a cauda sao os mais recentes.
+    # 30 dias x 2 tipos (hits + snapshot) = 60 arquivos. Fica autolimitado.
+    files = files[-60:]
     por_liga = {}
     por_nome = {}
     for f in files:
@@ -649,9 +654,40 @@ def historico_payload() -> dict:
 
     def ordena(d):
         return sorted(d.values(), key=lambda p: p['data'])
+
+    # FATIADO POR COLECAO (30/09): o limite de 100 MB do GitHub e por ARQUIVO, e o
+    # grafico da carta so precisa da colecao dela. Antes era um unico de 105 MB.
+    # A chave da colecao e o primeiro token do card_id canonico ({idE}-lang-num).
+    H = OUT / 'historico'
+    H.mkdir(parents=True, exist_ok=True)
+    sigla2ide = {}
+    try:
+        for c in json.loads((REPO / 'data' / 'catalogo_liga.json').read_text(encoding='utf-8')):
+            s, i = c.get('sigla'), c.get('idE')
+            if s and i is not None and str(s) not in sigla2ide:
+                sigla2ide[str(s)] = str(i)
+    except Exception as e:
+        print(f'  ⚠️ sigla2ide: {e}')
+    por_colecao = {}
+    for cid, pontos in por_liga.items():
+        col = str(cid).split('-')[0]
+        por_colecao.setdefault(col, {'porLiga': {}, 'porNome': {}})['porLiga'][cid] = ordena(pontos)
+    for nome, siglas in por_nome.items():
+        for sig, pontos in siglas.items():
+            col = sigla2ide.get(str(sig))
+            if not col:
+                continue
+            por_colecao.setdefault(col, {'porLiga': {}, 'porNome': {}})
+            por_colecao[col]['porNome'].setdefault(nome, {})[sig] = ordena(pontos)
+    for col, payload in por_colecao.items():
+        (H / f'{col}.json').write_text(json.dumps(payload, ensure_ascii=False), encoding='utf-8')
+    (H / '_siglas.json').write_text(json.dumps(sigla2ide, ensure_ascii=False), encoding='utf-8')
+    print(f'  historico fatiado: {len(por_colecao)} colecoes + _siglas.json ({len(sigla2ide)} siglas)')
     return {
-        'porLiga': {k: ordena(v) for k, v in por_liga.items()},
-        'porNome': {n: {s: ordena(v) for s, v in siglas.items()} for n, siglas in por_nome.items()},
+        'fatiado': True,
+        'colecoes': len(por_colecao),
+        'siglas': len(sigla2ide),
+        '_nota': 'series por colecao em data/historico/{idE}.json; mapa sigla->idE em _siglas.json',
     }
 
 

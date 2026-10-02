@@ -405,10 +405,30 @@ export async function lookupHistorico(params: {
   nome?: string;
   sigla?: string;
 }): Promise<{ serie: any[]; total: number; liga_id: string }> {
-  if (!_promises.historico) {
-    _promises.historico = getJson(base('/data/historico.json'));
+  // Historico FATIADO por colecao (30/09): busca so a fatia da colecao desta carta
+  // em vez do arquivo unico (que passava de 100 MB). Chave = 1o token do id canonico.
+  let _chave: string | null = null;
+  const _id = params.cardId || params.ligaId;
+  if (_id) {
+    _chave = String(_id).split('-')[0];
+  } else if (params.sigla) {
+    try {
+      const _sig = await getJson(base('/data/historico/_siglas.json'));
+      _chave = (_sig && (_sig as any)[params.sigla]) || null;
+    } catch {
+      _chave = null;
+    }
   }
-  const hist = await _promises.historico;
+  let hist: any = { porLiga: {}, porNome: {} };
+  if (_chave) {
+    const _k = 'hist_' + _chave;
+    if (!_promises[_k]) _promises[_k] = getJson(base(`/data/historico/${_chave}.json`));
+    try {
+      hist = await _promises[_k];
+    } catch {
+      hist = { porLiga: {}, porNome: {} };
+    }
+  }
 
   let serie: any[] = [];
   if (params.cardId) {
