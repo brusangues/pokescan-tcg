@@ -1,0 +1,123 @@
+{
+ "modelo": "BRL",
+ "tipo": "PredictionValuesChange",
+ "total": 100.0,
+ "grupos": [
+  {
+   "grupo": "USD (feature do BRL)",
+   "importance": 31.868,
+   "pct": 31.87,
+   "n": 1
+  },
+  {
+   "grupo": "Preço mercado (Cardmarket)",
+   "importance": 30.0989,
+   "pct": 30.1,
+   "n": 7
+  },
+  {
+   "grupo": "Set / era",
+   "importance": 14.2073,
+   "pct": 14.21,
+   "n": 4
+  },
+  {
+   "grupo": "Card (atributos)",
+   "importance": 6.566,
+   "pct": 6.57,
+   "n": 11
+  },
+  {
+   "grupo": "Liquidez (iCO)",
+   "importance": 6.1082,
+   "pct": 6.11,
+   "n": 1
+  },
+  {
+   "grupo": "Embeddings (DINOv2)",
+   "importance": 4.163,
+   "pct": 4.16,
+   "n": 32
+  },
+  {
+   "grupo": "Popularidade / grail",
+   "importance": 3.9967,
+   "pct": 4.0,
+   "n": 2
+  },
+  {
+   "grupo": "Supply (E1)",
+   "importance": 2.8815,
+   "pct": 2.88,
+   "n": 2
+  },
+  {
+   "grupo": "Artista / treinador",
+   "importance": 0.1104,
+   "pct": 0.11,
+   "n": 2
+  }
+ ],
+ "topFeatures": [
+  {
+   "feature": "target_price_usd",
+   "importance": 31.868,
+   "pct": 31.87,
+   "grupo": "USD (feature do BRL)"
+  },
+  {
+   "feature": "cardmarket_avg",
+   "importance": 8.8386,
+   "pct": 8.84,
+   "grupo": "Preço mercado (Cardmarket)"
+  },
+  {
+   "feature": "cardmarket_avg30",
+   "importance": 7.4214,
+   "pct": 7.42,
+   "grupo": "Preço mercado (Cardmarket)"
+  },
+  {
+   "feature": "iCO",
+   "importance": 6.1082,
+   "pct": 6.11,
+   "grupo": "Liquidez (iCO)"
+  },
+  {
+   "feature": "pokedex_number",
+   "importance": 5.5755,
+   "pct": 5.58,
+   "grupo": "Card (atributos)"
+  },
+  {
+   "feature": "set_series",
+   "importance": 5.2447,
+   "pct": 5.24,
+   "grupo": "Set / era"
+  },
+  {
+   "feature": "set_printed_total",
+   "importance": 4.901,
+   "pct": 4.9,
+   "grupo": "Set / era"
+  },
+  {
+   "feature": "cardmarket_avg7",
+   "importance": 4.0113,
+   "pct": 4.01,
+   "grupo": "Preço mercado (Cardmarket)"
+  },
+  {
+   "feature": "cardmarket_trend",
+   "importance": 3.7401,
+   "pct": 3.74,
+   "grupo": "Preço mercado (Cardmarket)"
+  },
+  {
+   "feature": "pokemon_grail_score",
+   "importance": 3.4614,
+   "pct": 3.46,
+   "grupo": "Popularidade / grail"
+  }
+ ]
+}
